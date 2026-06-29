@@ -333,13 +333,26 @@
       <span id="live-price-status">กำลังดึงราคาตลาดล่าสุด...</span>
     </div>
 
-    <!-- ไซ์ selector -->
-    <div id="be-size-wrap" style="display:none;margin-bottom:18px">
+    <!-- ไซ์ selector — always visible -->
+    <div style="margin-bottom:18px">
       <div style="font-size:12px;font-weight:600;color:var(--mud);margin-bottom:8px">
-        เลือกไซ์กุ้งที่จะขาย <span style="font-weight:400;color:#aaa">· น้ำหนักเฉลี่ย ÷ 1000 → ตัว/กก.</span>
-        <span id="be-size-hint-auto" style="font-size:11px;color:var(--wine);margin-left:6px"></span>
+        ไซ์กุ้งที่จะขาย
+        <span id="be-size-hint-auto" style="font-size:11px;color:var(--wine);margin-left:6px;font-weight:400"></span>
       </div>
-      <div id="be-size-btns" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+      <select id="be-size-select" class="calc-input" onchange="onSizeSelectChange()" style="font-family:inherit;font-size:15px;font-weight:600;cursor:pointer">
+        <option value="">-- เลือกไซ์กุ้ง --</option>
+        <option value="10">L10 · กุ้งใหญ่มาก (100 ก./ตัว)</option>
+        <option value="20">L20 · กุ้งใหญ่ (50 ก./ตัว)</option>
+        <option value="30">L30 · 33 ก./ตัว</option>
+        <option value="40">L40 · 25 ก./ตัว</option>
+        <option value="50">L50 · 20 ก./ตัว</option>
+        <option value="60">L60 · 17 ก./ตัว</option>
+        <option value="70">L70 · 14 ก./ตัว</option>
+        <option value="80">L80 · 12.5 ก./ตัว</option>
+        <option value="100">L100 · 10 ก./ตัว</option>
+        <option value="120">L120 · 8 ก./ตัว</option>
+      </select>
+      <div id="be-size-live-price" style="margin-top:6px;font-size:12px;color:#888"></div>
     </div>
 
     <div style="margin-bottom:18px">
@@ -380,8 +393,8 @@
           <input class="calc-input" id="be-harvest" type="number" min="0" step="10" placeholder="เช่น 4000" oninput="calcBreakeven()">
         </div>
         <div class="input-group">
-          <label>ราคาปากบ่อจริง <span class="unit">บาท/กก. · เลือกไซ์ด้านบน หรือกรอกเอง</span></label>
-          <input class="calc-input" id="be-market" type="number" min="0" step="1" placeholder="เลือกไซ์กุ้งด้านบน..." oninput="calcBreakeven()">
+          <label>ราคาปากบ่อจริง <span class="unit">บาท/กก. · โหลดจากไซ์ที่เลือก หรือกรอกเอง</span></label>
+          <input class="calc-input" id="be-market" type="number" min="0" step="1" placeholder="เลือกไซ์ด้านบน หรือกรอกเอง" oninput="calcBreakeven()">
         </div>
       </div>
     </div>
@@ -423,29 +436,66 @@
       <div class="calc-icon">📊</div>
       <div>
         <h2>Survival Rate — คำนวณอัตรารอดของกุ้ง</h2>
-        <p>หาเปอร์เซ็นต์กุ้งที่รอดจากจำนวน PL ที่ปล่อยเปรียบเทียบกับผลจับจริง</p>
+        <p>คำนวณได้ 2 วิธี: จากผลจับหลังรุ่น หรือประมาณกลางรุ่นจากปริมาณอาหารที่กิน</p>
       </div>
     </div>
-    <div class="input-grid">
-      <div class="input-group">
-        <label>จำนวน PL ที่ปล่อย <span class="unit">ตัว</span></label>
-        <input class="calc-input" id="sr-pl" type="number" min="0" step="1000" placeholder="เช่น 200000" oninput="calcSurvival()">
-      </div>
-      <div class="input-group">
-        <label>น้ำหนักกุ้งที่จับได้ <span class="unit">กก.</span></label>
-        <input class="calc-input" id="sr-harvest" type="number" min="0" step="10" placeholder="เช่น 3500" oninput="calcSurvival()">
-      </div>
-      <div class="input-group">
-        <label>น้ำหนักเฉลี่ยต่อตัว <span class="unit">กรัม/ตัว</span></label>
-        <input class="calc-input" id="sr-weight" type="number" min="0" step="0.5" placeholder="เช่น 18" oninput="calcSurvival();guessSizeFromWeight()">
+    <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">
+      <button class="mode-btn active" id="btn-sr-a" onclick="setSrMode('a')">จากผลจับ (หลังรุ่น)</button>
+      <button class="mode-btn" id="btn-sr-b" onclick="setSrMode('b')">จากอาหารที่กิน (กลางรุ่น)</button>
+    </div>
+
+    <!-- Mode A: จากผลจับ -->
+    <div id="sr-mode-a">
+      <div class="input-grid">
+        <div class="input-group">
+          <label>จำนวน PL ที่ปล่อย <span class="unit">ตัว</span></label>
+          <input class="calc-input" id="sr-pl" type="number" min="0" step="1000" placeholder="เช่น 200000" oninput="calcSurvival()">
+        </div>
+        <div class="input-group">
+          <label>น้ำหนักกุ้งที่จับได้ <span class="unit">กก.</span></label>
+          <input class="calc-input" id="sr-harvest" type="number" min="0" step="10" placeholder="เช่น 3500" oninput="calcSurvival()">
+        </div>
+        <div class="input-group">
+          <label>น้ำหนักเฉลี่ยต่อตัว <span class="unit">กรัม/ตัว</span></label>
+          <input class="calc-input" id="sr-weight" type="number" min="0" step="0.5" placeholder="เช่น 18" oninput="calcSurvival();guessSizeFromWeight()">
+        </div>
       </div>
     </div>
+
+    <!-- Mode B: จากอาหารที่กิน -->
+    <div id="sr-mode-b" style="display:none">
+      <div style="background:#FFF8F0;border:1.5px solid #fde68a;border-radius:10px;padding:10px 14px;font-size:12px;color:#92400e;margin-bottom:14px">
+        วิธีนี้ใช้ประมาณ SR กลางรุ่น: Biomass = อาหาร/วัน ÷ (%BW÷100) → จำนวนกุ้งรอด = Biomass × 1000 ÷ น้ำหนักเฉลี่ย
+      </div>
+      <div class="input-grid">
+        <div class="input-group">
+          <label>จำนวน PL ที่ปล่อย <span class="unit">ตัว</span></label>
+          <input class="calc-input" id="sr-pl-b" type="number" min="0" step="1000" placeholder="เช่น 200000" oninput="calcSurvival()">
+        </div>
+        <div class="input-group">
+          <label>อาหารที่กิน/วัน <span class="unit">กก./วัน</span></label>
+          <input class="calc-input" id="sr-feed" type="number" min="0" step="1" placeholder="เช่น 60" oninput="calcSurvival()">
+        </div>
+        <div class="input-group">
+          <label>%BW ที่ใช้ <span class="unit">%/วัน</span></label>
+          <input class="calc-input" id="sr-bw" type="number" min="0" step="0.1" placeholder="เช่น 3.5" oninput="calcSurvival()">
+        </div>
+        <div class="input-group">
+          <label>น้ำหนักเฉลี่ยปัจจุบัน <span class="unit">กรัม/ตัว</span></label>
+          <input class="calc-input" id="sr-weight-b" type="number" min="0" step="0.5" placeholder="เช่น 12" oninput="calcSurvival();guessSizeFromWeight()">
+        </div>
+      </div>
+    </div>
+
     <div id="sr-result" class="result-box neutral">
       <div class="result-main">
         <div class="result-value neutral" id="sr-val">—</div>
         <div class="result-label">อัตรารอด (%)</div>
       </div>
-      <span class="result-badge" id="sr-badge" style="display:none"></span>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+        <span class="result-badge" id="sr-badge" style="display:none"></span>
+        <span id="sr-size-tag" style="display:none;font-size:12px;font-weight:700;background:#F5EBF0;color:var(--wine);border-radius:20px;padding:4px 12px"></span>
+      </div>
     </div>
     <p class="result-hint" id="sr-hint"></p>
     <div class="tips-grid">
@@ -466,10 +516,35 @@
       </div>
     </div>
     <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">
-      <button class="mode-btn active" id="btn-fr-a" onclick="setFeedMode('a')">คำนวณอาหารที่ควรให้</button>
-      <button class="mode-btn" id="btn-fr-b" onclick="setFeedMode('b')">คำนวณ %BW จากอาหารที่ให้จริง</button>
+      <button class="mode-btn active" id="btn-fr-a" onclick="setFeedMode('a')">คำนวณจาก PL</button>
+      <button class="mode-btn" id="btn-fr-c" onclick="setFeedMode('c')">คำนวณจาก Biomass</button>
+      <button class="mode-btn" id="btn-fr-b" onclick="setFeedMode('b')">คำนวณ %BW จากอาหารจริง</button>
     </div>
+
+    <!-- Mode A: คำนวณจาก PL+SR+น้ำหนักเฉลี่ย -->
     <div id="fr-mode-a">
+      <div class="input-grid">
+        <div class="input-group">
+          <label>จำนวน PL ที่ปล่อย <span class="unit">ตัว</span></label>
+          <input class="calc-input" id="fr-pl" type="number" min="0" step="1000" placeholder="เช่น 200000" oninput="calcFeedRate()">
+        </div>
+        <div class="input-group">
+          <label>อัตรารอด <span class="unit">%</span></label>
+          <input class="calc-input" id="fr-sr" type="number" min="0" max="100" step="1" placeholder="เช่น 70" oninput="calcFeedRate()">
+        </div>
+        <div class="input-group">
+          <label>น้ำหนักเฉลี่ยปัจจุบัน <span class="unit">กรัม/ตัว</span></label>
+          <input class="calc-input" id="fr-avg" type="number" min="0" step="0.5" placeholder="เช่น 12" oninput="calcFeedRate()">
+        </div>
+        <div class="input-group">
+          <label>%BW ที่ต้องการ <span class="unit">%/วัน</span></label>
+          <input class="calc-input" id="fr-bw-a" type="number" min="0" step="0.1" placeholder="เช่น 3.5" oninput="calcFeedRate()">
+        </div>
+      </div>
+    </div>
+
+    <!-- Mode C: คำนวณจาก Biomass ที่รู้แล้ว -->
+    <div id="fr-mode-c" style="display:none">
       <div class="input-grid">
         <div class="input-group">
           <label>Biomass รวม <span class="unit">กก.</span></label>
@@ -481,6 +556,8 @@
         </div>
       </div>
     </div>
+
+    <!-- Mode B: ย้อนหา %BW จากอาหารจริง -->
     <div id="fr-mode-b" style="display:none">
       <div class="input-grid">
         <div class="input-group">
@@ -720,7 +797,6 @@ function calcDensity() {
 // ── BREAK-EVEN ────────────────────────────────────────────────────────────────
 let liveMarketPrice = null;
 let livePriceMap    = {};
-let selectedSize    = null;
 
 async function fetchLivePrice() {
   try {
@@ -728,52 +804,59 @@ async function fetchLivePrice() {
     if (!r.ok) throw new Error();
     const data = await r.json();
     if (!data.latest || !Object.keys(data.latest).length) throw new Error();
-
     livePriceMap = data.latest;
     const sizes  = Object.keys(livePriceMap).map(Number).sort((a,b) => a-b);
-
-    // Build size selector buttons
-    const wrap = document.getElementById('be-size-btns');
-    wrap.innerHTML = '';
-    sizes.forEach(sz => {
-      const price = livePriceMap[sz];
-      const btn = document.createElement('button');
-      btn.className = 'size-price-btn';
-      btn.dataset.size  = sz;
-      btn.dataset.price = price;
-      btn.innerHTML = `<span class="spb-size">L${sz}</span><span class="spb-price">${price} ฿</span>`;
-      btn.onclick = () => selectSizePrice(sz, price, btn);
-      wrap.appendChild(btn);
+    // Update select options with live prices
+    const sel = document.getElementById('be-size-select');
+    Array.from(sel.options).forEach(opt => {
+      if (!opt.value) return;
+      const sz = parseInt(opt.value);
+      if (livePriceMap[sz]) {
+        const gPerFish = (1000/sz).toFixed(1);
+        opt.textContent = `L${sz} · ${livePriceMap[sz]} บาท/กก.  (${gPerFish} ก./ตัว)`;
+      }
     });
-    document.getElementById('be-size-wrap').style.display = '';
-    document.getElementById('live-price-status').textContent = `ราคาตลาดล่าสุด: ${sizes.map(s=>'L'+s+' '+livePriceMap[s]+'฿').join(' · ')}`;
+    document.getElementById('live-price-status').textContent = `ราคาตลาดล่าสุด ${sizes.map(s=>'L'+s+'='+livePriceMap[s]+'฿').join(' · ')}`;
   } catch {
     document.getElementById('live-price-status').textContent = 'ไม่สามารถโหลดราคาตลาดได้ — กรอกราคาเองได้เลย';
   }
 }
 
-function selectSizePrice(sz, price, btn) {
-  selectedSize = sz;
-  document.querySelectorAll('.size-price-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('be-market').value = price;
-  liveMarketPrice = price;
+function onSizeSelectChange() {
+  const sel   = document.getElementById('be-size-select');
+  const sz    = parseInt(sel.value);
+  const priceBox = document.getElementById('be-size-live-price');
+  if (!sz) { priceBox.textContent = ''; return; }
+  const price = livePriceMap[sz];
+  if (price) {
+    document.getElementById('be-market').value = price;
+    priceBox.textContent = `ราคาตลาด L${sz} = ${price} บาท/กก.`;
+  } else {
+    priceBox.textContent = `L${sz} · ไม่มีข้อมูลราคาตลาด — กรอกราคาเองได้เลย`;
+    document.getElementById('be-market').placeholder = `กรอกราคา L${sz}...`;
+  }
   calcBreakeven();
 }
 
-// เมื่อ be-harvest เปลี่ยน → เดา size จาก sr-weight ถ้ามี
 function guessSizeFromWeight() {
-  const w = parseFloat(document.getElementById('sr-weight').value) || 0;
+  const wA = parseFloat(document.getElementById('sr-weight').value)   || 0;
+  const wB = parseFloat(document.getElementById('sr-weight-b').value) || 0;
+  const w  = wA || wB;
   if (!w) return;
   const estSize = Math.round(1000 / w);
   document.getElementById('be-size-hint-auto').textContent = `(น้ำหนัก ${w}ก. ≈ L${estSize})`;
-  // highlight closest btn
+  // auto-select closest option in dropdown
+  const sel = document.getElementById('be-size-select');
   let closest = null, minDiff = Infinity;
-  document.querySelectorAll('.size-price-btn').forEach(b => {
-    const diff = Math.abs(parseInt(b.dataset.size) - estSize);
-    if (diff < minDiff) { minDiff = diff; closest = b; }
+  Array.from(sel.options).forEach(opt => {
+    if (!opt.value) return;
+    const diff = Math.abs(parseInt(opt.value) - estSize);
+    if (diff < minDiff) { minDiff = diff; closest = opt; }
   });
-  if (closest && minDiff <= 15) closest.style.outline = '2px dashed var(--wine)';
+  if (closest && minDiff <= 15 && !sel.value) {
+    sel.value = closest.value;
+    onSizeSelectChange();
+  }
 }
 
 function calcBreakeven() {
@@ -864,51 +947,84 @@ function calcBreakeven() {
 }
 
 // ── SURVIVAL RATE ────────────────────────────────────────────────────────────
-function calcSurvival() {
-  const pl      = parseFloat(document.getElementById('sr-pl').value)      || 0;
-  const harvest = parseFloat(document.getElementById('sr-harvest').value) || 0;
-  const weight  = parseFloat(document.getElementById('sr-weight').value)  || 0;
-  const box   = document.getElementById('sr-result');
-  const val   = document.getElementById('sr-val');
-  const badge = document.getElementById('sr-badge');
-  const hint  = document.getElementById('sr-hint');
+let srMode = 'a';
+function setSrMode(m) {
+  srMode = m;
+  document.getElementById('sr-mode-a').style.display = m === 'a' ? '' : 'none';
+  document.getElementById('sr-mode-b').style.display = m === 'b' ? '' : 'none';
+  document.getElementById('btn-sr-a').className = 'mode-btn' + (m==='a'?' active':'');
+  document.getElementById('btn-sr-b').className = 'mode-btn' + (m==='b'?' active':'');
+  calcSurvival();
+}
 
-  if (!pl || !harvest || !weight) {
-    val.textContent = '—'; val.className = 'result-value neutral';
-    box.className = 'result-box neutral'; badge.style.display = 'none'; hint.textContent = ''; return;
+function calcSurvival() {
+  const box     = document.getElementById('sr-result');
+  const val     = document.getElementById('sr-val');
+  const badge   = document.getElementById('sr-badge');
+  const hint    = document.getElementById('sr-hint');
+  const sizeTag = document.getElementById('sr-size-tag');
+
+  let srPct, count, weight;
+
+  if (srMode === 'a') {
+    const pl      = parseFloat(document.getElementById('sr-pl').value)      || 0;
+    const harvest = parseFloat(document.getElementById('sr-harvest').value) || 0;
+    weight        = parseFloat(document.getElementById('sr-weight').value)  || 0;
+    if (!pl || !harvest || !weight) { reset(); return; }
+    count = Math.round((harvest * 1000) / weight);
+    srPct = ((count / pl) * 100).toFixed(1);
+    const size = Math.round(1000 / weight);
+    sizeTag.textContent = `L${size} · ${weight}ก./ตัว`;
+    sizeTag.style.display = 'inline';
+  } else {
+    const pl   = parseFloat(document.getElementById('sr-pl-b').value)     || 0;
+    const feed = parseFloat(document.getElementById('sr-feed').value)      || 0;
+    const bw   = parseFloat(document.getElementById('sr-bw').value)        || 0;
+    weight     = parseFloat(document.getElementById('sr-weight-b').value)  || 0;
+    if (!pl || !feed || !bw || !weight) { reset(); return; }
+    const biomass = feed / (bw / 100);
+    count = Math.round((biomass * 1000) / weight);
+    srPct = ((count / pl) * 100).toFixed(1);
+    const size = Math.round(1000 / weight);
+    sizeTag.textContent = `L${size} · Biomass ~${biomass.toFixed(0)}กก.`;
+    sizeTag.style.display = 'inline';
   }
-  const harvested = Math.round((harvest * 1000) / weight);
-  const sr = ((harvested / pl) * 100).toFixed(1);
 
   let cls, badgeText, hintText;
-  if (sr >= 70) {
+  if (srPct >= 70) {
     cls = 'good'; badgeText = '✓ ดีมาก';
-    hintText = `กุ้งรอด ${harvested.toLocaleString()} ตัว จาก ${pl.toLocaleString()} ตัว — อัตรารอด ${sr}% ดีเยี่ยม`;
-  } else if (sr >= 50) {
+    hintText = `กุ้งรอด ~${count.toLocaleString()} ตัว — อัตรารอด ${srPct}% ดีเยี่ยม`;
+  } else if (srPct >= 50) {
     cls = 'warn'; badgeText = '~ ปานกลาง';
-    hintText = `กุ้งรอด ${harvested.toLocaleString()} ตัว จาก ${pl.toLocaleString()} ตัว — อัตรารอด ${sr}% มาตรฐานทั่วไป`;
+    hintText = `กุ้งรอด ~${count.toLocaleString()} ตัว — อัตรารอด ${srPct}% อยู่ในช่วงมาตรฐาน`;
   } else {
     cls = 'bad'; badgeText = '! ต่ำ';
-    hintText = `กุ้งรอด ${harvested.toLocaleString()} ตัว จาก ${pl.toLocaleString()} ตัว — อัตรารอด ${sr}% ต่ำกว่าปกติ ควรตรวจสอบ`;
+    hintText = `กุ้งรอด ~${count.toLocaleString()} ตัว — อัตรารอด ${srPct}% ต่ำ ควรตรวจสอบโรค/น้ำ`;
   }
-  val.textContent = sr + '%';
+  val.textContent = srPct + '%';
   val.className = `result-value ${cls}`;
   box.className = `result-box ${cls}`;
   badge.className = `result-badge ${cls}`;
   badge.textContent = badgeText;
   badge.style.display = 'inline-flex';
   hint.textContent = hintText;
+
+  function reset() {
+    val.textContent = '—'; val.className = 'result-value neutral';
+    box.className = 'result-box neutral'; badge.style.display = 'none';
+    hint.textContent = ''; sizeTag.style.display = 'none';
+  }
 }
 
 // ── FEED RATE %BW ────────────────────────────────────────────────────────────
 let feedMode = 'a';
 function setFeedMode(m) {
   feedMode = m;
-  document.getElementById('fr-mode-a').style.display = m === 'a' ? '' : 'none';
-  document.getElementById('fr-mode-b').style.display = m === 'b' ? '' : 'none';
-  document.getElementById('btn-fr-a').className = 'mode-btn' + (m==='a'?' active':'');
-  document.getElementById('btn-fr-b').className = 'mode-btn' + (m==='b'?' active':'');
-  document.getElementById('fr-unit').textContent = m === 'a' ? 'อาหารที่ควรให้ต่อวัน (กก.)' : '%BW จริงที่กำลังใช้ (%/วัน)';
+  ['a','b','c'].forEach(x => {
+    document.getElementById(`fr-mode-${x}`).style.display = m === x ? '' : 'none';
+    document.getElementById(`btn-fr-${x}`).className = 'mode-btn' + (m===x?' active':'');
+  });
+  document.getElementById('fr-unit').textContent = m === 'b' ? '%BW จริงที่กำลังใช้ (%/วัน)' : 'อาหารที่ควรให้ต่อวัน (กก.)';
   calcFeedRate();
 }
 
@@ -918,33 +1034,54 @@ function calcFeedRate() {
   const badge = document.getElementById('fr-badge');
   const hint  = document.getElementById('fr-hint');
 
-  let result, bw, hintText, cls, badgeText;
+  let result, bw, biomass, hintText, cls, badgeText;
+
+  function badgeFromBw(b) {
+    if (b > 15) return { cls:'bad',  text:'! %BW สูงมาก' };
+    if (b > 8)  return { cls:'warn', text:'ช่วงกุ้งเล็ก' };
+    if (b > 4)  return { cls:'warn', text:'ช่วงกุ้งกลาง' };
+    return          { cls:'good', text:'ช่วงกุ้งใหญ่' };
+  }
 
   if (feedMode === 'a') {
-    const biomass = parseFloat(document.getElementById('fr-biomass').value) || 0;
-    bw = parseFloat(document.getElementById('fr-bw').value) || 0;
+    // คำนวณจาก PL + SR + น้ำหนักเฉลี่ย + %BW
+    const pl  = parseFloat(document.getElementById('fr-pl').value)   || 0;
+    const sr  = parseFloat(document.getElementById('fr-sr').value)   || 0;
+    const avg = parseFloat(document.getElementById('fr-avg').value)  || 0;
+    bw        = parseFloat(document.getElementById('fr-bw-a').value) || 0;
+    if (!pl || !sr || !avg || !bw) { reset(); return; }
+    biomass = pl * (sr / 100) * avg / 1000;
+    result  = (biomass * bw / 100).toFixed(2);
+    const perMeal = (result / 4).toFixed(2);
+    const bd = badgeFromBw(bw);
+    cls = bd.cls; badgeText = bd.text;
+    hintText = `Biomass ~${biomass.toFixed(0)} กก. (${pl.toLocaleString()}ตัว × SR${sr}% × ${avg}ก.) × %BW${bw}% = อาหาร ${result} กก./วัน (มื้อละ ~${perMeal} กก. ถ้า 4 มื้อ)`;
+    val.textContent = result + ' กก./วัน';
+
+  } else if (feedMode === 'c') {
+    // คำนวณจาก Biomass ที่รู้แล้ว
+    biomass = parseFloat(document.getElementById('fr-biomass').value) || 0;
+    bw      = parseFloat(document.getElementById('fr-bw').value)      || 0;
     if (!biomass || !bw) { reset(); return; }
     result = (biomass * bw / 100).toFixed(2);
     const perMeal = (result / 4).toFixed(2);
-    hintText = `Biomass ${biomass.toLocaleString()} กก. × %BW ${bw}% = อาหาร ${result} กก./วัน (มื้อละ ~${perMeal} กก. ถ้าให้ 4 มื้อ)`;
-    if (bw > 15) { cls='bad'; badgeText='! %BW สูงมาก'; }
-    else if (bw > 8) { cls='warn'; badgeText='กุ้งเล็ก'; }
-    else if (bw > 4) { cls='warn'; badgeText='กุ้งกลาง'; }
-    else { cls='good'; badgeText='กุ้งใหญ่'; }
+    const bd = badgeFromBw(bw);
+    cls = bd.cls; badgeText = bd.text;
+    hintText = `Biomass ${biomass.toLocaleString()} กก. × %BW ${bw}% = อาหาร ${result} กก./วัน (มื้อละ ~${perMeal} กก. ถ้า 4 มื้อ)`;
     val.textContent = result + ' กก./วัน';
+
   } else {
-    const biomass = parseFloat(document.getElementById('fr-biomass-b').value) || 0;
-    const actual  = parseFloat(document.getElementById('fr-actual').value)     || 0;
+    // Mode B: ย้อนหา %BW จากอาหารจริง
+    biomass      = parseFloat(document.getElementById('fr-biomass-b').value) || 0;
+    const actual = parseFloat(document.getElementById('fr-actual').value)    || 0;
     if (!biomass || !actual) { reset(); return; }
     bw = ((actual / biomass) * 100).toFixed(2);
-    result = bw;
+    const bd = badgeFromBw(parseFloat(bw));
+    cls = bd.cls; badgeText = bd.text;
     hintText = `อาหาร ${actual} กก. ÷ Biomass ${biomass.toLocaleString()} กก. = %BW ${bw}%/วัน`;
-    if (bw > 15) { cls='bad'; badgeText='! %BW สูงมาก'; }
-    else if (bw > 8) { cls='warn'; badgeText='ช่วงกุ้งเล็ก'; }
-    else if (bw > 4) { cls='warn'; badgeText='ช่วงกุ้งกลาง'; }
-    else { cls='good'; badgeText='ช่วงกุ้งใหญ่'; }
     val.textContent = bw + '%/วัน';
   }
+
   val.className = `result-value ${cls}`;
   box.className = `result-box ${cls}`;
   badge.className = `result-badge ${cls}`;
