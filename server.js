@@ -380,27 +380,15 @@ ${listed}`
     newsRefreshLock = false;
   }
 }
-// On startup: refresh if news is older than 6 days (catches Monday after a week)
+// On startup: refresh if news is older than 7 days
 setTimeout(async () => {
   const newsFile = path.join(__dirname, 'news-data.json');
   try {
     const data = fs.existsSync(newsFile) ? JSON.parse(fs.readFileSync(newsFile, 'utf-8')) : {};
     const ageMs = data.lastUpdated ? Date.now() - new Date(data.lastUpdated) : Infinity;
-    if (ageMs > 6 * 24 * 3600_000) await autoRefreshNews();
+    if (ageMs > 7 * 24 * 3600_000) await autoRefreshNews();
   } catch {}
 }, 30_000);
-
-// Check every hour; actually refresh only on Monday and if not yet refreshed this week
-setInterval(async () => {
-  const now = new Date();
-  if (now.getDay() !== 1) return; // 1 = Monday
-  const newsFile = path.join(__dirname, 'news-data.json');
-  try {
-    const data = fs.existsSync(newsFile) ? JSON.parse(fs.readFileSync(newsFile, 'utf-8')) : {};
-    const ageMs = data.lastUpdated ? Date.now() - new Date(data.lastUpdated) : Infinity;
-    if (ageMs > 6 * 24 * 3600_000) await autoRefreshNews();
-  } catch {}
-}, 3600_000);
 
 // ─── CONTACT FORM EMAIL ───────────────────────────────────────────────────
 app.post('/api/contact', async (req, res) => {
