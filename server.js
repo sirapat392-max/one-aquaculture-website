@@ -180,44 +180,124 @@ app.get('/api/news', (req, res) => {
   }
 });
 
-// ─── REFRESH NEWS VIA AI ──────────────────────────────────────────────────
-let newsRefreshLock = false; // prevent parallel calls
-app.post('/api/refresh-news', async (req, res) => {
-  if (newsRefreshLock) {
-    return res.status(429).json({ error: 'กำลังอัปเดตอยู่ รอสักครู่' });
+// ─── RSS FETCH + AI TRANSLATE NEWS ───────────────────────────────────────
+const RSS_SOURCES = [
+  { url: 'https://hatcheryinternational.com/feed/',              name: 'Hatchery International' },
+  { url: 'https://www.aquaculturealliance.org/advocate/feed/',   name: 'GAA Advocate' },
+  { url: 'https://www.undercurrentnews.com/feed/',               name: 'Undercurrent News' },
+  { url: 'https://www.aquaculturenorthamerica.com/feed/',        name: 'Aquaculture North America' },
+];
+const AQUA_KEYWORDS = ['shrimp', 'prawn', 'vannamei', 'aquaculture', 'fish', 'ems', 'wssv',
+  'white spot', 'seafood', 'fishery', 'hatchery', 'pathogen', 'feed', 'disease', 'marine',
+  'tilapia', 'salmon', 'water quality', 'farming', 'harvest', 'export', 'import'];
+
+function parseRSS(xml, sourceName) {
+  const items = [];
+  const rx = /<item>([\s\S]*?)<\/item>/gi;
+  let m;
+  while ((m = rx.exec(xml)) !== null) {
+    const block = m[1];
+    const get = (tag) => {
+      const r = block.match(new RegExp(`<${tag}[\\s][^>]*>(?:<!\\[CDATA\\[)?([\\s\\S]*?)(?:\\]\\]>)?<\\/${tag}>|<${tag}>(?:<!\\[CDATA\\[)?([\\s\\S]*?)(?:\\]\\]>)?<\\/${tag}>`, 'i'));
+      return r ? (r[1] || r[2] || '').replace(/<[^>]+>/g, '').trim() : '';
+    };
+    const linkM = block.match(/<link>([^<]+)<\/link>|<link\s[^>]*href="([^"]+)"/i);
+    items.push({
+      title:   get('title'),
+      url:     linkM ? (linkM[1] || linkM[2] || '').trim() : '',
+      summary: get('description').slice(0, 300),
+      pubDate: get('pubDate') || get('dc:date') || '',
+      source:  sourceName,
+    });
   }
+  return items;
+}
+
+function catLabel(cat) {
+  return { industry:'🌏 อุตสาหกรรม', regulation:'📋 กฎระเบียบ', research:'🔬 งานวิจัย', disease:'🦠 โรคสัตว์น้ำ' }[cat] || '🌏 อุตสาหกรรม';
+}
+
+let newsRefreshLock = false;
+app.post('/api/refresh-news', async (req, res) => {
+  if (newsRefreshLock) return res.status(429).json({ error: 'กำลังอัปเดตอยู่ รอสักครู่' });
   newsRefreshLock = true;
   try {
-    const today = new Date().toISOString().slice(0, 10);
+    // 1. Fetch RSS feeds in parallel
+    const feedResults = await Promise.allSettled(
+      RSS_SOURCES.map(async ({ url, name }) => {
+        const r = await fetch(url, {
+          headers: { 'User-Agent': 'Mozilla/5.0 (compatible; OneAquacultureNewsBot/1.0; +https://one-aquaculture.onrender.com)' },
+          signal: AbortSignal.timeout(9000),
+        });
+        if (!r.ok) throw new Error(`${r.status}`);
+        return parseRSS(await r.text(), name);
+      })
+    );
+
+    // 2. Collect and filter relevant items
+    let items = [];
+    feedResults.forEach(r => { if (r.status === 'fulfilled') items.push(...r.value); });
+    const relevant = items.filter(it => {
+      const text = `${it.title} ${it.summary}`.toLowerCase();
+      return AQUA_KEYWORDS.some(kw => text.includes(kw));
+    });
+    relevant.sort((a, b) => new Date(b.pubDate || 0) - new Date(a.pubDate || 0));
+    const top = relevant.slice(0, 12);
+
+    if (!top.length) {
+      const newsFile = path.join(__dirname, 'news-data.json');
+      return res.json(fs.existsSync(newsFile)
+        ? JSON.parse(fs.readFileSync(newsFile, 'utf-8'))
+        : { articles: [], lastUpdated: null });
+    }
+
+    // 3. Batch-translate with Claude
+    const listed = top.map((it, i) =>
+      `[${i}] title: ${it.title}\nsource: ${it.source}\nurl: ${it.url}\ndate: ${it.pubDate}\nexcerpt: ${it.summary}`
+    ).join('\n---\n');
+
     const msg = await client.messages.create({
       model: 'claude-haiku-4-5-20251001',
-      max_tokens: 2048,
+      max_tokens: 3000,
       messages: [{
         role: 'user',
-        content: `Generate 8 recent aquaculture industry news articles relevant to Thai shrimp farmers as of ${today}.
-Return ONLY valid JSON array, no markdown, no explanation:
-[
-  {
-    "title": "English title",
-    "titleTH": "ชื่อข่าวภาษาไทย",
-    "source": "Source name (FAO / กรมประมง / GOAL / etc.)",
-    "url": "https://...(real or plausible URL)",
-    "date": "YYYY-MM-DD",
-    "category": "industry|regulation|research|disease",
-    "categoryLabel": "🌏 อุตสาหกรรม|📋 กฎระเบียบ|🔬 งานวิจัย|🦠 โรคสัตว์น้ำ",
-    "summary": "2-3 sentence Thai summary relevant to shrimp farmers in Thailand"
-  }
-]
-Categories must be one of: industry, regulation, research, disease.
-categoryLabel must match: industry→"🌏 อุตสาหกรรม", regulation→"📋 กฎระเบียบ", research→"🔬 งานวิจัย", disease→"🦠 โรคสัตว์น้ำ".
-Mix categories. Focus on vannamei shrimp, Thai Gulf coast aquaculture, EMS/WSSV/disease alerts, export markets, feed innovation, water quality research.`
+        content: `Below are ${top.length} real aquaculture news articles. For each, return a JSON array entry.
+Return ONLY a valid JSON array, no markdown fences, no explanation.
+
+Schema per item:
+{
+  "idx": <number matching [N] above>,
+  "titleTH": "แปลชื่อข่าวเป็นภาษาไทย",
+  "category": "industry|regulation|research|disease",
+  "summary": "สรุป 2 ประโยคภาษาไทย เน้นประโยชน์ต่อเกษตรกรกุ้งไทย"
+}
+
+Category rules: disease if mentions disease/pathogen/virus/bacteria; regulation if mentions law/ban/standard/certification; research if mentions study/trial/technology; otherwise industry.
+
+Articles:
+${listed}`
       }]
     });
 
     const raw = msg.content[0].text.trim();
-    const start = raw.indexOf('[');
-    const end = raw.lastIndexOf(']');
-    const articles = JSON.parse(raw.slice(start, end + 1));
+    const parsed = JSON.parse(raw.slice(raw.indexOf('['), raw.lastIndexOf(']') + 1));
+    const byIdx = Object.fromEntries(parsed.map(p => [p.idx, p]));
+
+    const articles = top.map((it, i) => {
+      const ai = byIdx[i] || {};
+      const cat = ['industry','regulation','research','disease'].includes(ai.category) ? ai.category : 'industry';
+      return {
+        title:         it.title,
+        titleTH:       ai.titleTH || it.title,
+        source:        it.source,
+        url:           it.url,
+        date:          it.pubDate ? new Date(it.pubDate).toISOString().slice(0,10) : '',
+        category:      cat,
+        categoryLabel: catLabel(cat),
+        summary:       ai.summary || it.summary,
+      };
+    });
+
     const payload = { articles, lastUpdated: new Date().toISOString() };
     fs.writeFileSync(path.join(__dirname, 'news-data.json'), JSON.stringify(payload, null, 2));
     res.json(payload);
@@ -228,6 +308,99 @@ Mix categories. Focus on vannamei shrimp, Thai Gulf coast aquaculture, EMS/WSSV/
     newsRefreshLock = false;
   }
 });
+
+// Auto-refresh news on startup (after 30s) and every 6 hours
+async function autoRefreshNews() {
+  if (newsRefreshLock) return;
+  newsRefreshLock = true;
+  try {
+    const feedResults = await Promise.allSettled(
+      RSS_SOURCES.map(async ({ url, name }) => {
+        const r = await fetch(url, {
+          headers: { 'User-Agent': 'Mozilla/5.0 (compatible; OneAquacultureNewsBot/1.0; +https://one-aquaculture.onrender.com)' },
+          signal: AbortSignal.timeout(9000),
+        });
+        if (!r.ok) throw new Error(`${r.status}`);
+        return parseRSS(await r.text(), name);
+      })
+    );
+    let items = [];
+    feedResults.forEach(r => { if (r.status === 'fulfilled') items.push(...r.value); });
+    const relevant = items.filter(it => AQUA_KEYWORDS.some(kw => (it.title + ' ' + it.summary).toLowerCase().includes(kw)));
+    relevant.sort((a, b) => new Date(b.pubDate || 0) - new Date(a.pubDate || 0));
+    const top = relevant.slice(0, 12);
+    if (!top.length) return;
+
+    const listed = top.map((it, i) =>
+      `[${i}] title: ${it.title}\nsource: ${it.source}\nurl: ${it.url}\ndate: ${it.pubDate}\nexcerpt: ${it.summary}`
+    ).join('\n---\n');
+
+    const msg = await client.messages.create({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 3000,
+      messages: [{
+        role: 'user',
+        content: `Below are ${top.length} real aquaculture news articles. For each, return a JSON array entry.
+Return ONLY a valid JSON array, no markdown fences, no explanation.
+
+Schema per item:
+{
+  "idx": <number matching [N] above>,
+  "titleTH": "แปลชื่อข่าวเป็นภาษาไทย",
+  "category": "industry|regulation|research|disease",
+  "summary": "สรุป 2 ประโยคภาษาไทย เน้นประโยชน์ต่อเกษตรกรกุ้งไทย"
+}
+
+Category rules: disease if mentions disease/pathogen/virus/bacteria; regulation if mentions law/ban/standard/certification; research if mentions study/trial/technology; otherwise industry.
+
+Articles:
+${listed}`
+      }]
+    });
+
+    const raw = msg.content[0].text.trim();
+    const parsed = JSON.parse(raw.slice(raw.indexOf('['), raw.lastIndexOf(']') + 1));
+    const byIdx = Object.fromEntries(parsed.map(p => [p.idx, p]));
+    const articles = top.map((it, i) => {
+      const ai = byIdx[i] || {};
+      const cat = ['industry','regulation','research','disease'].includes(ai.category) ? ai.category : 'industry';
+      return {
+        title: it.title, titleTH: ai.titleTH || it.title,
+        source: it.source, url: it.url,
+        date: it.pubDate ? new Date(it.pubDate).toISOString().slice(0, 10) : '',
+        category: cat, categoryLabel: catLabel(cat),
+        summary: ai.summary || it.summary,
+      };
+    });
+    fs.writeFileSync(path.join(__dirname, 'news-data.json'), JSON.stringify({ articles, lastUpdated: new Date().toISOString() }, null, 2));
+    console.log(`[news] auto-refreshed ${articles.length} articles`);
+  } catch (err) {
+    console.error('[news] auto-refresh error:', err.message);
+  } finally {
+    newsRefreshLock = false;
+  }
+}
+// On startup: refresh if news is older than 6 days (catches Monday after a week)
+setTimeout(async () => {
+  const newsFile = path.join(__dirname, 'news-data.json');
+  try {
+    const data = fs.existsSync(newsFile) ? JSON.parse(fs.readFileSync(newsFile, 'utf-8')) : {};
+    const ageMs = data.lastUpdated ? Date.now() - new Date(data.lastUpdated) : Infinity;
+    if (ageMs > 6 * 24 * 3600_000) await autoRefreshNews();
+  } catch {}
+}, 30_000);
+
+// Check every hour; actually refresh only on Monday and if not yet refreshed this week
+setInterval(async () => {
+  const now = new Date();
+  if (now.getDay() !== 1) return; // 1 = Monday
+  const newsFile = path.join(__dirname, 'news-data.json');
+  try {
+    const data = fs.existsSync(newsFile) ? JSON.parse(fs.readFileSync(newsFile, 'utf-8')) : {};
+    const ageMs = data.lastUpdated ? Date.now() - new Date(data.lastUpdated) : Infinity;
+    if (ageMs > 6 * 24 * 3600_000) await autoRefreshNews();
+  } catch {}
+}, 3600_000);
 
 // ─── CONTACT FORM EMAIL ───────────────────────────────────────────────────
 app.post('/api/contact', async (req, res) => {
