@@ -23,7 +23,7 @@ app.post('/api/diagnose', async (req, res) => {
   if (!symptoms) return res.status(400).json({ error: 'กรุณาระบุอาการ' });
 
   const productList = companyData.products.map(p =>
-    `- ${p.nameTH} (${p.nameEN}): ${p.description} [ใช้สายพันธุ์: ${p.strains.join(', ')}]`
+    `- ${p.nameTH} (${p.nameEN}): ${p.description}${p.strains?.length ? ` [ใช้สายพันธุ์: ${p.strains.join(', ')}]` : ''}`
   ).join('\n');
 
   const diseaseRef = companyData.shrimpDiseases.map(d =>
