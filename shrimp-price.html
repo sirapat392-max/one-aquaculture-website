@@ -143,6 +143,17 @@
 .range-btn:hover { border-color:var(--wine); color:var(--wine); }
 .range-btn.active { background:var(--wine); border-color:var(--wine); color:white; }
 
+/* ── SIZE CHIPS ── */
+.size-chip-row { display:flex; flex-wrap:wrap; gap:5px; margin-top:10px; }
+.size-chip {
+  padding:4px 10px; border-radius:20px; border:1.5px solid #E8E0E5;
+  background:white; color:#8A7A85; font-size:11px; font-weight:700;
+  cursor:pointer; font-family:'JetBrains Mono',monospace; transition:all .12s;
+  user-select:none;
+}
+.size-chip:hover { border-color:var(--wine); color:var(--wine); }
+.size-chip.on { color:white; border-color:transparent; }
+
 /* ── SIZE LABEL MAP ── */
 
 /* ── RESPONSIVE TABLE ── */
@@ -195,12 +206,12 @@
         <canvas id="barChart"></canvas>
       </div>
     </div>
-    <!-- Line chart: trend over 7 days -->
+    <!-- Line chart: trend -->
     <div class="chart-card">
       <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;flex-wrap:wrap;">
         <div>
           <div class="chart-title">แนวโน้มราคา</div>
-          <div class="chart-sub">ขนาดหลัก 60 · 80 · 100 · 120</div>
+          <div class="chart-sub" id="lineChartSub">เลือกขนาดด้านล่าง</div>
         </div>
         <div class="range-tabs" id="rangeTabs">
           <button class="range-btn" data-days="7">7 วัน</button>
@@ -209,7 +220,8 @@
           <button class="range-btn" data-days="365">1 ปี</button>
         </div>
       </div>
-      <div class="chart-box" style="height:240px;margin-top:12px;">
+      <div class="size-chip-row" id="sizeChips"><!-- JS inject --></div>
+      <div class="chart-box" style="height:220px;margin-top:10px;">
         <canvas id="lineChart"></canvas>
       </div>
     </div>
@@ -265,23 +277,37 @@ const SIZE_DESC = {
   145:'เล็กมาก', 150:'เล็กมาก',
 };
 
-// Line chart colors for trend sizes
-const LINE_COLORS = {
-  60:  { border:'#8B3060', bg:'rgba(139,48,96,.12)' },
-  80:  { border:'#C9956C', bg:'rgba(201,149,108,.12)' },
-  100: { border:'#1565C0', bg:'rgba(21,101,192,.12)' },
-  120: { border:'#16a34a', bg:'rgba(22,163,74,.12)' },
-};
+// Color palette for up to 24 sizes
+const PALETTE = [
+  '#8B3060','#C9956C','#1565C0','#16a34a','#9c27b0','#f57c5a',
+  '#0891b2','#d97706','#4f46e5','#be185d','#047857','#b45309',
+  '#7c3aed','#0369a1','#166534','#9f1239','#1e40af','#92400e',
+  '#065f46','#7e22ce','#1d4ed8','#115e59','#831843','#6b21a8',
+];
+function sizeColor(sz, allSizes) {
+  const idx = allSizes.indexOf(sz);
+  return PALETTE[idx % PALETTE.length];
+}
 
 let barChartInst = null;
 let lineChartInst = null;
-let globalByDate = null;
-let globalDates  = null;
+let globalByDate    = null;
+let globalDates     = null;
+let globalAllSizes  = [];       // all sizes present in latest data
+let selectedLineSizes = [60, 80, 100, 120];
 let selectedDays = 30;
+
+// ── FUZZ: ±1-3 baht deterministic noise per (date, size) ─────────────────────
+function fuzz(price, sz, dt) {
+  // hash of size + date → integer 0-6 → noise -3..+3
+  const dateNum = parseInt(dt.replace(/-/g, ''), 10) % 100000;
+  const h = (sz * 7919 + dateNum * 131) % 7;
+  return price + h - 3;
+}
 
 // ── DATA PROCESSING ──────────────────────────────────────────────────────────
 function processData(records) {
-  // Group: date → size → pick entry (prefer non-stable trend, then take first)
+  // Group: date → size → pick best entry
   const byDate = {};
   for (const r of records) {
     const dt = r.date.slice(0, 10);
@@ -290,15 +316,20 @@ function processData(records) {
     if (!byDate[dt][sz]) {
       byDate[dt][sz] = r;
     } else {
-      // prefer non-stable entry (has meaningful change)
       const existing = byDate[dt][sz];
       if (existing.trend === 'stable' && r.trend !== 'stable') byDate[dt][sz] = r;
-      // or prefer more recent createdAt
       else if (new Date(r.createdAt) > new Date(existing.createdAt)) byDate[dt][sz] = r;
     }
   }
 
-  // Sort dates
+  // Apply fuzz ±1-3 baht to every stored price
+  for (const dt of Object.keys(byDate)) {
+    for (const sz of Object.keys(byDate[dt])) {
+      const entry = byDate[dt][sz];
+      entry.price = fuzz(entry.price, parseInt(sz), dt);
+    }
+  }
+
   const dates = Object.keys(byDate).sort();
   const latestDate = dates[dates.length - 1];
   const latestPrices = byDate[latestDate] || {};
@@ -387,12 +418,69 @@ function renderBarChart(latestPrices) {
   });
 }
 
+// ── RENDER SIZE CHIPS ─────────────────────────────────────────────────────────
+function renderSizeChips(allSizes) {
+  const container = document.getElementById('sizeChips');
+  const allBtn = `<button class="size-chip" id="chipAll" onclick="toggleAllSizes()">ทั้งหมด</button>`;
+  const chips = allSizes.map(sz => {
+    const color = sizeColor(sz, allSizes);
+    const isOn = selectedLineSizes.includes(sz);
+    return `<button class="size-chip${isOn?' on':''}" data-sz="${sz}"
+      style="${isOn?`background:${color};`:''}color:${isOn?'white':''}"
+      onclick="toggleSize(${sz},'${color}')">L${sz}</button>`;
+  }).join('');
+  container.innerHTML = allBtn + chips;
+  updateAllBtn();
+}
+
+function updateAllBtn() {
+  const btn = document.getElementById('chipAll');
+  if (!btn) return;
+  const all = selectedLineSizes.length === globalAllSizes.length;
+  btn.style.background = all ? '#1C1020' : '';
+  btn.style.color = all ? 'white' : '';
+  btn.style.borderColor = all ? '#1C1020' : '';
+}
+
+function toggleSize(sz, color) {
+  const i = selectedLineSizes.indexOf(sz);
+  if (i >= 0) {
+    if (selectedLineSizes.length === 1) return; // keep at least 1
+    selectedLineSizes.splice(i, 1);
+  } else {
+    selectedLineSizes.push(sz);
+  }
+  // update chip appearance
+  const chip = document.querySelector(`.size-chip[data-sz="${sz}"]`);
+  const on = selectedLineSizes.includes(sz);
+  chip.classList.toggle('on', on);
+  chip.style.background = on ? color : '';
+  chip.style.color = on ? 'white' : '';
+  updateAllBtn();
+  refreshLineChart();
+}
+
+function toggleAllSizes() {
+  if (selectedLineSizes.length === globalAllSizes.length) {
+    selectedLineSizes = [60, 80, 100, 120].filter(s => globalAllSizes.includes(s));
+  } else {
+    selectedLineSizes = [...globalAllSizes];
+  }
+  renderSizeChips(globalAllSizes);
+  refreshLineChart();
+}
+
+function refreshLineChart() {
+  if (globalByDate && globalDates)
+    renderLineChart(globalByDate, globalDates, selectedDays);
+}
+
 // ── RENDER LINE CHART ────────────────────────────────────────────────────────
 function renderLineChart(byDate, dates, nDays) {
   const slice = dates.slice(-nDays);
-  // For 1-year view, show weekly label; for <=90 days show every date; for <=7 show all
-  const skipLabel = nDays >= 365 ? 14 : nDays >= 90 ? 7 : nDays >= 30 ? 3 : 1;
+  const isAll = selectedLineSizes.length === globalAllSizes.length;
 
+  const skipLabel = nDays >= 365 ? 14 : nDays >= 90 ? 7 : nDays >= 30 ? 3 : 1;
   const labels = slice.map((d, i) => {
     if (i % skipLabel !== 0 && i !== slice.length - 1) return '';
     const dt = new Date(d + 'T12:00:00');
@@ -401,20 +489,32 @@ function renderLineChart(byDate, dates, nDays) {
       : `${dt.getDate()}/${dt.getMonth()+1}`;
   });
 
-  const pointRadius = nDays >= 90 ? 0 : nDays >= 30 ? 1.5 : 3;
+  // Point size: hide when all-sizes or long range
+  const pointRadius = (isAll || nDays >= 90) ? 0 : nDays >= 30 ? 1.5 : 3;
+  const lineWidth   = isAll ? 1 : nDays >= 90 ? 1.5 : 2.5;
 
-  const datasets = TREND_SIZES.map(sz => ({
-    label: `L${sz}`,
-    data: slice.map(d => byDate[d]?.[sz]?.price ?? null),
-    borderColor: LINE_COLORS[sz].border,
-    backgroundColor: LINE_COLORS[sz].bg,
-    pointRadius,
-    pointHoverRadius: 5,
-    borderWidth: nDays >= 90 ? 1.5 : 2.5,
-    tension: 0.3,
-    spanGaps: true,
-    fill: false,
-  }));
+  const sizesToShow = [...selectedLineSizes].sort((a,b)=>a-b);
+  const datasets = sizesToShow.map(sz => {
+    const color = sizeColor(sz, globalAllSizes);
+    return {
+      label: `L${sz}`,
+      data: slice.map(d => byDate[d]?.[sz]?.price ?? null),
+      borderColor: color,
+      backgroundColor: color.replace(')', ',.08)').replace('rgb', 'rgba'),
+      pointRadius,
+      pointHoverRadius: isAll ? 3 : 5,
+      borderWidth: lineWidth,
+      tension: 0.3,
+      spanGaps: true,
+      fill: false,
+    };
+  });
+
+  // Update subtitle
+  const sub = document.getElementById('lineChartSub');
+  if (sub) sub.textContent = isAll
+    ? `ทุกขนาด (${sizesToShow.length} ไซส์)`
+    : sizesToShow.map(s=>`L${s}`).join(' · ');
 
   if (lineChartInst) lineChartInst.destroy();
   const ctx = document.getElementById('lineChart').getContext('2d');
@@ -427,24 +527,24 @@ function renderLineChart(byDate, dates, nDays) {
       interaction: { mode: 'index', intersect: false },
       plugins: {
         legend: {
+          display: !isAll,
           position: 'bottom',
-          labels: { font: { size: 11, family: 'JetBrains Mono' }, boxWidth: 12, padding: 10 }
+          labels: { font: { size: 10, family: 'JetBrains Mono' }, boxWidth: 10, padding: 8 }
         },
         tooltip: {
           backgroundColor: '#1C1020',
-          titleFont: { size: 11, family: 'IBM Plex Sans Thai' },
-          bodyFont:  { size: 12, family: 'JetBrains Mono', weight: '600' },
+          titleFont: { size: 11 },
+          bodyFont: { size: 11, family: 'JetBrains Mono' },
           padding: 10, cornerRadius: 8,
-          callbacks: { label: ctx => ` L${ctx.dataset.label.replace('L','')}: ${ctx.parsed.y ?? '—'} ฿` }
+          callbacks: {
+            label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y ?? '—'} ฿`
+          }
         }
       },
       scales: {
         x: {
           grid: { display: false },
-          ticks: {
-            font: { size: 9, family: 'JetBrains Mono' }, color: '#8A7A85',
-            maxRotation: 0, autoSkip: false,
-          }
+          ticks: { font: { size: 9, family: 'JetBrains Mono' }, color: '#8A7A85', maxRotation: 0, autoSkip: false }
         },
         y: {
           grid: { color: '#F4F0F5' },
@@ -508,12 +608,18 @@ async function loadPrices() {
     document.getElementById('tableDate').textContent = `ข้อมูล ณ ${dateStr}`;
 
     // Store globally for range-tab re-renders
-    globalByDate = byDate;
-    globalDates  = dates;
+    globalByDate   = byDate;
+    globalDates    = dates;
+    globalAllSizes = Object.keys(latestPrices).map(Number).sort((a,b)=>a-b);
+
+    // Seed default selection with sizes actually present
+    selectedLineSizes = [60, 80, 100, 120].filter(s => globalAllSizes.includes(s));
+    if (!selectedLineSizes.length) selectedLineSizes = globalAllSizes.slice(0, 4);
 
     // Render all sections
     renderSummaryCards(latestPrices);
     renderBarChart(latestPrices);
+    renderSizeChips(globalAllSizes);
     renderLineChart(byDate, dates, selectedDays);
     renderTable(latestPrices);
 
