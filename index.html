@@ -453,6 +453,7 @@
   .reveal.visible { opacity: 1; transform: translateY(0); }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="js/i18n.js"></script>
 <script>
   // ── EmailJS config ──────────────────────────────────────────────
   // 1. PUBLIC_KEY  → EmailJS dashboard → Account → API Keys
@@ -482,7 +483,11 @@
     <li><a href="#why">ทำไมต้องเรา</a></li>
     <li><a href="#contact">ติดต่อ</a></li>
   </ul>
-  <a href="#contact" class="nav-cta">ปรึกษาผู้เชี่ยวชาญ</a>
+  <div class="lang-switcher">
+    <button class="lang-btn" data-lang="th" onclick="setLang('th')">TH</button>
+    <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+  </div>
+  <a href="#contact" class="nav-cta" data-i18n="nav.cta">ปรึกษาผู้เชี่ยวชาญ</a>
   <button class="nav-hamburger" aria-label="menu">
     <span></span><span></span><span></span>
   </button>
@@ -499,11 +504,11 @@
     <div class="geo-hex"></div>
   </div>
   <div class="hero-content">
-    <div class="hero-badge">● ผลิตภัณฑ์แบรนด์ตัวเอง · เชื่อใจโดยกว่า 100 ฟาร์มทั่วไทย</div>
+    <div class="hero-badge" data-i18n="idx.hero.badge">● เวชภัณฑ์สัตว์น้ำ · เชื่อใจโดยกว่า 100 ฟาร์มทั่วไทย</div>
     <div class="hero-title-en">ONE<br><span>AQUACULTURE</span></div>
     <div class="hero-title-th">บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด</div>
-    <p class="hero-desc">
-      เวชภัณฑ์สัตว์น้ำแบรนด์ตัวเอง ทดสอบจากหน้างานจริง<br>
+    <p class="hero-desc" data-i18n-html="idx.hero.desc">
+      เวชภัณฑ์สัตว์น้ำคุณภาพสูง ทดสอบจากหน้างานจริง<br>
       ให้บริการกว่า 100 ฟาร์มทั่วภาคใต้อ่าวไทย อันดามัน และภาคกลาง
     </p>
     <div class="hero-actions">
@@ -515,7 +520,7 @@
     </div>
     <div class="hero-stats">
       <div class="stat"><div class="stat-num">100<span style="font-size:0.6em">+</span></div><div class="stat-label">ฟาร์มที่ไว้วางใจ<br>Trusted Farms</div></div>
-      <div class="stat"><div class="stat-num" style="font-size:22px;line-height:1.6;">แบรนด์<br>ตัวเอง</div><div class="stat-label">ควบคุมคุณภาพทุกขั้นตอน<br>Own Brand</div></div>
+      <div class="stat"><div class="stat-num" style="font-size:22px;line-height:1.6;">100%</div><div class="stat-label" data-i18n="idx.hero.stat2">ควบคุมคุณภาพ<br>ทุกขั้นตอน</div></div>
       <div class="stat"><div class="stat-num">3</div><div class="stat-label">ภูมิภาคที่ให้บริการ<br>Regions Served</div></div>
     </div>
   </div>
@@ -535,7 +540,7 @@
 <!-- TRUST BAND -->
 <div style="background:var(--wine-deeper);padding:16px 5%;display:flex;align-items:center;justify-content:center;gap:40px;flex-wrap:wrap;">
   <div style="display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.85);font-size:13px;font-weight:600;">
-    <span style="font-size:18px;">✅</span> ผลิตภัณฑ์แบรนด์ตัวเอง ควบคุมคุณภาพ 100%
+    <span style="font-size:18px;">✅</span> <span data-i18n="idx.trust.1">เวชภัณฑ์คุณภาพสูง ควบคุมคุณภาพ 100%</span>
   </div>
   <div style="width:1px;height:20px;background:rgba(255,255,255,0.2);flex-shrink:0;"></div>
   <div style="display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.85);font-size:13px;font-weight:600;">
@@ -566,7 +571,7 @@
       <h2 class="section-title">วัน อควาคัลเจอร์ โปรดัคท์</h2>
       <p class="section-title-en">One Aquaculture Product Co., Ltd. · ก่อตั้ง 2564</p>
       <p class="section-desc">
-        ผลิตและจำหน่ายเวชภัณฑ์สัตว์น้ำ<strong>แบรนด์ตัวเอง</strong> ครอบคลุมวิตามิน แร่ธาตุ สารบำบัดน้ำ สารฆ่าเชื้อ และสารปรับสภาพน้ำ สำหรับการเพาะเลี้ยงกุ้งเชิงพาณิชย์ ทดสอบและพัฒนาจากหน้างานจริง ปัจจุบันดูแลกว่า <strong>100 ฟาร์ม</strong> ทั่วภาคใต้อ่าวไทย อันดามัน และภาคกลาง
+        ผลิตและจำหน่ายเวชภัณฑ์สัตว์น้ำ<strong>คุณภาพสูง</strong> ครอบคลุมวิตามิน แร่ธาตุ สารบำบัดน้ำ สารฆ่าเชื้อ และสารปรับสภาพน้ำ สำหรับการเพาะเลี้ยงกุ้งเชิงพาณิชย์ ทดสอบและพัฒนาจากหน้างานจริง ปัจจุบันดูแลกว่า <strong>100 ฟาร์ม</strong> ทั่วภาคใต้อ่าวไทย อันดามัน และภาคกลาง
       </p>
       <div class="about-features">
         <div class="feature-item">
@@ -748,15 +753,15 @@
     <h2 class="section-title">100+ ฟาร์มเลือกเรา ไม่ใช่เพราะโฆษณา</h2>
     <p class="section-title-en">Chosen by Farmers, Proven in the Field</p>
     <p class="section-desc">
-      เราไม่ใช่นายหน้าขายสินค้า — เราพัฒนาผลิตภัณฑ์แบรนด์ตัวเอง ทดสอบจากฟาร์มจริง และยืนหยัดข้างผู้เลี้ยงทุกขั้นตอน
+      ทีมงานลงพื้นที่จริง ผลิตภัณฑ์ทดสอบในบ่อเลี้ยงจริง และยืนหยัดข้างผู้เลี้ยงทุกขั้นตอน
     </p>
   </div>
   <div class="why-grid">
     <div class="why-card reveal">
       <div class="why-num">01</div>
       <span class="why-icon">🏷️</span>
-      <h4>แบรนด์ตัวเอง ไม่ใช่แค่รีเซลเลอร์</h4>
-      <p>ผลิตภัณฑ์ ONE AQUACULTURE PRODUCT เป็นของเราเอง ควบคุมสูตร คุณภาพ และราคาได้โดยตรง ไม่มีต้นทุนคนกลาง</p>
+      <h4>คุณภาพพิสูจน์จากฟาร์มจริง</h4>
+      <p>ผลิตภัณฑ์ ONE AQUACULTURE PRODUCT ควบคุมสูตรและคุณภาพโดยตรง ทดสอบในบ่อเลี้ยงเชิงพาณิชย์ก่อนวางจำหน่าย</p>
     </div>
     <div class="why-card reveal">
       <div class="why-num">02</div>
@@ -1010,7 +1015,7 @@
           <span>วัน อควาคัลเจอร์ โปรดัคท์</span>
         </div>
       </div>
-      <p class="footer-desc">ผลิตภัณฑ์เวชภัณฑ์สัตว์น้ำแบรนด์ตัวเอง ไว้วางใจโดยกว่า 100 ฟาร์มทั่วภาคใต้อ่าวไทย อันดามัน และภาคกลาง ก่อตั้ง 2564</p>
+      <p class="footer-desc">เวชภัณฑ์สัตว์น้ำคุณภาพสูง ทดสอบจากหน้างานจริง ไว้วางใจโดยกว่า 100 ฟาร์ม ทั่วภาคใต้อ่าวไทย อันดามัน และภาคกลาง ก่อตั้ง 2564</p>
       <a href="https://www.facebook.com/profile.php?id=100075538372879" target="_blank" style="display:inline-flex;align-items:center;gap:8px;color:#90CAF9;font-size:13px;font-weight:600;text-decoration:none;margin-top:12px;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
         ติดตามบน Facebook
@@ -1129,6 +1134,9 @@
     document.querySelector('nav').style.boxShadow = window.scrollY > 10
       ? '0 4px 24px rgba(139,48,96,0.12)' : '0 2px 16px rgba(139,48,96,0.08)';
   });
+
+  // Apply i18n on load
+  if (typeof applyI18n === 'function') applyI18n();
 </script>
 </body>
 </html>

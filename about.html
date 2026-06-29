@@ -42,20 +42,8 @@ body { padding-top: 68px; }
 .value-card h4 { font-size: 17px; font-weight: 700; color: var(--wine-dark); margin-bottom: 10px; }
 .value-card p { font-size: 13px; color: var(--text-mid); line-height: 1.75; }
 
-/* COMPLIANCE */
-.compliance-section { padding: 72px 5%; max-width: 1100px; margin: 0 auto; }
-.compliance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
-.compliance-card { background: white; border-radius: 16px; border: 1px solid var(--gray-mid); box-shadow: var(--shadow); padding: 28px; }
-.compliance-card h4 { font-size: 17px; font-weight: 700; color: var(--text-dark); margin-bottom: 6px; }
-.compliance-card .sub { font-size: 12px; color: var(--text-soft); margin-bottom: 14px; }
-.compliance-card p { font-size: 14px; color: var(--text-mid); line-height: 1.7; }
-.check-list { list-style: none; margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
-.check-list li { display: flex; gap: 8px; font-size: 13px; color: var(--text-mid); }
-.check-list li::before { content: "✓"; color: var(--wine); font-weight: 700; flex-shrink: 0; }
-
 @media (max-width: 768px) {
   .mission-inner { grid-template-columns: 1fr; }
-  .compliance-grid { grid-template-columns: 1fr; }
   .about-hero { padding: 60px 5% 48px; }
   .about-hero h1 { font-size: 24px; }
   .about-hero p { font-size: 14px; }
@@ -80,23 +68,23 @@ body { padding-top: 68px; }
   <div class="logo-ring"><img src="logo.jpg" alt="ONE AQUACULTURE PRODUCT"></div>
   <h1>
     <span>ONE AQUACULTURE PRODUCT</span>
-    บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด
+    <span data-i18n="about.hero.company">บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด</span>
   </h1>
-  <p>ผลิตภัณฑ์แบรนด์ตัวเอง ทดสอบจากหน้างานจริง ไว้วางใจโดยกว่า 100 ฟาร์มทั่วภาคใต้อ่าวไทย อันดามัน และภาคกลาง</p>
+  <p data-i18n="about.hero.tagline">เวชภัณฑ์สัตว์น้ำคุณภาพสูง ทดสอบจากหน้างานจริง ไว้วางใจโดยกว่า 100 ฟาร์มทั่วภาคใต้อ่าวไทย อันดามัน และภาคกลาง</p>
   <div style="display:flex;gap:32px;justify-content:center;margin-top:28px;flex-wrap:wrap;">
     <div style="text-align:center;">
       <div style="font-size:36px;font-weight:800;color:white;">100<span style="font-size:0.6em">+</span></div>
-      <div style="font-size:12px;color:rgba(255,255,255,0.7);">ฟาร์มที่ไว้วางใจ</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.7);" data-i18n="about.stat.farms">ฟาร์มที่ไว้วางใจ</div>
     </div>
     <div style="width:1px;background:rgba(255,255,255,0.2);"></div>
     <div style="text-align:center;">
       <div style="font-size:36px;font-weight:800;color:white;">3</div>
-      <div style="font-size:12px;color:rgba(255,255,255,0.7);">ภูมิภาคที่ให้บริการ</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.7);" data-i18n="about.stat.regions">ภูมิภาคที่ให้บริการ</div>
     </div>
     <div style="width:1px;background:rgba(255,255,255,0.2);"></div>
     <div style="text-align:center;">
       <div style="font-size:36px;font-weight:800;color:white;">2564</div>
-      <div style="font-size:12px;color:rgba(255,255,255,0.7);">ปีที่ก่อตั้ง</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.7);" data-i18n="about.stat.founded">ปีที่ก่อตั้ง</div>
     </div>
   </div>
 </div>
@@ -106,29 +94,29 @@ body { padding-top: 68px; }
   <div class="mission-inner">
     <div class="mission-item reveal">
       <div class="mission-icon">🔬</div>
-      <h3>วิทยาศาสตร์และนวัตกรรม</h3>
-      <p>คัดสรรผลิตภัณฑ์ที่ผ่านการพิสูจน์ทางวิทยาศาสตร์ มีประสิทธิภาพและปลอดภัยสำหรับการเพาะเลี้ยง</p>
+      <h3 data-i18n="about.m1.title">วิทยาศาสตร์และนวัตกรรม</h3>
+      <p data-i18n="about.m1.desc">คัดสรรผลิตภัณฑ์ที่ผ่านการพิสูจน์ทางวิทยาศาสตร์ มีประสิทธิภาพและปลอดภัยสำหรับการเพาะเลี้ยง</p>
     </div>
     <div class="mission-item reveal">
       <div class="mission-icon">🌿</div>
-      <h3>ยั่งยืนและปลอดภัย</h3>
-      <p>ผลิตภัณฑ์ชีวภาพปลอดภัยต่อสิ่งแวดล้อม ไม่ตกค้างในผลผลิต สนับสนุนการเพาะเลี้ยงยั่งยืน</p>
+      <h3 data-i18n="about.m2.title">ยั่งยืนและปลอดภัย</h3>
+      <p data-i18n="about.m2.desc">ผลิตภัณฑ์ชีวภาพปลอดภัยต่อสิ่งแวดล้อม ไม่ตกค้างในผลผลิต สนับสนุนการเพาะเลี้ยงยั่งยืน</p>
     </div>
     <div class="mission-item reveal">
       <div class="mission-icon">🤝</div>
-      <h3>ซื่อสัตย์ โปร่งใส</h3>
-      <p>ดำเนินธุรกิจด้วยความซื่อสัตย์ โปร่งใส และพร้อมให้ข้อมูลที่ถูกต้องแก่ลูกค้าเสมอ</p>
+      <h3 data-i18n="about.m3.title">ซื่อสัตย์ โปร่งใส</h3>
+      <p data-i18n="about.m3.desc">ดำเนินธุรกิจด้วยความซื่อสัตย์ โปร่งใส และพร้อมให้ข้อมูลที่ถูกต้องแก่ลูกค้าเสมอ</p>
     </div>
   </div>
 </div>
 
 <!-- STORY -->
 <div class="story-section">
-  <div class="section-tag reveal">เรื่องราวของเรา · Our Story</div>
-  <h2 class="reveal">จากฟาร์มกุ้งสู่แบรนด์ตัวเอง</h2>
-  <p class="reveal">บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด ก่อตั้งในปี พ.ศ. 2564 ด้วยความเชื่อว่าผู้เลี้ยงกุ้งต้องการมากกว่าแค่สินค้า — พวกเขาต้องการคู่ค้าที่เข้าใจฟาร์มจริง เราจึงพัฒนาผลิตภัณฑ์แบรนด์ตัวเอง ทดสอบในบ่อเลี้ยงจริง และปรับปรุงต่อเนื่องจากข้อมูลหน้างาน</p>
-  <p class="reveal">ปัจจุบันให้บริการกว่า <strong>100 ฟาร์มเชิงพาณิชย์</strong> ครอบคลุมพื้นที่ภาคใต้ฝั่งอ่าวไทย ภาคใต้ฝั่งอันดามัน และภาคกลาง ทีมงานลงพื้นที่จริง ติดตามผล และพร้อมให้คำปรึกษาอย่างต่อเนื่อง</p>
-  <div class="highlight-box reveal">
+  <div class="section-tag reveal" data-i18n="about.story.tag">เรื่องราวของเรา · Our Story</div>
+  <h2 class="reveal" data-i18n="about.story.title">จากฟาร์มกุ้งสู่นวัตกรรมการเพาะเลี้ยง</h2>
+  <p class="reveal" data-i18n-html="about.story.p1">บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด ก่อตั้งในปี พ.ศ. 2564 ด้วยความเชื่อว่าผู้เลี้ยงกุ้งต้องการมากกว่าแค่สินค้า — พวกเขาต้องการคู่ค้าที่เข้าใจฟาร์มจริง เราจึงพัฒนาผลิตภัณฑ์ที่ทดสอบในบ่อเลี้ยงจริง และปรับปรุงต่อเนื่องจากข้อมูลหน้างาน</p>
+  <p class="reveal" data-i18n-html="about.story.p2">ปัจจุบันให้บริการกว่า <strong>100 ฟาร์มเชิงพาณิชย์</strong> ครอบคลุมพื้นที่ภาคใต้ฝั่งอ่าวไทย ภาคใต้ฝั่งอันดามัน และภาคกลาง ทีมงานลงพื้นที่จริง ติดตามผล และพร้อมให้คำปรึกษาอย่างต่อเนื่อง</p>
+  <div class="highlight-box reveal" data-i18n="about.story.quote">
     "เราไม่ใช่แค่ผู้ขาย — เราเป็นคู่ค้าที่ยืนอยู่ข้างฟาร์มคุณตั้งแต่เปิดบ่อจนถึงวันเก็บเกี่ยว"
   </div>
 </div>
@@ -136,33 +124,34 @@ body { padding-top: 68px; }
 <!-- VALUES -->
 <div class="values-section">
   <div class="values-inner">
-    <div class="values-title">ค่านิยมหลักของเรา</div>
+    <div class="values-title" data-i18n="about.values.title">ค่านิยมหลักของเรา</div>
     <div class="values-grid">
       <div class="value-card reveal">
         <div class="value-num">01</div>
-        <h4>คุณภาพ</h4>
-        <p>คัดเลือกผลิตภัณฑ์คุณภาพสูงจากผู้ผลิตที่เชื่อถือได้ ผ่านการทดสอบและรับรอง ก่อนนำมาจัดจำหน่าย</p>
+        <h4 data-i18n="about.v1.title">คุณภาพ</h4>
+        <p data-i18n="about.v1.desc">คัดเลือกผลิตภัณฑ์คุณภาพสูงจากผู้ผลิตที่เชื่อถือได้ ผ่านการทดสอบและรับรอง ก่อนนำมาจัดจำหน่าย</p>
       </div>
       <div class="value-card reveal">
         <div class="value-num">02</div>
-        <h4>ความปลอดภัย</h4>
-        <p>ผลิตภัณฑ์ชีวภาพที่ไม่ก่อให้เกิดสารตกค้างในผลผลิต ปลอดภัยต่อผู้บริโภคและสิ่งแวดล้อม</p>
+        <h4 data-i18n="about.v2.title">ความปลอดภัย</h4>
+        <p data-i18n="about.v2.desc">ผลิตภัณฑ์ชีวภาพที่ไม่ก่อให้เกิดสารตกค้างในผลผลิต ปลอดภัยต่อผู้บริโภคและสิ่งแวดล้อม</p>
       </div>
       <div class="value-card reveal">
         <div class="value-num">03</div>
-        <h4>ความซื่อสัตย์</h4>
-        <p>ให้ข้อมูลที่ถูกต้องและโปร่งใสแก่ลูกค้า ไม่อ้างสรรพคุณเกินจริง</p>
+        <h4 data-i18n="about.v3.title">ความซื่อสัตย์</h4>
+        <p data-i18n="about.v3.desc">ให้ข้อมูลที่ถูกต้องและโปร่งใสแก่ลูกค้า ไม่อ้างสรรพคุณเกินจริง</p>
       </div>
       <div class="value-card reveal">
         <div class="value-num">04</div>
-        <h4>ความยั่งยืน</h4>
-        <p>สนับสนุนการเพาะเลี้ยงสัตว์น้ำที่ยั่งยืน ดูแลระบบนิเวศ และรักษาสมดุลสิ่งแวดล้อม</p>
+        <h4 data-i18n="about.v4.title">ความยั่งยืน</h4>
+        <p data-i18n="about.v4.desc">สนับสนุนการเพาะเลี้ยงสัตว์น้ำที่ยั่งยืน ดูแลระบบนิเวศ และรักษาสมดุลสิ่งแวดล้อม</p>
       </div>
     </div>
   </div>
 </div>
 
 
+<script src="js/i18n.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

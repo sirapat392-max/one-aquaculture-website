@@ -1,14 +1,21 @@
 // ─── SHARED NAV & FOOTER INJECTION ────────────────────────────────────────
 const currentPage = location.pathname.split('/').pop() || 'index.html';
 
+function langSwitcherHTML() {
+  return `<div class="lang-switcher">
+    <button class="lang-btn" data-lang="th" onclick="setLang('th')">TH</button>
+    <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+  </div>`;
+}
+
 function navHTML() {
   const links = [
-    { href: 'index.html',        label: 'หน้าแรก' },
-    { href: 'products.html',     label: 'ผลิตภัณฑ์' },
-    { href: 'ai-diagnosis.html', label: '🤖 วิเคราะห์โรค' },
-    { href: 'news.html',         label: 'ข่าวสาร' },
-    { href: 'about.html',        label: 'เกี่ยวกับเรา' },
-    { href: 'contact.html',      label: 'ติดต่อ' },
+    { href: 'index.html',        key: 'nav.home' },
+    { href: 'products.html',     key: 'nav.products' },
+    { href: 'ai-diagnosis.html', key: 'nav.diagnosis' },
+    { href: 'news.html',         key: 'nav.news' },
+    { href: 'about.html',        key: 'nav.about' },
+    { href: 'contact.html',      key: 'nav.contact' },
   ];
   return `
 <nav>
@@ -20,9 +27,10 @@ function navHTML() {
     </div>
   </a>
   <ul class="nav-links" id="navLinks">
-    ${links.map(l => `<li><a href="${l.href}" class="${currentPage===l.href?'active':''}">${l.label}</a></li>`).join('')}
+    ${links.map(l => `<li><a href="${l.href}" class="${currentPage===l.href?'active':''}" data-i18n="${l.key}">${t(l.key)}</a></li>`).join('')}
   </ul>
-  <a href="contact.html" class="nav-cta" id="navCta">ปรึกษาผู้เชี่ยวชาญ</a>
+  ${langSwitcherHTML()}
+  <a href="contact.html" class="nav-cta" id="navCta" data-i18n="nav.cta">${t('nav.cta')}</a>
   <button class="nav-hamburger" id="navHamburger" aria-label="เมนู">
     <span></span><span></span><span></span>
   </button>
@@ -39,50 +47,52 @@ function footerHTML() {
           <div class="footer-logo-icon"><img src="logo.jpg" alt="ONE logo"></div>
           <div class="footer-logo-text"><strong>ONE AQUACULTURE PRODUCT</strong><span>บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด</span></div>
         </div>
-        <p class="footer-desc">ผลิตภัณฑ์เวชภัณฑ์สัตว์น้ำแบรนด์ตัวเอง ไว้วางใจโดยกว่า 100 ฟาร์ม ทั่วภาคใต้อ่าวไทย อันดามัน และภาคกลาง</p>
+        <p class="footer-desc" data-i18n="footer.desc">${t('footer.desc')}</p>
         <a href="https://www.facebook.com/profile.php?id=100075538372879" target="_blank" style="display:inline-flex;align-items:center;gap:7px;color:#90CAF9;font-size:12px;font-weight:600;text-decoration:none;margin-top:10px;">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-          Facebook · ONE Aquaculture Product
+          <span data-i18n="footer.follow">${t('footer.follow')}</span>
         </a>
       </div>
       <div class="footer-col">
-        <h5>ผลิตภัณฑ์</h5>
+        <h5 data-i18n="footer.col1">${t('footer.col1')}</h5>
         <ul>
-          <li><a href="products.html#water">จุลินทรีย์ปรับสภาพน้ำ</a></li>
-          <li><a href="products.html#feed">ผลิตภัณฑ์เสริมอาหาร</a></li>
-          <li><a href="products.html#disease">ควบคุมโรค</a></li>
-          <li><a href="products.html#soil">ปรับปรุงดินก้นบ่อ</a></li>
+          <li><a href="products.html#water" data-i18n="footer.p1.1">${t('footer.p1.1')}</a></li>
+          <li><a href="products.html#feed"  data-i18n="footer.p1.2">${t('footer.p1.2')}</a></li>
+          <li><a href="products.html#disease" data-i18n="footer.p1.3">${t('footer.p1.3')}</a></li>
+          <li><a href="products.html#soil"  data-i18n="footer.p1.4">${t('footer.p1.4')}</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <h5>บริการ</h5>
+        <h5 data-i18n="footer.col2">${t('footer.col2')}</h5>
         <ul>
-          <li><a href="ai-diagnosis.html">🤖 วิเคราะห์โรคกุ้ง AI</a></li>
-          <li><a href="news.html">ข่าวสาร &amp; ความรู้</a></li>
-          <li><a href="about.html">เกี่ยวกับเรา</a></li>
-          <li><a href="contact.html">ติดต่อเรา</a></li>
+          <li><a href="ai-diagnosis.html" data-i18n="footer.s1.1">${t('footer.s1.1')}</a></li>
+          <li><a href="news.html"         data-i18n="footer.s1.2">${t('footer.s1.2')}</a></li>
+          <li><a href="about.html"        data-i18n="footer.s1.3">${t('footer.s1.3')}</a></li>
+          <li><a href="contact.html"      data-i18n="footer.s1.4">${t('footer.s1.4')}</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <h5>กฎระเบียบ</h5>
+        <h5 data-i18n="footer.col3">${t('footer.col3')}</h5>
         <ul>
-          <li><a href="https://www4.fisheries.go.th" target="_blank">กรมประมง</a></li>
-          <li><a href="https://haz.fisheries.go.th" target="_blank">ระบบ HAZDOF</a></li>
-          <li><a href="products.html#register">ทะเบียนวัตถุอันตราย</a></li>
+          <li><a href="https://www4.fisheries.go.th" target="_blank" data-i18n="footer.r1.1">${t('footer.r1.1')}</a></li>
+          <li><a href="https://haz.fisheries.go.th"  target="_blank" data-i18n="footer.r1.2">${t('footer.r1.2')}</a></li>
+          <li><a href="products.html#register" data-i18n="footer.r1.3">${t('footer.r1.3')}</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2569 บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด · All rights reserved.</p>
+      <p data-i18n="footer.copy">${t('footer.copy')}</p>
     </div>
   </div>
 </footer>`;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Inject nav & footer
   document.body.insertAdjacentHTML('afterbegin', navHTML());
   document.body.insertAdjacentHTML('beforeend', footerHTML());
+
+  // apply any remaining data-i18n on page content
+  if (typeof applyI18n === 'function') applyI18n();
 
   // Mobile nav hamburger
   const ham = document.getElementById('navHamburger');
@@ -92,7 +102,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const isOpen = navLinksList.classList.toggle('mobile-open');
       ham.classList.toggle('open', isOpen);
     });
-    // close on link click
     navLinksList.querySelectorAll('a').forEach(a => {
       a.addEventListener('click', () => {
         navLinksList.classList.remove('mobile-open');

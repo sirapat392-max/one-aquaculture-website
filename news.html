@@ -11,7 +11,6 @@
 body { padding-top: 68px; }
 .page-header { padding: 80px 5% 48px; }
 
-/* AI UPDATE BAR */
 .ai-update-bar { background: var(--wine-pale); border-bottom: 1px solid rgba(139,48,96,0.1); padding: 10px 5%; display: flex; align-items: center; gap: 12px; }
 .ai-update-bar .dot { width: 7px; height: 7px; border-radius: 50%; background: #22C55E; animation: pulse 2s infinite; }
 @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
@@ -20,13 +19,11 @@ body { padding-top: 68px; }
 .ai-update-bar button:hover { background: var(--wine); color: white; }
 .ai-update-bar button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-/* CATEGORY FILTER */
 .cat-filter { padding: 16px 5%; background: white; border-bottom: 1px solid var(--gray-mid); display: flex; gap: 8px; flex-wrap: wrap; }
 .cat-pill { padding: 7px 16px; border-radius: 24px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1.5px solid var(--gray-mid); background: white; color: var(--text-soft); transition: all .2s; font-family: inherit; }
 .cat-pill:hover { border-color: var(--wine); color: var(--wine); }
 .cat-pill.active { background: var(--wine); color: white; border-color: var(--wine); }
 
-/* NEWS GRID */
 .news-container { max-width: 1200px; margin: 0 auto; padding: 48px 5%; }
 .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; }
 
@@ -43,9 +40,7 @@ body { padding-top: 68px; }
 .news-meta { display: flex; justify-content: space-between; align-items: center; padding-top: 14px; border-top: 1px solid var(--gray-mid); }
 .news-source { font-size: 12px; font-weight: 600; color: var(--text-soft); }
 .news-date { font-size: 11px; color: var(--text-soft); }
-.news-read-more { font-size: 12px; font-weight: 600; color: var(--wine); }
 
-/* EMPTY STATE */
 .empty-news { text-align: center; padding: 80px 20px; }
 .empty-news .icon { font-size: 52px; margin-bottom: 16px; }
 .empty-news h3 { font-size: 20px; color: var(--text-mid); margin-bottom: 10px; }
@@ -72,45 +67,48 @@ body { padding-top: 68px; }
 <div class="ai-update-bar">
   <div class="dot"></div>
   <span id="updateStatus"></span>
-  <button id="refreshBtn" onclick="refreshNews()">🔄 อัปเดตข่าว</button>
+  <button id="refreshBtn" onclick="refreshNews()" data-i18n="news.refresh">🔄 อัปเดตข่าว</button>
 </div>
 
 <div class="page-header">
-  <div class="page-tag">ข่าวสาร · News</div>
-  <h1>ข่าวสารและความรู้<br>อุตสาหกรรมประมง</h1>
-  <p>ติดตามข่าวสาร งานวิจัย และกฎระเบียบล่าสุดด้านการเพาะเลี้ยงสัตว์น้ำ</p>
+  <div class="page-tag" data-i18n="news.page.tag">ข่าวสาร · News</div>
+  <h1 data-i18n-html="news.header.title">ข่าวสารและความรู้<br>อุตสาหกรรมประมง</h1>
+  <p data-i18n="news.header.desc">ติดตามข่าวสาร งานวิจัย และกฎระเบียบล่าสุดด้านการเพาะเลี้ยงสัตว์น้ำ</p>
 </div>
 
 <div class="cat-filter">
-  <button class="cat-pill active" onclick="filterNews('all', this)">ทั้งหมด</button>
-  <button class="cat-pill" onclick="filterNews('regulation', this)">⚖️ กฎระเบียบ</button>
-  <button class="cat-pill" onclick="filterNews('research', this)">🔬 งานวิจัย</button>
-  <button class="cat-pill" onclick="filterNews('industry', this)">🏭 อุตสาหกรรม</button>
-  <button class="cat-pill" onclick="filterNews('disease', this)">🦠 โรคสัตว์น้ำ</button>
+  <button class="cat-pill active" onclick="filterNews('all', this)"        data-i18n="news.filter.all">ทั้งหมด</button>
+  <button class="cat-pill" onclick="filterNews('regulation', this)"        data-i18n="news.filter.regulation">⚖️ กฎระเบียบ</button>
+  <button class="cat-pill" onclick="filterNews('research', this)"          data-i18n="news.filter.research">🔬 งานวิจัย</button>
+  <button class="cat-pill" onclick="filterNews('industry', this)"          data-i18n="news.filter.industry">🏭 อุตสาหกรรม</button>
+  <button class="cat-pill" onclick="filterNews('disease', this)"           data-i18n="news.filter.disease">🦠 โรคสัตว์น้ำ</button>
 </div>
 
 <div class="news-container">
   <div class="news-grid" id="newsGrid">
     <div class="empty-news" style="grid-column:1/-1">
       <div class="icon">📰</div>
-      <h3>กำลังโหลดข่าวสาร...</h3>
-      <p>รอสักครู่</p>
+      <h3 data-i18n="news.loading">กำลังโหลดข่าวสาร...</h3>
+      <p data-i18n="news.loading.wait">รอสักครู่</p>
     </div>
   </div>
   <div class="last-updated" id="lastUpdated"></div>
 </div>
 
+<script src="js/i18n.js"></script>
 <script src="js/main.js"></script>
 <script>
 let allArticles = [];
 let currentFilter = 'all';
 
-const catMap = {
-  regulation: { label: '⚖️ กฎระเบียบ', cls: 'cat-regulation' },
-  research:   { label: '🔬 งานวิจัย',   cls: 'cat-research' },
-  industry:   { label: '🏭 อุตสาหกรรม', cls: 'cat-industry' },
-  disease:    { label: '🦠 โรคสัตว์น้ำ', cls: 'cat-disease' },
-};
+function getCatMap() {
+  return {
+    regulation: { label: t('news.cat.regulation'), cls: 'cat-regulation' },
+    research:   { label: t('news.cat.research'),   cls: 'cat-research' },
+    industry:   { label: t('news.cat.industry'),   cls: 'cat-industry' },
+    disease:    { label: t('news.cat.disease'),     cls: 'cat-disease' },
+  };
+}
 
 async function loadNews() {
   try {
@@ -120,16 +118,17 @@ async function loadNews() {
     renderNews(allArticles);
     if (data.lastUpdated) {
       const d = new Date(data.lastUpdated);
+      const locale = getLang() === 'th' ? 'th-TH' : 'en-US';
       document.getElementById('lastUpdated').textContent =
-        `อัปเดตล่าสุด: ${d.toLocaleDateString('th-TH', { year:'numeric', month:'long', day:'numeric' })}`;
+        `${t('news.lastupdated')} ${d.toLocaleDateString(locale, { year:'numeric', month:'long', day:'numeric' })}`;
       document.getElementById('updateStatus').textContent = '';
     }
   } catch {
     document.getElementById('newsGrid').innerHTML = `
       <div class="empty-news" style="grid-column:1/-1">
         <div class="icon">⚠️</div>
-        <h3>ยังไม่มีข้อมูลข่าวสาร</h3>
-        <p>กด "อัปเดตข่าว" เพื่อให้ AI ไปหาข่าวล่าสุดมาให้<br>หรือรันคำสั่ง <code>npm run update-news</code> ใน terminal</p>
+        <h3>${t('news.empty.title')}</h3>
+        <p>${t('news.empty.desc')}</p>
       </div>`;
   }
 }
@@ -138,16 +137,19 @@ function renderNews(articles) {
   const grid = document.getElementById('newsGrid');
   const filtered = currentFilter === 'all' ? articles : articles.filter(a => a.category === currentFilter);
   if (!filtered.length) {
-    grid.innerHTML = `<div class="empty-news" style="grid-column:1/-1"><div class="icon">🔍</div><h3>ไม่พบข่าวในหมวดนี้</h3><p>ลองกด "อัปเดตข่าว" เพื่อค้นหาใหม่</p></div>`;
+    grid.innerHTML = `<div class="empty-news" style="grid-column:1/-1"><div class="icon">🔍</div><h3>${t('news.noresult.title')}</h3><p>${t('news.noresult.desc')}</p></div>`;
     return;
   }
+  const catMap = getCatMap();
+  const lang = getLang();
   grid.innerHTML = filtered.map(a => {
     const cat = catMap[a.category] || { label: a.categoryLabel || a.category, cls: 'cat-industry' };
+    const title = (lang === 'en' && a.titleEN) ? a.titleEN : (a.titleTH || a.title);
     return `
     <a class="news-card" href="${a.url || '#'}" target="_blank" rel="noopener">
       <div class="news-card-body">
         <span class="news-cat-label ${cat.cls}">${cat.label}</span>
-        <div class="news-title">${a.titleTH || a.title}</div>
+        <div class="news-title">${title}</div>
         ${a.summary ? `<div class="news-summary">${a.summary}</div>` : ''}
         <div class="news-meta">
           <span class="news-source">${a.source || ''}</span>
@@ -168,17 +170,16 @@ function filterNews(cat, btn) {
 async function refreshNews() {
   const btn = document.getElementById('refreshBtn');
   btn.disabled = true;
-  btn.textContent = '⏳ กำลังอัปเดต...';
-  document.getElementById('updateStatus').textContent = 'AI กำลังค้นหาข่าวใหม่...';
+  btn.textContent = t('news.refreshing');
+  document.getElementById('updateStatus').textContent = t('news.ai.searching');
   try {
     await fetch(`${API}/api/refresh-news`, { method: 'POST' });
     setTimeout(loadNews, 2000);
   } catch {
-    // fallback: just reload
     await loadNews();
   }
   btn.disabled = false;
-  btn.textContent = '🔄 อัปเดตข่าว';
+  btn.textContent = t('news.refresh');
 }
 
 loadNews();
