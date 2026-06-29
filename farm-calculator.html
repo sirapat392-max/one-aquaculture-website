@@ -726,6 +726,23 @@
   transition: transform .15s, box-shadow .15s;
 }
 #fc-bubble:hover { transform: scale(1.08); box-shadow: 0 8px 36px rgba(139,48,96,.6); }
+#fc-bubble:hover #fc-label { opacity: 1; transform: translateX(0); }
+
+#fc-label {
+  position: absolute; right: calc(100% + 12px); top: 50%; transform: translateY(-50%) translateX(6px);
+  background: #4D1232; color: white;
+  font-size: 13px; font-weight: 700; font-family: 'IBM Plex Sans Thai', sans-serif;
+  white-space: nowrap; padding: 7px 14px; border-radius: 22px;
+  box-shadow: 0 3px 12px rgba(0,0,0,.25);
+  opacity: 0; transition: opacity .2s, transform .2s;
+  pointer-events: none;
+}
+#fc-label::after {
+  content: '';
+  position: absolute; left: 100%; top: 50%; transform: translateY(-50%);
+  border: 6px solid transparent; border-left-color: #4D1232;
+}
+
 #fc-bubble .fc-badge {
   position: absolute; top: -4px; right: -4px;
   background: #dc2626; color: white; border-radius: 50%;
@@ -796,6 +813,7 @@
 <!-- Bubble button -->
 <button id="fc-bubble" onclick="toggleFarmChat()" title="ถามผู้ช่วยคำนวณ AI">
   🤖
+  <span id="fc-label">🧮 ถามผู้ช่วย AI</span>
   <span class="fc-badge" id="fc-badge"></span>
 </button>
 
@@ -826,6 +844,13 @@
 </div>
 
 <script>
+// แสดงป้ายตอนโหลด 4 วินาที แล้วซ่อน (แสดงอีกครั้งเมื่อ hover)
+window.addEventListener('load', () => {
+  const lbl = document.getElementById('fc-label');
+  lbl.style.opacity = '1'; lbl.style.transform = 'translateY(-50%) translateX(0)';
+  setTimeout(() => { lbl.style.opacity = ''; lbl.style.transform = ''; }, 4000);
+});
+
 // ── FARM CHAT ────────────────────────────────────────────────────────────────
 let fcHistory = [];
 let fcStreaming = false;
