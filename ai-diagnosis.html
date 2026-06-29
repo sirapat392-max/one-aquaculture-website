@@ -326,6 +326,26 @@ select {
 .hist-item-sym { font-size:11px; color:var(--text-soft); margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .hist-item-time { font-size:10px; color:#bbb; flex-shrink:0; }
 .hist-empty { padding:16px 14px; font-size:12px; color:var(--text-soft); text-align:center; }
+
+/* ===== IMAGE UPLOAD ===== */
+.img-upload-area {
+  border: 2px dashed var(--line); border-radius: 12px; padding: 18px 12px;
+  text-align: center; cursor: pointer; transition: all .2s; position: relative;
+  background: var(--sand);
+}
+.img-upload-area:hover { border-color: var(--wine); background: var(--wine-pale); }
+.img-upload-area input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.img-upload-ico { font-size: 26px; margin-bottom: 5px; }
+.img-upload-txt { font-size: 13px; color: var(--mud); font-weight: 500; }
+.img-upload-hint { font-size: 11px; color: #aaa; margin-top: 3px; }
+.img-preview-wrap { position: relative; margin-top: 10px; }
+.img-preview { width: 100%; max-height: 220px; object-fit: contain; border-radius: 10px; border: 1px solid var(--line); display: block; }
+.img-remove-btn {
+  position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,.55); color: white;
+  border: none; border-radius: 50%; width: 26px; height: 26px; cursor: pointer;
+  font-size: 15px; display: flex; align-items: center; justify-content: center; line-height: 1;
+}
+.img-badge { display: inline-flex; align-items: center; gap: 5px; margin-top: 6px; background: var(--wine-pale); border-radius: 20px; padding: 3px 10px; font-size: 11px; color: var(--wine-dark); font-weight: 600; }
 </style>
 </head>
 <body>
@@ -336,7 +356,7 @@ select {
     <div class="page-tag">🔬 AI · ShrimpDx</div>
     <h1>วิเคราะห์โรคกุ้ง AI</h1>
     <p>กรอกอาการ ข้อมูลบ่อ และค่าน้ำ — AI วินิจฉัยและให้คำแนะนำทันที</p>
-    <div class="version-pill">ONE AI · Powered by Claude · เพื่อเกษตรกรกุ้งไทย</div>
+    <div class="version-pill">ONE AI · Gemini 2.5 Flash · Vision · เพื่อเกษตรกรกุ้งไทย</div>
   </div>
 </div>
 
@@ -430,6 +450,23 @@ select {
           <span class="chip">โพรไบโอติก</span>
           <span class="chip">วิตามิน C</span>
           <span class="chip">ยังไม่ได้ทำอะไร</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>📸 แนบรูปกุ้ง <span class="hint">(ไม่บังคับ — ช่วย AI เห็นภาพจริง)</span></label>
+        <div class="img-upload-area" id="imgArea">
+          <input type="file" id="imgInput" accept="image/*" onchange="handleImgUpload(event)">
+          <div id="imgPlaceholder">
+            <div class="img-upload-ico">📷</div>
+            <div class="img-upload-txt">แตะเพื่อเลือกรูป หรือลากวางที่นี่</div>
+            <div class="img-upload-hint">รูปตับ เหงือก ลำตัว เปลือก · JPG/PNG ไม่เกิน 5MB</div>
+          </div>
+        </div>
+        <div id="imgPreviewWrap" class="img-preview-wrap" style="display:none">
+          <img id="imgPreview" class="img-preview" alt="preview">
+          <button type="button" class="img-remove-btn" onclick="removeImg()">×</button>
+          <div><span class="img-badge">📸 มีรูปแนบ — AI จะใช้ประกอบการวินิจฉัย</span></div>
         </div>
       </div>
     </div>
@@ -706,6 +743,33 @@ select {
 <script src="js/i18n.js"></script>
 <script src="js/main.js"></script>
 <script>
+// ── IMAGE UPLOAD ─────────────────────────────────────────────────────────────
+let diagImageBase64 = null;
+let diagImageMime = null;
+
+function handleImgUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { alert('ไฟล์ใหญ่เกิน 5MB กรุณาลดขนาดรูปก่อน'); return; }
+  diagImageMime = file.type || 'image/jpeg';
+  const reader = new FileReader();
+  reader.onload = ev => {
+    diagImageBase64 = ev.target.result.split(',')[1];
+    document.getElementById('imgPreview').src = ev.target.result;
+    document.getElementById('imgPreviewWrap').style.display = '';
+    document.getElementById('imgArea').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeImg() {
+  diagImageBase64 = null;
+  diagImageMime = null;
+  document.getElementById('imgInput').value = '';
+  document.getElementById('imgPreviewWrap').style.display = 'none';
+  document.getElementById('imgArea').style.display = '';
+}
+
 // ── CHIP TOGGLE ──────────────────────────────────────────────────────────────
 document.querySelectorAll('.chip').forEach(c => {
   c.addEventListener('click', () => c.classList.toggle('on'));
@@ -993,7 +1057,9 @@ async function runDiagnosis() {
   const t0 = Date.now();
   let full = '';
   try {
-    await streamAI('/api/diagnose', { symptoms, farmDetails },
+    const diagBody = { symptoms, farmDetails };
+    if (diagImageBase64) { diagBody.imageBase64 = diagImageBase64; diagBody.imageMimeType = diagImageMime; }
+    await streamAI('/api/diagnose', diagBody,
       txt => { full += txt; },
       () => {}
     );

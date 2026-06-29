@@ -67,35 +67,61 @@ const companyData = JSON.parse(fs.readFileSync(path.join(__dirname, 'company-dat
 
 // ─── AI SHRIMP DISEASE DIAGNOSIS ───────────────────────────────────────────
 app.post('/api/diagnose', diagRateLimiter, async (req, res) => {
-  const { symptoms, farmDetails } = req.body;
-  if (!symptoms) return res.status(400).json({ error: 'กรุณาระบุอาการ' });
+  const { symptoms, farmDetails, imageBase64, imageMimeType } = req.body;
+  if (!symptoms && !imageBase64) return res.status(400).json({ error: 'กรุณาระบุอาการหรือแนบรูปภาพ' });
 
   const productList = companyData.products.map(p =>
-    `- ${p.nameTH} (${p.nameEN}): ${p.description}${p.strains?.length ? ` [ใช้สายพันธุ์: ${p.strains.join(', ')}]` : ''}`
+    `- ${p.nameTH} (${p.nameEN}): ${p.description}`
   ).join('\n');
 
   const diseaseRef = companyData.shrimpDiseases.map(d =>
-    `โรค: ${d.nameTH} | สาเหตุ: ${d.pathogen} | อาการ: ${d.symptoms.join(', ')} | ความรุนแรง: ${d.severity}`
-  ).join('\n');
+    `[${d.id}] ${d.nameTH} (${d.nameEN})
+  สาเหตุ: ${d.pathogen}
+  อาการ: ${d.symptoms.join(' | ')}
+  เริ่มอาการ: ${d.onset}
+  อายุเสี่ยง: ${d.susceptibleAge}
+  น้ำที่กระตุ้น: ${d.waterTriggers}
+  จุดแยกจากโรคอื่น: ${d.keyDifferential}
+  ความรุนแรง: ${d.severity}`
+  ).join('\n\n');
 
-  const systemPrompt = `คุณคือผู้เชี่ยวชาญด้านโรคกุ้งของบริษัท ${companyData.company.nameTH}
+  const hasImage = !!imageBase64;
+  const systemPrompt = `คุณคือผู้เชี่ยวชาญด้านโรคกุ้งของบริษัท ${companyData.company.nameTH} ที่มีประสบการณ์หน้าฟาร์มมากกว่า 10 ปี
 
 ## กฎเหล็ก
 1. ตอบเป็น JSON ล้วนๆ เท่านั้น — ห้ามมี text นอก JSON ห้ามใส่ \`\`\`json หรือ code block ใดๆ
-2. ตอบกระชับ — reasoning ไม่เกิน 2 ประโยค, immediateAction/treatment/prevention ไม่เกิน 2 ประโยค
-3. ห้ามกล่าวถึงชื่อโรงฟักหรือยี่ห้ออาหารสัตว์ในการวิเคราะห์ (ป้องกันปัญหากับบริษัทอื่น)
-4. ใช้เฉพาะผลิตภัณฑ์และข้อมูลบริษัทที่ระบุด้านล่าง ห้ามแต่งเพิ่ม
-5. ถ้าไม่แน่ใจ ให้บอกตรงๆ และแนะนำปรึกษาสัตวแพทย์
+2. reasoning ไม่เกิน 2 ประโยค, immediateAction/treatment/prevention ไม่เกิน 2 ประโยค
+3. ห้ามกล่าวถึงชื่อโรงฟักหรือยี่ห้ออาหารสัตว์
+4. ใช้เฉพาะผลิตภัณฑ์บริษัทที่ระบุไว้ ห้ามแต่งเพิ่ม
+5. ถ้าไม่มั่นใจให้บอกตรงๆ แนะนำปรึกษาสัตวแพทย์
 6. ห้ามรับประกันผลการรักษา
+${hasImage ? '7. ใช้ข้อมูลจากรูปภาพประกอบการวินิจฉัยด้วย — สังเกตสี รูปร่าง ความผิดปกติที่มองเห็น' : ''}
+
+## กลยุทธ์วินิจฉัย (สำคัญ)
+- ดู DOC: ตาย <35 วัน → EMS ก่อนเป็นอันดับแรก; ตาย >50 วัน → WSSV/WFS/EHP เป็นไปได้มากกว่า
+- ดูจุดแยกโรค (keyDifferential) ของแต่ละโรคอย่างละเอียด
+- พิจารณาอาการรวมกัน ไม่ใช่อาการเดียว
+- ถ้าตาย 3–10 วันเร็วมาก → WSSV หรือ YHD ก่อน
+- ถ้าโตช้า CV สูง ไม่ตาย → EHP ก่อน
+- ถ้ากุ้งเรืองแสงในที่มืด → Vibriosis ชัดเจน
+- ถ้าหนวดผิดรูป ตัวเตี้ย → IHHNV
 
 ## ผลิตภัณฑ์บริษัท
 ${productList}
 
-## ฐานข้อมูลโรคกุ้ง
+## ฐานข้อมูลโรคกุ้ง (${companyData.shrimpDiseases.length} โรค)
 ${diseaseRef}
 
 ## รูปแบบ JSON (ตอบแบบนี้เท่านั้น ไม่มีอะไรนอก JSON)
-{"topDiagnosis":{"nameTH":"ชื่อโรค","nameEN":"Disease Name","confidence":85,"reasoning":"เหตุผล 1-2 ประโยค"},"differentials":[{"nameTH":"โรคหลัก","nameEN":"Main","confidence":85},{"nameTH":"โรครอง","nameEN":"Second","confidence":40},{"nameTH":"โรคที่3","nameEN":"Third","confidence":15}],"severity":"รุนแรงมาก/รุนแรง/ปานกลาง/เบา","immediateAction":"1-2 ประโยค","treatment":"1-2 ประโยค","prevention":"1-2 ประโยค","relevantProducts":["ชื่อผลิตภัณฑ์ ONE"],"needVet":true,"disclaimer":"ผลวิเคราะห์เบื้องต้น ควรปรึกษาผู้เชี่ยวชาญ"}`;
+{"topDiagnosis":{"nameTH":"ชื่อโรค","nameEN":"Disease Name","confidence":85,"reasoning":"เหตุผล 1-2 ประโยค อ้างอิง keyDifferential"},"differentials":[{"nameTH":"โรคหลัก","nameEN":"Main","confidence":85},{"nameTH":"โรครอง","nameEN":"Second","confidence":40},{"nameTH":"โรคที่3","nameEN":"Third","confidence":15}],"severity":"รุนแรงมาก/รุนแรง/ปานกลาง/เบา","immediateAction":"1-2 ประโยค","treatment":"1-2 ประโยค","prevention":"1-2 ประโยค","relevantProducts":["ชื่อผลิตภัณฑ์ ONE"],"needVet":true,"disclaimer":"ผลวิเคราะห์เบื้องต้น ควรปรึกษาผู้เชี่ยวชาญ"}`;
+
+  const userText = `${symptoms ? `อาการที่พบ: ${symptoms}` : ''}${farmDetails ? `\nข้อมูลบ่อ:\n${farmDetails}` : ''}\n\nวิเคราะห์โรคที่เป็นไปได้และตอบในรูปแบบ JSON ที่กำหนด`;
+  const userContent = imageBase64
+    ? [
+        { type: 'image_url', image_url: { url: `data:${imageMimeType || 'image/jpeg'};base64,${imageBase64}` } },
+        { type: 'text', text: userText },
+      ]
+    : userText;
 
   try {
     res.setHeader('Content-Type', 'text/event-stream');
@@ -103,12 +129,12 @@ ${diseaseRef}
     res.setHeader('Connection', 'keep-alive');
 
     const stream = await client.chat.completions.create({
-      model: 'google/gemini-2.5-flash', // smart for medical reasoning
+      model: 'google/gemini-2.5-flash',
       max_tokens: 2048,
       stream: true,
       messages: [
         { role: 'system', content: systemPrompt },
-        { role: 'user', content: `อาการที่พบ: ${symptoms}${farmDetails ? `\nข้อมูลฟาร์ม: ${farmDetails}` : ''}\n\nวิเคราะห์โรคที่เป็นไปได้และตอบในรูปแบบ JSON ที่กำหนด` },
+        { role: 'user', content: userContent },
       ],
     });
 
