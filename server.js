@@ -8,11 +8,14 @@ const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+if (!process.env.OPENROUTER_API_KEY) {
+  console.warn('WARNING: OPENROUTER_API_KEY not set — AI features will be unavailable');
+}
 const client = new OpenAI({
-  apiKey: process.env.OPENROUTER_API_KEY,
+  apiKey: process.env.OPENROUTER_API_KEY || 'missing-key',
   baseURL: 'https://openrouter.ai/api/v1',
   defaultHeaders: {
-    'HTTP-Referer': 'https://one-aquaculture.onrender.com',
+    'HTTP-Referer': 'https://one-aquaculture-website-production.up.railway.app',
     'X-Title': 'ONE AQUACULTURE PRODUCT',
   },
 });
