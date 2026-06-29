@@ -134,6 +134,20 @@ async function loadNews() {
     const res = await fetch(`${API}/api/news`);
     const data = await res.json();
     allArticles = data.articles || [];
+
+    if (!allArticles.length) {
+      // ไม่มีข่าว — trigger refresh อัตโนมัติ
+      document.getElementById('newsGrid').innerHTML = `
+        <div class="empty-news" style="grid-column:1/-1">
+          <div class="icon">📡</div>
+          <h3>กำลังดึงข่าวใหม่...</h3>
+          <p>ระบบกำลังดึงข่าวสารล่าสุดจากแหล่งข้อมูล รอสักครู่ (~30 วินาที)</p>
+        </div>`;
+      document.getElementById('updateStatus').textContent = '⏳ กำลังดึงข่าวจาก RSS...';
+      await refreshNews();
+      return;
+    }
+
     renderNews(allArticles);
     if (data.lastUpdated) {
       const d = new Date(data.lastUpdated);
@@ -145,10 +159,11 @@ async function loadNews() {
   } catch {
     document.getElementById('newsGrid').innerHTML = `
       <div class="empty-news" style="grid-column:1/-1">
-        <div class="icon"></div>
+        <div class="icon">📡</div>
         <h3>${t('news.empty.title')}</h3>
         <p>${t('news.empty.desc')}</p>
- </div>`;
+        <button onclick="loadNews()" style="margin-top:16px;padding:10px 24px;border-radius:24px;background:#8B3060;color:white;border:none;font-size:14px;font-weight:700;cursor:pointer;">🔄 ลองอีกครั้ง</button>
+      </div>`;
   }
 }
 
