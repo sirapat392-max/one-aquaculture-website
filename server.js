@@ -227,7 +227,7 @@ app.post('/api/refresh-news', async (req, res) => {
       RSS_SOURCES.map(async ({ url, name }) => {
         const r = await fetch(url, {
           headers: { 'User-Agent': 'Mozilla/5.0 (compatible; OneAquacultureNewsBot/1.0; +https://one-aquaculture.onrender.com)' },
-          signal: AbortSignal.timeout(9000),
+          signal: AbortSignal.timeout(15000),
         });
         if (!r.ok) throw new Error(`${r.status}`);
         return parseRSS(await r.text(), name);
@@ -251,17 +251,36 @@ app.post('/api/refresh-news', async (req, res) => {
         : { articles: [], lastUpdated: null });
     }
 
-    // 3. Batch-translate with Claude
-    const listed = top.map((it, i) =>
-      `[${i}] title: ${it.title}\nsource: ${it.source}\nurl: ${it.url}\ndate: ${it.pubDate}\nexcerpt: ${it.summary}`
-    ).join('\n---\n');
+    // 3. Build fallback articles (English) first — save immediately so page shows something
+    function guessCategory(title, summary) {
+      const t = `${title} ${summary}`.toLowerCase();
+      if (/disease|virus|bacteria|pathogen|wssv|ehp|ems|outbreak/.test(t)) return 'disease';
+      if (/regulation|law|ban|standard|certification|fda|eu|import|export restriction/.test(t)) return 'regulation';
+      if (/research|study|trial|technology|genome|crispr|vaccine/.test(t)) return 'research';
+      return 'industry';
+    }
+    const fallbackArticles = top.map(it => {
+      const cat = guessCategory(it.title, it.summary);
+      return { title: it.title, titleTH: it.title, source: it.source, url: it.url,
+        date: it.pubDate ? new Date(it.pubDate).toISOString().slice(0,10) : '',
+        category: cat, categoryLabel: catLabel(cat), summary: it.summary };
+    });
+    const fallbackPayload = { articles: fallbackArticles, lastUpdated: new Date().toISOString(), translated: false };
+    fs.writeFileSync(path.join(__dirname, 'news-data.json'), JSON.stringify(fallbackPayload, null, 2));
 
-    const msg = await client.messages.create({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 3000,
-      messages: [{
-        role: 'user',
-        content: `Below are ${top.length} real aquaculture news articles. For each, return a JSON array entry.
+    // 4. Batch-translate with Claude (best-effort — if it fails, fallback already saved)
+    let articles = fallbackArticles;
+    try {
+      const listed = top.map((it, i) =>
+        `[${i}] title: ${it.title}\nsource: ${it.source}\nurl: ${it.url}\ndate: ${it.pubDate}\nexcerpt: ${it.summary}`
+      ).join('\n---\n');
+
+      const msg = await client.messages.create({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 3000,
+        messages: [{
+          role: 'user',
+          content: `Below are ${top.length} real aquaculture news articles. For each, return a JSON array entry.
 Return ONLY a valid JSON array, no markdown fences, no explanation.
 
 Schema per item:
@@ -276,27 +295,26 @@ Category rules: disease if mentions disease/pathogen/virus/bacteria; regulation 
 
 Articles:
 ${listed}`
-      }]
-    });
+        }]
+      });
 
-    const raw = msg.content[0].text.trim();
-    const parsed = JSON.parse(raw.slice(raw.indexOf('['), raw.lastIndexOf(']') + 1));
-    const byIdx = Object.fromEntries(parsed.map(p => [p.idx, p]));
+      const raw = msg.content[0].text.trim();
+      const parsed = JSON.parse(raw.slice(raw.indexOf('['), raw.lastIndexOf(']') + 1));
+      const byIdx = Object.fromEntries(parsed.map(p => [p.idx, p]));
 
-    const articles = top.map((it, i) => {
-      const ai = byIdx[i] || {};
-      const cat = ['industry','regulation','research','disease'].includes(ai.category) ? ai.category : 'industry';
-      return {
-        title:         it.title,
-        titleTH:       ai.titleTH || it.title,
-        source:        it.source,
-        url:           it.url,
-        date:          it.pubDate ? new Date(it.pubDate).toISOString().slice(0,10) : '',
-        category:      cat,
-        categoryLabel: catLabel(cat),
-        summary:       ai.summary || it.summary,
-      };
-    });
+      articles = top.map((it, i) => {
+        const ai = byIdx[i] || {};
+        const cat = ['industry','regulation','research','disease'].includes(ai.category) ? ai.category : 'industry';
+        return { title: it.title, titleTH: ai.titleTH || it.title, source: it.source, url: it.url,
+          date: it.pubDate ? new Date(it.pubDate).toISOString().slice(0,10) : '',
+          category: cat, categoryLabel: catLabel(cat), summary: ai.summary || it.summary };
+      });
+
+      const payload = { articles, lastUpdated: new Date().toISOString(), translated: true };
+      fs.writeFileSync(path.join(__dirname, 'news-data.json'), JSON.stringify(payload, null, 2));
+    } catch (translateErr) {
+      console.error('Claude translate error (using English fallback):', translateErr.message);
+    }
 
     const payload = { articles, lastUpdated: new Date().toISOString() };
     fs.writeFileSync(path.join(__dirname, 'news-data.json'), JSON.stringify(payload, null, 2));
@@ -318,7 +336,7 @@ async function autoRefreshNews() {
       RSS_SOURCES.map(async ({ url, name }) => {
         const r = await fetch(url, {
           headers: { 'User-Agent': 'Mozilla/5.0 (compatible; OneAquacultureNewsBot/1.0; +https://one-aquaculture.onrender.com)' },
-          signal: AbortSignal.timeout(9000),
+          signal: AbortSignal.timeout(15000),
         });
         if (!r.ok) throw new Error(`${r.status}`);
         return parseRSS(await r.text(), name);
