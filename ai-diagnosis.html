@@ -900,8 +900,11 @@ function renderAICard(raw) {
     const productsHTML = (d.relevantProducts || []).length
       ? `<div class="ai-products">${d.relevantProducts.map(p=>`<span class="ai-product-pill"> ${p}</span>`).join('')}</div>` : '';
 
+    const vetMsg = (d.severity === 'รุนแรงมาก' || d.severity === 'รุนแรง')
+      ? 'เคสนี้รุนแรง — ควรให้สัตวแพทย์ตรวจยืนยันก่อนรักษา'
+      : 'ผลเบื้องต้นจาก AI — ควรให้ผู้เชี่ยวชาญตรวจยืนยัน';
     const vetHTML = d.needVet
-      ? `<div class="vet-alert-box"> <b>แนะนำปรึกษาสัตวแพทย์ทันที</b> — เคสนี้มีความรุนแรง</div>` : '';
+      ? `<div class="vet-alert-box"><b>แนะนำปรึกษาผู้เชี่ยวชาญ</b> — ${vetMsg}</div>` : '';
 
     area.innerHTML = `
     <div class="ai-card">

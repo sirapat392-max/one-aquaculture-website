@@ -93,9 +93,19 @@ app.post('/api/diagnose', diagRateLimiter, async (req, res) => {
 2. reasoning ไม่เกิน 2 ประโยค, immediateAction/treatment/prevention ไม่เกิน 2 ประโยค
 3. ห้ามกล่าวถึงชื่อโรงฟักหรือยี่ห้ออาหารสัตว์
 4. ใช้เฉพาะผลิตภัณฑ์บริษัทที่ระบุไว้ ห้ามแต่งเพิ่ม
-5. ถ้าไม่มั่นใจให้บอกตรงๆ แนะนำปรึกษาสัตวแพทย์
-6. ห้ามรับประกันผลการรักษา
-${hasImage ? '7. ใช้ข้อมูลจากรูปภาพประกอบการวินิจฉัยด้วย — สังเกตสี รูปร่าง ความผิดปกติที่มองเห็น' : ''}
+5. ห้ามรับประกันผลการรักษา
+${hasImage ? '6. ใช้ข้อมูลจากรูปภาพประกอบการวินิจฉัยด้วย — สังเกตสี รูปร่าง ความผิดปกติที่มองเห็น' : ''}
+
+## กฎ needVet (สำคัญมาก — ห้ามตั้งเป็น true ทุกเคส)
+- needVet: true เฉพาะ severity = "รุนแรงมาก" หรือ "รุนแรง" เท่านั้น
+- needVet: false สำหรับ severity = "ปานกลาง" หรือ "เบา"
+- ปัญหาคุณภาพน้ำ (pH, DO, ออกซิเจน, ความเค็ม, อุณหภูมิ) → needVet: false เสมอ ไม่ว่าจะรุนแรงแค่ไหน เพราะแก้ที่น้ำ ไม่ใช่หมอ
+
+## กฎการรักษาตามสาเหตุ
+- สาเหตุคือ**คุณภาพน้ำ** (เช่น DO ต่ำ, pH ผิด, ก๊าซแอมโมเนีย, ความเค็มผิด): treatment/immediateAction ต้องโฟกัสการแก้น้ำ เช่น เพิ่มออกซิเจน เปลี่ยนน้ำ ปรับ pH ลดปริมาณอาหาร — ห้ามแนะนำยาหรือชีวภัณฑ์เป็นอันดับแรก
+- สาเหตุคือ**เชื้อไวรัส** (WSSV, YHD): ไม่มียารักษา treatment = กำจัดกุ้งป่วย ทำความสะอาดบ่อ ป้องกันแพร่กระจาย
+- สาเหตุคือ**แบคทีเรีย/เชื้อรา**: ใช้ผลิตภัณฑ์ชีวภัณฑ์ของบริษัทได้
+- สาเหตุคือ**ปรสิต/EHP**: โฟกัสการจัดการบ่อและสุขอนามัย
 
 ## กลยุทธ์วินิจฉัย (สำคัญ)
 - ดู DOC: ตาย <35 วัน → EMS ก่อนเป็นอันดับแรก; ตาย >50 วัน → WSSV/WFS/EHP เป็นไปได้มากกว่า
@@ -113,7 +123,7 @@ ${productList}
 ${diseaseRef}
 
 ## รูปแบบ JSON (ตอบแบบนี้เท่านั้น ไม่มีอะไรนอก JSON)
-{"topDiagnosis":{"nameTH":"ชื่อโรค","nameEN":"Disease Name","confidence":85,"reasoning":"เหตุผล 1-2 ประโยค อ้างอิง keyDifferential"},"differentials":[{"nameTH":"โรคหลัก","nameEN":"Main","confidence":85},{"nameTH":"โรครอง","nameEN":"Second","confidence":40},{"nameTH":"โรคที่3","nameEN":"Third","confidence":15}],"severity":"รุนแรงมาก/รุนแรง/ปานกลาง/เบา","immediateAction":"1-2 ประโยค","treatment":"1-2 ประโยค","prevention":"1-2 ประโยค","relevantProducts":["ชื่อผลิตภัณฑ์ ONE"],"needVet":true,"disclaimer":"ผลวิเคราะห์เบื้องต้น ควรปรึกษาผู้เชี่ยวชาญ"}`;
+{"topDiagnosis":{"nameTH":"ชื่อโรค","nameEN":"Disease Name","confidence":85,"reasoning":"เหตุผล 1-2 ประโยค อ้างอิง keyDifferential"},"differentials":[{"nameTH":"โรคหลัก","nameEN":"Main","confidence":85},{"nameTH":"โรครอง","nameEN":"Second","confidence":40},{"nameTH":"โรคที่3","nameEN":"Third","confidence":15}],"severity":"รุนแรงมาก/รุนแรง/ปานกลาง/เบา","immediateAction":"1-2 ประโยค","treatment":"1-2 ประโยค","prevention":"1-2 ประโยค","relevantProducts":["ชื่อผลิตภัณฑ์ ONE"],"needVet":false,"disclaimer":"ผลวิเคราะห์เบื้องต้น ควรปรึกษาผู้เชี่ยวชาญ"}`;
 
   const userText = `${symptoms ? `อาการที่พบ: ${symptoms}` : ''}${farmDetails ? `\nข้อมูลบ่อ:\n${farmDetails}` : ''}\n\nวิเคราะห์โรคที่เป็นไปได้และตอบในรูปแบบ JSON ที่กำหนด`;
   const userContent = imageBase64
