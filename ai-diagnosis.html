@@ -870,11 +870,11 @@ function collectData() {
 function renderAICard(raw) {
   const area = document.getElementById('aiResult');
   try {
-    // strip any markdown / prose surrounding the JSON
-    const stripped = raw
-      .replace(/^[\s\S]*?(?=\{)/, '')   // drop everything before first {
-      .replace(/\}[\s\S]*$/, '}');       // drop everything after last }
-    const m = stripped.match(/^\{[\s\S]*\}$/) ? [stripped] : stripped.match(/\{[\s\S]*\}/);
+    // extract JSON: find first { and last } to handle any wrapping
+    const start = raw.indexOf('{');
+    const end = raw.lastIndexOf('}');
+    if (start === -1 || end < start) throw new Error('no json');
+    const m = [raw.slice(start, end + 1)];
     if (!m) throw new Error('no json');
     const d = JSON.parse(m[0]);
     const top = d.topDiagnosis || {};
