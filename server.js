@@ -386,9 +386,9 @@ async function autoRefreshNews() {
       `[${i}] title: ${it.title}\nsource: ${it.source}\nurl: ${it.url}\ndate: ${it.pubDate}\nexcerpt: ${it.summary}`
     ).join('\n---\n');
 
-    const msg = await client.messages.create({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 3000,
+    const msg = await client.chat.completions.create({
+      model: 'google/gemini-2.5-flash-lite',
+      max_tokens: 5000,
       messages: [{
         role: 'user',
         content: `Below are ${top.length} real aquaculture news articles. For each, return a JSON array entry.
@@ -409,7 +409,7 @@ ${listed}`
       }]
     });
 
-    const raw = msg.content[0].text.trim();
+    const raw = msg.choices[0].message.content.trim();
     const parsed = JSON.parse(raw.slice(raw.indexOf('['), raw.lastIndexOf(']') + 1));
     const byIdx = Object.fromEntries(parsed.map(p => [p.idx, p]));
     const articles = top.map((it, i) => {
