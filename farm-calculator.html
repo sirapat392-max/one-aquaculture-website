@@ -11,9 +11,9 @@
 </script>
 <link rel="icon" href="/logo.jpg" type="image/jpeg">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>เครื่องคิดเลขฟาร์มกุ้ง — FCR, ความหนาแน่น, ต้นทุน · ONE AQUACULTURE PRODUCT</title>
-<meta name="description" content="เครื่องคิดเลขฟาร์มกุ้งออนไลน์ฟรี คำนวณ FCR (อัตราแลกเนื้อ), ความหนาแน่นลูกกุ้ง, ราคาคุ้มทุน เปรียบเทียบกับราคาปากบ่อวันนี้ เหมาะสำหรับเกษตรกรกุ้งขาวแวนนาไม">
-<meta name="keywords" content="FCR กุ้ง, อัตราแลกเนื้อกุ้ง, ความหนาแน่นลูกกุ้ง, คำนวณต้นทุนกุ้ง, ราคาคุ้มทุนกุ้ง, farm calculator กุ้ง">
+<title>เครื่องคิดเลขฟาร์มกุ้ง — FCR, อัตรารอด, Biomass, ต้นทุน · ONE AQUACULTURE PRODUCT</title>
+<meta name="description" content="เครื่องคิดเลขฟาร์มกุ้งออนไลน์ฟรี 6 ตัว: FCR, ความหนาแน่น, ราคาคุ้มทุน, อัตรารอด, เปอร์เซ็นต์อาหาร (%BW), Biomass, วางแผนจับ — ราคาปากบ่อเรียลไทม์แยกตามไซ์กุ้ง">
+<meta name="keywords" content="FCR กุ้ง, อัตราแลกเนื้อกุ้ง, อัตรารอดกุ้ง, Biomass กุ้ง, %BW กุ้ง, ความหนาแน่นลูกกุ้ง, คำนวณต้นทุนกุ้ง, ราคาคุ้มทุนกุ้ง, farm calculator กุ้ง">
 <meta property="og:type" content="website">
 <meta property="og:title" content="เครื่องคิดเลขฟาร์มกุ้ง · ONE AQUACULTURE PRODUCT">
 <meta property="og:description" content="คำนวณ FCR ความหนาแน่น และต้นทุนคุ้มทุน สำหรับฟาร์มกุ้งขาวแวนนาไม">
@@ -147,6 +147,25 @@
 .tip-card { background: var(--sand); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
 .tip-card .tip-head { font-size: 13px; font-weight: 700; color: var(--wine); margin-bottom: 6px; }
 .tip-card p { font-size: 12px; color: #666; line-height: 1.6; margin: 0; }
+
+/* SIZE PRICE BUTTONS */
+.size-price-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  border: 1.5px solid var(--line); border-radius: 10px; padding: 8px 14px;
+  background: var(--sand); cursor: pointer; font-family: inherit; transition: all .12s;
+  min-width: 60px;
+}
+.size-price-btn:hover { border-color: var(--wine); background: #F5EBF0; }
+.size-price-btn.active { border-color: var(--wine); background: var(--wine); color: white; }
+.size-price-btn .spb-size { font-size: 12px; font-weight: 700; }
+.size-price-btn .spb-price { font-size: 11px; font-family: 'JetBrains Mono', monospace; opacity: .8; }
+.size-price-btn.active .spb-price { opacity: 1; }
+
+/* BIG TOTAL PROFIT BOX */
+.be-total-wrap.good  { background: var(--good-bg); border: 1.5px solid #bbf7d0; }
+.be-total-wrap.warn  { background: var(--warn-bg); border: 1.5px solid #fde68a; }
+.be-total-wrap.bad   { background: var(--bad-bg);  border: 1.5px solid #fecaca; }
+.be-total-wrap.neutral { background: #f8f5fc; border: 1.5px solid var(--line); }
 </style>
 </head>
 <body>
@@ -179,7 +198,7 @@
   <div class="calc-hero-inner">
     <div class="hero-tag">🧮 Farm Calculator</div>
     <h1>เครื่องคิดเลขฟาร์มกุ้ง</h1>
-    <p>คำนวณ FCR · ความหนาแน่น · ต้นทุนคุ้มทุน — ฟรี ไม่ต้องสมัครสมาชิก</p>
+    <p>FCR · ความหนาแน่น · ต้นทุนคุ้มทุน · อัตรารอด · %BW · Biomass · วางแผนจับ — ฟรี ไม่ต้องสมัครสมาชิก</p>
   </div>
 </div>
 
@@ -314,6 +333,15 @@
       <span id="live-price-status">กำลังดึงราคาตลาดล่าสุด...</span>
     </div>
 
+    <!-- ไซ์ selector -->
+    <div id="be-size-wrap" style="display:none;margin-bottom:18px">
+      <div style="font-size:12px;font-weight:600;color:var(--mud);margin-bottom:8px">
+        เลือกไซ์กุ้งที่จะขาย <span style="font-weight:400;color:#aaa">· น้ำหนักเฉลี่ย ÷ 1000 → ตัว/กก.</span>
+        <span id="be-size-hint-auto" style="font-size:11px;color:var(--wine);margin-left:6px"></span>
+      </div>
+      <div id="be-size-btns" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+    </div>
+
     <div style="margin-bottom:18px">
       <div style="font-size:12px;font-weight:600;color:var(--mud);margin-bottom:10px;">ต้นทุนต่อรุ่น (บาท)</div>
       <div class="input-grid">
@@ -352,8 +380,8 @@
           <input class="calc-input" id="be-harvest" type="number" min="0" step="10" placeholder="เช่น 4000" oninput="calcBreakeven()">
         </div>
         <div class="input-group">
-          <label>ราคาปากบ่อจริง <span class="unit">บาท/กก.</span></label>
-          <input class="calc-input" id="be-market" type="number" min="0" step="1" placeholder="โหลดจากตลาด..." oninput="calcBreakeven()">
+          <label>ราคาปากบ่อจริง <span class="unit">บาท/กก. · เลือกไซ์ด้านบน หรือกรอกเอง</span></label>
+          <input class="calc-input" id="be-market" type="number" min="0" step="1" placeholder="เลือกไซ์กุ้งด้านบน..." oninput="calcBreakeven()">
         </div>
       </div>
     </div>
@@ -378,7 +406,185 @@
       </div>
       <span class="result-badge" id="be-badge" style="display:none"></span>
     </div>
-    <p class="result-hint" id="be-hint"></p>
+
+    <!-- กำไรรวม BIG DISPLAY -->
+    <div id="be-total-box" style="display:none;margin-top:14px;border-radius:16px;padding:20px 24px;text-align:center;" class="be-total-wrap">
+      <div style="font-size:13px;color:#888;margin-bottom:6px;" id="be-total-label">กำไรรวมทั้งรุ่น</div>
+      <div style="font-size:48px;font-weight:900;font-family:'JetBrains Mono',monospace;line-height:1;letter-spacing:-1px;" id="be-total-val">—</div>
+      <div style="font-size:14px;font-weight:600;margin-top:6px;opacity:.75;" id="be-total-sub"></div>
+    </div>
+    <p class="result-hint" id="be-hint" style="margin-top:10px"></p>
+  </div>
+
+  <!-- ── SURVIVAL RATE ── -->
+  <div class="calc-section-label">SURVIVAL · อัตรารอด</div>
+  <div class="calc-card">
+    <div class="calc-card-header">
+      <div class="calc-icon">📊</div>
+      <div>
+        <h2>Survival Rate — คำนวณอัตรารอดของกุ้ง</h2>
+        <p>หาเปอร์เซ็นต์กุ้งที่รอดจากจำนวน PL ที่ปล่อยเปรียบเทียบกับผลจับจริง</p>
+      </div>
+    </div>
+    <div class="input-grid">
+      <div class="input-group">
+        <label>จำนวน PL ที่ปล่อย <span class="unit">ตัว</span></label>
+        <input class="calc-input" id="sr-pl" type="number" min="0" step="1000" placeholder="เช่น 200000" oninput="calcSurvival()">
+      </div>
+      <div class="input-group">
+        <label>น้ำหนักกุ้งที่จับได้ <span class="unit">กก.</span></label>
+        <input class="calc-input" id="sr-harvest" type="number" min="0" step="10" placeholder="เช่น 3500" oninput="calcSurvival()">
+      </div>
+      <div class="input-group">
+        <label>น้ำหนักเฉลี่ยต่อตัว <span class="unit">กรัม/ตัว</span></label>
+        <input class="calc-input" id="sr-weight" type="number" min="0" step="0.5" placeholder="เช่น 18" oninput="calcSurvival();guessSizeFromWeight()">
+      </div>
+    </div>
+    <div id="sr-result" class="result-box neutral">
+      <div class="result-main">
+        <div class="result-value neutral" id="sr-val">—</div>
+        <div class="result-label">อัตรารอด (%)</div>
+      </div>
+      <span class="result-badge" id="sr-badge" style="display:none"></span>
+    </div>
+    <p class="result-hint" id="sr-hint"></p>
+    <div class="tips-grid">
+      <div class="tip-card"><div class="tip-head">อัตรารอดดี · &gt; 70%</div><p>สภาพแวดล้อมดี ลูกกุ้งคุณภาพสูง การจัดการโรคและน้ำมีประสิทธิภาพ</p></div>
+      <div class="tip-card"><div class="tip-head">อัตรารอดปานกลาง · 50–70%</div><p>มาตรฐานทั่วไปของฟาร์มกึ่งอินเทนซีฟ ยังมีช่องให้ปรับปรุงได้</p></div>
+      <div class="tip-card"><div class="tip-head">อัตรารอดต่ำ · &lt; 50%</div><p>ควรตรวจสอบคุณภาพน้ำ โรค และแหล่งลูกกุ้ง — มีความสูญเสียสูง</p></div>
+    </div>
+  </div>
+
+  <!-- ── FEED RATE %BW ── -->
+  <div class="calc-section-label">FEED RATE · เปอร์เซ็นต์อาหาร</div>
+  <div class="calc-card">
+    <div class="calc-card-header">
+      <div class="calc-icon">🍽️</div>
+      <div>
+        <h2>Feed Rate (%BW) — คำนวณปริมาณอาหารต่อวัน</h2>
+        <p>อาหารที่ให้ต่อวัน = Biomass รวม × %BW — ให้มากไปอาหารเหลือ เพิ่ม Vibrio; ให้น้อยไปกุ้งโตช้า</p>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">
+      <button class="mode-btn active" id="btn-fr-a" onclick="setFeedMode('a')">คำนวณอาหารที่ควรให้</button>
+      <button class="mode-btn" id="btn-fr-b" onclick="setFeedMode('b')">คำนวณ %BW จากอาหารที่ให้จริง</button>
+    </div>
+    <div id="fr-mode-a">
+      <div class="input-grid">
+        <div class="input-group">
+          <label>Biomass รวม <span class="unit">กก.</span></label>
+          <input class="calc-input" id="fr-biomass" type="number" min="0" step="10" placeholder="เช่น 2000" oninput="calcFeedRate()">
+        </div>
+        <div class="input-group">
+          <label>%BW ที่ต้องการ <span class="unit">%/วัน</span></label>
+          <input class="calc-input" id="fr-bw" type="number" min="0" step="0.1" placeholder="เช่น 3.5" oninput="calcFeedRate()">
+        </div>
+      </div>
+    </div>
+    <div id="fr-mode-b" style="display:none">
+      <div class="input-grid">
+        <div class="input-group">
+          <label>Biomass รวม <span class="unit">กก.</span></label>
+          <input class="calc-input" id="fr-biomass-b" type="number" min="0" step="10" placeholder="เช่น 2000" oninput="calcFeedRate()">
+        </div>
+        <div class="input-group">
+          <label>อาหารที่ให้จริง/วัน <span class="unit">กก.</span></label>
+          <input class="calc-input" id="fr-actual" type="number" min="0" step="1" placeholder="เช่น 80" oninput="calcFeedRate()">
+        </div>
+      </div>
+    </div>
+    <div id="fr-result" class="result-box neutral">
+      <div class="result-main">
+        <div class="result-value neutral" id="fr-val">—</div>
+        <div class="result-label" id="fr-unit">อาหารที่ควรให้ต่อวัน (กก.)</div>
+      </div>
+      <span class="result-badge" id="fr-badge" style="display:none"></span>
+    </div>
+    <p class="result-hint" id="fr-hint"></p>
+    <div class="tips-grid">
+      <div class="tip-card"><div class="tip-head">กุ้งเล็ก DOC 1–30</div><p>%BW สูง 8–15% — กุ้งเล็กกินอาหารเทียบสัดส่วนตัวมาก กระเพาะเล็ก ต้องให้บ่อย</p></div>
+      <div class="tip-card"><div class="tip-head">กุ้งกลาง DOC 30–60</div><p>%BW ลดลง 4–8% — กุ้งโตขึ้น Biomass เพิ่ม ปรับอาหารตามตะแกรงชั่งทุกอาทิตย์</p></div>
+      <div class="tip-card"><div class="tip-head">กุ้งใหญ่ DOC 60+</div><p>%BW 2–4% — กุ้งโตแล้ว อัตราการกินต่อน้ำหนักตัวลดลง แต่ปริมาณสูง</p></div>
+    </div>
+  </div>
+
+  <!-- ── BIOMASS ── -->
+  <div class="calc-section-label">BIOMASS · น้ำหนักรวมในบ่อ</div>
+  <div class="calc-card">
+    <div class="calc-card-header">
+      <div class="calc-icon">⚖️</div>
+      <div>
+        <h2>Biomass Estimator — ประมาณน้ำหนักกุ้งรวมในบ่อ</h2>
+        <p>คำนวณ Biomass เพื่อวางแผนอาหาร ออกซิเจน และกำหนดเวลาจับ</p>
+      </div>
+    </div>
+    <div class="input-grid">
+      <div class="input-group">
+        <label>จำนวน PL ที่ปล่อย <span class="unit">ตัว</span></label>
+        <input class="calc-input" id="bm-pl" type="number" min="0" step="1000" placeholder="เช่น 200000" oninput="calcBiomass()">
+      </div>
+      <div class="input-group">
+        <label>อัตรารอดโดยประมาณ <span class="unit">%</span></label>
+        <input class="calc-input" id="bm-sr" type="number" min="0" max="100" step="1" placeholder="เช่น 70" oninput="calcBiomass()">
+      </div>
+      <div class="input-group">
+        <label>น้ำหนักเฉลี่ยปัจจุบัน <span class="unit">กรัม/ตัว</span></label>
+        <input class="calc-input" id="bm-avg" type="number" min="0" step="0.5" placeholder="เช่น 12" oninput="calcBiomass()">
+      </div>
+    </div>
+    <div id="bm-result" class="result-box neutral">
+      <div class="result-main">
+        <div class="result-value neutral" id="bm-val">—</div>
+        <div class="result-label">Biomass รวมในบ่อ (กก.)</div>
+      </div>
+    </div>
+    <p class="result-hint" id="bm-hint"></p>
+  </div>
+
+  <!-- ── HARVEST PLANNING ── -->
+  <div class="calc-section-label">HARVEST · วางแผนจับกุ้ง</div>
+  <div class="calc-card">
+    <div class="calc-card-header">
+      <div class="calc-icon">📅</div>
+      <div>
+        <h2>Harvest Planning — คาดการณ์ขนาดกุ้งและวันจับ</h2>
+        <p>จาก growth rate ปัจจุบัน คำนวณว่ากุ้งจะถึงขนาดที่ต้องการเมื่อไหร่</p>
+      </div>
+    </div>
+    <div class="input-grid">
+      <div class="input-group">
+        <label>น้ำหนักปัจจุบัน <span class="unit">กรัม/ตัว</span></label>
+        <input class="calc-input" id="hp-current" type="number" min="0" step="0.5" placeholder="เช่น 10" oninput="calcHarvest()">
+      </div>
+      <div class="input-group">
+        <label>Growth rate <span class="unit">กรัม/วัน</span></label>
+        <input class="calc-input" id="hp-growth" type="number" min="0" step="0.05" placeholder="เช่น 0.2" oninput="calcHarvest()">
+      </div>
+      <div class="input-group">
+        <label>ขนาดที่ต้องการจับ <span class="unit">กรัม/ตัว</span></label>
+        <input class="calc-input" id="hp-target" type="number" min="0" step="1" placeholder="เช่น 20" oninput="calcHarvest()">
+      </div>
+    </div>
+    <div id="hp-result" class="result-box neutral">
+      <div class="result-main">
+        <div class="result-value neutral" id="hp-val">—</div>
+        <div class="result-label" id="hp-label">วันที่เหลือจนถึงขนาดเป้าหมาย</div>
+      </div>
+    </div>
+    <p class="result-hint" id="hp-hint"></p>
+    <div id="hp-table" style="display:none;margin-top:16px;overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:13px;">
+        <thead>
+          <tr style="background:#F5EBF0;">
+            <th style="padding:8px 12px;text-align:left;font-weight:700;color:#4D1232;border-radius:8px 0 0 8px">อีก (วัน)</th>
+            <th style="padding:8px 12px;text-align:right;font-weight:700;color:#4D1232">น้ำหนัก (กรัม)</th>
+            <th style="padding:8px 12px;text-align:right;font-weight:700;color:#4D1232">ขนาด (ตัว/กก.)</th>
+            <th style="padding:8px 12px;text-align:right;font-weight:700;color:#4D1232;border-radius:0 8px 8px 0">หมายเหตุ</th>
+          </tr>
+        </thead>
+        <tbody id="hp-tbody"></tbody>
+      </table>
+    </div>
   </div>
 
 </div>
@@ -513,25 +719,61 @@ function calcDensity() {
 
 // ── BREAK-EVEN ────────────────────────────────────────────────────────────────
 let liveMarketPrice = null;
+let livePriceMap    = {};
+let selectedSize    = null;
 
 async function fetchLivePrice() {
   try {
     const r = await fetch('/api/shrimp-price');
     if (!r.ok) throw new Error();
     const data = await r.json();
-    // pick L60 or L70 as reference
-    const ref = data.latest && (data.latest[60] || data.latest[70] || data.latest[80]);
-    if (ref) {
-      liveMarketPrice = ref;
-      document.getElementById('be-market').placeholder = ref + ' (L60/L70 วันนี้)';
-      const inp = document.getElementById('be-market');
-      if (!inp.value) inp.value = ref;
-      document.getElementById('live-price-status').textContent = `ราคาตลาดล่าสุด: L60/L70 = ${ref} บาท/กก.`;
-      calcBreakeven();
-    }
+    if (!data.latest || !Object.keys(data.latest).length) throw new Error();
+
+    livePriceMap = data.latest;
+    const sizes  = Object.keys(livePriceMap).map(Number).sort((a,b) => a-b);
+
+    // Build size selector buttons
+    const wrap = document.getElementById('be-size-btns');
+    wrap.innerHTML = '';
+    sizes.forEach(sz => {
+      const price = livePriceMap[sz];
+      const btn = document.createElement('button');
+      btn.className = 'size-price-btn';
+      btn.dataset.size  = sz;
+      btn.dataset.price = price;
+      btn.innerHTML = `<span class="spb-size">L${sz}</span><span class="spb-price">${price} ฿</span>`;
+      btn.onclick = () => selectSizePrice(sz, price, btn);
+      wrap.appendChild(btn);
+    });
+    document.getElementById('be-size-wrap').style.display = '';
+    document.getElementById('live-price-status').textContent = `ราคาตลาดล่าสุด: ${sizes.map(s=>'L'+s+' '+livePriceMap[s]+'฿').join(' · ')}`;
   } catch {
     document.getElementById('live-price-status').textContent = 'ไม่สามารถโหลดราคาตลาดได้ — กรอกราคาเองได้เลย';
   }
+}
+
+function selectSizePrice(sz, price, btn) {
+  selectedSize = sz;
+  document.querySelectorAll('.size-price-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('be-market').value = price;
+  liveMarketPrice = price;
+  calcBreakeven();
+}
+
+// เมื่อ be-harvest เปลี่ยน → เดา size จาก sr-weight ถ้ามี
+function guessSizeFromWeight() {
+  const w = parseFloat(document.getElementById('sr-weight').value) || 0;
+  if (!w) return;
+  const estSize = Math.round(1000 / w);
+  document.getElementById('be-size-hint-auto').textContent = `(น้ำหนัก ${w}ก. ≈ L${estSize})`;
+  // highlight closest btn
+  let closest = null, minDiff = Infinity;
+  document.querySelectorAll('.size-price-btn').forEach(b => {
+    const diff = Math.abs(parseInt(b.dataset.size) - estSize);
+    if (diff < minDiff) { minDiff = diff; closest = b; }
+  });
+  if (closest && minDiff <= 15) closest.style.outline = '2px dashed var(--wine)';
 }
 
 function calcBreakeven() {
@@ -544,18 +786,22 @@ function calcBreakeven() {
   const harvest = parseFloat(document.getElementById('be-harvest').value)  || 0;
   const market  = parseFloat(document.getElementById('be-market').value)   || 0;
 
-  const box     = document.getElementById('be-result');
-  const val     = document.getElementById('be-val');
-  const badge   = document.getElementById('be-badge');
-  const hint    = document.getElementById('be-hint');
-  const compare = document.getElementById('be-compare');
+  const box      = document.getElementById('be-result');
+  const val      = document.getElementById('be-val');
+  const badge    = document.getElementById('be-badge');
+  const hint     = document.getElementById('be-hint');
+  const compare  = document.getElementById('be-compare');
+  const totalBox = document.getElementById('be-total-box');
+  const totalVal = document.getElementById('be-total-val');
+  const totalSub = document.getElementById('be-total-sub');
 
   const totalCost = pl + feed + elec + chem + labor + other;
 
   if (!totalCost || !harvest) {
     val.textContent = '—'; val.className = 'result-value neutral';
     box.className = 'result-box neutral'; badge.style.display = 'none';
-    hint.textContent = ''; compare.style.display = 'none'; return;
+    hint.textContent = ''; compare.style.display = 'none';
+    totalBox.style.display = 'none'; return;
   }
 
   const costPerKg = (totalCost / harvest).toFixed(2);
@@ -568,6 +814,7 @@ function calcBreakeven() {
     badge.style.display = 'none';
     hint.textContent = `ต้นทุนรวม ${totalCost.toLocaleString()} บาท — ต้องขายที่ ≥ ${costPerKg} บาท/กก. จึงคุ้มทุน`;
     compare.style.display = 'none';
+    totalBox.style.display = 'none';
     return;
   }
 
@@ -580,13 +827,13 @@ function calcBreakeven() {
   let cls, badgeText, hintText;
   if (profit > 0) {
     cls = 'good'; badgeText = `+${profit} ฿/กก. กำไร`;
-    hintText = `กำไรรวมประมาณ ${totalProfit.toLocaleString()} บาท (ต้นทุน ${costPerKg} ฿/กก. · ราคา ${market} ฿/กก.)`;
+    hintText = `ต้นทุน ${costPerKg} ฿/กก. · ราคาตลาด ${market} ฿/กก.`;
   } else if (profit == 0) {
     cls = 'warn'; badgeText = 'คุ้มทุนพอดี';
-    hintText = `ราคาตลาดเท่ากับต้นทุนพอดี — ลดต้นทุนหรือรอราคาขึ้น`;
+    hintText = 'ราคาตลาดเท่ากับต้นทุนพอดี — ลดต้นทุนหรือรอราคาขึ้น';
   } else {
     cls = 'bad'; badgeText = `${profit} ฿/กก. ขาดทุน`;
-    hintText = `ขาดทุนประมาณ ${Math.abs(totalProfit).toLocaleString()} บาท — ต้องการราคา ≥ ${costPerKg} ฿/กก. จึงคุ้มทุน`;
+    hintText = `ต้องการราคา ≥ ${costPerKg} ฿/กก. จึงคุ้มทุน`;
   }
 
   val.textContent = (profit > 0 ? '+' : '') + profit + ' ฿/กก.';
@@ -596,6 +843,185 @@ function calcBreakeven() {
   badge.textContent = badgeText;
   badge.style.display = 'inline-flex';
   hint.textContent = hintText;
+
+  // BIG total profit display
+  totalBox.style.display = 'block';
+  totalBox.className = `be-total-wrap ${cls}`;
+  if (profit > 0) {
+    totalVal.textContent = '+' + totalProfit.toLocaleString() + ' บาท';
+    totalVal.style.color = 'var(--good)';
+    document.getElementById('be-total-label').textContent = 'กำไรรวมทั้งรุ่น';
+  } else if (profit == 0) {
+    totalVal.textContent = '0 บาท';
+    totalVal.style.color = 'var(--warn)';
+    document.getElementById('be-total-label').textContent = 'กำไรรวมทั้งรุ่น';
+  } else {
+    totalVal.textContent = totalProfit.toLocaleString() + ' บาท';
+    totalVal.style.color = 'var(--bad)';
+    document.getElementById('be-total-label').textContent = 'ขาดทุนรวมทั้งรุ่น';
+  }
+  totalSub.textContent = `ต้นทุนรวม ${totalCost.toLocaleString()} บาท · ผลผลิต ${harvest.toLocaleString()} กก.`;
+}
+
+// ── SURVIVAL RATE ────────────────────────────────────────────────────────────
+function calcSurvival() {
+  const pl      = parseFloat(document.getElementById('sr-pl').value)      || 0;
+  const harvest = parseFloat(document.getElementById('sr-harvest').value) || 0;
+  const weight  = parseFloat(document.getElementById('sr-weight').value)  || 0;
+  const box   = document.getElementById('sr-result');
+  const val   = document.getElementById('sr-val');
+  const badge = document.getElementById('sr-badge');
+  const hint  = document.getElementById('sr-hint');
+
+  if (!pl || !harvest || !weight) {
+    val.textContent = '—'; val.className = 'result-value neutral';
+    box.className = 'result-box neutral'; badge.style.display = 'none'; hint.textContent = ''; return;
+  }
+  const harvested = Math.round((harvest * 1000) / weight);
+  const sr = ((harvested / pl) * 100).toFixed(1);
+
+  let cls, badgeText, hintText;
+  if (sr >= 70) {
+    cls = 'good'; badgeText = '✓ ดีมาก';
+    hintText = `กุ้งรอด ${harvested.toLocaleString()} ตัว จาก ${pl.toLocaleString()} ตัว — อัตรารอด ${sr}% ดีเยี่ยม`;
+  } else if (sr >= 50) {
+    cls = 'warn'; badgeText = '~ ปานกลาง';
+    hintText = `กุ้งรอด ${harvested.toLocaleString()} ตัว จาก ${pl.toLocaleString()} ตัว — อัตรารอด ${sr}% มาตรฐานทั่วไป`;
+  } else {
+    cls = 'bad'; badgeText = '! ต่ำ';
+    hintText = `กุ้งรอด ${harvested.toLocaleString()} ตัว จาก ${pl.toLocaleString()} ตัว — อัตรารอด ${sr}% ต่ำกว่าปกติ ควรตรวจสอบ`;
+  }
+  val.textContent = sr + '%';
+  val.className = `result-value ${cls}`;
+  box.className = `result-box ${cls}`;
+  badge.className = `result-badge ${cls}`;
+  badge.textContent = badgeText;
+  badge.style.display = 'inline-flex';
+  hint.textContent = hintText;
+}
+
+// ── FEED RATE %BW ────────────────────────────────────────────────────────────
+let feedMode = 'a';
+function setFeedMode(m) {
+  feedMode = m;
+  document.getElementById('fr-mode-a').style.display = m === 'a' ? '' : 'none';
+  document.getElementById('fr-mode-b').style.display = m === 'b' ? '' : 'none';
+  document.getElementById('btn-fr-a').className = 'mode-btn' + (m==='a'?' active':'');
+  document.getElementById('btn-fr-b').className = 'mode-btn' + (m==='b'?' active':'');
+  document.getElementById('fr-unit').textContent = m === 'a' ? 'อาหารที่ควรให้ต่อวัน (กก.)' : '%BW จริงที่กำลังใช้ (%/วัน)';
+  calcFeedRate();
+}
+
+function calcFeedRate() {
+  const box   = document.getElementById('fr-result');
+  const val   = document.getElementById('fr-val');
+  const badge = document.getElementById('fr-badge');
+  const hint  = document.getElementById('fr-hint');
+
+  let result, bw, hintText, cls, badgeText;
+
+  if (feedMode === 'a') {
+    const biomass = parseFloat(document.getElementById('fr-biomass').value) || 0;
+    bw = parseFloat(document.getElementById('fr-bw').value) || 0;
+    if (!biomass || !bw) { reset(); return; }
+    result = (biomass * bw / 100).toFixed(2);
+    const perMeal = (result / 4).toFixed(2);
+    hintText = `Biomass ${biomass.toLocaleString()} กก. × %BW ${bw}% = อาหาร ${result} กก./วัน (มื้อละ ~${perMeal} กก. ถ้าให้ 4 มื้อ)`;
+    if (bw > 15) { cls='bad'; badgeText='! %BW สูงมาก'; }
+    else if (bw > 8) { cls='warn'; badgeText='กุ้งเล็ก'; }
+    else if (bw > 4) { cls='warn'; badgeText='กุ้งกลาง'; }
+    else { cls='good'; badgeText='กุ้งใหญ่'; }
+    val.textContent = result + ' กก./วัน';
+  } else {
+    const biomass = parseFloat(document.getElementById('fr-biomass-b').value) || 0;
+    const actual  = parseFloat(document.getElementById('fr-actual').value)     || 0;
+    if (!biomass || !actual) { reset(); return; }
+    bw = ((actual / biomass) * 100).toFixed(2);
+    result = bw;
+    hintText = `อาหาร ${actual} กก. ÷ Biomass ${biomass.toLocaleString()} กก. = %BW ${bw}%/วัน`;
+    if (bw > 15) { cls='bad'; badgeText='! %BW สูงมาก'; }
+    else if (bw > 8) { cls='warn'; badgeText='ช่วงกุ้งเล็ก'; }
+    else if (bw > 4) { cls='warn'; badgeText='ช่วงกุ้งกลาง'; }
+    else { cls='good'; badgeText='ช่วงกุ้งใหญ่'; }
+    val.textContent = bw + '%/วัน';
+  }
+  val.className = `result-value ${cls}`;
+  box.className = `result-box ${cls}`;
+  badge.className = `result-badge ${cls}`;
+  badge.textContent = badgeText;
+  badge.style.display = 'inline-flex';
+  hint.textContent = hintText;
+
+  function reset() {
+    val.textContent = '—'; val.className = 'result-value neutral';
+    box.className = 'result-box neutral'; badge.style.display = 'none'; hint.textContent = '';
+  }
+}
+
+// ── BIOMASS ESTIMATOR ────────────────────────────────────────────────────────
+function calcBiomass() {
+  const pl  = parseFloat(document.getElementById('bm-pl').value)  || 0;
+  const sr  = parseFloat(document.getElementById('bm-sr').value)  || 0;
+  const avg = parseFloat(document.getElementById('bm-avg').value) || 0;
+  const box = document.getElementById('bm-result');
+  const val = document.getElementById('bm-val');
+  const hint = document.getElementById('bm-hint');
+
+  if (!pl || !sr || !avg) {
+    val.textContent = '—'; val.className = 'result-value neutral';
+    box.className = 'result-box neutral'; hint.textContent = ''; return;
+  }
+  const survived = pl * (sr / 100);
+  const biomass  = (survived * avg / 1000).toFixed(0);
+  val.textContent = Number(biomass).toLocaleString() + ' กก.';
+  val.className = 'result-value neutral';
+  box.className = 'result-box neutral';
+  hint.textContent = `กุ้งรอด ~${Math.round(survived).toLocaleString()} ตัว × ${avg} กรัม/ตัว = Biomass ${Number(biomass).toLocaleString()} กก.`;
+}
+
+// ── HARVEST PLANNING ────────────────────────────────────────────────────────
+const HP_MILESTONES = [7, 14, 21, 30, 45, 60, 90];
+
+function calcHarvest() {
+  const current = parseFloat(document.getElementById('hp-current').value) || 0;
+  const growth  = parseFloat(document.getElementById('hp-growth').value)  || 0;
+  const target  = parseFloat(document.getElementById('hp-target').value)  || 0;
+  const box     = document.getElementById('hp-result');
+  const val     = document.getElementById('hp-val');
+  const hint    = document.getElementById('hp-hint');
+  const table   = document.getElementById('hp-table');
+  const tbody   = document.getElementById('hp-tbody');
+
+  if (!current || !growth || !target) {
+    val.textContent = '—'; val.className = 'result-value neutral';
+    box.className = 'result-box neutral'; hint.textContent = ''; table.style.display = 'none'; return;
+  }
+  if (target <= current) {
+    val.textContent = 'ถึงขนาดแล้ว'; val.className = 'result-value good';
+    box.className = 'result-box good'; hint.textContent = 'กุ้งถึงขนาดเป้าหมายแล้ว พร้อมจับได้ทันที'; table.style.display = 'none'; return;
+  }
+  const daysNeeded = Math.ceil((target - current) / growth);
+  val.textContent = daysNeeded + ' วัน';
+  val.className = 'result-value neutral';
+  box.className = 'result-box neutral';
+  hint.textContent = `จาก ${current} กรัม → ${target} กรัม ที่ growth rate ${growth} กรัม/วัน`;
+
+  // build milestone table
+  tbody.innerHTML = '';
+  HP_MILESTONES.forEach(d => {
+    const w = (current + growth * d).toFixed(1);
+    const size = w > 0 ? Math.round(1000 / w) : '—';
+    const isTarget = d >= daysNeeded;
+    const note = isTarget && (d - daysNeeded) <= 7 ? '🎯 ใกล้เป้า' : (isTarget ? '✓ เกินเป้า' : '');
+    const bg = isTarget ? '#f0fdf4' : '';
+    tbody.innerHTML += `<tr style="border-top:1px solid #f0e8ed;background:${bg}">
+      <td style="padding:8px 12px;font-weight:600">${d}</td>
+      <td style="padding:8px 12px;text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700">${w}</td>
+      <td style="padding:8px 12px;text-align:right;font-family:'JetBrains Mono',monospace">${size}</td>
+      <td style="padding:8px 12px;text-align:right;font-size:12px;color:#16a34a">${note}</td>
+    </tr>`;
+  });
+  table.style.display = '';
 }
 
 fetchLivePrice();
