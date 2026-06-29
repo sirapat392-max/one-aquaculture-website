@@ -10,8 +10,38 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
+app.set('trust proxy', 1); // Render.com reverse proxy
 app.use(cors());
 app.use(express.json());
+
+// ─── SERVER-SIDE RATE LIMIT: 10 diagnoses / IP / day ─────────────────────
+const DIAG_LIMIT = 10;
+const diagRateMap = new Map(); // ip → { date: 'YYYY-MM-DD', count: N }
+
+function getDiagEntry(ip) {
+  const today = new Date().toISOString().slice(0, 10);
+  let e = diagRateMap.get(ip);
+  if (!e || e.date !== today) { e = { date: today, count: 0 }; diagRateMap.set(ip, e); }
+  return e;
+}
+
+function diagRateLimiter(req, res, next) {
+  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.ip || 'unknown';
+  const e = getDiagEntry(ip);
+  if (e.count >= DIAG_LIMIT) {
+    return res.status(429).json({
+      error: `ถึงขีดจำกัด ${DIAG_LIMIT} ครั้งต่อวันแล้ว กรุณาลองใหม่พรุ่งนี้`
+    });
+  }
+  e.count++;
+  next();
+}
+
+// Clean up entries older than today every hour (prevent memory leak)
+setInterval(() => {
+  const today = new Date().toISOString().slice(0, 10);
+  for (const [ip, e] of diagRateMap) { if (e.date !== today) diagRateMap.delete(ip); }
+}, 3600_000);
 
 // redirect *.html → clean URL (must be before static)
 app.use((req, res, next) => {
@@ -29,7 +59,7 @@ app.use(express.static(path.join(__dirname), { extensions: ['html'] }));
 const companyData = JSON.parse(fs.readFileSync(path.join(__dirname, 'company-data.json'), 'utf-8'));
 
 // ─── AI SHRIMP DISEASE DIAGNOSIS ───────────────────────────────────────────
-app.post('/api/diagnose', async (req, res) => {
+app.post('/api/diagnose', diagRateLimiter, async (req, res) => {
   const { symptoms, farmDetails } = req.body;
   if (!symptoms) return res.status(400).json({ error: 'กรุณาระบุอาการ' });
 
