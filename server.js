@@ -509,6 +509,11 @@ app.patch('/api/cases/:id', (req, res) => {
   res.json({ ok: true });
 });
 
+app.use((req, res) => {
+  if (req.path.startsWith('/api/')) return res.status(404).json({ error: 'Not found' });
+  res.status(404).sendFile(path.join(__dirname, '404.html'));
+});
+
 app.listen(PORT, () => {
   console.log(`✅ ONE Aquaculture server running at http://localhost:${PORT}`);
   console.log(`🤖 AI Diagnosis: http://localhost:${PORT}/ai-diagnosis.html`);

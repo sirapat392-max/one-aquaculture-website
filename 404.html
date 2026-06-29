@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ไม่พบหน้า · ONE AQUACULTURE PRODUCT</title>
+<link rel="icon" href="/logo.jpg" type="image/jpeg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --wine: #8B3060; --wine-dark: #6B2347; --wine-pale: #FDF0F6;
+    --text-dark: #1C1020; --text-soft: #A090A0;
+  }
+  body {
+    font-family: 'Noto Sans Thai', 'Inter', sans-serif;
+    background: #FDFBFC; color: var(--text-dark);
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; padding: 40px 20px;
+    text-align: center;
+  }
+  .num {
+    font-size: clamp(80px, 20vw, 160px); font-weight: 800;
+    color: var(--wine-pale); line-height: 1;
+    background: linear-gradient(135deg, #8B3060, #C9956C);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .icon { font-size: 52px; margin: 8px 0 20px; }
+  h1 { font-size: clamp(20px, 4vw, 28px); font-weight: 800; margin-bottom: 10px; }
+  p { font-size: 15px; color: var(--text-soft); margin-bottom: 32px; line-height: 1.7; max-width: 380px; }
+  .links { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  a.btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 11px 22px; border-radius: 32px; font-size: 14px; font-weight: 700;
+    text-decoration: none; transition: all .2s;
+  }
+  a.btn-primary { background: var(--wine); color: white; }
+  a.btn-primary:hover { background: var(--wine-dark); transform: translateY(-2px); }
+  a.btn-secondary { background: var(--wine-pale); color: var(--wine); }
+  a.btn-secondary:hover { transform: translateY(-2px); }
+</style>
+</head>
+<body>
+  <div class="num">404</div>
+  <div class="icon">🦐</div>
+  <h1>ไม่พบหน้าที่คุณตามหา</h1>
+  <p>ลิงก์อาจเปลี่ยนไปแล้ว หรือหน้านี้ไม่มีอยู่ในระบบ ลองไปที่หน้าอื่นได้เลย</p>
+  <div class="links">
+    <a class="btn btn-primary" href="/">🏠 หน้าหลัก</a>
+    <a class="btn btn-secondary" href="/products">ผลิตภัณฑ์</a>
+    <a class="btn btn-secondary" href="/ai-diagnosis">🔬 วิเคราะห์กุ้ง AI</a>
+    <a class="btn btn-secondary" href="/contact">ติดต่อเรา</a>
+  </div>
+</body>
+</html>
