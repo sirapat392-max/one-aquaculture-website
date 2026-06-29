@@ -1,9 +1,16 @@
 require('dotenv').config();
-const Anthropic = require('@anthropic-ai/sdk');
+const OpenAI = require('openai');
 const fs = require('fs');
 const path = require('path');
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const client = new OpenAI({
+  apiKey: process.env.OPENROUTER_API_KEY,
+  baseURL: 'https://openrouter.ai/api/v1',
+  defaultHeaders: {
+    'HTTP-Referer': 'https://one-aquaculture.onrender.com',
+    'X-Title': 'ONE AQUACULTURE PRODUCT',
+  },
+});
 
 const RSS_SOURCES = [
   { url: 'https://hatcheryinternational.com/feed/',              name: 'Hatchery International' },
@@ -98,9 +105,9 @@ async function updateNews() {
     `[${i}] title: ${it.title}\nsource: ${it.source}\ndate: ${it.pubDate}\nexcerpt: ${it.summary}`
   ).join('\n---\n');
 
-  const msg = await client.messages.create({
-    model: 'claude-haiku-4-5-20251001',
-    max_tokens: 3000,
+  const msg = await client.chat.completions.create({
+    model: 'google/gemini-2.5-flash-lite',
+    max_tokens: 5000,
     messages: [{ role: 'user', content: `Below are ${top.length} real aquaculture news articles. Return ONLY a valid JSON array, no markdown.
 
 Schema: { "idx": N, "titleTH": "ชื่อภาษาไทย", "category": "industry|regulation|research|disease", "summary": "สรุป 2 ประโยคภาษาไทย" }
@@ -110,7 +117,7 @@ Category: disease=disease/pathogen/virus; regulation=law/ban/standard; research=
 Articles:\n${listed}` }]
   });
 
-  const raw = msg.content[0].text.trim();
+  const raw = msg.choices[0].message.content.trim();
   const parsed = JSON.parse(raw.slice(raw.indexOf('['), raw.lastIndexOf(']') + 1));
   const byIdx = Object.fromEntries(parsed.map(p => [p.idx, p]));
 

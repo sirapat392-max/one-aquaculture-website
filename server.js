@@ -1,14 +1,21 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const Anthropic = require('@anthropic-ai/sdk');
+const OpenAI = require('openai');
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const client = new OpenAI({
+  apiKey: process.env.OPENROUTER_API_KEY,
+  baseURL: 'https://openrouter.ai/api/v1',
+  defaultHeaders: {
+    'HTTP-Referer': 'https://one-aquaculture.onrender.com',
+    'X-Title': 'ONE AQUACULTURE PRODUCT',
+  },
+});
 
 app.set('trust proxy', 1); // Render.com reverse proxy
 app.use(cors());
@@ -95,22 +102,19 @@ ${diseaseRef}
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
 
-    let fullText = '';
-    const stream = await client.messages.stream({
-      model: 'claude-sonnet-4-6',
+    const stream = await client.chat.completions.create({
+      model: 'google/gemini-2.5-flash', // smart for medical reasoning
       max_tokens: 2048,
-      system: systemPrompt,
-      messages: [{
-        role: 'user',
-        content: `อาการที่พบ: ${symptoms}${farmDetails ? `\nข้อมูลฟาร์ม: ${farmDetails}` : ''}\n\nวิเคราะห์โรคที่เป็นไปได้และตอบในรูปแบบ JSON ที่กำหนด`
-      }]
+      stream: true,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: `อาการที่พบ: ${symptoms}${farmDetails ? `\nข้อมูลฟาร์ม: ${farmDetails}` : ''}\n\nวิเคราะห์โรคที่เป็นไปได้และตอบในรูปแบบ JSON ที่กำหนด` },
+      ],
     });
 
     for await (const chunk of stream) {
-      if (chunk.type === 'content_block_delta' && chunk.delta.type === 'text_delta') {
-        fullText += chunk.delta.text;
-        res.write(`data: ${JSON.stringify({ text: chunk.delta.text })}\n\n`);
-      }
+      const text = chunk.choices[0]?.delta?.content || '';
+      if (text) res.write(`data: ${JSON.stringify({ text })}\n\n`);
     }
     res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
     res.end();
@@ -142,20 +146,22 @@ app.post('/api/chat', async (req, res) => {
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
 
-    const messages = (history || []).map(h => ({ role: h.role, content: h.content }));
-    messages.push({ role: 'user', content: message });
+    const messages = [
+      { role: 'system', content: systemPrompt },
+      ...(history || []).map(h => ({ role: h.role, content: h.content })),
+      { role: 'user', content: message },
+    ];
 
-    const stream = await client.messages.stream({
-      model: 'claude-sonnet-4-6',
+    const stream = await client.chat.completions.create({
+      model: 'google/gemini-2.5-flash-lite',
       max_tokens: 1024,
-      system: systemPrompt,
-      messages
+      stream: true,
+      messages,
     });
 
     for await (const chunk of stream) {
-      if (chunk.type === 'content_block_delta' && chunk.delta.type === 'text_delta') {
-        res.write(`data: ${JSON.stringify({ text: chunk.delta.text })}\n\n`);
-      }
+      const text = chunk.choices[0]?.delta?.content || '';
+      if (text) res.write(`data: ${JSON.stringify({ text })}\n\n`);
     }
     res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
     res.end();
@@ -275,9 +281,9 @@ app.post('/api/refresh-news', async (req, res) => {
         `[${i}] title: ${it.title}\nsource: ${it.source}\nurl: ${it.url}\ndate: ${it.pubDate}\nexcerpt: ${it.summary}`
       ).join('\n---\n');
 
-      const msg = await client.messages.create({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 3000,
+      const msg = await client.chat.completions.create({
+        model: 'google/gemini-2.5-flash-lite',
+        max_tokens: 5000,
         messages: [{
           role: 'user',
           content: `Below are ${top.length} real aquaculture news articles. For each, return a JSON array entry.
@@ -298,7 +304,7 @@ ${listed}`
         }]
       });
 
-      const raw = msg.content[0].text.trim();
+      const raw = msg.choices[0].message.content.trim();
       const parsed = JSON.parse(raw.slice(raw.indexOf('['), raw.lastIndexOf(']') + 1));
       const byIdx = Object.fromEntries(parsed.map(p => [p.idx, p]));
 
