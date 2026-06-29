@@ -718,14 +718,14 @@
 <style>
 #fc-bubble {
   position: fixed; bottom: 24px; right: 24px; z-index: 999;
-  width: 52px; height: 52px; border-radius: 50%;
+  width: 72px; height: 72px; border-radius: 50%;
   background: linear-gradient(135deg,#4D1232,#8B3060);
-  box-shadow: 0 4px 20px rgba(139,48,96,.4);
-  border: none; cursor: pointer; font-size: 22px;
+  box-shadow: 0 6px 28px rgba(139,48,96,.45);
+  border: none; cursor: pointer; font-size: 32px;
   display: flex; align-items: center; justify-content: center;
   transition: transform .15s, box-shadow .15s;
 }
-#fc-bubble:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(139,48,96,.55); }
+#fc-bubble:hover { transform: scale(1.08); box-shadow: 0 8px 36px rgba(139,48,96,.6); }
 #fc-bubble .fc-badge {
   position: absolute; top: -4px; right: -4px;
   background: #dc2626; color: white; border-radius: 50%;
@@ -735,7 +735,7 @@
 }
 
 #fc-panel {
-  position: fixed; bottom: 88px; right: 24px; z-index: 998;
+  position: fixed; bottom: 108px; right: 24px; z-index: 998;
   width: 360px; max-width: calc(100vw - 32px);
   background: white; border-radius: 20px;
   box-shadow: 0 8px 40px rgba(0,0,0,.18);
