@@ -173,9 +173,20 @@ async function refreshNews() {
   btn.textContent = t('news.refreshing');
   document.getElementById('updateStatus').textContent = t('news.ai.searching');
   try {
-    await fetch(`${API}/api/refresh-news`, { method: 'POST' });
-    setTimeout(loadNews, 2000);
-  } catch {
+    const res = await fetch(`${API}/api/refresh-news`, { method: 'POST' });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || res.status);
+    allArticles = data.articles || [];
+    renderNews(allArticles);
+    if (data.lastUpdated) {
+      const d = new Date(data.lastUpdated);
+      const locale = getLang() === 'th' ? 'th-TH' : 'en-US';
+      document.getElementById('lastUpdated').textContent =
+        `${t('news.lastupdated')} ${d.toLocaleDateString(locale, { year:'numeric', month:'long', day:'numeric' })}`;
+    }
+    document.getElementById('updateStatus').textContent = '';
+  } catch (e) {
+    document.getElementById('updateStatus').textContent = e.message || 'อัปเดตไม่สำเร็จ';
     await loadNews();
   }
   btn.disabled = false;

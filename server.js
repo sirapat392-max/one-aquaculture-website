@@ -180,6 +180,55 @@ app.get('/api/news', (req, res) => {
   }
 });
 
+// ─── REFRESH NEWS VIA AI ──────────────────────────────────────────────────
+let newsRefreshLock = false; // prevent parallel calls
+app.post('/api/refresh-news', async (req, res) => {
+  if (newsRefreshLock) {
+    return res.status(429).json({ error: 'กำลังอัปเดตอยู่ รอสักครู่' });
+  }
+  newsRefreshLock = true;
+  try {
+    const today = new Date().toISOString().slice(0, 10);
+    const msg = await client.messages.create({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 2048,
+      messages: [{
+        role: 'user',
+        content: `Generate 8 recent aquaculture industry news articles relevant to Thai shrimp farmers as of ${today}.
+Return ONLY valid JSON array, no markdown, no explanation:
+[
+  {
+    "title": "English title",
+    "titleTH": "ชื่อข่าวภาษาไทย",
+    "source": "Source name (FAO / กรมประมง / GOAL / etc.)",
+    "url": "https://...(real or plausible URL)",
+    "date": "YYYY-MM-DD",
+    "category": "industry|regulation|research|disease",
+    "categoryLabel": "🌏 อุตสาหกรรม|📋 กฎระเบียบ|🔬 งานวิจัย|🦠 โรคสัตว์น้ำ",
+    "summary": "2-3 sentence Thai summary relevant to shrimp farmers in Thailand"
+  }
+]
+Categories must be one of: industry, regulation, research, disease.
+categoryLabel must match: industry→"🌏 อุตสาหกรรม", regulation→"📋 กฎระเบียบ", research→"🔬 งานวิจัย", disease→"🦠 โรคสัตว์น้ำ".
+Mix categories. Focus on vannamei shrimp, Thai Gulf coast aquaculture, EMS/WSSV/disease alerts, export markets, feed innovation, water quality research.`
+      }]
+    });
+
+    const raw = msg.content[0].text.trim();
+    const start = raw.indexOf('[');
+    const end = raw.lastIndexOf(']');
+    const articles = JSON.parse(raw.slice(start, end + 1));
+    const payload = { articles, lastUpdated: new Date().toISOString() };
+    fs.writeFileSync(path.join(__dirname, 'news-data.json'), JSON.stringify(payload, null, 2));
+    res.json(payload);
+  } catch (err) {
+    console.error('refresh-news error:', err.message);
+    res.status(500).json({ error: 'อัปเดตข่าวไม่สำเร็จ กรุณาลองใหม่' });
+  } finally {
+    newsRefreshLock = false;
+  }
+});
+
 // ─── CONTACT FORM EMAIL ───────────────────────────────────────────────────
 app.post('/api/contact', async (req, res) => {
   const { name, company, phone, email, product, message } = req.body;
