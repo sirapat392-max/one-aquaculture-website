@@ -132,6 +132,7 @@ ${diseaseRef}
       model: 'google/gemini-2.5-flash',
       max_tokens: 2048,
       stream: true,
+      response_format: { type: 'json_object' },
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userContent },
