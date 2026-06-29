@@ -1,0 +1,87 @@
+{
+  "articles": [
+    {
+      "title": "FAO Report: Global Aquaculture Production Reaches Record High in 2024",
+      "titleTH": "FAO รายงาน: การเพาะเลี้ยงสัตว์น้ำโลกแตะระดับสูงสุดเป็นประวัติการณ์ในปี 2567",
+      "source": "FAO",
+      "url": "https://www.fao.org/fishery/en/aquaculture",
+      "date": "2024-11-01",
+      "category": "industry",
+      "categoryLabel": "🌏 อุตสาหกรรม",
+      "summary": "องค์การอาหารและเกษตรแห่งสหประชาชาติ (FAO) รายงานว่าการผลิตสัตว์น้ำจากการเพาะเลี้ยงทั่วโลกในปี 2567 มีปริมาณสูงสุดเป็นประวัติการณ์ โดยเอเชียยังคงเป็นภูมิภาคหลักที่มีสัดส่วนการผลิตมากกว่า 85% ของทั้งโลก ประเทศไทยติดอันดับผู้ส่งออกกุ้งและปลานิลรายสำคัญในตลาดโลก"
+    },
+    {
+      "title": "Early Mortality Syndrome (EMS) Prevention Strategies in Southeast Asian Shrimp Farms",
+      "titleTH": "กลยุทธ์ป้องกันโรค EMS ในฟาร์มกุ้งเอเชียตะวันออกเฉียงใต้",
+      "source": "The Fish Site",
+      "url": "https://thefishsite.com/articles/preventing-early-mortality-syndrome-ems-in-shrimp",
+      "date": "2024-10-15",
+      "category": "disease",
+      "categoryLabel": "🦐 โรคสัตว์น้ำ",
+      "summary": "โรค EMS หรือ Acute Hepatopancreatic Necrosis Disease (AHPND) ยังคงเป็นภัยคุกคามสำคัญต่ออุตสาหกรรมกุ้งในภูมิภาคเอเชียตะวันออกเฉียงใต้ รวมถึงไทย เวียดนาม และอินโดนีเซีย นักวิจัยแนะนำการใช้โปรไบโอติกร่วมกับการจัดการคุณภาพน้ำที่เข้มงวดเพื่อลดความเสี่ยงการระบาด การคัดกรองสายพันธุ์ Vibrio parahaemolyticus ในระยะแรกของการเลี้ยงเป็นมาตรการสำคัญที่ฟาร์มชั้นนำนำมาปฏิบัติ"
+    },
+    {
+      "title": "Probiotic Bacillus subtilis Enhances Growth and Disease Resistance in Litopenaeus vannamei",
+      "titleTH": "โปรไบโอติก Bacillus subtilis ช่วยเพิ่มการเจริญเติบโตและภูมิต้านทานโรคในกุ้งขาวแวนนาไม",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/",
+      "date": "2024-09-20",
+      "category": "research",
+      "categoryLabel": "🔬 งานวิจัย",
+      "summary": "งานวิจัยที่ตีพิมพ์ใน Aquaculture Reports ระบุว่าการเสริม Bacillus subtilis ในอาหารกุ้งขาวแวนนาไม (Litopenaeus vannamei) ในระดับ 1×10⁷ CFU/g ส่งผลให้อัตราการเจริญเติบโตเพิ่มขึ้น 18% และอัตราการรอดตายสูงกว่ากลุ่มควบคุมอย่างมีนัยสำคัญ นอกจากนี้ยังพบการเพิ่มขึ้นของกิจกรรมเอนไซม์ภูมิคุ้มกันในเฮโมลิมฟ์ของกุ้ง ซึ่งแสดงถึงศักยภาพในการลดการใช้ยาปฏิชีวนะในฟาร์มเพาะเลี้ยงสัตว์น้ำ"
+    },
+    {
+      "title": "กรมประมงประกาศปรับปรุงมาตรฐานอาหารสัตว์น้ำและการรับรอง GAP ปี 2567",
+      "titleTH": "กรมประมงประกาศปรับปรุงมาตรฐานอาหารสัตว์น้ำและการรับรอง GAP ปี 2567",
+      "source": "กรมประมง",
+      "url": "https://www.fisheries.go.th/it-dof/index.php",
+      "date": "2024-10-01",
+      "category": "regulation",
+      "categoryLabel": "⚖️ กฎระเบียบ",
+      "summary": "กรมประมงประกาศแนวทางปรับปรุงมาตรฐานการรับรองฟาร์มเพาะเลี้ยงสัตว์น้ำ (GAP) ฉบับใหม่ โดยเพิ่มข้อกำหนดด้านการใช้สารปฏิชีวนะและสารเคมีในบัญชีควบคุม รวมถึงบังคับให้ฟาร์มที่ส่งออกต้องผ่านการตรวจรับรองตามมาตรฐาน EU และ FDA อย่างเข้มงวดยิ่งขึ้น มาตรการดังกล่าวมีผลบังคับใช้กับฟาร์มกุ้ง ปลานิล และปลาสลิดทะเลขนาดกลางและใหญ่ทั่วประเทศ"
+    },
+    {
+      "title": "Thailand Shrimp Industry Rebounds with Sustainable Practices Amid Global Competition",
+      "titleTH": "อุตสาหกรรมกุ้งไทยฟื้นตัวด้วยแนวทางยั่งยืนท่ามกลางการแข่งขันระดับโลก",
+      "source": "Seafood Source",
+      "url": "https://www.seafoodsource.com/news/aquaculture/thailand-shrimp-industry",
+      "date": "2024-10-28",
+      "category": "industry",
+      "categoryLabel": "🌏 อุตสาหกรรม",
+      "summary": "อุตสาหกรรมกุ้งไทยแสดงสัญญาณฟื้นตัวอย่างต่อเนื่องในปี 2567 โดยมูลค่าการส่งออกกุ้งและผลิตภัณฑ์กุ้งเพิ่มขึ้น 12% เมื่อเทียบกับปีก่อน ผู้ผลิตรายใหญ่หันมาใช้ระบบ Biofloc และ RAS (Recirculating Aquaculture System) เพื่อเพิ่มประสิทธิภาพและลดผลกระทบต่อสิ่งแวดล้อม การได้รับการรับรองมาตรฐาน ASC และ BAP ช่วยเพิ่มความเชื่อมั่นในตลาดยุโรปและสหรัฐอเมริกา"
+    },
+    {
+      "title": "White Spot Syndrome Virus (WSSV) Outbreak Monitoring and Biosecurity Measures in Asian Aquaculture",
+      "titleTH": "การเฝ้าระวังการระบาดไวรัสดาวขาว (WSSV) และมาตรการความปลอดภัยทางชีวภาพในการเพาะเลี้ยงสัตว์น้ำเอเชีย",
+      "source": "The Fish Site",
+      "url": "https://thefishsite.com/articles/white-spot-syndrome-virus-wssv-biosecurity",
+      "date": "2024-11-05",
+      "category": "disease",
+      "categoryLabel": "🦐 โรคสัตว์น้ำ",
+      "summary": "ไวรัสดาวขาว (WSSV) ยังคงเป็นหนึ่งในโรคที่สร้างความเสียหายสูงสุดแก่อุตสาหกรรมกุ้งในเอเชีย โดยประเมินมูลค่าความเสียหายรวมกว่า 1 พันล้านดอลลาร์ต่อปี การตรวจ PCR เชิงป้องกันในโรงเพาะฟักและการควบคุมสัตว์พาหะ เช่น ปูและนกน้ำ เป็นมาตรการหลักที่แนะนำ นักวิจัยกำลังพัฒนาวัคซีน RNA interference และการคัดพันธุ์กุ้งที่มีความต้านทานต่อไวรัสเพื่อรองรับการใช้งานเชิงพาณิชย์ในอนาคต"
+    },
+    {
+      "title": "Sustainable Aquaculture Feed Innovation: Replacing Fishmeal with Alternative Proteins",
+      "titleTH": "นวัตกรรมอาหารสัตว์น้ำยั่งยืน: การทดแทนปลาป่นด้วยโปรตีนทางเลือก",
+      "source": "FAO",
+      "url": "https://www.fao.org/sustainable-food-value-chains/library/details/en/c/1274899/",
+      "date": "2024-09-10",
+      "category": "research",
+      "categoryLabel": "🔬 งานวิจัย",
+      "summary": "FAO และสถาบันวิจัยทั่วโลกเร่งพัฒนาสูตรอาหารสัตว์น้ำที่ใช้โปรตีนทางเลือก เช่น โปรตีนจากแมลง (Black Soldier Fly) สาหร่าย และโปรตีนจากจุลินทรีย์ Single Cell Protein (SCP) เพื่อลดการพึ่งพาปลาป่น การทดแทนปลาป่นได้ถึง 50% ในสูตรอาหารกุ้งและปลาแซลมอนโดยไม่กระทบต่อการเจริญเติบโตถือเป็นความก้าวหน้าสำคัญ แนวทางนี้ช่วยลดแรงกดดันต่อทรัพยากรสัตว์น้ำธรรมชาติและส่งเสริมความยั่งยืนของห่วงโซ่อาหารทะเล"
+    },
+    {
+      "title": "Microbiome Management in Shrimp Ponds: Role of Probiotics and Prebiotics in Disease Prevention",
+      "titleTH": "การจัดการไมโครไบโอมในบ่อกุ้ง: บทบาทของโปรไบโอติกและพรีไบโอติกในการป้องกันโรค",
+      "source": "PubMed / NCBI",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/",
+      "date": "2024-08-30",
+      "category": "research",
+      "categoryLabel": "🔬 งานวิจัย",
+      "summary": "งานวิจัยล่าสุดในวารสาร Aquaculture ชี้ว่าการจัดการไมโครไบโอมในบ่อเลี้ยงกุ้งผ่านการใช้โปรไบโอติกแบบผสม (Consortium probiotics) ที่ประกอบด้วย Lactobacillus, Bacillus และ Saccharomyces สามารถลดความชุกของ Vibrio spp. ในน้ำได้อย่างมีนัยสำคัญ การศึกษาในฟาร์มเชิงพาณิชย์ในประเทศไทยพบว่าฟาร์มที่ใช้โปรไบโอติกอย่างสม่ำเสมอมีอัตราการเกิดโรคลดลง 35% และสามารถลดการใช้ยาปฏิชีวนะได้กว่า 60% ส่งผลดีต่อทั้งต้นทุนการผลิตและมาตรฐานการส่งออก"
+    }
+  ],
+  "lastUpdated": "2026-06-29T09:04:32.446Z",
+  "updatedBy": "AI (claude-sonnet-4-6) + SERP API",
+  "source": "ai-generated"
+}
