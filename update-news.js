@@ -86,23 +86,26 @@ ${allRaw.length === 0 ? 'ไม่มีข้อมูล SERP — สร้า
     const match = raw.match(/\[[\s\S]*\]/);
     if (!match) throw new Error('ไม่พบ JSON ในคำตอบ');
 
-    const articles = JSON.parse(match[0]);
+    const newArticles = JSON.parse(match[0]);
+
+    // Load existing archive and merge (dedup by URL)
+    const newsFile = path.join(__dirname, 'news-data.json');
+    let existing = [];
+    try { existing = JSON.parse(fs.readFileSync(newsFile, 'utf-8')).articles || []; } catch {}
+    const existingUrls = new Set(existing.map(a => a.url));
+    const fresh = newArticles.filter(a => !existingUrls.has(a.url));
+    const articles = [...fresh, ...existing].slice(0, 100); // สูงสุด 100 บทความ
+
     const newsData = {
       articles,
       lastUpdated: new Date().toISOString(),
-      updatedBy: 'AI (claude-sonnet-4-6) + SERP API',
-      source: allRaw.length > 0 ? 'real-search' : 'ai-generated',
     };
 
-    fs.writeFileSync(
-      path.join(__dirname, 'news-data.json'),
-      JSON.stringify(newsData, null, 2),
-      'utf-8'
-    );
+    fs.writeFileSync(newsFile, JSON.stringify(newsData, null, 2), 'utf-8');
 
-    console.log(`✅ อัปเดตข่าวสำเร็จ ${articles.length} บทความ`);
+    console.log(`✅ เพิ่มใหม่ ${fresh.length} บทความ · รวมทั้งหมด ${articles.length} บทความ`);
     console.log(`📅 ${new Date().toLocaleString('th-TH')}`);
-    articles.forEach((a, i) => console.log(`  ${i + 1}. [${a.category}] ${a.titleTH || a.title}`));
+    fresh.forEach((a, i) => console.log(`  +${i + 1}. [${a.category}] ${a.titleTH || a.title}`));
   } catch (err) {
     console.error('❌ เกิดข้อผิดพลาด:', err.message);
     process.exit(1);

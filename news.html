@@ -71,14 +71,14 @@ body { padding-top: 68px; }
 
 <div class="ai-update-bar">
   <div class="dot"></div>
-  <span id="updateStatus">ข่าวสารอัปเดตโดย AI</span>
+  <span id="updateStatus"></span>
   <button id="refreshBtn" onclick="refreshNews()">🔄 อัปเดตข่าว</button>
 </div>
 
 <div class="page-header">
   <div class="page-tag">ข่าวสาร · News</div>
   <h1>ข่าวสารและความรู้<br>อุตสาหกรรมประมง</h1>
-  <p>ติดตามข่าวสาร งานวิจัย และกฎระเบียบล่าสุด คัดสรรและอัปเดตโดย AI</p>
+  <p>ติดตามข่าวสาร งานวิจัย และกฎระเบียบล่าสุดด้านการเพาะเลี้ยงสัตว์น้ำ</p>
 </div>
 
 <div class="cat-filter">
@@ -121,8 +121,8 @@ async function loadNews() {
     if (data.lastUpdated) {
       const d = new Date(data.lastUpdated);
       document.getElementById('lastUpdated').textContent =
-        `อัปเดตล่าสุด: ${d.toLocaleDateString('th-TH', { year:'numeric', month:'long', day:'numeric' })} · อัปเดตโดย ${data.updatedBy || 'AI'}`;
-      document.getElementById('updateStatus').textContent = 'ข่าวสารอัปเดตโดย AI · ' + d.toLocaleDateString('th-TH');
+        `อัปเดตล่าสุด: ${d.toLocaleDateString('th-TH', { year:'numeric', month:'long', day:'numeric' })}`;
+      document.getElementById('updateStatus').textContent = '';
     }
   } catch {
     document.getElementById('newsGrid').innerHTML = `

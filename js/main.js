@@ -74,7 +74,6 @@ function footerHTML() {
     </div>
     <div class="footer-bottom">
       <p>© 2569 บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด · All rights reserved.</p>
-      <p style="font-size:11px;color:rgba(255,255,255,0.25);">🤖 ข่าวสารอัปเดตโดย AI · AI-maintained content</p>
     </div>
   </div>
 </footer>`;
