@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: one-aquaculture-website
+    runtime: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: VET_PASSWORD
+        sync: false
+      - key: EMAIL_USER
+        value: one.aquaculture.product@gmail.com
+      - key: EMAIL_PASS
+        sync: false
