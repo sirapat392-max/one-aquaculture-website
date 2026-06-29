@@ -3,7 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ราคากุ้งปากบ่อ · ONE AQUACULTURE PRODUCT</title>
+<title>ราคากุ้งปากบ่อวันนี้ · ONE AQUACULTURE PRODUCT</title>
+<meta name="description" content="ราคากุ้งปากบ่อวันนี้ — ราคารับซื้อกุ้งขาวแวนนาไมหน้าฟาร์ม แยกตามขนาด (L40–L150) พร้อมกราฟแนวโน้ม รวบรวมจากเกษตรกรภาคใต้ อ่าวไทย อัปเดตทุกวัน">
+<meta name="keywords" content="ราคากุ้ง, ราคากุ้งวันนี้, ราคากุ้งปากบ่อ, กุ้งขาวแวนนาไม, ราคากุ้งภาคใต้, ราคากุ้ง L60 L80 L100">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ราคากุ้งปากบ่อวันนี้ · ONE AQUACULTURE PRODUCT">
+<meta property="og:description" content="ราคารับซื้อกุ้งขาวแวนนาไมหน้าฟาร์ม แยกตามขนาด พร้อมกราฟแนวโน้ม อัปเดตทุกวัน">
+<meta property="og:image" content="https://one-aquaculture.onrender.com/logo.jpg">
+<meta property="og:url" content="https://one-aquaculture.onrender.com/shrimp-price">
+<meta property="og:site_name" content="ONE AQUACULTURE PRODUCT">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://one-aquaculture.onrender.com/shrimp-price">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Noto+Sans+Thai:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/main.css">
@@ -184,7 +194,7 @@
 
   <!-- SUMMARY CARDS -->
   <div class="summary-section">
-    <div class="summary-label" data-i18n="price.summary.label">ราคาวันนี้ · ขนาดหลัก</div>
+    <div class="summary-label" id="summaryLabel" data-i18n="price.summary.label">ราคาวันนี้ · ขนาดหลัก</div>
     <div class="summary-grid" id="summaryGrid">
       <!-- JS injects cards -->
       <div class="sz-card"><div class="skeleton" style="height:80px;"></div></div>
@@ -444,24 +454,30 @@ function populateDateSelect(dates) {
   selectedBarDate = dates[dates.length - 1];
 }
 
-function onBarDateChange() {
-  selectedBarDate = document.getElementById('barDateSelect').value;
+function updateSelectedDate(date) {
+  selectedBarDate = date;
+  const barSel = document.getElementById('barDateSelect');
+  if (barSel) barSel.value = date;
   const tableSel = document.getElementById('tableDateSelect');
-  if (tableSel) tableSel.value = selectedBarDate;
-  const prices = globalByDate[selectedBarDate];
+  if (tableSel) tableSel.value = date;
+  const prices = globalByDate[date];
   if (!prices) return;
+  const dt = new Date(date + 'T12:00:00');
+  const dateStr = `${dt.getDate()}/${dt.getMonth()+1}/${dt.getFullYear()}`;
+  const isToday = date === globalDates[globalDates.length - 1];
+  const lbl = document.getElementById('summaryLabel');
+  if (lbl) lbl.textContent = isToday ? 'ราคาวันนี้ · ขนาดหลัก' : `ราคา ${dateStr} · ขนาดหลัก`;
+  renderSummaryCards(prices);
   renderBarChart(prices);
   renderTable(prices);
 }
 
+function onBarDateChange() {
+  updateSelectedDate(document.getElementById('barDateSelect').value);
+}
+
 function onTableDateChange() {
-  selectedBarDate = document.getElementById('tableDateSelect').value;
-  const barSel = document.getElementById('barDateSelect');
-  if (barSel) barSel.value = selectedBarDate;
-  const prices = globalByDate[selectedBarDate];
-  if (!prices) return;
-  renderBarChart(prices);
-  renderTable(prices);
+  updateSelectedDate(document.getElementById('tableDateSelect').value);
 }
 
 // ── RENDER SIZE CHIPS ─────────────────────────────────────────────────────────
