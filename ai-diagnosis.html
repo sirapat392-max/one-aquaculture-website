@@ -265,6 +265,47 @@ select {
   .water-grid { grid-template-columns:1fr 1fr; }
   .ai-action-grid { grid-template-columns:1fr; }
 }
+
+/* ===== BACK BUTTON ===== */
+.back-home {
+  display:inline-flex; align-items:center; gap:5px;
+  color:rgba(255,255,255,.75); font-size:12px; font-weight:600;
+  text-decoration:none; margin-bottom:10px;
+  position:relative; z-index:2;
+}
+.back-home:hover { color:white; }
+
+/* ===== RATE BAR ===== */
+.rate-bar {
+  margin:8px 16px 0; padding:9px 13px;
+  background:var(--sand); border:1px solid var(--line); border-radius:9px;
+  font-size:12px; color:var(--mud);
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+}
+.rate-bar.at-limit { background:var(--warn-soft); border-color:var(--warn-border); color:#7a4a1f; }
+.rate-track { flex:1; height:4px; background:var(--line); border-radius:4px; overflow:hidden; }
+.rate-fill { height:100%; background:var(--pond); border-radius:4px; transition:width .3s; }
+.rate-fill.warn { background:var(--warn); }
+.rate-fill.full { background:var(--coral); }
+
+/* ===== DESKTOP LAYOUT ===== */
+.dx-layout { }
+@media (min-width: 900px) {
+  .wrap { max-width: 1200px; }
+  .page-hero { border-radius: 0 0 16px 16px; margin: 0 0 0 0; }
+  .nudge { margin: 12px 20px 0; }
+  .dx-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 20px;
+    padding: 0 20px;
+    align-items: start;
+  }
+  .dx-form-col form { padding-bottom: 0; }
+  .dx-form-col .action-row { padding: 0 16px 20px; }
+  .dx-result-col { position: sticky; top: 80px; }
+  .rate-bar { margin: 8px 0 0; }
+}
 </style>
 </head>
 <body>
@@ -277,6 +318,7 @@ select {
       <img src="logo.jpg" alt="logo">
       <span>ONE AQUACULTURE PRODUCT</span>
     </div>
+    <a href="index.html" class="back-home">← หน้าหลัก</a>
     <h1>🦐 วิเคราะห์โรคกุ้ง AI</h1>
     <p>กรอกอาการ ข้อมูลบ่อ และค่าน้ำ — AI วินิจฉัยและให้คำแนะนำทันที</p>
     <div class="version-pill">ONE AI · Powered by Claude · เพื่อเกษตรกรกุ้งไทย</div>
@@ -287,6 +329,8 @@ select {
     <div>ผลวิเคราะห์นี้ใช้เป็น<b>แนวทางเบื้องต้นเท่านั้น</b> กรณีรุนแรงหรือไม่แน่ใจ ควรปรึกษาสัตวแพทย์</div>
   </div>
 
+  <div class="dx-layout">
+    <div class="dx-form-col">
   <form id="dxForm">
 
     <!-- SECTION 1 -->
@@ -575,6 +619,19 @@ select {
       </div>
     </div>
 
+  </form>
+  <div class="action-row" style="padding:0 16px 12px;">
+    <button class="btn-clear" type="button" onclick="clearForm()">🗑 ล้าง</button>
+    <button class="btn-submit" type="button" id="submitBtn" onclick="runDiagnosis()">
+      🔍 วิเคราะห์ด้วย AI
+    </button>
+  </div>
+    </div><!-- /dx-form-col -->
+    <div class="dx-result-col">
+      <div id="rateBar" class="rate-bar">
+        <span id="rateLabel">⬢ วันนี้วิเคราะห์แล้ว <b id="rateCount">0</b>/10 ครั้ง</span>
+        <div class="rate-track"><div class="rate-fill" id="rateFill" style="width:0%"></div></div>
+      </div>
     <!-- SECTION: AI CARD -->
     <div class="group" id="groupAI">
       <div class="group-head">
@@ -583,14 +640,6 @@ select {
         <div style="margin-left:auto;display:flex;align-items:center;gap:5px;background:var(--ai-light);border-radius:100px;padding:3px 9px;font-size:10px;font-weight:700;color:var(--ai-deep);font-family:'JetBrains Mono',monospace;">
           <span style="width:6px;height:6px;background:var(--coral);border-radius:50%;animation:aipulse 2s infinite;display:inline-block;"></span>ONE AI
         </div>
-      </div>
-
-      <!-- ปุ่มอยู่ใกล้ๆ AI section -->
-      <div class="action-row">
-        <button class="btn-clear" type="button" onclick="clearForm()">🗑 ล้าง</button>
-        <button class="btn-submit" type="button" id="submitBtn" onclick="runDiagnosis()">
-          🔍 วิเคราะห์ด้วย AI
-        </button>
       </div>
 
       <div id="aiResult">
@@ -623,9 +672,11 @@ select {
       </div>
     </div>
 
-  </form>
+    </div><!-- /dx-result-col -->
+  </div><!-- /dx-layout -->
 </div>
 
+<script src="js/i18n.js"></script>
 <script src="js/main.js"></script>
 <script>
 // ── CHIP TOGGLE ──────────────────────────────────────────────────────────────
@@ -786,6 +837,25 @@ function renderAICard(raw) {
   }
 }
 
+// ── RATE LIMIT ──────────────────────────────────────────────────────────────
+function getRateUsage() {
+  const today = new Date().toISOString().slice(0, 10);
+  let usage = JSON.parse(localStorage.getItem('dx_usage') || '{}');
+  if (usage.date !== today) usage = { date: today, count: 0 };
+  return usage;
+}
+function updateRateBar() {
+  const n = (getRateUsage().count) || 0;
+  const el = { count: document.getElementById('rateCount'), fill: document.getElementById('rateFill'), bar: document.getElementById('rateBar'), label: document.getElementById('rateLabel') };
+  if (el.count) el.count.textContent = n;
+  if (el.fill) {
+    el.fill.style.width = Math.min(n / 10 * 100, 100) + '%';
+    el.fill.className = 'rate-fill' + (n >= 10 ? ' full' : n >= 7 ? ' warn' : '');
+  }
+  if (el.bar) el.bar.classList.toggle('at-limit', n >= 10);
+  if (el.label && n >= 10) el.label.innerHTML = '⛔ ครบ 10 ครั้งแล้ววันนี้ กลับมาพรุ่งนี้';
+}
+
 // ── DIAGNOSIS ────────────────────────────────────────────────────────────────
 const chatHistory = [];
 let lastCase = null;
@@ -802,6 +872,11 @@ async function saveCase() {
 }
 
 async function runDiagnosis() {
+  const usage = getRateUsage();
+  if (usage.count >= 10) {
+    alert('คุณวิเคราะห์ครบ 10 ครั้งแล้ววันนี้ กรุณากลับมาใหม่พรุ่งนี้');
+    return;
+  }
   const { symptoms, farmDetails } = collectData();
   if (!symptoms && !farmDetails.includes('รายละเอียด')) {
     alert('กรุณาเลือกอาการ หรือกรอกรายละเอียดในช่อง "เล่าเพิ่ม" ก่อน');
@@ -829,6 +904,9 @@ async function runDiagnosis() {
       () => {}
     );
     renderAICard(full);
+    usage.count++;
+    localStorage.setItem('dx_usage', JSON.stringify(usage));
+    updateRateBar();
     const secs = ((Date.now()-t0)/1000).toFixed(1);
     document.getElementById('aiMeta').textContent = `⬢ ONE AI · ${secs}s · ผลเบื้องต้นเท่านั้น`;
 
@@ -1054,6 +1132,8 @@ function clearForm() {
   document.getElementById('aiMeta').textContent='';
   lastCase = null;
 }
+
+updateRateBar();
 </script>
 </body>
 </html>
