@@ -240,7 +240,10 @@
     <div class="table-card">
       <div class="table-head-row">
         <h3 data-i18n="price.table.title">ราคาทุกขนาด</h3>
-        <span class="tbl-note" id="tableDate">—</span>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <label for="tableDateSelect" style="font-size:11px;font-weight:600;color:#8A7A85;" data-i18n="price.chart.date.label">เลือกวันที่:</label>
+          <select id="tableDateSelect" onchange="onTableDateChange()" style="font-size:11px;padding:4px 8px;border-radius:8px;border:1.5px solid #E8E0E5;color:#1C1020;font-family:inherit;cursor:pointer;background:white;"></select>
+        </div>
       </div>
       <div class="table-scroll">
         <table class="price-table" id="priceTable">
@@ -429,24 +432,36 @@ function renderBarChart(latestPrices) {
 
 // ── DATE SELECTOR FOR BAR CHART ──────────────────────────────────────────────
 function populateDateSelect(dates) {
-  const sel = document.getElementById('barDateSelect');
-  if (!sel) return;
-  sel.innerHTML = [...dates].reverse().map(d => {
+  const optionsHtml = [...dates].reverse().map(d => {
     const dt = new Date(d + 'T12:00:00');
     const label = `${dt.getDate()}/${dt.getMonth()+1}/${dt.getFullYear()}`;
     return `<option value="${d}">${label}</option>`;
   }).join('');
+  const barSel = document.getElementById('barDateSelect');
+  if (barSel) barSel.innerHTML = optionsHtml;
+  const tableSel = document.getElementById('tableDateSelect');
+  if (tableSel) tableSel.innerHTML = optionsHtml;
   selectedBarDate = dates[dates.length - 1];
 }
 
 function onBarDateChange() {
   selectedBarDate = document.getElementById('barDateSelect').value;
+  const tableSel = document.getElementById('tableDateSelect');
+  if (tableSel) tableSel.value = selectedBarDate;
   const prices = globalByDate[selectedBarDate];
   if (!prices) return;
   renderBarChart(prices);
   renderTable(prices);
-  const dt = new Date(selectedBarDate + 'T12:00:00');
-  document.getElementById('tableDate').textContent = `ข้อมูล ณ ${dt.getDate()}/${dt.getMonth()+1}/${dt.getFullYear()}`;
+}
+
+function onTableDateChange() {
+  selectedBarDate = document.getElementById('tableDateSelect').value;
+  const barSel = document.getElementById('barDateSelect');
+  if (barSel) barSel.value = selectedBarDate;
+  const prices = globalByDate[selectedBarDate];
+  if (!prices) return;
+  renderBarChart(prices);
+  renderTable(prices);
 }
 
 // ── RENDER SIZE CHIPS ─────────────────────────────────────────────────────────
@@ -637,7 +652,6 @@ async function loadPrices() {
     const dt = new Date(latestDate + 'T12:00:00');
     const dateStr = `${dt.getDate()}/${dt.getMonth()+1}/${dt.getFullYear()}`;
     document.getElementById('heroTs').textContent = ` อัปเดตล่าสุด: ${dateStr} · ข้อมูลล่าสุด ${json.data.length} รายการ`;
-    document.getElementById('tableDate').textContent = `ข้อมูล ณ ${dateStr}`;
 
     // Store globally for range-tab re-renders
     globalByDate   = byDate;
