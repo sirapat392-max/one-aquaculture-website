@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ราคากุ้งปากบ่อ · ONE AQUACULTURE PRODUCT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Noto+Sans+Thai:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/main.css">
+<style>
+:root {
+  --up:   #16a34a;
+  --up-bg: #f0fdf4;
+  --dn:   #dc2626;
+  --dn-bg: #fef2f2;
+  --stb:  #6b7280;
+  --stb-bg:#f9fafb;
+  --gold: #C9956C;
+  --wine: #8B3060;
+  --coral:#f57c5a;
+}
+
+/* ── HERO ── */
+.price-hero {
+  background: linear-gradient(135deg, #4D1232 0%, #8B3060 60%, #B04880 100%);
+  padding: 100px 5% 48px; color: white;
+}
+.price-hero-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+.price-hero h1 { font-size: clamp(26px, 4vw, 40px); font-weight: 800; margin-bottom: 6px; }
+.price-hero p { font-size: 14px; opacity: .8; }
+.hero-tag { display: inline-block; background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25); border-radius: 100px; padding: 4px 14px; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px; }
+.price-ts { font-size: 12px; opacity: .75; font-family: 'JetBrains Mono', monospace; margin-top: 10px; }
+
+.refresh-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: rgba(255,255,255,.15); border: 1.5px solid rgba(255,255,255,.3);
+  color: white; border-radius: 22px; padding: 9px 18px;
+  font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit;
+  transition: background .15s; flex-shrink: 0;
+}
+.refresh-btn:hover { background: rgba(255,255,255,.25); }
+.refresh-btn.loading .ico { animation: spin 1s linear infinite; display: inline-block; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── WRAP ── */
+.price-wrap { max-width: 1100px; margin: 0 auto; padding: 0 5% 60px; }
+
+/* ── SUMMARY CARDS ── */
+.summary-section { padding: 28px 0 0; }
+.summary-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--wine); margin-bottom: 14px; }
+.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+@media (min-width: 640px) { .summary-grid { grid-template-columns: repeat(6, 1fr); } }
+
+.sz-card {
+  background: white; border: 1px solid #E8E0E5; border-radius: 14px;
+  padding: 14px 12px 12px; text-align: center; position: relative; overflow: hidden;
+  box-shadow: 0 2px 8px rgba(139,48,96,.06);
+  transition: transform .15s, box-shadow .15s;
+}
+.sz-card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(139,48,96,.12); }
+.sz-card.up   { border-color: #bbf7d0; }
+.sz-card.down { border-color: #fecaca; }
+.sz-size { font-size: 11px; font-weight: 700; color: var(--stb); letter-spacing: .5px; margin-bottom: 4px; }
+.sz-label { font-size: 9px; color: #aaa; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px; }
+.sz-price { font-size: 26px; font-weight: 800; color: #1C1020; font-family: 'JetBrains Mono', monospace; line-height: 1; }
+.sz-unit { font-size: 9px; color: var(--stb); margin-top: 2px; }
+.sz-change {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 11px; font-weight: 700; border-radius: 100px; padding: 2px 8px; margin-top: 7px;
+}
+.sz-change.up   { background: var(--up-bg);  color: var(--up); }
+.sz-change.down { background: var(--dn-bg);  color: var(--dn); }
+.sz-change.stb  { background: var(--stb-bg); color: var(--stb); }
+
+/* ── CHARTS ── */
+.charts-section { margin-top: 28px; display: grid; grid-template-columns: 1fr; gap: 16px; }
+@media (min-width: 860px) { .charts-section { grid-template-columns: 3fr 2fr; } }
+
+.chart-card {
+  background: white; border: 1px solid #E8E0E5; border-radius: 16px;
+  padding: 20px; box-shadow: 0 2px 8px rgba(139,48,96,.06);
+}
+.chart-title { font-size: 14px; font-weight: 700; color: #1C1020; margin-bottom: 4px; }
+.chart-sub { font-size: 12px; color: #8A7A85; margin-bottom: 16px; }
+.chart-box { position: relative; width: 100%; }
+.chart-box canvas { width: 100% !important; }
+
+/* ── FULL TABLE ── */
+.table-section { margin-top: 28px; }
+.table-card {
+  background: white; border: 1px solid #E8E0E5; border-radius: 16px;
+  overflow: hidden; box-shadow: 0 2px 8px rgba(139,48,96,.06);
+}
+.table-head-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px 12px; border-bottom: 1px solid #F4F0F5; flex-wrap: wrap; gap: 8px;
+}
+.table-head-row h3 { font-size: 15px; font-weight: 700; }
+.tbl-note { font-size: 11px; color: #8A7A85; }
+
+.price-table { width: 100%; border-collapse: collapse; }
+.price-table th {
+  font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+  color: #8A7A85; padding: 10px 16px; text-align: left; background: #FAFAFA;
+  border-bottom: 1px solid #F4F0F5; white-space: nowrap;
+}
+.price-table td { padding: 10px 16px; font-size: 14px; border-bottom: 1px solid #F8F5F7; }
+.price-table tr:last-child td { border-bottom: none; }
+.price-table tr:hover td { background: #FDFBFC; }
+
+.td-size { font-weight: 700; color: #1C1020; font-family: 'JetBrains Mono', monospace; }
+.td-desc { font-size: 11px; color: #8A7A85; }
+.td-price { font-size: 18px; font-weight: 800; color: #1C1020; font-family: 'JetBrains Mono', monospace; }
+.td-change { font-weight: 700; font-size: 13px; white-space: nowrap; }
+.td-change.up   { color: var(--up); }
+.td-change.down { color: var(--dn); }
+.td-change.stb  { color: var(--stb); }
+.trend-badge { display: inline-flex; align-items: center; gap: 4px; border-radius: 100px; padding: 3px 10px; font-size: 11px; font-weight: 600; }
+.trend-badge.up   { background: var(--up-bg);  color: var(--up); }
+.trend-badge.down { background: var(--dn-bg);  color: var(--dn); }
+.trend-badge.stb  { background: var(--stb-bg); color: var(--stb); }
+
+/* ── BAR VISUAL (table) ── */
+.mini-bar-wrap { width: 80px; }
+.mini-bar { height: 6px; border-radius: 3px; background: #F4F0F5; overflow: hidden; }
+.mini-bar-fill { height: 100%; border-radius: 3px; background: var(--wine); transition: width .4s; }
+
+/* ── LOADING ── */
+.skeleton { background: linear-gradient(90deg, #f4f0f5 25%, #ede8f0 50%, #f4f0f5 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 8px; }
+@keyframes shimmer { 0%{background-position:200%} 100%{background-position:-200%} }
+
+.load-state { text-align: center; padding: 60px 20px; color: #8A7A85; }
+.load-state .ico { font-size: 40px; margin-bottom: 12px; display: block; }
+.error-banner { background: #fef2f2; border: 1px solid #fecaca; border-radius: 12px; padding: 16px 20px; margin-top: 20px; color: #dc2626; font-size: 14px; display: flex; gap: 10px; align-items: flex-start; }
+
+/* ── SIZE LABEL MAP ── */
+
+/* ── RESPONSIVE TABLE ── */
+.table-scroll { overflow-x: auto; }
+@media (max-width: 640px) {
+  .price-table th:nth-child(5), .price-table td:nth-child(5) { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="price-hero">
+  <div class="price-hero-inner">
+    <div>
+      <div class="hero-tag">ราคาตลาด · Market Price</div>
+      <h1>🦐 ราคากุ้งปากบ่อ</h1>
+      <p>ราคารับซื้อกุ้งขาวแวนนาไมหน้าฟาร์ม · รวบรวมจากกลุ่มไลน์เกษตรกร</p>
+      <div class="price-ts" id="heroTs">⏳ กำลังโหลด...</div>
+    </div>
+    <button class="refresh-btn" id="refreshBtn" onclick="loadPrices()">
+      <span class="ico">⟳</span> รีเฟรช
+    </button>
+  </div>
+</div>
+
+<div class="price-wrap">
+
+  <!-- SUMMARY CARDS -->
+  <div class="summary-section">
+    <div class="summary-label">ราคาวันนี้ · ขนาดหลัก</div>
+    <div class="summary-grid" id="summaryGrid">
+      <!-- JS injects cards -->
+      <div class="sz-card"><div class="skeleton" style="height:80px;"></div></div>
+      <div class="sz-card"><div class="skeleton" style="height:80px;"></div></div>
+      <div class="sz-card"><div class="skeleton" style="height:80px;"></div></div>
+      <div class="sz-card"><div class="skeleton" style="height:80px;"></div></div>
+      <div class="sz-card"><div class="skeleton" style="height:80px;"></div></div>
+      <div class="sz-card"><div class="skeleton" style="height:80px;"></div></div>
+    </div>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="charts-section">
+    <!-- Bar chart: today's price by size -->
+    <div class="chart-card">
+      <div class="chart-title">ราคาตามขนาดวันนี้</div>
+      <div class="chart-sub">บาท/กก. แยกตามขนาดกุ้ง (ตัว/กก.)</div>
+      <div class="chart-box" style="height:260px;">
+        <canvas id="barChart"></canvas>
+      </div>
+    </div>
+    <!-- Line chart: trend over 7 days -->
+    <div class="chart-card">
+      <div class="chart-title">แนวโน้มราคา 7 วัน</div>
+      <div class="chart-sub">ขนาดหลัก 60 · 80 · 100 · 120</div>
+      <div class="chart-box" style="height:260px;">
+        <canvas id="lineChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- FULL TABLE -->
+  <div class="table-section">
+    <div class="table-card">
+      <div class="table-head-row">
+        <h3>ราคาทุกขนาด</h3>
+        <span class="tbl-note" id="tableDate">—</span>
+      </div>
+      <div class="table-scroll">
+        <table class="price-table" id="priceTable">
+          <thead>
+            <tr>
+              <th>ขนาด (ตัว/กก.)</th>
+              <th>ราคา (บาท/กก.)</th>
+              <th>เปลี่ยน</th>
+              <th>แนวโน้ม</th>
+              <th>กราฟเทียบ</th>
+            </tr>
+          </thead>
+          <tbody id="priceTableBody">
+            <tr><td colspan="5" class="load-state"><span class="ico">🔄</span>กำลังโหลด...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <p style="text-align:center;font-size:11px;color:#B0A0AA;margin-top:20px;">
+    ราคาเพื่อใช้ในการอ้างอิงเบื้องต้น อาจมีความแตกต่างตามพื้นที่และเวลา · ข้อมูลจากกลุ่มไลน์เกษตรกรภาคใต้ อ่าวไทย
+  </p>
+</div>
+
+<script src="js/i18n.js"></script>
+<script src="js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+// ── CONFIG ──────────────────────────────────────────────────────────────────
+const PRICE_API = 'https://pricen8n-production.up.railway.app/api/prices/?limit=700';
+const SUMMARY_SIZES = [40, 50, 60, 80, 100, 120];
+const TREND_SIZES   = [60, 80, 100, 120];
+const SIZE_DESC = {
+  40:'ใหญ่พิเศษ', 45:'ใหญ่พิเศษ', 50:'ใหญ่',
+  55:'ใหญ่', 60:'กลาง-ใหญ่', 65:'กลาง-ใหญ่',
+  70:'กลาง', 75:'กลาง', 80:'กลาง',
+  85:'กลาง', 90:'กลาง', 95:'กลาง-เล็ก',
+  100:'กลาง-เล็ก', 105:'กลาง-เล็ก', 110:'กลาง-เล็ก',
+  115:'เล็ก', 120:'เล็ก', 125:'เล็ก',
+  130:'เล็กมาก', 135:'เล็กมาก', 140:'เล็กมาก',
+  145:'เล็กมาก', 150:'เล็กมาก',
+};
+
+// Line chart colors for trend sizes
+const LINE_COLORS = {
+  60:  { border:'#8B3060', bg:'rgba(139,48,96,.12)' },
+  80:  { border:'#C9956C', bg:'rgba(201,149,108,.12)' },
+  100: { border:'#1565C0', bg:'rgba(21,101,192,.12)' },
+  120: { border:'#16a34a', bg:'rgba(22,163,74,.12)' },
+};
+
+let barChartInst = null;
+let lineChartInst = null;
+
+// ── DATA PROCESSING ──────────────────────────────────────────────────────────
+function processData(records) {
+  // Group: date → size → pick entry (prefer non-stable trend, then take first)
+  const byDate = {};
+  for (const r of records) {
+    const dt = r.date.slice(0, 10);
+    const sz = parseInt(r.size);
+    if (!byDate[dt]) byDate[dt] = {};
+    if (!byDate[dt][sz]) {
+      byDate[dt][sz] = r;
+    } else {
+      // prefer non-stable entry (has meaningful change)
+      const existing = byDate[dt][sz];
+      if (existing.trend === 'stable' && r.trend !== 'stable') byDate[dt][sz] = r;
+      // or prefer more recent createdAt
+      else if (new Date(r.createdAt) > new Date(existing.createdAt)) byDate[dt][sz] = r;
+    }
+  }
+
+  // Sort dates
+  const dates = Object.keys(byDate).sort();
+  const latestDate = dates[dates.length - 1];
+  const latestPrices = byDate[latestDate] || {};
+
+  return { byDate, dates, latestDate, latestPrices };
+}
+
+// ── RENDER SUMMARY CARDS ─────────────────────────────────────────────────────
+function renderSummaryCards(latestPrices) {
+  const grid = document.getElementById('summaryGrid');
+  grid.innerHTML = SUMMARY_SIZES.map(sz => {
+    const entry = latestPrices[sz];
+    if (!entry) return `<div class="sz-card"><div class="sz-size">${sz}</div><div class="sz-price">—</div></div>`;
+    const price = entry.price;
+    const change = entry.change || 0;
+    const trend = entry.trend || 'stable';
+    const cls = trend === 'up' ? 'up' : trend === 'down' ? 'down' : '';
+    const changeCls = trend === 'up' ? 'up' : trend === 'down' ? 'down' : 'stb';
+    const arrow = trend === 'up' ? '▲' : trend === 'down' ? '▼' : '—';
+    const changeStr = change > 0 ? `${arrow} +${change}` : change < 0 ? `${arrow} ${change}` : `${arrow} 0`;
+    return `
+    <div class="sz-card ${cls}">
+      <div class="sz-size">L${sz}</div>
+      <div class="sz-label">${SIZE_DESC[sz] || ''}</div>
+      <div class="sz-price">${price}</div>
+      <div class="sz-unit">บาท/กก.</div>
+      <div class="sz-change ${changeCls}">${changeStr}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── RENDER BAR CHART ─────────────────────────────────────────────────────────
+function renderBarChart(latestPrices) {
+  const sizes = Object.keys(latestPrices).map(Number).sort((a,b) => a-b);
+  const prices = sizes.map(sz => latestPrices[sz].price);
+  const trends = sizes.map(sz => latestPrices[sz].trend || 'stable');
+  const colors = trends.map(t => t === 'up' ? '#16a34a' : t === 'down' ? '#dc2626' : '#8B3060');
+  const alphas = trends.map(t => t === 'up' ? 'rgba(22,163,74,.85)' : t === 'down' ? 'rgba(220,38,38,.85)' : 'rgba(139,48,96,.8)');
+
+  if (barChartInst) barChartInst.destroy();
+  const ctx = document.getElementById('barChart').getContext('2d');
+  barChartInst = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: sizes.map(s => `L${s}`),
+      datasets: [{
+        label: 'ราคา (บ./กก.)',
+        data: prices,
+        backgroundColor: alphas,
+        borderColor: colors,
+        borderWidth: 1.5,
+        borderRadius: 6,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` ${ctx.parsed.y} บาท/กก.`,
+            title: ctx => `ขนาด ${ctx[0].label.replace('L','')} ตัว/กก.`
+          },
+          backgroundColor: '#1C1020',
+          titleFont: { size: 12, family: 'IBM Plex Sans Thai' },
+          bodyFont:  { size: 13, family: 'JetBrains Mono', weight: '600' },
+          padding: 10, cornerRadius: 8,
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { font: { size: 10, family: 'JetBrains Mono' }, color: '#8A7A85', maxRotation: 0 }
+        },
+        y: {
+          min: Math.floor(Math.min(...prices) / 10) * 10 - 5,
+          grid: { color: '#F4F0F5' },
+          ticks: { font: { size: 11, family: 'JetBrains Mono' }, color: '#8A7A85',
+            callback: v => v + '฿'
+          }
+        }
+      }
+    }
+  });
+}
+
+// ── RENDER LINE CHART ────────────────────────────────────────────────────────
+function renderLineChart(byDate, dates) {
+  // use last 14 days
+  const last14 = dates.slice(-14);
+  const labels = last14.map(d => {
+    const dt = new Date(d + 'T12:00:00');
+    return `${dt.getDate()}/${dt.getMonth()+1}`;
+  });
+
+  const datasets = TREND_SIZES.map(sz => ({
+    label: `L${sz}`,
+    data: last14.map(d => byDate[d]?.[sz]?.price ?? null),
+    borderColor: LINE_COLORS[sz].border,
+    backgroundColor: LINE_COLORS[sz].bg,
+    pointRadius: 3,
+    pointHoverRadius: 5,
+    borderWidth: 2.5,
+    tension: 0.35,
+    spanGaps: true,
+    fill: false,
+  }));
+
+  if (lineChartInst) lineChartInst.destroy();
+  const ctx = document.getElementById('lineChart').getContext('2d');
+  lineChartInst = new Chart(ctx, {
+    type: 'line',
+    data: { labels, datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 11, family: 'JetBrains Mono' }, boxWidth: 12, padding: 12 }
+        },
+        tooltip: {
+          backgroundColor: '#1C1020',
+          titleFont: { size: 11, family: 'IBM Plex Sans Thai' },
+          bodyFont:  { size: 12, family: 'JetBrains Mono', weight: '600' },
+          padding: 10, cornerRadius: 8,
+          callbacks: { label: ctx => ` L${ctx.dataset.label.replace('L','')}: ${ctx.parsed.y} ฿` }
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 10, family: 'JetBrains Mono' }, color: '#8A7A85' } },
+        y: {
+          grid: { color: '#F4F0F5' },
+          ticks: { font: { size: 11, family: 'JetBrains Mono' }, color: '#8A7A85', callback: v => v + '฿' }
+        }
+      }
+    }
+  });
+}
+
+// ── RENDER TABLE ─────────────────────────────────────────────────────────────
+function renderTable(latestPrices) {
+  const sizes = Object.keys(latestPrices).map(Number).sort((a,b) => a-b);
+  const prices = sizes.map(sz => latestPrices[sz].price);
+  const maxPrice = Math.max(...prices);
+
+  const tbody = document.getElementById('priceTableBody');
+  tbody.innerHTML = sizes.map(sz => {
+    const e = latestPrices[sz];
+    const trend = e.trend || 'stable';
+    const change = e.change || 0;
+    const changeCls = trend === 'up' ? 'up' : trend === 'down' ? 'down' : 'stb';
+    const arrow = trend === 'up' ? '▲' : trend === 'down' ? '▼' : '—';
+    const changeStr = change > 0 ? `+${change}` : `${change}`;
+    const trendTH = trend === 'up' ? 'ขึ้น' : trend === 'down' ? 'ลง' : 'คงที่';
+    const barW = Math.round(e.price / maxPrice * 100);
+
+    return `<tr>
+      <td>
+        <span class="td-size">L${sz}</span><br>
+        <span class="td-desc">${SIZE_DESC[sz] || ''}</span>
+      </td>
+      <td class="td-price">${e.price}<span style="font-size:11px;font-weight:500;color:#8A7A85"> ฿</span></td>
+      <td class="td-change ${changeCls}">${arrow} ${changeStr}</td>
+      <td><span class="trend-badge ${changeCls}">${trend === 'up' ? '▲' : trend === 'down' ? '▼' : '·'} ${trendTH}</span></td>
+      <td>
+        <div class="mini-bar-wrap">
+          <div class="mini-bar"><div class="mini-bar-fill" style="width:${barW}%;background:${trend==='up'?'#16a34a':trend==='down'?'#dc2626':'#8B3060'}"></div></div>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ── MAIN LOAD ────────────────────────────────────────────────────────────────
+async function loadPrices() {
+  const btn = document.getElementById('refreshBtn');
+  btn.classList.add('loading');
+  btn.querySelector('.ico').textContent = '⟳';
+
+  try {
+    const res = await fetch(PRICE_API);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
+    const { byDate, dates, latestDate, latestPrices } = processData(json.data || []);
+
+    // Update timestamp
+    const dt = new Date(latestDate + 'T12:00:00');
+    const dateStr = `${dt.getDate()}/${dt.getMonth()+1}/${dt.getFullYear()}`;
+    document.getElementById('heroTs').textContent = `⬢ อัปเดตล่าสุด: ${dateStr} · ข้อมูลล่าสุด ${json.data.length} รายการ`;
+    document.getElementById('tableDate').textContent = `ข้อมูล ณ ${dateStr}`;
+
+    // Render all sections
+    renderSummaryCards(latestPrices);
+    renderBarChart(latestPrices);
+    renderLineChart(byDate, dates);
+    renderTable(latestPrices);
+
+  } catch(err) {
+    document.getElementById('summaryGrid').innerHTML = `
+      <div class="error-banner" style="grid-column:1/-1;">
+        ❌ ไม่สามารถโหลดข้อมูลราคาได้ — ${err.message}
+      </div>`;
+    document.getElementById('priceTableBody').innerHTML = `
+      <tr><td colspan="5">
+        <div class="load-state">
+          <span class="ico">⚠️</span>
+          กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ต แล้วลองรีเฟรชอีกครั้ง
+        </div>
+      </td></tr>`;
+  }
+
+  btn.classList.remove('loading');
+  btn.querySelector('.ico').textContent = '⟳';
+}
+
+loadPrices();
+</script>
+</body>
+</html>

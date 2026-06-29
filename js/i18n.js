@@ -5,6 +5,7 @@
       // NAV
       'nav.home':     'หน้าแรก',
       'nav.products': 'ผลิตภัณฑ์',
+      'nav.price':    '📈 ราคากุ้ง',
       'nav.diagnosis':'🦐 ShrimpDx',
       'nav.news':     'ข่าวสาร',
       'nav.about':    'เกี่ยวกับเรา',
@@ -285,6 +286,7 @@
       // NAV
       'nav.home':     'Home',
       'nav.products': 'Products',
+      'nav.price':    '📈 Shrimp Price',
       'nav.diagnosis':'🦐 ShrimpDx',
       'nav.news':     'News',
       'nav.about':    'About',

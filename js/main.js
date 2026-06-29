@@ -12,6 +12,7 @@ function navHTML() {
   const links = [
     { href: 'index.html',        key: 'nav.home' },
     { href: 'products.html',     key: 'nav.products' },
+    { href: 'shrimp-price.html', key: 'nav.price' },
     { href: 'ai-diagnosis.html', key: 'nav.diagnosis' },
     { href: 'news.html',         key: 'nav.news' },
     { href: 'about.html',        key: 'nav.about' },
