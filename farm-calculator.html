@@ -148,6 +148,13 @@
 .tip-card .tip-head { font-size: 13px; font-weight: 700; color: var(--wine); margin-bottom: 6px; }
 .tip-card p { font-size: 12px; color: #666; line-height: 1.6; margin: 0; }
 
+/* WEIGHT UNIT TOGGLE (inline in label) */
+.unit-toggle-inline { display:inline-flex; gap:2px; margin-left:6px; background:#f0e8ed; border-radius:20px; padding:2px; vertical-align:middle; }
+.utbtn { border:none; background:transparent; border-radius:16px; padding:2px 8px; font-size:10px; font-weight:700; cursor:pointer; color:var(--wine); font-family:inherit; transition:all .1s; line-height:1.4; }
+.utbtn.active { background:white; box-shadow:0 1px 3px rgba(0,0,0,.15); color:#4D1232; }
+.suggest-btn { border:1.5px solid #E8D5E0; background:#FAF6FA; border-radius:20px; padding:2px 10px; font-size:10px; font-weight:700; cursor:pointer; color:var(--wine); font-family:inherit; margin-left:6px; transition:all .1s; vertical-align:middle; }
+.suggest-btn:hover { background:#F5EBF0; border-color:var(--wine); }
+
 /* SIZE PRICE BUTTONS */
 .size-price-btn {
   display: flex; flex-direction: column; align-items: center; gap: 2px;
@@ -456,7 +463,12 @@
           <input class="calc-input" id="sr-harvest" type="number" min="0" step="10" placeholder="เช่น 3500" oninput="calcSurvival()">
         </div>
         <div class="input-group">
-          <label>น้ำหนักเฉลี่ยต่อตัว <span class="unit">กรัม/ตัว</span></label>
+          <label>น้ำหนักเฉลี่ยต่อตัว
+            <span class="unit-toggle-inline">
+              <button class="utbtn active" onclick="setWtUnit('sr-weight','g',this)">ก./ตัว</button>
+              <button class="utbtn" onclick="setWtUnit('sr-weight','k',this)">ตัว/กก.</button>
+            </span>
+          </label>
           <input class="calc-input" id="sr-weight" type="number" min="0" step="0.5" placeholder="เช่น 18" oninput="calcSurvival();guessSizeFromWeight()">
         </div>
       </div>
@@ -477,12 +489,19 @@
           <input class="calc-input" id="sr-feed" type="number" min="0" step="1" placeholder="เช่น 60" oninput="calcSurvival()">
         </div>
         <div class="input-group">
-          <label>%BW ที่ใช้ <span class="unit">%/วัน</span></label>
-          <input class="calc-input" id="sr-bw" type="number" min="0" step="0.1" placeholder="เช่น 3.5" oninput="calcSurvival()">
+          <label>น้ำหนักเฉลี่ยปัจจุบัน
+            <span class="unit-toggle-inline">
+              <button class="utbtn active" onclick="setWtUnit('sr-weight-b','g',this)">ก./ตัว</button>
+              <button class="utbtn" onclick="setWtUnit('sr-weight-b','k',this)">ตัว/กก.</button>
+            </span>
+          </label>
+          <input class="calc-input" id="sr-weight-b" type="number" min="0" step="0.5" placeholder="เช่น 12" oninput="calcSurvival();guessSizeFromWeight()">
         </div>
         <div class="input-group">
-          <label>น้ำหนักเฉลี่ยปัจจุบัน <span class="unit">กรัม/ตัว</span></label>
-          <input class="calc-input" id="sr-weight-b" type="number" min="0" step="0.5" placeholder="เช่น 12" oninput="calcSurvival();guessSizeFromWeight()">
+          <label>%BW ที่ใช้ <span class="unit">%/วัน</span>
+            <button class="suggest-btn" onclick="suggestBw('sr-weight-b','sr-bw')">💡 แนะนำตามไซ์</button>
+          </label>
+          <input class="calc-input" id="sr-bw" type="number" min="0" step="0.1" placeholder="เช่น 3.5" oninput="calcSurvival()">
         </div>
       </div>
     </div>
@@ -533,11 +552,18 @@
           <input class="calc-input" id="fr-sr" type="number" min="0" max="100" step="1" placeholder="เช่น 70" oninput="calcFeedRate()">
         </div>
         <div class="input-group">
-          <label>น้ำหนักเฉลี่ยปัจจุบัน <span class="unit">กรัม/ตัว</span></label>
+          <label>น้ำหนักเฉลี่ยปัจจุบัน
+            <span class="unit-toggle-inline">
+              <button class="utbtn active" onclick="setWtUnit('fr-avg','g',this)">ก./ตัว</button>
+              <button class="utbtn" onclick="setWtUnit('fr-avg','k',this)">ตัว/กก.</button>
+            </span>
+          </label>
           <input class="calc-input" id="fr-avg" type="number" min="0" step="0.5" placeholder="เช่น 12" oninput="calcFeedRate()">
         </div>
         <div class="input-group">
-          <label>%BW ที่ต้องการ <span class="unit">%/วัน</span></label>
+          <label>%BW ที่ต้องการ <span class="unit">%/วัน</span>
+            <button class="suggest-btn" onclick="suggestBw('fr-avg','fr-bw-a')">💡 แนะนำตามไซ์</button>
+          </label>
           <input class="calc-input" id="fr-bw-a" type="number" min="0" step="0.1" placeholder="เช่น 3.5" oninput="calcFeedRate()">
         </div>
       </div>
@@ -551,7 +577,18 @@
           <input class="calc-input" id="fr-biomass" type="number" min="0" step="10" placeholder="เช่น 2000" oninput="calcFeedRate()">
         </div>
         <div class="input-group">
-          <label>%BW ที่ต้องการ <span class="unit">%/วัน</span></label>
+          <label>น้ำหนักเฉลี่ย (เพื่อแนะนำ %BW)
+            <span class="unit-toggle-inline">
+              <button class="utbtn active" onclick="setWtUnit('fr-avg-c','g',this)">ก./ตัว</button>
+              <button class="utbtn" onclick="setWtUnit('fr-avg-c','k',this)">ตัว/กก.</button>
+            </span>
+          </label>
+          <input class="calc-input" id="fr-avg-c" type="number" min="0" step="0.5" placeholder="ไม่บังคับ — ใช้กด 💡" oninput="">
+        </div>
+        <div class="input-group">
+          <label>%BW ที่ต้องการ <span class="unit">%/วัน</span>
+            <button class="suggest-btn" onclick="suggestBw('fr-avg-c','fr-bw')">💡 แนะนำตามไซ์</button>
+          </label>
           <input class="calc-input" id="fr-bw" type="number" min="0" step="0.1" placeholder="เช่น 3.5" oninput="calcFeedRate()">
         </div>
       </div>
@@ -605,7 +642,12 @@
         <input class="calc-input" id="bm-sr" type="number" min="0" max="100" step="1" placeholder="เช่น 70" oninput="calcBiomass()">
       </div>
       <div class="input-group">
-        <label>น้ำหนักเฉลี่ยปัจจุบัน <span class="unit">กรัม/ตัว</span></label>
+        <label>น้ำหนักเฉลี่ยปัจจุบัน
+          <span class="unit-toggle-inline">
+            <button class="utbtn active" onclick="setWtUnit('bm-avg','g',this)">ก./ตัว</button>
+            <button class="utbtn" onclick="setWtUnit('bm-avg','k',this)">ตัว/กก.</button>
+          </span>
+        </label>
         <input class="calc-input" id="bm-avg" type="number" min="0" step="0.5" placeholder="เช่น 12" oninput="calcBiomass()">
       </div>
     </div>
@@ -694,6 +736,57 @@
 }
 </style>
 <script>
+// ── WEIGHT UNIT HELPER ───────────────────────────────────────────────────────
+const weightUnitMap = {};
+
+function setWtUnit(fieldId, unit, btn) {
+  const input  = document.getElementById(fieldId);
+  const oldVal = parseFloat(input.value);
+  const prev   = weightUnitMap[fieldId] || 'g';
+  if (!isNaN(oldVal) && oldVal > 0 && prev !== unit) {
+    input.value = (1000 / oldVal).toFixed(unit === 'k' ? 0 : 1);
+  }
+  weightUnitMap[fieldId] = unit;
+  input.placeholder = unit === 'g' ? 'เช่น 12' : 'เช่น 83';
+  btn.closest('.unit-toggle-inline').querySelectorAll('.utbtn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  input.dispatchEvent(new Event('input'));
+}
+
+function getWtG(fieldId) {
+  const val = parseFloat(document.getElementById(fieldId).value) || 0;
+  if (!val) return 0;
+  return weightUnitMap[fieldId] === 'k' ? 1000 / val : val;
+}
+
+// %BW reference table: at each max gram, suggested %BW midpoint
+const BW_TABLE = [
+  {maxG:1,   bw:20},
+  {maxG:3,   bw:13},
+  {maxG:5,   bw:9},
+  {maxG:8,   bw:7},
+  {maxG:12,  bw:5.5},
+  {maxG:16,  bw:4},
+  {maxG:22,  bw:3.5},
+  {maxG:30,  bw:3},
+  {maxG:9999,bw:2.5},
+];
+
+function suggestBw(weightFieldId, bwFieldId) {
+  const wg = getWtG(weightFieldId);
+  if (!wg) {
+    const el = document.getElementById(bwFieldId);
+    el.placeholder = 'กรอกน้ำหนักก่อน';
+    el.focus(); return;
+  }
+  const row = BW_TABLE.find(r => wg <= r.maxG) || BW_TABLE[BW_TABLE.length-1];
+  const el  = document.getElementById(bwFieldId);
+  el.value  = row.bw;
+  el.style.borderColor = 'var(--wine)';
+  setTimeout(() => el.style.borderColor = '', 1800);
+  el.dispatchEvent(new Event('input'));
+}
+
 // ── FCR ──────────────────────────────────────────────────────────────────────
 function calcFCR() {
   const feed    = parseFloat(document.getElementById('fcr-feed').value)    || 0;
@@ -839,9 +932,7 @@ function onSizeSelectChange() {
 }
 
 function guessSizeFromWeight() {
-  const wA = parseFloat(document.getElementById('sr-weight').value)   || 0;
-  const wB = parseFloat(document.getElementById('sr-weight-b').value) || 0;
-  const w  = wA || wB;
+  const w = getWtG('sr-weight') || getWtG('sr-weight-b');
   if (!w) return;
   const estSize = Math.round(1000 / w);
   document.getElementById('be-size-hint-auto').textContent = `(น้ำหนัก ${w}ก. ≈ L${estSize})`;
@@ -969,18 +1060,18 @@ function calcSurvival() {
   if (srMode === 'a') {
     const pl      = parseFloat(document.getElementById('sr-pl').value)      || 0;
     const harvest = parseFloat(document.getElementById('sr-harvest').value) || 0;
-    weight        = parseFloat(document.getElementById('sr-weight').value)  || 0;
+    weight        = getWtG('sr-weight');
     if (!pl || !harvest || !weight) { reset(); return; }
     count = Math.round((harvest * 1000) / weight);
     srPct = ((count / pl) * 100).toFixed(1);
     const size = Math.round(1000 / weight);
-    sizeTag.textContent = `L${size} · ${weight}ก./ตัว`;
+    sizeTag.textContent = `L${size} · ${weight.toFixed(1)}ก./ตัว`;
     sizeTag.style.display = 'inline';
   } else {
-    const pl   = parseFloat(document.getElementById('sr-pl-b').value)     || 0;
-    const feed = parseFloat(document.getElementById('sr-feed').value)      || 0;
-    const bw   = parseFloat(document.getElementById('sr-bw').value)        || 0;
-    weight     = parseFloat(document.getElementById('sr-weight-b').value)  || 0;
+    const pl   = parseFloat(document.getElementById('sr-pl-b').value) || 0;
+    const feed = parseFloat(document.getElementById('sr-feed').value)  || 0;
+    const bw   = parseFloat(document.getElementById('sr-bw').value)    || 0;
+    weight     = getWtG('sr-weight-b');
     if (!pl || !feed || !bw || !weight) { reset(); return; }
     const biomass = feed / (bw / 100);
     count = Math.round((biomass * 1000) / weight);
@@ -1047,7 +1138,7 @@ function calcFeedRate() {
     // คำนวณจาก PL + SR + น้ำหนักเฉลี่ย + %BW
     const pl  = parseFloat(document.getElementById('fr-pl').value)   || 0;
     const sr  = parseFloat(document.getElementById('fr-sr').value)   || 0;
-    const avg = parseFloat(document.getElementById('fr-avg').value)  || 0;
+    const avg = getWtG('fr-avg');
     bw        = parseFloat(document.getElementById('fr-bw-a').value) || 0;
     if (!pl || !sr || !avg || !bw) { reset(); return; }
     biomass = pl * (sr / 100) * avg / 1000;
@@ -1097,9 +1188,9 @@ function calcFeedRate() {
 
 // ── BIOMASS ESTIMATOR ────────────────────────────────────────────────────────
 function calcBiomass() {
-  const pl  = parseFloat(document.getElementById('bm-pl').value)  || 0;
-  const sr  = parseFloat(document.getElementById('bm-sr').value)  || 0;
-  const avg = parseFloat(document.getElementById('bm-avg').value) || 0;
+  const pl  = parseFloat(document.getElementById('bm-pl').value) || 0;
+  const sr  = parseFloat(document.getElementById('bm-sr').value) || 0;
+  const avg = getWtG('bm-avg');
   const box = document.getElementById('bm-result');
   const val = document.getElementById('bm-val');
   const hint = document.getElementById('bm-hint');
