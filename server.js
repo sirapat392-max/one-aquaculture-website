@@ -220,6 +220,24 @@ app.get('/api/company', (req, res) => {
   res.json(companyData);
 });
 
+// ─── GET LATEST SHRIMP PRICE (for farm calculator) ────────────────────────
+app.get('/api/shrimp-price', (req, res) => {
+  const priceFile = path.join(__dirname, 'shrimp-price-data.json');
+  if (!fs.existsSync(priceFile)) return res.json({ latest: {} });
+  try {
+    const data = JSON.parse(fs.readFileSync(priceFile, 'utf-8'));
+    const records = Array.isArray(data) ? data : (data.records || []);
+    const latest = {};
+    for (const r of records) {
+      const sz = parseInt(r.size);
+      if (!latest[sz] || new Date(r.date) >= new Date(latest[sz].date)) {
+        latest[sz] = r.price;
+      }
+    }
+    res.json({ latest });
+  } catch { res.json({ latest: {} }); }
+});
+
 // ─── GET CURRENT NEWS ─────────────────────────────────────────────────────
 app.get('/api/news', (req, res) => {
   const newsFile = path.join(__dirname, 'news-data.json');
