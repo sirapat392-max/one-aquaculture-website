@@ -422,8 +422,8 @@ body { font-family: 'IBM Plex Sans Thai', 'Inter', sans-serif; background: #f0ea
 <header class="app-header">
   <div>
     <div class="subtitle">ONE AQUACULTURE PRODUCT</div>
-    <h1>🩺 Vet Review Dashboard</h1>
-  </div>
+    <h1> Vet Review Dashboard</h1>
+ </div>
   <span class="header-pending" id="pendingBadge"></span>
   <span class="header-badge" id="totalBadge"></span>
 </header>
@@ -431,13 +431,13 @@ body { font-family: 'IBM Plex Sans Thai', 'Inter', sans-serif; background: #f0ea
 <!-- LOGIN -->
 <div id="loginWrap">
   <div class="login-card">
-    <div class="login-icon">🩺</div>
+    <div class="login-icon"></div>
     <h2>เข้าสู่ระบบ Vet</h2>
     <p>ระบบรีวิวเคสสัตวแพทย์<br>ONE AQUACULTURE PRODUCT</p>
     <input type="password" id="passInput" placeholder="รหัสผ่าน" onkeydown="if(event.key==='Enter')doLogin()">
     <button onclick="doLogin()">เข้าสู่ระบบ</button>
     <div class="login-err" id="loginErr"></div>
-  </div>
+ </div>
 </div>
 
 <!-- MAIN -->
@@ -450,38 +450,38 @@ body { font-family: 'IBM Plex Sans Thai', 'Inter', sans-serif; background: #f0ea
         <div class="queue-toolbar-row">
           <span class="queue-title">เคสทั้งหมด</span>
           <span class="case-count" id="caseCount"></span>
-          <button class="refresh-btn" onclick="loadCases()">🔄</button>
-        </div>
+          <button class="refresh-btn" onclick="loadCases()"></button>
+ </div>
         <div class="filter-tabs">
           <button class="ftab active" data-f="all" onclick="setFilter(this,'all')">ทั้งหมด</button>
           <button class="ftab" data-f="pending" onclick="setFilter(this,'pending')">รอรีวิว</button>
           <button class="ftab" data-f="reviewed" onclick="setFilter(this,'reviewed')">แล้ว</button>
-          <button class="ftab" data-f="flagged" onclick="setFilter(this,'flagged')">⚠</button>
-        </div>
-      </div>
+          <button class="ftab" data-f="flagged" onclick="setFilter(this,'flagged')"></button>
+ </div>
+ </div>
       <div class="queue-list" id="queueList"></div>
-    </div>
+ </div>
 
     <!-- RIGHT: CASE DETAIL -->
     <div class="detail-panel" id="detailPanel">
       <div class="no-selection" id="noSelection">
-        <span class="ico">👆</span>
+        <span class="ico"></span>
         <p>เลือกเคสจากรายการทางซ้าย<br>เพื่อเริ่มรีวิว</p>
-      </div>
+ </div>
       <div class="case-detail" id="caseDetail" style="display:none;"></div>
-    </div>
+ </div>
 
-  </div>
+ </div>
 </div>
 
 <!-- BOTTOM BAR (shown when case selected & pending) -->
 <div class="bar" id="actionBar">
   <div class="bar-inner">
-    <button class="reject-btn" onclick="submitReview('rejected')">✗ ปฏิเสธ</button>
-    <button class="btn-flag-bar" onclick="submitReview('flagged')">⚠ ต้องติดตาม</button>
-    <button class="btn-approve" onclick="submitReview('reviewed')">✓ อนุมัติ / รีวิวแล้ว</button>
+    <button class="reject-btn" onclick="submitReview('rejected')"> ปฏิเสธ</button>
+    <button class="btn-flag-bar" onclick="submitReview('flagged')"> ต้องติดตาม</button>
+    <button class="btn-approve" onclick="submitReview('reviewed')"> อนุมัติ / รีวิวแล้ว</button>
     <span class="bar-msg" id="barMsg"></span>
-  </div>
+ </div>
   <div class="bar-note">กด "อนุมัติ" = บันทึกรีวิวสัตวแพทย์ + เข้าฐานข้อมูล</div>
 </div>
 
@@ -550,7 +550,7 @@ function renderQueue() {
   const list = filteredCases();
   document.getElementById('caseCount').textContent = `${list.length} เคส`;
   if (!list.length) {
-    document.getElementById('queueList').innerHTML = `<div class="empty-state"><span class="ico">📋</span><p>ไม่มีเคส</p></div>`;
+    document.getElementById('queueList').innerHTML = `<div class="empty-state"><span class="ico"></span><p>ไม่มีเคส</p></div>`;
     return;
   }
   document.getElementById('queueList').innerHTML = list.map(c => buildQItem(c)).join('');
@@ -569,13 +569,13 @@ function buildQItem(c) {
       <div class="q-dot ${c.status}"></div>
       <div class="q-dx">${top.nameTH || '(ยังไม่ระบุ)'}</div>
       ${top.confidence ? `<span class="q-conf">${top.confidence}%</span>` : ''}
-    </div>
+ </div>
     <div class="q-sym">${sym || '—'}</div>
     <div class="q-meta">
       <span>${dateStr}</span>
       <span class="status-tag ${c.status}">${statusLabel}</span>
-    </div>
-  </div>`;
+ </div>
+ </div>`;
 }
 
 // ─── SELECT & DETAIL ───
@@ -613,34 +613,34 @@ function buildDetailHTML(c) {
       <span class="sc-case-id">${caseId}</span>
       <span class="status-tag ${c.status}">${{pending:'รอรีวิว',reviewed:'รีวิวแล้ว',flagged:'ต้องติดตาม',rejected:'ปฏิเสธ'}[c.status]||c.status}</span>
       <span class="sc-meta">${dateStr}</span>
-    </div>
+ </div>
 
     <div class="sc-ai-row">
       <div>
-        <div class="sc-ai-dx-label">⬢ AI วินิจฉัย (หมอปลาวาฬ)</div>
+        <div class="sc-ai-dx-label"> AI วินิจฉัย (หมอปลาวาฬ)</div>
         <div class="sc-ai-dx-name">${top.nameTH || '—'}</div>
         ${top.nameEN ? `<div class="sc-ai-dx-sub">${top.nameEN}</div>` : ''}
         ${dx?.severity ? `<div style="margin-top:6px;"><span style="background:#fff3e0;color:#e65100;font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;">${dx.severity}</span></div>` : ''}
-      </div>
+ </div>
       ${top.confidence ? `
       <div class="sc-ai-conf">
         <div class="sc-ai-conf-val">${top.confidence}%</div>
         <div class="sc-ai-conf-label">confidence</div>
-      </div>` : ''}
-    </div>
+ </div>` : ''}
+ </div>
 
     ${(c.symptoms || c.farmDetails) ? `
     <div class="sc-section-label">อาการที่บันทึก</div>
     <div class="sc-chips-row">
       ${(c.symptoms||'').split(/[,\n·•]+/).filter(s=>s.trim()).map(s=>`<span class="sc-chip">${s.trim()}</span>`).join('')}
-    </div>` : ''}
+ </div>` : ''}
 
     ${top.reasoning ? `
     <div class="sc-section-label">เหตุผล AI</div>
     <div class="sc-reasoning">${top.reasoning}</div>` : ''}
 
     ${dx?.treatment ? `
-    <div class="sc-treatment">💊 <b>AI แนะนำ:</b> ${dx.treatment}</div>` : ''}
+    <div class="sc-treatment"> <b>AI แนะนำ:</b> ${dx.treatment}</div>` : ''}
 
     ${diffs.length ? `
     <div style="margin-top:14px;">
@@ -651,43 +651,43 @@ function buildDetailHTML(c) {
           <span class="diff-name">${d.nameTH||d.nameEN||''}</span>
           <div class="diff-bar-wrap"><div class="diff-bar-fill" style="width:${Math.min(d.confidence||0,100)}%"></div></div>
           <span class="diff-pct">${d.confidence||0}%</span>
-        </div>`).join('')}
-      </div>
-    </div>` : ''}
-  </div>`;
+ </div>`).join('')}
+ </div>
+ </div>` : ''}
+ </div>`;
 
   // Farm details
   const farmCard = c.farmDetails ? `
   <div class="group">
     <div class="group-head">
-      <div class="num">🦐</div>
+      <div class="num"></div>
       <h2>ข้อมูลฟาร์ม & อาการ</h2>
-    </div>
+ </div>
     <div class="group-body">
       <div style="font-size:13px;color:var(--mud);line-height:1.8;white-space:pre-wrap;background:var(--gray);border-radius:8px;padding:12px 14px;">${c.farmDetails}</div>
-    </div>
-  </div>` : '';
+ </div>
+ </div>` : '';
 
   // Already reviewed display
   const reviewedDisplay = c.status !== 'pending' ? `
   <div class="${c.status==='flagged'||c.status==='rejected'?'vet-review-display flagged-display':'vet-review-display'}">
-    <div class="vrd-title">${{reviewed:'✓ vet review',flagged:'⚠ vet review — ต้องติดตาม',rejected:'✗ ปฏิเสธ'}[c.status]||'vet review'}</div>
+    <div class="vrd-title">${{reviewed:' vet review',flagged:' vet review — ต้องติดตาม',rejected:' ปฏิเสธ'}[c.status]||'vet review'}</div>
     ${c.vetDiagnosis ? `<div class="vrd-row"><span class="vrd-label">วินิจฉัย</span><span class="vrd-val">${c.vetDiagnosis}</span></div>` : ''}
     ${c.vetSeverity ? `<div class="vrd-row"><span class="vrd-label">ความรุนแรง</span><span class="vrd-val">${c.vetSeverity}</span></div>` : ''}
     ${c.vetDrugs?.length ? `<div class="vrd-row"><span class="vrd-label">ยาแนะนำ</span><span class="vrd-val">${[].concat(c.vetDrugs).join(', ')}</span></div>` : ''}
     ${c.vetTreatment ? `<div class="vrd-row"><span class="vrd-label">การรักษา</span><span class="vrd-val">${c.vetTreatment}</span></div>` : ''}
     ${c.vetNotes ? `<div class="vrd-row"><span class="vrd-label">หมายเหตุ</span><span class="vrd-val">${c.vetNotes}</span></div>` : ''}
     ${c.vetTimestamp ? `<div class="vrd-row"><span class="vrd-label">รีวิวเมื่อ</span><span class="vrd-val" style="font-size:11px;">${new Date(c.vetTimestamp).toLocaleString('th-TH')}</span></div>` : ''}
-  </div>` : '';
+ </div>` : '';
 
   // Vet review form (only for pending)
   const vetForm = c.status === 'pending' ? `
   <div class="group">
     <div class="group-head">
-      <div class="num vet">⚕</div>
+      <div class="num vet"></div>
       <h2>รีวิวสัตวแพทย์</h2>
       <span class="who-tag vet">vet เท่านั้น</span>
-    </div>
+ </div>
     <div class="group-body">
 
       <div class="field">
@@ -702,9 +702,9 @@ function buildDetailHTML(c) {
           <option>Gill Disease</option>
           <option>Muscle Necrosis</option>
           <option>กำหนดเอง...</option>
-        </select>
+ </select>
         <input type="text" id="vet-dx-custom" placeholder="พิมพ์ชื่อโรค..." style="margin-top:8px;display:none;" oninput="syncDxInput()">
-      </div>
+ </div>
 
       <div class="field">
         <label>ความรุนแรง</label>
@@ -713,13 +713,13 @@ function buildDetailHTML(c) {
           <button type="button" class="tag-chip" onclick="toggleChip(this,'severity')">ปานกลาง</button>
           <button type="button" class="tag-chip" onclick="toggleChip(this,'severity')">รุนแรง</button>
           <button type="button" class="tag-chip" onclick="toggleChip(this,'severity')">วิกฤต</button>
-        </div>
-      </div>
+ </div>
+ </div>
 
       <div class="field">
         <label>การรักษาที่แนะนำ</label>
         <textarea id="vet-treatment" placeholder="เช่น ลดอาหาร 50% + เพิ่มออกซิเจน + ProBio+...">${dx?.treatment||''}</textarea>
-      </div>
+ </div>
 
       <div class="field">
         <label>ยา/ผลิตภัณฑ์ที่แนะนำ</label>
@@ -729,16 +729,16 @@ function buildDetailHTML(c) {
           <button type="button" class="tag-chip drug" onclick="this.classList.toggle('selected')">REDDER</button>
           <button type="button" class="tag-chip drug" onclick="this.classList.toggle('selected')">Blue Sea</button>
           <button type="button" class="tag-chip drug" onclick="this.classList.toggle('selected')">GoodWater</button>
-        </div>
-      </div>
+ </div>
+ </div>
 
       <div class="field">
         <label>บันทึก / หมายเหตุภายในทีม <span style="font-weight:400;font-size:11px;">(ไม่ส่งให้ลูกค้า)</span></label>
         <textarea id="vet-notes" placeholder="สิ่งที่สังเกตได้ คำแนะนำ หรือประเด็นที่ต้องติดตาม..."></textarea>
-      </div>
+ </div>
 
-    </div>
-  </div>` : '';
+ </div>
+ </div>` : '';
 
   return summaryCard + farmCard + reviewedDisplay + vetForm;
 }
@@ -795,15 +795,15 @@ async function submitReview(status) {
       body: JSON.stringify({ vetDiagnosis, vetNotes, vetSeverity, vetDrugs, vetTreatment, status }),
     });
     if (res.ok) {
-      msg.textContent = '✅ บันทึกแล้ว';
+      msg.textContent = ' บันทึกแล้ว';
       msg.style.color = 'var(--vet-green)';
       await loadCases();
     } else {
-      msg.textContent = '❌ ผิดพลาด';
+      msg.textContent = ' ผิดพลาด';
       msg.style.color = 'var(--coral)';
     }
   } catch {
-    msg.textContent = '❌ ไม่สามารถเชื่อมต่อ';
+    msg.textContent = ' ไม่สามารถเชื่อมต่อ';
     msg.style.color = 'var(--coral)';
   }
 }

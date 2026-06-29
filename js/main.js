@@ -1,5 +1,6 @@
 // ─── SHARED NAV & FOOTER INJECTION ────────────────────────────────────────
-const currentPage = location.pathname.split('/').pop() || 'index.html';
+// pathname without .html for active-link matching
+const currentPage = location.pathname.split('/').pop().replace(/\.html$/, '') || 'index';
 
 function langSwitcherHTML() {
   return `<div class="lang-switcher">
@@ -10,17 +11,17 @@ function langSwitcherHTML() {
 
 function navHTML() {
   const links = [
-    { href: 'index.html',        key: 'nav.home' },
-    { href: 'products.html',     key: 'nav.products' },
-    { href: 'shrimp-price.html', key: 'nav.price' },
-    { href: 'ai-diagnosis.html', key: 'nav.diagnosis' },
-    { href: 'news.html',         key: 'nav.news' },
-    { href: 'about.html',        key: 'nav.about' },
-    { href: 'contact.html',      key: 'nav.contact' },
+    { href: '/',             id: 'index',       key: 'nav.home' },
+    { href: '/products',     id: 'products',    key: 'nav.products' },
+    { href: '/shrimp-price', id: 'shrimp-price',key: 'nav.price' },
+    { href: '/ai-diagnosis', id: 'ai-diagnosis',key: 'nav.diagnosis' },
+    { href: '/news',         id: 'news',        key: 'nav.news' },
+    { href: '/about',        id: 'about',       key: 'nav.about' },
+    { href: '/contact',      id: 'contact',     key: 'nav.contact' },
   ];
   return `
 <nav>
-  <a href="index.html" class="nav-logo">
+  <a href="/" class="nav-logo">
     <div class="nav-logo-icon"><img src="logo.jpg" alt="ONE logo"></div>
     <div class="nav-logo-text">
       <strong>ONE AQUACULTURE</strong>
@@ -28,10 +29,10 @@ function navHTML() {
     </div>
   </a>
   <ul class="nav-links" id="navLinks">
-    ${links.map(l => `<li><a href="${l.href}" class="${currentPage===l.href?'active':''}" data-i18n="${l.key}">${t(l.key)}</a></li>`).join('')}
+    ${links.map(l => `<li><a href="${l.href}" class="${currentPage===l.id?'active':''}" data-i18n="${l.key}">${t(l.key)}</a></li>`).join('')}
   </ul>
   ${langSwitcherHTML()}
-  <a href="ai-diagnosis.html" class="nav-cta" id="navCta" data-i18n="nav.cta">${t('nav.cta')}</a>
+  <a href="/ai-diagnosis" class="nav-cta" id="navCta" data-i18n="nav.cta">${t('nav.cta')}</a>
   <button class="nav-hamburger" id="navHamburger" aria-label="เมนู">
     <span></span><span></span><span></span>
   </button>
@@ -57,19 +58,19 @@ function footerHTML() {
       <div class="footer-col">
         <h5 data-i18n="footer.col1">${t('footer.col1')}</h5>
         <ul>
-          <li><a href="products.html#water" data-i18n="footer.p1.1">${t('footer.p1.1')}</a></li>
-          <li><a href="products.html#feed"  data-i18n="footer.p1.2">${t('footer.p1.2')}</a></li>
-          <li><a href="products.html#disease" data-i18n="footer.p1.3">${t('footer.p1.3')}</a></li>
-          <li><a href="products.html#soil"  data-i18n="footer.p1.4">${t('footer.p1.4')}</a></li>
+          <li><a href="/products#water"   data-i18n="footer.p1.1">${t('footer.p1.1')}</a></li>
+          <li><a href="/products#feed"    data-i18n="footer.p1.2">${t('footer.p1.2')}</a></li>
+          <li><a href="/products#disease" data-i18n="footer.p1.3">${t('footer.p1.3')}</a></li>
+          <li><a href="/products#soil"    data-i18n="footer.p1.4">${t('footer.p1.4')}</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h5 data-i18n="footer.col2">${t('footer.col2')}</h5>
         <ul>
-          <li><a href="ai-diagnosis.html" data-i18n="footer.s1.1">${t('footer.s1.1')}</a></li>
-          <li><a href="news.html"         data-i18n="footer.s1.2">${t('footer.s1.2')}</a></li>
-          <li><a href="about.html"        data-i18n="footer.s1.3">${t('footer.s1.3')}</a></li>
-          <li><a href="contact.html"      data-i18n="footer.s1.4">${t('footer.s1.4')}</a></li>
+          <li><a href="/ai-diagnosis" data-i18n="footer.s1.1">${t('footer.s1.1')}</a></li>
+          <li><a href="/news"         data-i18n="footer.s1.2">${t('footer.s1.2')}</a></li>
+          <li><a href="/about"        data-i18n="footer.s1.3">${t('footer.s1.3')}</a></li>
+          <li><a href="/contact"      data-i18n="footer.s1.4">${t('footer.s1.4')}</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -77,13 +78,13 @@ function footerHTML() {
         <ul>
           <li><a href="https://www4.fisheries.go.th" target="_blank" data-i18n="footer.r1.1">${t('footer.r1.1')}</a></li>
           <li><a href="https://haz.fisheries.go.th"  target="_blank" data-i18n="footer.r1.2">${t('footer.r1.2')}</a></li>
-          <li><a href="products.html#register" data-i18n="footer.r1.3">${t('footer.r1.3')}</a></li>
+          <li><a href="/products#register" data-i18n="footer.r1.3">${t('footer.r1.3')}</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
       <p data-i18n="footer.copy">${t('footer.copy')}</p>
-      <a href="vet-review.html" class="vet-secret-btn" title="Vet">🔒</a>
+      <a href="/vet-review" class="vet-secret-btn" title="Vet">🔒</a>
     </div>
   </div>
 </footer>`;

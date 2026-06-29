@@ -169,22 +169,22 @@
 <div class="price-hero">
   <div class="price-hero-inner">
     <div>
-      <div class="hero-tag">ราคาตลาด · Market Price</div>
-      <h1>🦐 ราคากุ้งปากบ่อ</h1>
-      <p>ราคารับซื้อกุ้งขาวแวนนาไมหน้าฟาร์ม · รวบรวมจากกลุ่มไลน์เกษตรกร</p>
-      <div class="price-ts" id="heroTs">⏳ กำลังโหลด...</div>
+      <div class="hero-tag" data-i18n="price.hero.tag">ราคาตลาด · Market Price</div>
+      <h1 data-i18n="price.hero.h1">ราคากุ้งปากบ่อ</h1>
+      <p data-i18n="price.hero.desc">ราคารับซื้อกุ้งขาวแวนนาไมหน้าฟาร์ม · รวบรวมจากกลุ่มไลน์เกษตรกร</p>
+      <div class="price-ts" id="heroTs" data-i18n="price.loading">กำลังโหลด...</div>
     </div>
     <button class="refresh-btn" id="refreshBtn" onclick="loadPrices()">
-      <span class="ico">⟳</span> รีเฟรช
+      <span class="ico">⟳</span> <span data-i18n="price.refresh">รีเฟรช</span>
     </button>
-  </div>
+ </div>
 </div>
 
 <div class="price-wrap">
 
   <!-- SUMMARY CARDS -->
   <div class="summary-section">
-    <div class="summary-label">ราคาวันนี้ · ขนาดหลัก</div>
+    <div class="summary-label" data-i18n="price.summary.label">ราคาวันนี้ · ขนาดหลัก</div>
     <div class="summary-grid" id="summaryGrid">
       <!-- JS injects cards -->
       <div class="sz-card"><div class="skeleton" style="height:80px;"></div></div>
@@ -193,16 +193,24 @@
       <div class="sz-card"><div class="skeleton" style="height:80px;"></div></div>
       <div class="sz-card"><div class="skeleton" style="height:80px;"></div></div>
       <div class="sz-card"><div class="skeleton" style="height:80px;"></div></div>
-    </div>
-  </div>
+ </div>
+ </div>
 
   <!-- CHARTS -->
   <div class="charts-section">
-    <!-- Bar chart: today's price by size -->
+    <!-- Bar chart: price by size for selected date -->
     <div class="chart-card">
-      <div class="chart-title">ราคาตามขนาดวันนี้</div>
-      <div class="chart-sub">บาท/กก. แยกตามขนาดกุ้ง (ตัว/กก.)</div>
-      <div class="chart-box" style="height:260px;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+        <div>
+          <div class="chart-title" data-i18n="price.chart.bar.title">ราคาตามขนาด</div>
+          <div class="chart-sub" data-i18n="price.chart.bar.sub">บาท/กก. แยกตามขนาดกุ้ง (ตัว/กก.)</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+          <label for="barDateSelect" style="font-size:11px;font-weight:600;color:#8A7A85;" data-i18n="price.chart.date.label">เลือกวันที่:</label>
+          <select id="barDateSelect" onchange="onBarDateChange()" style="font-size:11px;padding:4px 8px;border-radius:8px;border:1.5px solid #E8E0E5;color:#1C1020;font-family:inherit;cursor:pointer;background:white;"></select>
+        </div>
+      </div>
+      <div class="chart-box" style="height:240px;">
         <canvas id="barChart"></canvas>
       </div>
     </div>
@@ -210,50 +218,50 @@
     <div class="chart-card">
       <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;flex-wrap:wrap;">
         <div>
-          <div class="chart-title">แนวโน้มราคา</div>
+          <div class="chart-title" data-i18n="price.chart.line.title">แนวโน้มราคา</div>
           <div class="chart-sub" id="lineChartSub">เลือกขนาดด้านล่าง</div>
-        </div>
+ </div>
         <div class="range-tabs" id="rangeTabs">
-          <button class="range-btn" data-days="7">7 วัน</button>
-          <button class="range-btn active" data-days="30">30 วัน</button>
-          <button class="range-btn" data-days="90">3 เดือน</button>
-          <button class="range-btn" data-days="365">1 ปี</button>
+          <button class="range-btn" data-days="7" data-i18n="price.range.7">7 วัน</button>
+          <button class="range-btn active" data-days="30" data-i18n="price.range.30">30 วัน</button>
+          <button class="range-btn" data-days="90" data-i18n="price.range.90">3 เดือน</button>
+          <button class="range-btn" data-days="365" data-i18n="price.range.365">1 ปี</button>
         </div>
-      </div>
+ </div>
       <div class="size-chip-row" id="sizeChips"><!-- JS inject --></div>
       <div class="chart-box" style="height:220px;margin-top:10px;">
         <canvas id="lineChart"></canvas>
-      </div>
-    </div>
-  </div>
+ </div>
+ </div>
+ </div>
 
   <!-- FULL TABLE -->
   <div class="table-section">
     <div class="table-card">
       <div class="table-head-row">
-        <h3>ราคาทุกขนาด</h3>
+        <h3 data-i18n="price.table.title">ราคาทุกขนาด</h3>
         <span class="tbl-note" id="tableDate">—</span>
       </div>
       <div class="table-scroll">
         <table class="price-table" id="priceTable">
           <thead>
             <tr>
-              <th>ขนาด (ตัว/กก.)</th>
-              <th>ราคา (บาท/กก.)</th>
-              <th>เปลี่ยน</th>
-              <th>แนวโน้ม</th>
-              <th>กราฟเทียบ</th>
-            </tr>
-          </thead>
+              <th data-i18n="price.th.size">ขนาด (ตัว/กก.)</th>
+              <th data-i18n="price.th.price">ราคา (บาท/กก.)</th>
+              <th data-i18n="price.th.change">เปลี่ยน</th>
+              <th data-i18n="price.th.trend">แนวโน้ม</th>
+              <th data-i18n="price.th.bar">กราฟเทียบ</th>
+ </tr>
+ </thead>
           <tbody id="priceTableBody">
-            <tr><td colspan="5" class="load-state"><span class="ico">🔄</span>กำลังโหลด...</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+            <tr><td colspan="5" class="load-state"><span class="ico"></span>กำลังโหลด...</td></tr>
+ </tbody>
+ </table>
+ </div>
+ </div>
+ </div>
 
-  <p style="text-align:center;font-size:11px;color:#B0A0AA;margin-top:20px;">
+  <p style="text-align:center;font-size:11px;color:#B0A0AA;margin-top:20px;" data-i18n="price.disclaimer">
     ราคาเพื่อใช้ในการอ้างอิงเบื้องต้น อาจมีความแตกต่างตามพื้นที่และเวลา · ข้อมูลจากกลุ่มไลน์เกษตรกรภาคใต้ อ่าวไทย
   </p>
 </div>
@@ -293,9 +301,10 @@ let barChartInst = null;
 let lineChartInst = null;
 let globalByDate    = null;
 let globalDates     = null;
-let globalAllSizes  = [];       // all sizes present in latest data
+let globalAllSizes  = [];
 let selectedLineSizes = [60, 80, 100, 120];
 let selectedDays = 30;
+let selectedBarDate = null; // null = latest
 
 // ── FUZZ: ±1-3 baht deterministic noise per (date, size) ─────────────────────
 function fuzz(price, sz, dt) {
@@ -357,7 +366,7 @@ function renderSummaryCards(latestPrices) {
       <div class="sz-price">${price}</div>
       <div class="sz-unit">บาท/กก.</div>
       <div class="sz-change ${changeCls}">${changeStr}</div>
-    </div>`;
+ </div>`;
   }).join('');
 }
 
@@ -418,10 +427,33 @@ function renderBarChart(latestPrices) {
   });
 }
 
+// ── DATE SELECTOR FOR BAR CHART ──────────────────────────────────────────────
+function populateDateSelect(dates) {
+  const sel = document.getElementById('barDateSelect');
+  if (!sel) return;
+  sel.innerHTML = [...dates].reverse().map(d => {
+    const dt = new Date(d + 'T12:00:00');
+    const label = `${dt.getDate()}/${dt.getMonth()+1}/${dt.getFullYear()}`;
+    return `<option value="${d}">${label}</option>`;
+  }).join('');
+  selectedBarDate = dates[dates.length - 1];
+}
+
+function onBarDateChange() {
+  selectedBarDate = document.getElementById('barDateSelect').value;
+  const prices = globalByDate[selectedBarDate];
+  if (!prices) return;
+  renderBarChart(prices);
+  renderTable(prices);
+  const dt = new Date(selectedBarDate + 'T12:00:00');
+  document.getElementById('tableDate').textContent = `ข้อมูล ณ ${dt.getDate()}/${dt.getMonth()+1}/${dt.getFullYear()}`;
+}
+
 // ── RENDER SIZE CHIPS ─────────────────────────────────────────────────────────
 function renderSizeChips(allSizes) {
   const container = document.getElementById('sizeChips');
-  const allBtn = `<button class="size-chip" id="chipAll" onclick="toggleAllSizes()">ทั้งหมด</button>`;
+  const allLabel = (typeof t === 'function') ? t('price.chip.all') : 'ทั้งหมด';
+  const allBtn = `<button class="size-chip" id="chipAll" onclick="toggleAllSizes()">${allLabel}</button>`;
   const chips = allSizes.map(sz => {
     const color = sizeColor(sz, allSizes);
     const isOn = selectedLineSizes.includes(sz);
@@ -576,16 +608,16 @@ function renderTable(latestPrices) {
       <td>
         <span class="td-size">L${sz}</span><br>
         <span class="td-desc">${SIZE_DESC[sz] || ''}</span>
-      </td>
+ </td>
       <td class="td-price">${e.price}<span style="font-size:11px;font-weight:500;color:#8A7A85"> ฿</span></td>
       <td class="td-change ${changeCls}">${arrow} ${changeStr}</td>
       <td><span class="trend-badge ${changeCls}">${trend === 'up' ? '▲' : trend === 'down' ? '▼' : '·'} ${trendTH}</span></td>
       <td>
         <div class="mini-bar-wrap">
           <div class="mini-bar"><div class="mini-bar-fill" style="width:${barW}%;background:${trend==='up'?'#16a34a':trend==='down'?'#dc2626':'#8B3060'}"></div></div>
-        </div>
-      </td>
-    </tr>`;
+ </div>
+ </td>
+ </tr>`;
   }).join('');
 }
 
@@ -604,13 +636,14 @@ async function loadPrices() {
     // Update timestamp
     const dt = new Date(latestDate + 'T12:00:00');
     const dateStr = `${dt.getDate()}/${dt.getMonth()+1}/${dt.getFullYear()}`;
-    document.getElementById('heroTs').textContent = `⬢ อัปเดตล่าสุด: ${dateStr} · ข้อมูลล่าสุด ${json.data.length} รายการ`;
+    document.getElementById('heroTs').textContent = ` อัปเดตล่าสุด: ${dateStr} · ข้อมูลล่าสุด ${json.data.length} รายการ`;
     document.getElementById('tableDate').textContent = `ข้อมูล ณ ${dateStr}`;
 
     // Store globally for range-tab re-renders
     globalByDate   = byDate;
     globalDates    = dates;
     globalAllSizes = Object.keys(latestPrices).map(Number).sort((a,b)=>a-b);
+    selectedBarDate = latestDate;
 
     // Seed default selection with sizes actually present
     selectedLineSizes = [60, 80, 100, 120].filter(s => globalAllSizes.includes(s));
@@ -618,23 +651,27 @@ async function loadPrices() {
 
     // Render all sections
     renderSummaryCards(latestPrices);
+    populateDateSelect(dates);
     renderBarChart(latestPrices);
     renderSizeChips(globalAllSizes);
     renderLineChart(byDate, dates, selectedDays);
     renderTable(latestPrices);
 
+    // Apply language translations
+    if (typeof applyI18n === 'function') applyI18n();
+
   } catch(err) {
     document.getElementById('summaryGrid').innerHTML = `
       <div class="error-banner" style="grid-column:1/-1;">
-        ❌ ไม่สามารถโหลดข้อมูลราคาได้ — ${err.message}
-      </div>`;
+         ไม่สามารถโหลดข้อมูลราคาได้ — ${err.message}
+ </div>`;
     document.getElementById('priceTableBody').innerHTML = `
       <tr><td colspan="5">
         <div class="load-state">
-          <span class="ico">⚠️</span>
+          <span class="ico"></span>
           กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ต แล้วลองรีเฟรชอีกครั้ง
-        </div>
-      </td></tr>`;
+ </div>
+ </td></tr>`;
   }
 
   btn.classList.remove('loading');

@@ -40,7 +40,7 @@ body { padding-top: 68px; }
 .section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-soft); margin-bottom: 8px; }
 .uses-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
 .uses-list li { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--text-mid); }
-.uses-list li::before { content: "✓"; color: var(--wine); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+.uses-list li::before { content: ""; color: var(--wine); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
 
 @media (max-width: 768px) {
   .products-hero { padding: 48px 5% 36px; }
@@ -69,20 +69,20 @@ body { padding-top: 68px; }
   <h1 data-i18n-html="prod.hero.title">ผลิตภัณฑ์ ONE<br>ทดสอบจากฟาร์มจริงกว่า 100 แห่ง</h1>
   <p data-i18n="prod.hero.desc">เวชภัณฑ์สัตว์น้ำคุณภาพสูง พัฒนาและทดสอบในบ่อเลี้ยงเชิงพาณิชย์จริง ครอบคลุมทุกความต้องการของฟาร์มกุ้ง</p>
   <div class="badge-row">
-    <span class="badge" data-i18n="prod.badge.quality">✅ ควบคุมคุณภาพ</span>
-    <span class="badge" data-i18n="prod.badge.tested">✅ ทดสอบจากฟาร์มจริง</span>
-    <span class="badge" data-i18n="prod.badge.species">🐠 สำหรับกุ้งและสัตว์น้ำ</span>
-    <span class="badge" data-i18n="prod.badge.ai">🤖 AI หมอปลาวาฬ ช่วยแนะนำ</span>
-  </div>
+    <span class="badge" data-i18n="prod.badge.quality"> ควบคุมคุณภาพ</span>
+    <span class="badge" data-i18n="prod.badge.tested"> ทดสอบจากฟาร์มจริง</span>
+    <span class="badge" data-i18n="prod.badge.species"> สำหรับกุ้งและสัตว์น้ำ</span>
+    <span class="badge" data-i18n="prod.badge.ai"> AI หมอปลาวาฬ ช่วยแนะนำ</span>
+ </div>
 </div>
 
 <div class="filter-bar">
   <button class="filter-tab active" onclick="filterCat('all', this)" data-i18n="prod.filter.all">ทั้งหมด</button>
-  <button class="filter-tab" onclick="filterCat('vitamin', this)"    data-i18n="prod.filter.vitamin">💊 วิตามิน & อาหารเสริม</button>
-  <button class="filter-tab" onclick="filterCat('mineral', this)"    data-i18n="prod.filter.mineral">⚡ แร่ธาตุ</button>
-  <button class="filter-tab" onclick="filterCat('water', this)"      data-i18n="prod.filter.water">💧 สารบำบัดน้ำ</button>
-  <button class="filter-tab" onclick="filterCat('disinfect', this)"  data-i18n="prod.filter.disinfect">🛡️ สารฆ่าเชื้อ</button>
-  <button class="filter-tab" onclick="filterCat('conditioner', this)" data-i18n="prod.filter.conditioner">🌊 สารปรับสภาพน้ำ</button>
+  <button class="filter-tab" onclick="filterCat('vitamin', this)"    data-i18n="prod.filter.vitamin"> วิตามิน & อาหารเสริม</button>
+  <button class="filter-tab" onclick="filterCat('mineral', this)"    data-i18n="prod.filter.mineral"> แร่ธาตุ</button>
+  <button class="filter-tab" onclick="filterCat('water', this)"      data-i18n="prod.filter.water"> สารบำบัดน้ำ</button>
+  <button class="filter-tab" onclick="filterCat('disinfect', this)"  data-i18n="prod.filter.disinfect"> สารฆ่าเชื้อ</button>
+  <button class="filter-tab" onclick="filterCat('conditioner', this)" data-i18n="prod.filter.conditioner"> สารปรับสภาพน้ำ</button>
 </div>
 
 <div class="products-section" id="productContainer">
@@ -90,17 +90,17 @@ body { padding-top: 68px; }
   <!-- VITAMINS & SUPPLEMENTS -->
   <div class="product-category reveal" id="cat-vitamin">
     <div class="cat-header">
-      <div class="cat-icon">💊</div>
+      <div class="cat-icon"></div>
       <div>
         <div class="cat-title" data-i18n="prod.vitamin.title">วิตามิน และ อาหารเสริม</div>
         <div class="cat-sub">Vitamins &amp; Supplements</div>
-      </div>
-    </div>
+ </div>
+ </div>
     <div class="product-card">
       <div class="product-card-top">
         <div class="product-card-name" data-i18n="prod.vitamin.title">วิตามิน และ อาหารเสริม</div>
         <div class="product-card-name-en">Vitamins &amp; Supplements</div>
-      </div>
+ </div>
       <div class="product-card-body">
         <p class="product-desc" data-i18n="prod.vitamin.desc">กลุ่มวิตามินและอาหารเสริมคุณภาพสูงสำหรับสัตว์น้ำ เสริมภูมิคุ้มกัน เพิ่มความแข็งแรง และส่งเสริมการเจริญเติบโต</p>
         <div class="section-label" data-i18n="prod.label.benefits">ประโยชน์</div>
@@ -108,25 +108,25 @@ body { padding-top: 68px; }
           <li data-i18n="prod.vitamin.b1">เสริมภูมิคุ้มกันและความแข็งแรง</li>
           <li data-i18n="prod.vitamin.b2">ส่งเสริมการเจริญเติบโตของสัตว์น้ำ</li>
           <li data-i18n="prod.vitamin.b3">ช่วยให้สัตว์น้ำทนต่อความเครียดจากสภาพแวดล้อม</li>
-        </ul>
-      </div>
-    </div>
-  </div>
+ </ul>
+ </div>
+ </div>
+ </div>
 
   <!-- MINERALS -->
   <div class="product-category reveal" id="cat-mineral">
     <div class="cat-header">
-      <div class="cat-icon">⚡</div>
+      <div class="cat-icon"></div>
       <div>
         <div class="cat-title" data-i18n="prod.mineral.title">แร่ธาตุ</div>
         <div class="cat-sub">Minerals</div>
-      </div>
-    </div>
+ </div>
+ </div>
     <div class="product-card">
       <div class="product-card-top">
         <div class="product-card-name" data-i18n="prod.mineral.title">แร่ธาตุ</div>
         <div class="product-card-name-en">Minerals</div>
-      </div>
+ </div>
       <div class="product-card-body">
         <p class="product-desc" data-i18n="prod.mineral.desc">กลุ่มแร่ธาตุที่จำเป็นสำหรับการลอกคราบและการเจริญเติบโตของสัตว์น้ำ ปรับสมดุลแคลเซียม แมกนีเซียม และแร่ธาตุอื่นๆ</p>
         <div class="section-label" data-i18n="prod.label.benefits">ประโยชน์</div>
@@ -134,25 +134,25 @@ body { padding-top: 68px; }
           <li data-i18n="prod.mineral.b1">ส่งเสริมการลอกคราบที่สมบูรณ์</li>
           <li data-i18n="prod.mineral.b2">เสริมความแข็งแรงของเปลือก</li>
           <li data-i18n="prod.mineral.b3">ปรับสมดุลแร่ธาตุในระบบน้ำและร่างกาย</li>
-        </ul>
-      </div>
-    </div>
-  </div>
+ </ul>
+ </div>
+ </div>
+ </div>
 
   <!-- WATER TREATMENT -->
   <div class="product-category reveal" id="cat-water">
     <div class="cat-header">
-      <div class="cat-icon">💧</div>
+      <div class="cat-icon"></div>
       <div>
         <div class="cat-title" data-i18n="prod.water.title">สารบำบัดน้ำ</div>
         <div class="cat-sub">Water Treatment</div>
-      </div>
-    </div>
+ </div>
+ </div>
     <div class="product-card">
       <div class="product-card-top">
         <div class="product-card-name" data-i18n="prod.water.title">สารบำบัดน้ำ</div>
         <div class="product-card-name-en">Water Treatment</div>
-      </div>
+ </div>
       <div class="product-card-body">
         <p class="product-desc" data-i18n="prod.water.desc">กลุ่มผลิตภัณฑ์โปรไบโอติกส์และสารบำบัดน้ำสำหรับบ่อเลี้ยงสัตว์น้ำ ปรับสมดุลจุลินทรีย์ในบ่อ ลดแอมโมเนีย และปรับปรุงคุณภาพน้ำ</p>
         <div class="section-label" data-i18n="prod.label.benefits">ประโยชน์</div>
@@ -160,25 +160,25 @@ body { padding-top: 68px; }
           <li data-i18n="prod.water.b1">ลดแอมโมเนียและสารพิษในน้ำ</li>
           <li data-i18n="prod.water.b2">ปรับสมดุลจุลินทรีย์ในระบบน้ำ</li>
           <li data-i18n="prod.water.b3">ปรับปรุงคุณภาพน้ำให้เหมาะกับการเพาะเลี้ยง</li>
-        </ul>
-      </div>
-    </div>
-  </div>
+ </ul>
+ </div>
+ </div>
+ </div>
 
   <!-- DISINFECTANTS -->
   <div class="product-category reveal" id="cat-disinfect">
     <div class="cat-header">
-      <div class="cat-icon">🛡️</div>
+      <div class="cat-icon"></div>
       <div>
         <div class="cat-title" data-i18n="prod.disinfect.title">สารฆ่าเชื้อ</div>
         <div class="cat-sub">Disinfectants</div>
-      </div>
-    </div>
+ </div>
+ </div>
     <div class="product-card">
       <div class="product-card-top">
         <div class="product-card-name" data-i18n="prod.disinfect.title">สารฆ่าเชื้อ</div>
         <div class="product-card-name-en">Disinfectants</div>
-      </div>
+ </div>
       <div class="product-card-body">
         <p class="product-desc" data-i18n="prod.disinfect.desc">กลุ่มสารฆ่าเชื้อและควบคุมเชื้อโรคในบ่อเลี้ยงสัตว์น้ำ ช่วยลดความเสี่ยงการเกิดโรคระบาด</p>
         <div class="section-label" data-i18n="prod.label.benefits">ประโยชน์</div>
@@ -186,25 +186,25 @@ body { padding-top: 68px; }
           <li data-i18n="prod.disinfect.b1">ฆ่าเชื้อโรคในบ่อและระบบน้ำ</li>
           <li data-i18n="prod.disinfect.b2">ควบคุมเชื้อก่อโรคที่เป็นอันตราย</li>
           <li data-i18n="prod.disinfect.b3">ลดความเสี่ยงการระบาดของโรค</li>
-        </ul>
-      </div>
-    </div>
-  </div>
+ </ul>
+ </div>
+ </div>
+ </div>
 
   <!-- WATER CONDITIONERS -->
   <div class="product-category reveal" id="cat-conditioner">
     <div class="cat-header">
-      <div class="cat-icon">🌊</div>
+      <div class="cat-icon"></div>
       <div>
         <div class="cat-title" data-i18n="prod.conditioner.title">สารปรับสภาพน้ำ</div>
         <div class="cat-sub">Water Conditioners</div>
-      </div>
-    </div>
+ </div>
+ </div>
     <div class="product-card">
       <div class="product-card-top">
         <div class="product-card-name" data-i18n="prod.conditioner.title">สารปรับสภาพน้ำ</div>
         <div class="product-card-name-en">Water Conditioners</div>
-      </div>
+ </div>
       <div class="product-card-body">
         <p class="product-desc" data-i18n="prod.conditioner.desc">กลุ่มสารปรับสภาพน้ำสำหรับบ่อเลี้ยงสัตว์น้ำ ปรับ pH ปรับความกระด้าง และสร้างสภาพแวดล้อมน้ำที่เหมาะสมกับการเพาะเลี้ยง</p>
         <div class="section-label" data-i18n="prod.label.benefits">ประโยชน์</div>
@@ -212,10 +212,10 @@ body { padding-top: 68px; }
           <li data-i18n="prod.conditioner.b1">ปรับ pH น้ำให้เหมาะสม</li>
           <li data-i18n="prod.conditioner.b2">ปรับความกระด้างและแร่ธาตุในน้ำ</li>
           <li data-i18n="prod.conditioner.b3">สร้างสภาพแวดล้อมที่เหมาะกับการเพาะเลี้ยง</li>
-        </ul>
-      </div>
-    </div>
-  </div>
+ </ul>
+ </div>
+ </div>
+ </div>
 
 </div>
 

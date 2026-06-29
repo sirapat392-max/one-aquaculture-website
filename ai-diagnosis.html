@@ -318,14 +318,14 @@ select {
       <img src="logo.jpg" alt="logo">
       <span>ONE AQUACULTURE PRODUCT</span>
     </div>
-    <a href="index.html" class="back-home">← หน้าหลัก</a>
-    <h1>🦐 วิเคราะห์โรคกุ้ง AI</h1>
+    <a href="/" class="back-home">← หน้าหลัก</a>
+    <h1> วิเคราะห์โรคกุ้ง AI</h1>
     <p>กรอกอาการ ข้อมูลบ่อ และค่าน้ำ — AI วินิจฉัยและให้คำแนะนำทันที</p>
     <div class="version-pill">ONE AI · Powered by Claude · เพื่อเกษตรกรกุ้งไทย</div>
   </div>
 
   <div class="nudge warn">
-    <span>⚠️</span>
+    <span></span>
     <div>ผลวิเคราะห์นี้ใช้เป็น<b>แนวทางเบื้องต้นเท่านั้น</b> กรณีรุนแรงหรือไม่แน่ใจ ควรปรึกษาสัตวแพทย์</div>
   </div>
 
@@ -377,7 +377,7 @@ select {
       </div>
 
       <div class="field">
-        <label>📊 ระดับความรุนแรงเบื้องต้น</label>
+        <label> ระดับความรุนแรงเบื้องต้น</label>
         <div class="chips scale" id="cs-scale">
           <span class="chip">&lt; 5%</span>
           <span class="chip">5–20%</span>
@@ -393,7 +393,7 @@ select {
       </div>
 
       <div class="field">
-        <label>💊 เคยลองรักษาอะไรไปแล้ว <span class="hint">(ไม่บังคับ)</span></label>
+        <label> เคยลองรักษาอะไรไปแล้ว <span class="hint">(ไม่บังคับ)</span></label>
         <div class="chips" id="cs-treat">
           <span class="chip">ลดอาหาร</span>
           <span class="chip">เพิ่มออกซิเจน</span>
@@ -454,7 +454,7 @@ select {
       </div>
 
       <div class="field" style="margin-top:9px;">
-        <label>🚨 บ่อข้างๆ เป็นไหม</label>
+        <label> บ่อข้างๆ เป็นไหม</label>
         <div class="chips" id="cs-nbr">
           <span class="chip">ไม่เป็น</span>
           <span class="chip">บ่อใกล้ๆ เป็น</span>
@@ -493,7 +493,7 @@ select {
           <div class="water-cell"><label>ความใส cm</label><input type="number" id="wtrans" placeholder="35"></div>
         </div>
         <div class="field" style="margin-top:12px;">
-          <label>🎨 สีน้ำ <span class="hint">(แตะเลือก)</span></label>
+          <label> สีน้ำ <span class="hint">(แตะเลือก)</span></label>
           <div class="water-color-grid">
             <div class="cs cs-gl" data-lbl="เขียวอ่อน" onclick="this.classList.toggle('sel')">เขียวอ่อน</div>
             <div class="cs cs-gd" data-lbl="เขียวเข้ม" onclick="this.classList.toggle('sel')">เขียวเข้ม</div>
@@ -560,7 +560,7 @@ select {
     <!-- SECTION 5: ตำแหน่ง & สภาพอากาศ -->
     <div class="group collapsible closed" id="groupWeather">
       <div class="group-head" onclick="toggleCollapse(this)">
-        <div class="num" style="background:#1565C0;font-size:13px;">🌤</div>
+        <div class="num" style="background:#1565C0;font-size:13px;"></div>
         <h2>ตำแหน่ง &amp; สภาพอากาศ</h2>
         <span class="who-tag opt">ช่วย AI เข้าใจบริบท</span>
       </div>
@@ -569,7 +569,7 @@ select {
         <!-- GPS -->
         <div class="field">
           <button type="button" id="gpsBtn" onclick="getGPS()" style="width:100%;border:1.5px dashed var(--line);background:var(--sand);border-radius:10px;padding:11px;font-family:inherit;font-size:13.5px;font-weight:600;color:var(--mud);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s;">
-            📍 กดเพื่อระบุพิกัดบ่อเลี้ยง (GPS)
+             กดเพื่อระบุพิกัดบ่อเลี้ยง (GPS)
           </button>
           <div id="gpsResult" style="margin-top:8px;font-size:11.5px;color:var(--mud);font-family:'JetBrains Mono',monospace;display:none;background:var(--pond-pale);border-radius:8px;padding:8px 11px;"></div>
           <input type="hidden" id="gpsLat">
@@ -608,11 +608,11 @@ select {
 
         <!-- Weather strip -->
         <div class="field">
-          <label id="weatherLabel" style="display:none;">🌡️ สภาพอากาศ 14 วัน <span class="hint" id="weatherCoordHint"></span></label>
+          <label id="weatherLabel" style="display:none;"> สภาพอากาศ 14 วัน <span class="hint" id="weatherCoordHint"></span></label>
           <div id="weatherStrip" style="display:none;"></div>
           <div id="weatherInsight" style="display:none;margin-top:8px;padding:9px 12px;background:var(--warn-soft);border:1px solid var(--warn-border);border-radius:9px;font-size:12px;color:#7a4a1f;line-height:1.6;"></div>
           <button type="button" id="weatherBtn" style="display:none;margin-top:8px;width:100%;border:1.5px dashed var(--line);background:var(--sand);border-radius:9px;padding:8px;font-family:inherit;font-size:12px;color:var(--mud);cursor:pointer;" onclick="fetchWeather()">
-            🔄 โหลดข้อมูลอากาศใหม่
+             โหลดข้อมูลอากาศใหม่
           </button>
         </div>
 
@@ -621,21 +621,21 @@ select {
 
   </form>
   <div class="action-row" style="padding:0 16px 12px;">
-    <button class="btn-clear" type="button" onclick="clearForm()">🗑 ล้าง</button>
+    <button class="btn-clear" type="button" onclick="clearForm()"> ล้าง</button>
     <button class="btn-submit" type="button" id="submitBtn" onclick="runDiagnosis()">
-      🔍 วิเคราะห์ด้วย AI
+       วิเคราะห์ด้วย AI
     </button>
   </div>
     </div><!-- /dx-form-col -->
     <div class="dx-result-col">
       <div id="rateBar" class="rate-bar">
-        <span id="rateLabel">⬢ วันนี้วิเคราะห์แล้ว <b id="rateCount">0</b>/10 ครั้ง</span>
+        <span id="rateLabel"> วันนี้วิเคราะห์แล้ว <b id="rateCount">0</b>/10 ครั้ง</span>
         <div class="rate-track"><div class="rate-fill" id="rateFill" style="width:0%"></div></div>
       </div>
     <!-- SECTION: AI CARD -->
     <div class="group" id="groupAI">
       <div class="group-head">
-        <div class="num ai">⬢</div>
+        <div class="num ai"></div>
         <h2>AI วินิจฉัย</h2>
         <div style="margin-left:auto;display:flex;align-items:center;gap:5px;background:var(--ai-light);border-radius:100px;padding:3px 9px;font-size:10px;font-weight:700;color:var(--ai-deep);font-family:'JetBrains Mono',monospace;">
           <span style="width:6px;height:6px;background:var(--coral);border-radius:50%;animation:aipulse 2s infinite;display:inline-block;"></span>ONE AI
@@ -645,7 +645,7 @@ select {
       <div id="aiResult">
         <div class="ai-card">
           <div class="ai-empty">
-            <span class="ico">🤖</span>
+            <span class="ico"></span>
             <p>กรอกอาการที่พบแล้วกด<br><b>"วิเคราะห์ด้วย AI"</b> ด้านบน</p>
           </div>
         </div>
@@ -656,19 +656,19 @@ select {
     <!-- SECTION: CHAT -->
     <div class="chat-section" id="chatSection">
       <div class="chat-head">
-        <div class="chat-avatar">🤖</div>
+        <div class="chat-avatar"></div>
         <h3>ถามต่อได้เลย</h3>
         <span style="font-size:11px;color:var(--mud);">AI ตอบทันที</span>
       </div>
       <div class="chat-msgs" id="chatMsgs">
         <div class="bubble-row">
-          <div class="chat-avatar">🤖</div>
+          <div class="chat-avatar"></div>
           <div class="bubble ai">สวัสดีครับ! หลังวิเคราะห์แล้ว ถามได้เลยนะครับ เช่น "ต้องใช้ผลิตภัณฑ์อะไร" หรือ "วิธีป้องกันระยะยาว"</div>
         </div>
       </div>
       <div class="chat-input-row">
         <textarea class="chat-txt" id="chatTxt" placeholder="ถามเพิ่มเติม... เช่น วิธีใช้ผลิตภัณฑ์ ONE, ปริมาณที่ใช้..." rows="1" onkeydown="chatKey(event)" oninput="autoResize(this)"></textarea>
-        <button class="chat-send" type="button" onclick="sendChat()">➤</button>
+        <button class="chat-send" type="button" onclick="sendChat()"></button>
       </div>
     </div>
 
@@ -805,10 +805,10 @@ function renderAICard(raw) {
     }).join('');
 
     const productsHTML = (d.relevantProducts || []).length
-      ? `<div class="ai-products">${d.relevantProducts.map(p=>`<span class="ai-product-pill">🏭 ${p}</span>`).join('')}</div>` : '';
+      ? `<div class="ai-products">${d.relevantProducts.map(p=>`<span class="ai-product-pill"> ${p}</span>`).join('')}</div>` : '';
 
     const vetHTML = d.needVet
-      ? `<div class="vet-alert-box">🚨 <b>แนะนำปรึกษาสัตวแพทย์ทันที</b> — เคสนี้มีความรุนแรง</div>` : '';
+      ? `<div class="vet-alert-box"> <b>แนะนำปรึกษาสัตวแพทย์ทันที</b> — เคสนี้มีความรุนแรง</div>` : '';
 
     area.innerHTML = `
     <div class="ai-card">
@@ -824,9 +824,9 @@ function renderAICard(raw) {
       ${top.reasoning ? `<div class="ai-reasoning"><b>เหตุผล:</b> ${top.reasoning}</div>` : ''}
 
       <div class="ai-action-grid">
-        ${d.immediateAction ? `<div class="ai-action-box"><div class="ai-action-lbl">⚡ ทำทันที</div><div class="ai-action-txt">${d.immediateAction}</div></div>` : ''}
-        ${d.treatment ? `<div class="ai-action-box"><div class="ai-action-lbl">💊 การรักษา</div><div class="ai-action-txt">${d.treatment}</div></div>` : ''}
-        ${d.prevention ? `<div class="ai-action-box" style="grid-column:1/-1"><div class="ai-action-lbl">🛡️ การป้องกัน</div><div class="ai-action-txt">${d.prevention}</div></div>` : ''}
+        ${d.immediateAction ? `<div class="ai-action-box"><div class="ai-action-lbl"> ทำทันที</div><div class="ai-action-txt">${d.immediateAction}</div></div>` : ''}
+        ${d.treatment ? `<div class="ai-action-box"><div class="ai-action-lbl"> การรักษา</div><div class="ai-action-txt">${d.treatment}</div></div>` : ''}
+        ${d.prevention ? `<div class="ai-action-box" style="grid-column:1/-1"><div class="ai-action-lbl"> การป้องกัน</div><div class="ai-action-txt">${d.prevention}</div></div>` : ''}
       </div>
       ${productsHTML}
       ${vetHTML}
@@ -853,7 +853,7 @@ function updateRateBar() {
     el.fill.className = 'rate-fill' + (n >= 10 ? ' full' : n >= 7 ? ' warn' : '');
   }
   if (el.bar) el.bar.classList.toggle('at-limit', n >= 10);
-  if (el.label && n >= 10) el.label.innerHTML = '⛔ ครบ 10 ครั้งแล้ววันนี้ กลับมาพรุ่งนี้';
+  if (el.label && n >= 10) el.label.innerHTML = ' ครบ 10 ครั้งแล้ววันนี้ กลับมาพรุ่งนี้';
 }
 
 // ── DIAGNOSIS ────────────────────────────────────────────────────────────────
@@ -889,7 +889,7 @@ async function runDiagnosis() {
   document.getElementById('aiResult').innerHTML = `
   <div class="ai-card">
     <div class="ai-empty">
-      <span class="ico">🤖</span>
+      <span class="ico"></span>
       <p>AI กำลังวิเคราะห์<br><span class="thinking-dots"><span>.</span><span>.</span><span>.</span></span></p>
     </div>
   </div>`;
@@ -908,7 +908,7 @@ async function runDiagnosis() {
     localStorage.setItem('dx_usage', JSON.stringify(usage));
     updateRateBar();
     const secs = ((Date.now()-t0)/1000).toFixed(1);
-    document.getElementById('aiMeta').textContent = `⬢ ONE AI · ${secs}s · ผลเบื้องต้นเท่านั้น`;
+    document.getElementById('aiMeta').textContent = ` ONE AI · ${secs}s · ผลเบื้องต้นเท่านั้น`;
 
     // auto-save every case to vet review
     lastCase = { symptoms, farmDetails, aiRaw: full };
@@ -925,15 +925,15 @@ async function runDiagnosis() {
       role: 'assistant',
       content: `AI ได้วิเคราะห์แล้ว: ${full.substring(0,300)}...`
     });
-    addBubble('ai', '✅ วิเคราะห์เสร็จแล้ว! ถามเพิ่มเติมได้เลยครับ เช่น วิธีใช้ผลิตภัณฑ์ ขนาดที่ใช้ หรือวิธีป้องกันระยะยาว');
+    addBubble('ai', ' วิเคราะห์เสร็จแล้ว! ถามเพิ่มเติมได้เลยครับ เช่น วิธีใช้ผลิตภัณฑ์ ขนาดที่ใช้ หรือวิธีป้องกันระยะยาว');
   } catch(e) {
     document.getElementById('aiResult').innerHTML = `
     <div class="ai-card">
-      <div class="ai-empty"><span class="ico">❌</span><p>ไม่สามารถเชื่อมต่อ AI ได้<br>กรุณาตรวจสอบว่า server กำลังทำงาน</p></div>
+      <div class="ai-empty"><span class="ico"></span><p>ไม่สามารถเชื่อมต่อ AI ได้<br>กรุณาตรวจสอบว่า server กำลังทำงาน</p></div>
     </div>`;
   }
   btn.disabled = false;
-  btn.innerHTML = '🔍 วิเคราะห์ด้วย AI';
+  btn.innerHTML = ' วิเคราะห์ด้วย AI';
 }
 
 // ── CHAT ──────────────────────────────────────────────────────────────────────
@@ -942,7 +942,7 @@ function addBubble(type, text) {
   const row = document.createElement('div');
   row.className = 'bubble-row' + (type==='user'?' user':'');
   if (type !== 'user') {
-    row.innerHTML = `<div class="chat-avatar">🤖</div><div class="bubble ai">${text}</div>`;
+    row.innerHTML = `<div class="chat-avatar"></div><div class="bubble ai">${text}</div>`;
   } else {
     row.innerHTML = `<div class="bubble user">${text}</div>`;
   }
@@ -979,14 +979,14 @@ function autoResize(el) { el.style.height='auto'; el.style.height=Math.min(el.sc
 
 // ── GPS & WEATHER ─────────────────────────────────────────────────────────────
 const WMO = {
-  0:'☀️',1:'🌤️',2:'⛅',3:'☁️',
-  45:'🌫️',48:'🌫️',
-  51:'🌦️',53:'🌦️',55:'🌧️',
-  61:'🌧️',63:'🌧️',65:'🌧️',
-  71:'🌨️',73:'🌨️',75:'❄️',
-  80:'🌦️',81:'🌧️',82:'⛈️',
-  85:'🌨️',86:'❄️',
-  95:'⛈️',96:'⛈️',99:'⛈️',
+  0:'',1:'',2:'',3:'',
+  45:'',48:'',
+  51:'',53:'',55:'',
+  61:'',63:'',65:'',
+  71:'',73:'',75:'',
+  80:'',81:'',82:'',
+  85:'',86:'',
+  95:'',96:'',99:'',
 };
 const WMO_TH = {
   0:'แจ่มใส',1:'แจ่มใส',2:'มีเมฆ',3:'มืดครึ้ม',
@@ -1010,7 +1010,7 @@ function getGPS() {
   btn.innerHTML = '⏳ กำลังระบุตำแหน่ง...';
   btn.disabled = true;
   if (!navigator.geolocation) {
-    btn.innerHTML = '❌ browser ไม่รองรับ GPS';
+    btn.innerHTML = ' browser ไม่รองรับ GPS';
     btn.disabled = false; return;
   }
   navigator.geolocation.getCurrentPosition(async pos => {
@@ -1020,12 +1020,12 @@ function getGPS() {
     document.getElementById('gpsLon').value = lon;
     const res = document.getElementById('gpsResult');
     res.style.display = 'block';
-    res.innerHTML = `📍 ${lat}, ${lon} <span style="color:var(--vet-green);font-weight:700;">✓</span>`;
-    btn.innerHTML = '📍 ระบุตำแหน่งแล้ว — กดอีกครั้งเพื่ออัปเดต';
+    res.innerHTML = ` ${lat}, ${lon} <span style="color:var(--vet-green);font-weight:700;"></span>`;
+    btn.innerHTML = ' ระบุตำแหน่งแล้ว — กดอีกครั้งเพื่ออัปเดต';
     btn.disabled = false;
     await fetchWeather(lat, lon);
   }, err => {
-    btn.innerHTML = '❌ ไม่สามารถระบุตำแหน่งได้ — กดลองใหม่';
+    btn.innerHTML = ' ไม่สามารถระบุตำแหน่งได้ — กดลองใหม่';
     btn.disabled = false;
   }, { timeout: 10000 });
 }
@@ -1041,7 +1041,7 @@ async function fetchWeather(lat, lon) {
   const wBtn = document.getElementById('weatherBtn');
 
   strip.style.display = 'block';
-  strip.innerHTML = '<div style="font-size:12px;color:var(--mud);padding:8px;">🌐 กำลังโหลดข้อมูลอากาศ...</div>';
+  strip.innerHTML = '<div style="font-size:12px;color:var(--mud);padding:8px;"> กำลังโหลดข้อมูลอากาศ...</div>';
   label.style.display = 'block';
   document.getElementById('weatherCoordHint').textContent = `(${parseFloat(lat).toFixed(3)}, ${parseFloat(lon).toFixed(3)})`;
   wBtn.style.display = 'block';
@@ -1053,7 +1053,7 @@ async function fetchWeather(lat, lon) {
     weatherData = json.daily;
     renderWeatherStrip(json.daily);
   } catch(e) {
-    strip.innerHTML = '<div style="font-size:12px;color:var(--coral);padding:8px;">❌ โหลดข้อมูลอากาศไม่ได้ กรุณาลองใหม่</div>';
+    strip.innerHTML = '<div style="font-size:12px;color:var(--coral);padding:8px;"> โหลดข้อมูลอากาศไม่ได้ กรุณาลองใหม่</div>';
   }
 }
 
@@ -1078,7 +1078,7 @@ function renderWeatherStrip(daily) {
     const dd = date.getDate();
     const isToday = d === todayStr;
     const isPast = i < todayIdx;
-    const ico = WMO[codes[i]] || '🌤️';
+    const ico = WMO[codes[i]] || '';
     const rainVal = rain[i] || 0;
     const rainCls = rainVal > 20 ? 'heavy' : '';
 
@@ -1099,11 +1099,11 @@ function renderWeatherStrip(daily) {
   const rainDaysPast = rain.slice(0, todayIdx+1).filter(r=>r>5).length;
 
   let insightTxt = '';
-  if (past7Rain > 100) insightTxt += `⚠️ <b>ฝนตกหนักใน 7 วันที่ผ่านมา</b> รวม ${past7Rain.toFixed(0)}mm — คุณภาพน้ำอาจเปลี่ยนแปลงฉับพลัน `;
+  if (past7Rain > 100) insightTxt += ` <b>ฝนตกหนักใน 7 วันที่ผ่านมา</b> รวม ${past7Rain.toFixed(0)}mm — คุณภาพน้ำอาจเปลี่ยนแปลงฉับพลัน `;
   if (rainDaysPast >= 4) insightTxt += `ฝนตกต่อเนื่อง ${rainDaysPast} วัน อาจมีผลต่อค่า pH และแพลงก์ตอน `;
-  if (next7Rain > 80) insightTxt += `☁️ พยากรณ์ฝน 7 วันข้างหน้ารวม ${next7Rain.toFixed(0)}mm `;
-  if (avgTempPast > 31) insightTxt += `🌡️ อุณหภูมิเฉลี่ยสูง ${avgTempPast.toFixed(1)}°C — ออกซิเจนในน้ำอาจต่ำ `;
-  if (!insightTxt) insightTxt = '✅ สภาพอากาศในช่วง 7 วันที่ผ่านมาปกติ ไม่พบความเสี่ยงจากอากาศ';
+  if (next7Rain > 80) insightTxt += ` พยากรณ์ฝน 7 วันข้างหน้ารวม ${next7Rain.toFixed(0)}mm `;
+  if (avgTempPast > 31) insightTxt += ` อุณหภูมิเฉลี่ยสูง ${avgTempPast.toFixed(1)}°C — ออกซิเจนในน้ำอาจต่ำ `;
+  if (!insightTxt) insightTxt = ' สภาพอากาศในช่วง 7 วันที่ผ่านมาปกติ ไม่พบความเสี่ยงจากอากาศ';
 
   insight.style.display = 'block';
   insight.innerHTML = insightTxt;
@@ -1128,7 +1128,7 @@ function clearForm() {
   document.querySelectorAll('input,textarea').forEach(el=>{if(!el.readOnly)el.value='';});
   document.querySelectorAll('select').forEach(el=>el.selectedIndex=0);
   document.getElementById('densityHint').style.display='none';
-  document.getElementById('aiResult').innerHTML=`<div class="ai-card"><div class="ai-empty"><span class="ico">🤖</span><p>กรอกอาการที่พบ<br>แล้วกด "วิเคราะห์ด้วย AI"</p></div></div>`;
+  document.getElementById('aiResult').innerHTML=`<div class="ai-card"><div class="ai-empty"><span class="ico"></span><p>กรอกอาการที่พบ<br>แล้วกด "วิเคราะห์ด้วย AI"</p></div></div>`;
   document.getElementById('aiMeta').textContent='';
   lastCase = null;
 }

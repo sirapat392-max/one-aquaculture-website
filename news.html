@@ -67,7 +67,7 @@ body { padding-top: 68px; }
 <div class="ai-update-bar">
   <div class="dot"></div>
   <span id="updateStatus"></span>
-  <button id="refreshBtn" onclick="refreshNews()" data-i18n="news.refresh">🔄 อัปเดตข่าว</button>
+  <button id="refreshBtn" onclick="refreshNews()" data-i18n="news.refresh"> อัปเดตข่าว</button>
 </div>
 
 <div class="page-header">
@@ -78,20 +78,20 @@ body { padding-top: 68px; }
 
 <div class="cat-filter">
   <button class="cat-pill active" onclick="filterNews('all', this)"        data-i18n="news.filter.all">ทั้งหมด</button>
-  <button class="cat-pill" onclick="filterNews('regulation', this)"        data-i18n="news.filter.regulation">⚖️ กฎระเบียบ</button>
-  <button class="cat-pill" onclick="filterNews('research', this)"          data-i18n="news.filter.research">🔬 งานวิจัย</button>
-  <button class="cat-pill" onclick="filterNews('industry', this)"          data-i18n="news.filter.industry">🏭 อุตสาหกรรม</button>
-  <button class="cat-pill" onclick="filterNews('disease', this)"           data-i18n="news.filter.disease">🦠 โรคสัตว์น้ำ</button>
+  <button class="cat-pill" onclick="filterNews('regulation', this)"        data-i18n="news.filter.regulation"> กฎระเบียบ</button>
+  <button class="cat-pill" onclick="filterNews('research', this)"          data-i18n="news.filter.research"> งานวิจัย</button>
+  <button class="cat-pill" onclick="filterNews('industry', this)"          data-i18n="news.filter.industry"> อุตสาหกรรม</button>
+  <button class="cat-pill" onclick="filterNews('disease', this)"           data-i18n="news.filter.disease"> โรคสัตว์น้ำ</button>
 </div>
 
 <div class="news-container">
   <div class="news-grid" id="newsGrid">
     <div class="empty-news" style="grid-column:1/-1">
-      <div class="icon">📰</div>
+      <div class="icon"></div>
       <h3 data-i18n="news.loading">กำลังโหลดข่าวสาร...</h3>
       <p data-i18n="news.loading.wait">รอสักครู่</p>
-    </div>
-  </div>
+ </div>
+ </div>
   <div class="last-updated" id="lastUpdated"></div>
 </div>
 
@@ -126,10 +126,10 @@ async function loadNews() {
   } catch {
     document.getElementById('newsGrid').innerHTML = `
       <div class="empty-news" style="grid-column:1/-1">
-        <div class="icon">⚠️</div>
+        <div class="icon"></div>
         <h3>${t('news.empty.title')}</h3>
         <p>${t('news.empty.desc')}</p>
-      </div>`;
+ </div>`;
   }
 }
 
@@ -137,7 +137,7 @@ function renderNews(articles) {
   const grid = document.getElementById('newsGrid');
   const filtered = currentFilter === 'all' ? articles : articles.filter(a => a.category === currentFilter);
   if (!filtered.length) {
-    grid.innerHTML = `<div class="empty-news" style="grid-column:1/-1"><div class="icon">🔍</div><h3>${t('news.noresult.title')}</h3><p>${t('news.noresult.desc')}</p></div>`;
+    grid.innerHTML = `<div class="empty-news" style="grid-column:1/-1"><div class="icon"></div><h3>${t('news.noresult.title')}</h3><p>${t('news.noresult.desc')}</p></div>`;
     return;
   }
   const catMap = getCatMap();
@@ -154,9 +154,9 @@ function renderNews(articles) {
         <div class="news-meta">
           <span class="news-source">${a.source || ''}</span>
           <span class="news-date">${a.date || ''}</span>
-        </div>
-      </div>
-    </a>`;
+ </div>
+ </div>
+ </a>`;
   }).join('');
 }
 

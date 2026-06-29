@@ -12,10 +12,18 @@ const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname)));
 
-// redirect /index.html → /
-app.get('/index.html', (req, res) => res.redirect(301, '/'));
+// redirect *.html → clean URL (must be before static)
+app.use((req, res, next) => {
+  if (req.path.endsWith('.html')) {
+    const clean = req.path === '/index.html' ? '/' : req.path.slice(0, -5);
+    return res.redirect(301, clean);
+  }
+  next();
+});
+
+// serve static files; fall back to .html extension for clean URLs
+app.use(express.static(path.join(__dirname), { extensions: ['html'] }));
 
 // Load locked company data — AI must not deviate from this
 const companyData = JSON.parse(fs.readFileSync(path.join(__dirname, 'company-data.json'), 'utf-8'));
