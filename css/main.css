@@ -81,6 +81,8 @@ footer { background: var(--text-dark); color: rgba(255,255,255,0.7); padding: 48
 .footer-col a:hover { color: var(--gold); }
 .footer-bottom { padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
 .footer-bottom p { font-size: 12px; color: rgba(255,255,255,0.35); }
+.vet-secret-btn { font-size: 12px; opacity: 0.06; text-decoration: none; transition: opacity .4s; user-select: none; }
+.vet-secret-btn:hover { opacity: 0.5; }
 
 /* REVEAL ANIM */
 .reveal { opacity: 0; transform: translateY(24px); transition: opacity .5s ease, transform .5s ease; }

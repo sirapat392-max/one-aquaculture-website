@@ -451,6 +451,16 @@
   /* ─── SCROLL REVEAL ─── */
   .reveal { opacity: 0; transform: translateY(30px); transition: opacity .6s ease, transform .6s ease; }
   .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── LANG SWITCHER ─── */
+  .lang-switcher { display: flex; align-items: center; gap: 2px; background: rgba(255,255,255,0.12); border-radius: 20px; padding: 3px; flex-shrink: 0; }
+  .lang-btn { padding: 4px 10px; border-radius: 16px; border: none; background: transparent; color: var(--text-soft); font-size: 11px; font-weight: 700; cursor: pointer; font-family: inherit; letter-spacing: .5px; transition: all .15s; }
+  .lang-btn.active { background: var(--wine); color: white; }
+  .lang-btn:hover:not(.active) { color: var(--wine); }
+
+  /* ─── VET SECRET BTN ─── */
+  .vet-secret-btn { font-size: 12px; opacity: 0.06; text-decoration: none; transition: opacity .4s; user-select: none; }
+  .vet-secret-btn:hover { opacity: 0.5; }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="js/i18n.js"></script>
@@ -477,17 +487,17 @@
     </div>
   </a>
   <ul class="nav-links">
-    <li><a href="#about">เกี่ยวกับเรา</a></li>
-    <li><a href="#products">ผลิตภัณฑ์</a></li>
-    <li><a href="ai-diagnosis.html" style="color:var(--wine);font-weight:700;">🤖 วิเคราะห์โรคกุ้ง</a></li>
-    <li><a href="#why">ทำไมต้องเรา</a></li>
-    <li><a href="#contact">ติดต่อ</a></li>
+    <li><a href="about.html" data-i18n="nav.about">เกี่ยวกับเรา</a></li>
+    <li><a href="products.html" data-i18n="nav.products">ผลิตภัณฑ์</a></li>
+    <li><a href="ai-diagnosis.html" data-i18n="nav.diagnosis">🦐 ShrimpDx</a></li>
+    <li><a href="#why" data-i18n="nav.why">ทำไมต้องเรา</a></li>
+    <li><a href="contact.html" data-i18n="nav.contact">ติดต่อ</a></li>
   </ul>
   <div class="lang-switcher">
     <button class="lang-btn" data-lang="th" onclick="setLang('th')">TH</button>
     <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
   </div>
-  <a href="#contact" class="nav-cta" data-i18n="nav.cta">ปรึกษาผู้เชี่ยวชาญ</a>
+  <a href="ai-diagnosis.html" class="nav-cta" data-i18n="nav.cta">ปรึกษาผู้เชี่ยวชาญ</a>
   <button class="nav-hamburger" aria-label="menu">
     <span></span><span></span><span></span>
   </button>
@@ -512,7 +522,7 @@
       ให้บริการกว่า 100 ฟาร์มทั่วภาคใต้อ่าวไทย อันดามัน และภาคกลาง
     </p>
     <div class="hero-actions">
-      <a href="#contact" class="btn-primary">📞 ปรึกษาผู้เชี่ยวชาญฟรี</a>
+      <a href="ai-diagnosis.html" class="btn-primary">🦐 วิเคราะห์โรคกุ้ง AI ฟรี</a>
       <a href="https://www.facebook.com/profile.php?id=100075538372879" target="_blank" class="btn-outline" style="display:inline-flex;align-items:center;gap:8px;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
         Facebook
@@ -544,16 +554,16 @@
   </div>
   <div style="width:1px;height:20px;background:rgba(255,255,255,0.2);flex-shrink:0;"></div>
   <div style="display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.85);font-size:13px;font-weight:600;">
-    <span style="font-size:18px;">🐠</span> ภาคใต้อ่าวไทย · อันดามัน · ภาคกลาง
+    <span style="font-size:18px;">🐠</span> <span data-i18n="idx.trust.2">ภาคใต้อ่าวไทย · อันดามัน · ภาคกลาง</span>
   </div>
   <div style="width:1px;height:20px;background:rgba(255,255,255,0.2);flex-shrink:0;"></div>
   <div style="display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.85);font-size:13px;font-weight:600;">
-    <span style="font-size:18px;">🤝</span> ไว้วางใจโดยกว่า 100 ฟาร์มเชิงพาณิชย์
+    <span style="font-size:18px;">🤝</span> <span data-i18n="idx.trust.3">ไว้วางใจโดยกว่า 100 ฟาร์มเชิงพาณิชย์</span>
   </div>
   <div style="width:1px;height:20px;background:rgba(255,255,255,0.2);flex-shrink:0;"></div>
   <a href="https://www.facebook.com/profile.php?id=100075538372879" target="_blank" style="display:flex;align-items:center;gap:8px;color:#90CAF9;font-size:13px;font-weight:700;text-decoration:none;">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-    ติดตามบน Facebook
+    <span data-i18n="idx.trust.fb">ติดตามบน Facebook</span>
   </a>
 </div>
 
@@ -567,32 +577,32 @@
       </div>
     </div>
     <div class="reveal">
-      <div class="section-tag">เกี่ยวกับเรา · About Us</div>
-      <h2 class="section-title">วัน อควาคัลเจอร์ โปรดัคท์</h2>
-      <p class="section-title-en">One Aquaculture Product Co., Ltd. · ก่อตั้ง 2564</p>
-      <p class="section-desc">
+      <div class="section-tag" data-i18n="idx.about.tag">เกี่ยวกับเรา · About Us</div>
+      <h2 class="section-title" data-i18n="idx.about.title">วัน อควาคัลเจอร์ โปรดัคท์</h2>
+      <p class="section-title-en" data-i18n="idx.about.sub">One Aquaculture Product Co., Ltd. · ก่อตั้ง 2564</p>
+      <p class="section-desc" data-i18n-html="idx.about.desc">
         ผลิตและจำหน่ายเวชภัณฑ์สัตว์น้ำ<strong>คุณภาพสูง</strong> ครอบคลุมวิตามิน แร่ธาตุ สารบำบัดน้ำ สารฆ่าเชื้อ และสารปรับสภาพน้ำ สำหรับการเพาะเลี้ยงกุ้งเชิงพาณิชย์ ทดสอบและพัฒนาจากหน้างานจริง ปัจจุบันดูแลกว่า <strong>100 ฟาร์ม</strong> ทั่วภาคใต้อ่าวไทย อันดามัน และภาคกลาง
       </p>
       <div class="about-features">
         <div class="feature-item">
           <div class="feature-icon">🎯</div>
           <div>
-            <h4>คัดสินค้าจากหน้างานจริง</h4>
-            <p>เลือกเฉพาะสินค้าที่ใช้ได้จริงในฟาร์ม ไม่ขายเกินจำเป็น เน้นผลลัพธ์</p>
+            <h4 data-i18n="idx.about.f1.title">คัดสินค้าจากหน้างานจริง</h4>
+            <p data-i18n="idx.about.f1.desc">เลือกเฉพาะสินค้าที่ใช้ได้จริงในฟาร์ม ไม่ขายเกินจำเป็น เน้นผลลัพธ์</p>
           </div>
         </div>
         <div class="feature-item">
           <div class="feature-icon">🌾</div>
           <div>
-            <h4>ฟาร์มตัวอย่างให้เยี่ยมชม</h4>
-            <p>มีฟาร์มตัวอย่างที่ประสบความสำเร็จ เป็นแหล่งทดสอบและถ่ายทอดองค์ความรู้</p>
+            <h4 data-i18n="idx.about.f2.title">ฟาร์มตัวอย่างให้เยี่ยมชม</h4>
+            <p data-i18n="idx.about.f2.desc">มีฟาร์มตัวอย่างที่ประสบความสำเร็จ เป็นแหล่งทดสอบและถ่ายทอดองค์ความรู้</p>
           </div>
         </div>
         <div class="feature-item">
           <div class="feature-icon">🤖</div>
           <div>
-            <h4>ผสานหน้างานกับ AI</h4>
-            <p>AI หมอปลาวาฬ ตอบคำถามด้านการเลี้ยงกุ้ง 24 ชั่วโมง พัฒนาโดยทีมงาน ONE</p>
+            <h4 data-i18n="idx.about.f3.title">ผสานหน้างานกับ AI</h4>
+            <p data-i18n="idx.about.f3.desc">ShrimpDx ตอบคำถามด้านการเลี้ยงกุ้ง 24 ชั่วโมง พัฒนาโดยทีมงาน ONE</p>
           </div>
         </div>
       </div>
@@ -603,10 +613,9 @@
 <!-- PRODUCTS -->
 <section id="products">
   <div class="text-center reveal">
-    <div class="section-tag">ผลิตภัณฑ์ · Products</div>
-    <h2 class="section-title">กลุ่มผลิตภัณฑ์ของเรา</h2>
-    <p class="section-title-en">Our Product Lines</p>
-    <p class="section-desc">
+    <div class="section-tag" data-i18n="idx.prod.tag">ผลิตภัณฑ์ · Products</div>
+    <h2 class="section-title" data-i18n="idx.prod.title">กลุ่มผลิตภัณฑ์ของเรา</h2>
+    <p class="section-desc" data-i18n="idx.prod.desc">
       ผลิตภัณฑ์ชีวภาพครบวงจร ออกแบบมาสำหรับทุกขั้นตอนของการเพาะเลี้ยงสัตว์น้ำ
     </p>
   </div>
@@ -614,76 +623,71 @@
     <div class="product-card reveal">
       <div class="product-card-header">
         <span class="product-icon">💊</span>
-        <h3>วิตามิน และ อาหารเสริม</h3>
-        <p>Vitamins &amp; Supplements</p>
+        <h3 data-i18n="idx.prod.p1.title">วิตามิน และ อาหารเสริม</h3>
       </div>
       <div class="product-card-body">
-        <p>วิตามินและอาหารเสริมคุณภาพสูงสำหรับสัตว์น้ำ เสริมภูมิคุ้มกัน เพิ่มความแข็งแรง และส่งเสริมการเจริญเติบโต</p>
+        <p data-i18n="idx.prod.p1.desc">วิตามินและอาหารเสริมคุณภาพสูงสำหรับสัตว์น้ำ เสริมภูมิคุ้มกัน เพิ่มความแข็งแรง และส่งเสริมการเจริญเติบโต</p>
         <div class="product-tags">
-          <span class="product-tag">เสริมภูมิคุ้มกัน</span>
-          <span class="product-tag">เพิ่มการเจริญเติบโต</span>
+          <span class="product-tag" data-i18n="idx.prod.p1.t1">เสริมภูมิคุ้มกัน</span>
+          <span class="product-tag" data-i18n="idx.prod.p1.t2">เพิ่มการเจริญเติบโต</span>
         </div>
-        <a href="products.html" class="product-link">ดูรายละเอียด →</a>
+        <a href="products.html" class="product-link" data-i18n="idx.prod.link">ดูรายละเอียด →</a>
       </div>
     </div>
     <div class="product-card reveal">
       <div class="product-card-header">
         <span class="product-icon">⚡</span>
-        <h3>แร่ธาตุ</h3>
-        <p>Minerals</p>
+        <h3 data-i18n="idx.prod.p2.title">แร่ธาตุ</h3>
       </div>
       <div class="product-card-body">
-        <p>แร่ธาตุที่จำเป็นสำหรับการลอกคราบและการเจริญเติบโตของสัตว์น้ำ ปรับสมดุลแร่ธาตุในน้ำและร่างกายสัตว์น้ำ</p>
+        <p data-i18n="idx.prod.p2.desc">แร่ธาตุที่จำเป็นสำหรับการลอกคราบและการเจริญเติบโตของสัตว์น้ำ ปรับสมดุลแร่ธาตุในน้ำและร่างกายสัตว์น้ำ</p>
         <div class="product-tags">
-          <span class="product-tag">ส่งเสริมการลอกคราบ</span>
-          <span class="product-tag">สมดุลแร่ธาตุ</span>
+          <span class="product-tag" data-i18n="idx.prod.p2.t1">ส่งเสริมการลอกคราบ</span>
+          <span class="product-tag" data-i18n="idx.prod.p2.t2">สมดุลแร่ธาตุ</span>
         </div>
-        <a href="products.html" class="product-link">ดูรายละเอียด →</a>
+        <a href="products.html" class="product-link" data-i18n="idx.prod.link">ดูรายละเอียด →</a>
       </div>
     </div>
     <div class="product-card reveal">
       <div class="product-card-header">
         <span class="product-icon">💧</span>
-        <h3>สารบำบัดน้ำ</h3>
-        <p>Water Treatment</p>
+        <h3 data-i18n="idx.prod.p3.title">สารบำบัดน้ำ</h3>
       </div>
       <div class="product-card-body">
-        <p>โปรไบโอติกส์และสารบำบัดน้ำสำหรับบ่อเลี้ยงสัตว์น้ำ ปรับสมดุลจุลินทรีย์ ลดแอมโมเนีย และปรับปรุงคุณภาพน้ำ</p>
+        <p data-i18n="idx.prod.p3.desc">โปรไบโอติกส์และสารบำบัดน้ำสำหรับบ่อเลี้ยงสัตว์น้ำ ปรับสมดุลจุลินทรีย์ ลดแอมโมเนีย และปรับปรุงคุณภาพน้ำ</p>
         <div class="product-tags">
-          <span class="product-tag">ลดแอมโมเนีย</span>
+          <span class="product-tag" data-i18n="idx.prod.p3.t1">ลดแอมโมเนีย</span>
           <span class="product-tag">Probiotics</span>
         </div>
-        <a href="products.html" class="product-link">ดูรายละเอียด →</a>
+        <a href="products.html" class="product-link" data-i18n="idx.prod.link">ดูรายละเอียด →</a>
       </div>
     </div>
     <div class="product-card reveal">
       <div class="product-card-header">
         <span class="product-icon">🛡️</span>
-        <h3>สารฆ่าเชื้อ</h3>
-        <p>Disinfectants</p>
+        <h3 data-i18n="idx.prod.p4.title">สารฆ่าเชื้อ</h3>
       </div>
       <div class="product-card-body">
-        <p>สารฆ่าเชื้อและควบคุมเชื้อโรคในบ่อเลี้ยงสัตว์น้ำ ลดความเสี่ยงการเกิดโรคและควบคุมเชื้อก่อโรคในระบบน้ำ</p>
+        <p data-i18n="idx.prod.p4.desc">สารฆ่าเชื้อและควบคุมเชื้อโรคในบ่อเลี้ยงสัตว์น้ำ ลดความเสี่ยงการเกิดโรคและควบคุมเชื้อก่อโรคในระบบน้ำ</p>
         <div class="product-tags">
-          <span class="product-tag">ฆ่าเชื้อโรค</span>
-          <span class="product-tag">ป้องกันโรค</span>
+          <span class="product-tag" data-i18n="idx.prod.p4.t1">ฆ่าเชื้อโรค</span>
+          <span class="product-tag" data-i18n="idx.prod.p4.t2">ป้องกันโรค</span>
         </div>
-        <a href="products.html" class="product-link">ดูรายละเอียด →</a>
+        <a href="products.html" class="product-link" data-i18n="idx.prod.link">ดูรายละเอียด →</a>
       </div>
     </div>
     <div class="product-card reveal">
       <div class="product-card-header">
         <span class="product-icon">🌊</span>
-        <h3>สารปรับสภาพน้ำ</h3>
-        <p>Water Conditioners</p>
+        <h3 data-i18n="idx.prod.p5.title">สารปรับสภาพน้ำ</h3>
       </div>
       <div class="product-card-body">
-        <p>สารปรับสภาพน้ำสำหรับบ่อเลี้ยงสัตว์น้ำ ปรับ pH ปรับความกระด้าง และสร้างสภาพแวดล้อมที่เหมาะสมกับการเพาะเลี้ยง</p>
+        <p data-i18n="idx.prod.p5.desc">สารปรับสภาพน้ำสำหรับบ่อเลี้ยงสัตว์น้ำ ปรับ pH ปรับความกระด้าง และสร้างสภาพแวดล้อมที่เหมาะสมกับการเพาะเลี้ยง</p>
         <div class="product-tags">
-          <span class="product-tag">ปรับ pH</span>
-          <span class="product-tag">ปรับสภาพน้ำ</span>
+          <span class="product-tag" data-i18n="idx.prod.p5.t1">ปรับ pH</span>
+          <span class="product-tag" data-i18n="idx.prod.p5.t2">ปรับสภาพน้ำ</span>
         </div>
-        <a href="products.html" class="product-link">ดูรายละเอียด →</a>
+        <a href="products.html" class="product-link" data-i18n="idx.prod.link">ดูรายละเอียด →</a>
       </div>
     </div>
   </div>
@@ -695,21 +699,21 @@
   <div style="position:absolute;bottom:-60px;left:-60px;width:220px;height:220px;border-radius:50%;background:rgba(201,149,108,.08);pointer-events:none;"></div>
   <div style="max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;position:relative;z-index:1;" class="ai-diag-grid">
     <div class="reveal">
-      <div style="display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:24px;padding:5px 16px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.9);margin-bottom:20px;">
+      <div style="display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:24px;padding:5px 16px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.9);margin-bottom:20px;" data-i18n="idx.ai.tag">
         🤖 ONE AI · วิเคราะห์โรคกุ้ง
       </div>
-      <h2 style="font-size:clamp(28px,4vw,42px);font-weight:800;color:white;line-height:1.2;margin-bottom:12px;">วินิจฉัยโรคกุ้ง<br>ด้วย AI ทันที</h2>
-      <p style="font-size:16px;color:rgba(255,255,255,.75);line-height:1.8;max-width:440px;margin-bottom:28px;">กรอกอาการที่พบ ข้อมูลบ่อ และค่าน้ำ — AI วิเคราะห์โรคที่เป็นไปได้พร้อม Differential Diagnosis confidence bars และแนะนำผลิตภัณฑ์ ONE ที่เหมาะสม</p>
+      <h2 style="font-size:clamp(28px,4vw,42px);font-weight:800;color:white;line-height:1.2;margin-bottom:12px;" data-i18n-html="idx.ai.title">วินิจฉัยโรคกุ้ง<br>ด้วย AI ทันที</h2>
+      <p style="font-size:16px;color:rgba(255,255,255,.75);line-height:1.8;max-width:440px;margin-bottom:28px;" data-i18n="idx.ai.desc">กรอกอาการที่พบ ข้อมูลบ่อ และค่าน้ำ — AI วิเคราะห์โรคที่เป็นไปได้พร้อม Differential Diagnosis confidence bars และแนะนำผลิตภัณฑ์ ONE ที่เหมาะสม</p>
       <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px;">
-        <span style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:6px 14px;font-size:13px;color:rgba(255,255,255,.85);font-weight:500;">🩺 วินิจฉัยโรค</span>
-        <span style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:6px 14px;font-size:13px;color:rgba(255,255,255,.85);font-weight:500;">💧 วิเคราะห์ค่าน้ำ</span>
-        <span style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:6px 14px;font-size:13px;color:rgba(255,255,255,.85);font-weight:500;">🔬 Differential Dx</span>
-        <span style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:6px 14px;font-size:13px;color:rgba(255,255,255,.85);font-weight:500;">💬 ถาม-ตอบ AI</span>
+        <span style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:6px 14px;font-size:13px;color:rgba(255,255,255,.85);font-weight:500;" data-i18n="idx.ai.b1">🩺 วินิจฉัยโรค</span>
+        <span style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:6px 14px;font-size:13px;color:rgba(255,255,255,.85);font-weight:500;" data-i18n="idx.ai.b2">💧 วิเคราะห์ค่าน้ำ</span>
+        <span style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:6px 14px;font-size:13px;color:rgba(255,255,255,.85);font-weight:500;" data-i18n="idx.ai.b3">🔬 Differential Dx</span>
+        <span style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:6px 14px;font-size:13px;color:rgba(255,255,255,.85);font-weight:500;" data-i18n="idx.ai.b4">💬 ถาม-ตอบ AI</span>
       </div>
-      <a href="ai-diagnosis.html" style="display:inline-flex;align-items:center;gap:10px;background:white;color:var(--wine-dark);padding:15px 32px;border-radius:32px;font-size:16px;font-weight:700;text-decoration:none;transition:all .25s;box-shadow:0 6px 24px rgba(0,0,0,.2);" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 10px 32px rgba(0,0,0,.3)'" onmouseout="this.style.transform='';this.style.boxShadow='0 6px 24px rgba(0,0,0,.2)'">
+      <a href="ai-diagnosis.html" style="display:inline-flex;align-items:center;gap:10px;background:white;color:var(--wine-dark);padding:15px 32px;border-radius:32px;font-size:16px;font-weight:700;text-decoration:none;transition:all .25s;box-shadow:0 6px 24px rgba(0,0,0,.2);" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 10px 32px rgba(0,0,0,.3)'" onmouseout="this.style.transform='';this.style.boxShadow='0 6px 24px rgba(0,0,0,.2)'" data-i18n="idx.ai.btn">
         🔍 เริ่มวิเคราะห์โรคกุ้ง →
       </a>
-      <div style="margin-top:16px;font-size:12px;color:rgba(255,255,255,.5);">ฟรี · ไม่ต้องสมัครสมาชิก · ใช้งานได้ทันที</div>
+      <div style="margin-top:16px;font-size:12px;color:rgba(255,255,255,.5);" data-i18n="idx.ai.free">ฟรี · ไม่ต้องสมัครสมาชิก · ใช้งานได้ทันที</div>
     </div>
     <div class="reveal" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:24px;backdrop-filter:blur(8px);">
       <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px;">
@@ -749,10 +753,9 @@
 <!-- WHY ONE -->
 <section class="why" id="why">
   <div class="text-center reveal">
-    <div class="section-tag">ทำไมต้องเลือกเรา · Why ONE</div>
-    <h2 class="section-title">100+ ฟาร์มเลือกเรา ไม่ใช่เพราะโฆษณา</h2>
-    <p class="section-title-en">Chosen by Farmers, Proven in the Field</p>
-    <p class="section-desc">
+    <div class="section-tag" data-i18n="idx.why.tag">ทำไมต้องเลือกเรา · Why ONE</div>
+    <h2 class="section-title" data-i18n="idx.why.title">100+ ฟาร์มเลือกเรา ไม่ใช่เพราะโฆษณา</h2>
+    <p class="section-desc" data-i18n="idx.why.desc">
       ทีมงานลงพื้นที่จริง ผลิตภัณฑ์ทดสอบในบ่อเลี้ยงจริง และยืนหยัดข้างผู้เลี้ยงทุกขั้นตอน
     </p>
   </div>
@@ -760,26 +763,26 @@
     <div class="why-card reveal">
       <div class="why-num">01</div>
       <span class="why-icon">🏷️</span>
-      <h4>คุณภาพพิสูจน์จากฟาร์มจริง</h4>
-      <p>ผลิตภัณฑ์ ONE AQUACULTURE PRODUCT ควบคุมสูตรและคุณภาพโดยตรง ทดสอบในบ่อเลี้ยงเชิงพาณิชย์ก่อนวางจำหน่าย</p>
+      <h4 data-i18n="idx.why.c1.title">คุณภาพพิสูจน์จากฟาร์มจริง</h4>
+      <p data-i18n="idx.why.c1.desc">ผลิตภัณฑ์ ONE AQUACULTURE PRODUCT ควบคุมสูตรและคุณภาพโดยตรง ทดสอบในบ่อเลี้ยงเชิงพาณิชย์ก่อนวางจำหน่าย</p>
     </div>
     <div class="why-card reveal">
       <div class="why-num">02</div>
       <span class="why-icon">🌾</span>
-      <h4>ทดสอบจากฟาร์มจริง ไม่ใช่ห้องแล็บ</h4>
-      <p>มีฟาร์มตัวอย่างให้เยี่ยมชม เห็นผลจริงก่อนซื้อ ทุกผลิตภัณฑ์ผ่านการทดสอบในบ่อเลี้ยงเชิงพาณิชย์จริง</p>
+      <h4 data-i18n="idx.why.c2.title">ทดสอบจากฟาร์มจริง ไม่ใช่ห้องแล็บ</h4>
+      <p data-i18n="idx.why.c2.desc">มีฟาร์มตัวอย่างให้เยี่ยมชม เห็นผลจริงก่อนซื้อ ทุกผลิตภัณฑ์ผ่านการทดสอบในบ่อเลี้ยงเชิงพาณิชย์จริง</p>
     </div>
     <div class="why-card reveal">
       <div class="why-num">03</div>
       <span class="why-icon">🤖</span>
-      <h4>AI หมอปลาวาฬ ช่วยได้ทันที 24 ชม.</h4>
-      <p>วิเคราะห์โรคกุ้ง ค่าน้ำ และแนะนำผลิตภัณฑ์ที่เหมาะสม ตอบคำถามได้ทันทีไม่ต้องรอทีมงาน</p>
+      <h4 data-i18n="idx.why.c3.title">ShrimpDx ช่วยได้ทันที 24 ชม.</h4>
+      <p data-i18n="idx.why.c3.desc">วิเคราะห์โรคกุ้ง ค่าน้ำ และแนะนำผลิตภัณฑ์ที่เหมาะสม ตอบคำถามได้ทันทีไม่ต้องรอทีมงาน</p>
     </div>
     <div class="why-card reveal">
       <div class="why-num">04</div>
       <span class="why-icon">📍</span>
-      <h4>ลงพื้นที่ 3 ภูมิภาค ไม่ใช่แค่ขายออนไลน์</h4>
-      <p>ทีมงานลงพื้นที่จริงทั่วภาคใต้อ่าวไทย อันดามัน และภาคกลาง ติดตามผลต่อเนื่อง ไม่หายหลังขาย</p>
+      <h4 data-i18n="idx.why.c4.title">ลงพื้นที่ 3 ภูมิภาค ไม่ใช่แค่ขายออนไลน์</h4>
+      <p data-i18n="idx.why.c4.desc">ทีมงานลงพื้นที่จริงทั่วภาคใต้อ่าวไทย อันดามัน และภาคกลาง ติดตามผลต่อเนื่อง ไม่หายหลังขาย</p>
     </div>
   </div>
 </section>
@@ -787,31 +790,30 @@
 <!-- PROCESS -->
 <section id="process">
   <div class="text-center reveal">
-    <div class="section-tag">กระบวนการ · Process</div>
-    <h2 class="section-title">เริ่มต้นกับเราง่ายๆ</h2>
-    <p class="section-title-en">How to Get Started</p>
-    <p class="section-desc">เพียง 4 ขั้นตอนสู่ผลิตภัณฑ์คุณภาพในมือคุณ</p>
+    <div class="section-tag" data-i18n="idx.proc.tag">กระบวนการ · Process</div>
+    <h2 class="section-title" data-i18n="idx.proc.title">เริ่มต้นกับเราง่ายๆ</h2>
+    <p class="section-desc" data-i18n="idx.proc.desc">เพียง 4 ขั้นตอนสู่ผลิตภัณฑ์คุณภาพในมือคุณ</p>
   </div>
   <div class="process-steps">
     <div class="process-step reveal">
       <div class="step-num">1</div>
-      <h4>ปรึกษาผู้เชี่ยวชาญ<br><small style="font-weight:400;font-size:11px;">Consultation</small></h4>
-      <p>แจ้งข้อมูลบ่อเลี้ยง ชนิดสัตว์น้ำ และปัญหาที่พบ</p>
+      <h4 data-i18n="idx.proc.s1.title">ปรึกษาผู้เชี่ยวชาญ</h4>
+      <p data-i18n="idx.proc.s1.desc">แจ้งข้อมูลบ่อเลี้ยง ชนิดสัตว์น้ำ และปัญหาที่พบ</p>
     </div>
     <div class="process-step reveal">
       <div class="step-num">2</div>
-      <h4>เลือกผลิตภัณฑ์<br><small style="font-weight:400;font-size:11px;">Product Selection</small></h4>
-      <p>ทีมผู้เชี่ยวชาญแนะนำผลิตภัณฑ์ที่เหมาะสม</p>
+      <h4 data-i18n="idx.proc.s2.title">เลือกผลิตภัณฑ์</h4>
+      <p data-i18n="idx.proc.s2.desc">ทีมผู้เชี่ยวชาญแนะนำผลิตภัณฑ์ที่เหมาะสม</p>
     </div>
     <div class="process-step reveal">
       <div class="step-num">3</div>
-      <h4>ทดลองใช้<br><small style="font-weight:400;font-size:11px;">Trial Run</small></h4>
-      <p>ทดสอบในบ่อจริง ติดตามผล และปรับแผนการใช้</p>
+      <h4 data-i18n="idx.proc.s3.title">ทดลองใช้</h4>
+      <p data-i18n="idx.proc.s3.desc">ทดสอบในบ่อจริง ติดตามผล และปรับแผนการใช้</p>
     </div>
     <div class="process-step reveal">
       <div class="step-num">4</div>
-      <h4>ติดตามผลลัพธ์<br><small style="font-weight:400;font-size:11px;">Follow-up</small></h4>
-      <p>ทีมงานติดตามผลและให้คำแนะนำต่อเนื่อง</p>
+      <h4 data-i18n="idx.proc.s4.title">ติดตามผลลัพธ์</h4>
+      <p data-i18n="idx.proc.s4.desc">ทีมงานติดตามผลและให้คำแนะนำต่อเนื่อง</p>
     </div>
   </div>
 </section>
@@ -819,13 +821,9 @@
 <!-- NEWS & KNOWLEDGE -->
 <section id="news" style="background:var(--gray-light);">
   <div class="text-center reveal">
-    <div class="section-tag">ข่าวสาร &amp; ความรู้ · News &amp; Knowledge</div>
-    <h2 class="section-title">อัปเดตจากวงการ</h2>
-    <p class="section-title-en">Industry Updates &amp; Research</p>
-    <p class="section-desc">คัดสรรข่าวสารและงานวิจัยล่าสุดจากแหล่งข้อมูลที่น่าเชื่อถือ</p>
-    <div style="display:inline-flex;align-items:center;gap:8px;background:var(--wine-pale);border:1px solid var(--wine-pale);padding:6px 14px;border-radius:24px;margin-top:12px;font-size:12px;color:var(--wine-dark);font-weight:600;">
-      🤖 อัปเดตโดย AI · AI-curated links
-    </div>
+    <div class="section-tag" data-i18n="idx.news.tag">ข่าวสาร & ความรู้ · News & Knowledge</div>
+    <h2 class="section-title" data-i18n="idx.news.title">อัปเดตจากวงการ</h2>
+    <p class="section-desc" data-i18n="idx.news.desc">คัดสรรข่าวสารและงานวิจัยล่าสุดจากแหล่งข้อมูลที่น่าเชื่อถือ</p>
   </div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;margin-top:48px;max-width:1100px;margin-left:auto;margin-right:auto;">
 
@@ -878,9 +876,6 @@
     </a>
 
   </div>
-  <div style="text-align:center;margin-top:40px;">
-    <p style="font-size:12px;color:var(--text-soft);">🤖 ลิงก์เหล่านี้คัดสรรและตรวจสอบโดย AI · AI-verified links from trusted sources</p>
-  </div>
 </section>
 
 <style>
@@ -908,10 +903,9 @@
 <!-- CONTACT -->
 <section class="contact" id="contact">
   <div class="text-center reveal">
-    <div class="section-tag">ติดต่อเรา · Contact</div>
-    <h2 class="section-title">พูดคุยกับเราได้เลย ฟรี ไม่มีข้อผูกมัด</h2>
-    <p class="section-title-en">Free Consultation · No Obligation</p>
-    <p class="section-desc" style="margin:0 auto;max-width:560px;">ทีมผู้เชี่ยวชาญพร้อมให้คำแนะนำเรื่องผลิตภัณฑ์และปัญหาในฟาร์มโดยตรง โทรหาเราเลยหรือทักทาง Facebook ได้ทันที</p>
+    <div class="section-tag" data-i18n="idx.con.tag">ติดต่อเรา · Contact</div>
+    <h2 class="section-title" data-i18n="idx.con.title">พูดคุยกับเราได้เลย ฟรี ไม่มีข้อผูกมัด</h2>
+    <p class="section-desc" style="margin:0 auto;max-width:560px;" data-i18n="idx.con.desc">ทีมผู้เชี่ยวชาญพร้อมให้คำแนะนำเรื่องผลิตภัณฑ์และปัญหาในฟาร์มโดยตรง โทรหาเราเลยหรือทักทาง Facebook ได้ทันที</p>
     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px;">
       <a href="tel:0625615639" style="display:inline-flex;align-items:center;gap:8px;background:var(--wine);color:white;padding:12px 24px;border-radius:32px;font-size:15px;font-weight:700;text-decoration:none;">📞 062-561-5639</a>
       <a href="https://www.facebook.com/profile.php?id=100075538372879" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#1877F2;color:white;padding:12px 24px;border-radius:32px;font-size:15px;font-weight:700;text-decoration:none;">
@@ -925,29 +919,29 @@
       <div class="contact-item">
         <div class="contact-icon">📍</div>
         <div>
-          <h4>ที่อยู่ · Address</h4>
+          <h4 data-i18n="idx.con.addr.h">ที่อยู่ · Address</h4>
           <p>บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด<br>315/3-X8 ซอยอ่อนนุช39 แขวงพัฒนาการ เขตสวนหลวง กรุงเทพมหานคร 10250</p>
         </div>
       </div>
       <div class="contact-item">
         <div class="contact-icon">📞</div>
         <div>
-          <h4>โทรศัพท์ · Phone</h4>
+          <h4 data-i18n="idx.con.phone.h">โทรศัพท์ · Phone</h4>
           <p>062-561-5639</p>
         </div>
       </div>
       <div class="contact-item">
         <div class="contact-icon">📧</div>
         <div>
-          <h4>อีเมล · Email</h4>
+          <h4 data-i18n="idx.con.email.h">อีเมล · Email</h4>
           <p>one.aquaculture.product@gmail.com</p>
         </div>
       </div>
       <div class="contact-item">
         <div class="contact-icon">🕐</div>
         <div>
-          <h4>เวลาทำการ · Business Hours</h4>
-          <p>จันทร์ – ศุกร์: 08:00 – 17:00 น.<br>Mon – Fri: 8AM – 5PM</p>
+          <h4 data-i18n="idx.con.hours.h">เวลาทำการ · Business Hours</h4>
+          <p data-i18n-html="idx.con.hours.v">จันทร์ – ศุกร์: 08:00 – 17:00 น.<br>Mon – Fri: 8AM – 5PM</p>
         </div>
       </div>
       <div class="contact-item">
@@ -955,14 +949,14 @@
           <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
         </div>
         <div>
-          <h4>Facebook · ติดต่อทันที</h4>
+          <h4 data-i18n="idx.con.fb.h">Facebook · ติดต่อทันที</h4>
           <p><a href="https://www.facebook.com/profile.php?id=100075538372879" target="_blank" style="color:var(--wine);font-weight:600;text-decoration:none;">ONE Aquaculture Product →</a></p>
         </div>
       </div>
     </div>
     <div class="contact-form reveal">
-      <div class="form-title">ส่งข้อความถึงเรา</div>
-      <div class="form-subtitle">Send us a message · เราจะติดต่อกลับภายใน 24 ชั่วโมง</div>
+      <div class="form-title" data-i18n="idx.con.form.title">ส่งข้อความถึงเรา</div>
+      <div class="form-subtitle" data-i18n="idx.con.form.sub">เราจะติดต่อกลับภายใน 24 ชั่วโมง</div>
       <form onsubmit="handleSubmit(event)">
         <div class="form-grid">
           <div class="form-group">
@@ -998,7 +992,7 @@
             <textarea id="contact-message" placeholder="บอกเราเพิ่มเติมเกี่ยวกับฟาร์มหรือความต้องการของคุณ...&#10;Tell us about your farm or needs..."></textarea>
           </div>
         </div>
-        <button type="submit" class="form-submit">ส่งข้อความ · Send Message</button>
+        <button type="submit" class="form-submit" data-i18n="idx.con.form.submit">ส่งข้อความ · Send Message</button>
       </form>
     </div>
   </div>
@@ -1015,49 +1009,46 @@
           <span>วัน อควาคัลเจอร์ โปรดัคท์</span>
         </div>
       </div>
-      <p class="footer-desc">เวชภัณฑ์สัตว์น้ำคุณภาพสูง ทดสอบจากหน้างานจริง ไว้วางใจโดยกว่า 100 ฟาร์ม ทั่วภาคใต้อ่าวไทย อันดามัน และภาคกลาง ก่อตั้ง 2564</p>
+      <p class="footer-desc" data-i18n="idx.foot.desc">เวชภัณฑ์สัตว์น้ำคุณภาพสูง ทดสอบจากหน้างานจริง ไว้วางใจโดยกว่า 100 ฟาร์ม ทั่วภาคใต้อ่าวไทย อันดามัน และภาคกลาง ก่อตั้ง 2564</p>
       <a href="https://www.facebook.com/profile.php?id=100075538372879" target="_blank" style="display:inline-flex;align-items:center;gap:8px;color:#90CAF9;font-size:13px;font-weight:600;text-decoration:none;margin-top:12px;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-        ติดตามบน Facebook
+        <span data-i18n="idx.foot.fb">ติดตามบน Facebook</span>
       </a>
       <div class="footer-wave">
         <svg viewBox="0 0 100 20" fill="none"><path d="M0,10 C25,2 50,18 75,10 C87,6 95,12 100,10" stroke="#C9956C" stroke-width="2" fill="none"/><path d="M0,15 C20,8 45,20 70,13 C82,9 92,15 100,14" stroke="#C9956C" stroke-width="1.5" fill="none" opacity="0.5"/></svg>
       </div>
     </div>
     <div class="footer-col">
-      <h5>ผลิตภัณฑ์ · Products</h5>
+      <h5 data-i18n="idx.foot.c1">ผลิตภัณฑ์ · Products</h5>
       <ul>
-        <li><a href="#">จุลินทรีย์ปรับสภาพน้ำ</a></li>
-        <li><a href="#">ผลิตภัณฑ์เสริมอาหาร</a></li>
-        <li><a href="#">ควบคุมโรค</a></li>
-        <li><a href="#">ปรับปรุงดินก้นบ่อ</a></li>
+        <li><a href="products.html#water" data-i18n="idx.foot.p1.1">จุลินทรีย์ปรับสภาพน้ำ</a></li>
+        <li><a href="products.html#feed" data-i18n="idx.foot.p1.2">ผลิตภัณฑ์เสริมอาหาร</a></li>
+        <li><a href="products.html#disease" data-i18n="idx.foot.p1.3">ควบคุมโรค</a></li>
+        <li><a href="products.html#soil" data-i18n="idx.foot.p1.4">ปรับปรุงดินก้นบ่อ</a></li>
       </ul>
     </div>
     <div class="footer-col">
-      <h5>บริษัท · Company</h5>
+      <h5 data-i18n="idx.foot.c2">บริษัท · Company</h5>
       <ul>
-        <li><a href="#about">เกี่ยวกับเรา</a></li>
-        <li><a href="#why">ทำไมต้องเรา</a></li>
-        <li><a href="#process">กระบวนการ</a></li>
-        <li><a href="#contact">ติดต่อเรา</a></li>
+        <li><a href="about.html" data-i18n="idx.foot.p2.1">เกี่ยวกับเรา</a></li>
+        <li><a href="#why" data-i18n="idx.foot.p2.2">ทำไมต้องเรา</a></li>
+        <li><a href="#process" data-i18n="idx.foot.p2.3">กระบวนการ</a></li>
+        <li><a href="contact.html" data-i18n="idx.foot.p2.4">ติดต่อเรา</a></li>
       </ul>
     </div>
     <div class="footer-col">
-      <h5>บริการ · Services</h5>
+      <h5 data-i18n="idx.foot.c3">บริการ · Services</h5>
       <ul>
-        <li><a href="ai-diagnosis.html">วิเคราะห์โรคกุ้ง AI</a></li>
-        <li><a href="contact.html">ขอใบเสนอราคา</a></li>
-        <li><a href="contact.html">ปรึกษาผู้เชี่ยวชาญ</a></li>
-        <li><a href="contact.html">ติดต่อเรา</a></li>
+        <li><a href="ai-diagnosis.html" data-i18n="idx.foot.p3.1">วิเคราะห์โรคกุ้ง AI</a></li>
+        <li><a href="contact.html" data-i18n="idx.foot.p3.2">ขอใบเสนอราคา</a></li>
+        <li><a href="contact.html" data-i18n="idx.foot.p3.3">ปรึกษาผู้เชี่ยวชาญ</a></li>
+        <li><a href="contact.html" data-i18n="idx.foot.p3.4">ติดต่อเรา</a></li>
       </ul>
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© 2569 บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด · One Aquaculture Product Co., Ltd. All rights reserved.</p>
-    <div class="footer-legal">
-      <a href="#">นโยบายความเป็นส่วนตัว</a>
-      <a href="#">ข้อกำหนดการใช้งาน</a>
-    </div>
+    <p data-i18n="idx.foot.copy">© 2569 บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด · One Aquaculture Product Co., Ltd. All rights reserved.</p>
+    <a href="vet-review.html" class="vet-secret-btn" title="Vet">🔒</a>
   </div>
 </footer>
 
@@ -1086,7 +1077,7 @@
     e.preventDefault();
     const btn = e.target.querySelector('.form-submit');
     btn.disabled = true;
-    btn.textContent = '⏳ กำลังส่ง…';
+    btn.textContent = '⏳ ' + (typeof t === 'function' ? t('idx.con.form.sub') : 'กำลังส่ง…');
     const params = {
       name:    document.getElementById('contact-name').value.trim(),
       company: document.getElementById('contact-company').value.trim(),
@@ -1097,20 +1088,20 @@
     };
     try {
       await emailjs.send(EJS_SERVICE_ID, EJS_TEMPLATE_ID, params);
-      btn.textContent = '✓ ส่งข้อความแล้ว · Message Sent!';
+      btn.textContent = typeof t === 'function' ? t('idx.con.form.ok') : '✓ ส่งข้อความแล้ว';
       btn.style.background = '#2ecc71';
       e.target.reset();
       setTimeout(() => {
-        btn.textContent = 'ส่งข้อความ · Send Message';
+        if (typeof applyI18n === 'function') applyI18n();
         btn.style.background = '';
         btn.disabled = false;
       }, 4000);
     } catch (err) {
-      btn.textContent = '❌ ส่งไม่สำเร็จ กรุณาลองใหม่';
+      btn.textContent = typeof t === 'function' ? t('idx.con.form.fail') : '❌ ส่งไม่สำเร็จ';
       btn.style.background = '#e74c3c';
       btn.disabled = false;
       setTimeout(() => {
-        btn.textContent = 'ส่งข้อความ · Send Message';
+        if (typeof applyI18n === 'function') applyI18n();
         btn.style.background = '';
       }, 4000);
     }

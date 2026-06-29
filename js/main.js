@@ -30,7 +30,7 @@ function navHTML() {
     ${links.map(l => `<li><a href="${l.href}" class="${currentPage===l.href?'active':''}" data-i18n="${l.key}">${t(l.key)}</a></li>`).join('')}
   </ul>
   ${langSwitcherHTML()}
-  <a href="contact.html" class="nav-cta" id="navCta" data-i18n="nav.cta">${t('nav.cta')}</a>
+  <a href="ai-diagnosis.html" class="nav-cta" id="navCta" data-i18n="nav.cta">${t('nav.cta')}</a>
   <button class="nav-hamburger" id="navHamburger" aria-label="เมนู">
     <span></span><span></span><span></span>
   </button>
@@ -82,6 +82,7 @@ function footerHTML() {
     </div>
     <div class="footer-bottom">
       <p data-i18n="footer.copy">${t('footer.copy')}</p>
+      <a href="vet-review.html" class="vet-secret-btn" title="Vet">🔒</a>
     </div>
   </div>
 </footer>`;
