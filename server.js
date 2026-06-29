@@ -398,15 +398,15 @@ ${listed}`
     newsRefreshLock = false;
   }
 }
-// On startup: refresh if news is older than 7 days
+// On startup: refresh if no news file or older than 1 day
 setTimeout(async () => {
   const newsFile = path.join(__dirname, 'news-data.json');
   try {
     const data = fs.existsSync(newsFile) ? JSON.parse(fs.readFileSync(newsFile, 'utf-8')) : {};
     const ageMs = data.lastUpdated ? Date.now() - new Date(data.lastUpdated) : Infinity;
-    if (ageMs > 7 * 24 * 3600_000) await autoRefreshNews();
+    if (ageMs > 24 * 3600_000) await autoRefreshNews();
   } catch {}
-}, 30_000);
+}, 5_000);
 
 // ─── CONTACT FORM EMAIL ───────────────────────────────────────────────────
 app.post('/api/contact', async (req, res) => {

@@ -119,6 +119,8 @@ body { padding-top: 68px; }
 <script>
 let allArticles = [];
 let currentFilter = 'all';
+const NEWS_CACHE_KEY = 'one_news_cache';
+const NEWS_CACHE_TTL = 6 * 60 * 60 * 1000; // 6 ชั่วโมง
 
 function getCatMap() {
   return {
@@ -129,41 +131,77 @@ function getCatMap() {
   };
 }
 
+function saveCache(data) {
+  try { localStorage.setItem(NEWS_CACHE_KEY, JSON.stringify({ ...data, cachedAt: Date.now() })); } catch {}
+}
+
+function loadCache() {
+  try {
+    const c = JSON.parse(localStorage.getItem(NEWS_CACHE_KEY) || 'null');
+    if (c && c.articles?.length && Date.now() - c.cachedAt < NEWS_CACHE_TTL) return c;
+  } catch {}
+  return null;
+}
+
+function showLastUpdated(data) {
+  if (!data.lastUpdated) return;
+  const d = new Date(data.lastUpdated);
+  const locale = getLang() === 'th' ? 'th-TH' : 'en-US';
+  document.getElementById('lastUpdated').textContent =
+    `${t('news.lastupdated')} ${d.toLocaleDateString(locale, { year:'numeric', month:'long', day:'numeric' })}`;
+  document.getElementById('updateStatus').textContent = '';
+}
+
 async function loadNews() {
+  // แสดง cache ก่อนทันที ถ้ามี
+  const cached = loadCache();
+  if (cached) {
+    allArticles = cached.articles;
+    renderNews(allArticles);
+    showLastUpdated(cached);
+    // fetch ใหม่ใน background โดยไม่บล็อก UI
+    fetchFreshNews(false);
+    return;
+  }
+
+  // ไม่มี cache — fetch และรอ
+  await fetchFreshNews(true);
+}
+
+async function fetchFreshNews(showLoading) {
   try {
     const res = await fetch(`${API}/api/news`);
     const data = await res.json();
-    allArticles = data.articles || [];
+    const articles = data.articles || [];
 
-    if (!allArticles.length) {
-      // ไม่มีข่าว — trigger refresh อัตโนมัติ
-      document.getElementById('newsGrid').innerHTML = `
-        <div class="empty-news" style="grid-column:1/-1">
-          <div class="icon">📡</div>
-          <h3>กำลังดึงข่าวใหม่...</h3>
-          <p>ระบบกำลังดึงข่าวสารล่าสุดจากแหล่งข้อมูล รอสักครู่ (~30 วินาที)</p>
-        </div>`;
-      document.getElementById('updateStatus').textContent = '⏳ กำลังดึงข่าวจาก RSS...';
-      await refreshNews();
+    if (!articles.length) {
+      if (showLoading) {
+        document.getElementById('newsGrid').innerHTML = `
+          <div class="empty-news" style="grid-column:1/-1">
+            <div class="icon">📡</div>
+            <h3>กำลังดึงข่าวใหม่...</h3>
+            <p>ระบบกำลังดึงข่าวสารล่าสุดจากแหล่งข้อมูล รอสักครู่ (~30 วินาที)</p>
+          </div>`;
+        document.getElementById('updateStatus').textContent = '⏳ กำลังดึงข่าวจาก RSS...';
+        await refreshNews();
+      }
       return;
     }
 
+    allArticles = articles;
+    saveCache(data);
     renderNews(allArticles);
-    if (data.lastUpdated) {
-      const d = new Date(data.lastUpdated);
-      const locale = getLang() === 'th' ? 'th-TH' : 'en-US';
-      document.getElementById('lastUpdated').textContent =
-        `${t('news.lastupdated')} ${d.toLocaleDateString(locale, { year:'numeric', month:'long', day:'numeric' })}`;
-      document.getElementById('updateStatus').textContent = '';
-    }
+    showLastUpdated(data);
   } catch {
-    document.getElementById('newsGrid').innerHTML = `
-      <div class="empty-news" style="grid-column:1/-1">
-        <div class="icon">📡</div>
-        <h3>${t('news.empty.title')}</h3>
-        <p>${t('news.empty.desc')}</p>
-        <button onclick="loadNews()" style="margin-top:16px;padding:10px 24px;border-radius:24px;background:#8B3060;color:white;border:none;font-size:14px;font-weight:700;cursor:pointer;">🔄 ลองอีกครั้ง</button>
-      </div>`;
+    if (showLoading) {
+      document.getElementById('newsGrid').innerHTML = `
+        <div class="empty-news" style="grid-column:1/-1">
+          <div class="icon">📡</div>
+          <h3>${t('news.empty.title')}</h3>
+          <p>${t('news.empty.desc')}</p>
+          <button onclick="loadNews()" style="margin-top:16px;padding:10px 24px;border-radius:24px;background:#8B3060;color:white;border:none;font-size:14px;font-weight:700;cursor:pointer;">🔄 ลองอีกครั้ง</button>
+        </div>`;
+    }
   }
 }
 
@@ -211,14 +249,9 @@ async function refreshNews() {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || res.status);
     allArticles = data.articles || [];
+    saveCache(data);
     renderNews(allArticles);
-    if (data.lastUpdated) {
-      const d = new Date(data.lastUpdated);
-      const locale = getLang() === 'th' ? 'th-TH' : 'en-US';
-      document.getElementById('lastUpdated').textContent =
-        `${t('news.lastupdated')} ${d.toLocaleDateString(locale, { year:'numeric', month:'long', day:'numeric' })}`;
-    }
-    document.getElementById('updateStatus').textContent = '';
+    showLastUpdated(data);
   } catch (e) {
     document.getElementById('updateStatus').textContent = e.message || 'อัปเดตไม่สำเร็จ';
     await loadNews();
