@@ -42,15 +42,15 @@ body {
 /* ===== HERO ===== */
 .page-hero {
   background: linear-gradient(135deg, var(--wine-deeper) 0%, var(--wine) 100%);
-  padding: 22px 20px 28px; color: white; position: relative; overflow: hidden;
+  padding: 80px 5% 60px; color: white; position: relative; overflow: hidden;
 }
-.page-hero::after { content:''; position:absolute; right:-60px; bottom:-60px; width:200px; height:200px; border-radius:50%; background:rgba(255,255,255,.07); }
-.page-hero::before { content:''; position:absolute; left:-40px; top:-40px; width:130px; height:130px; border-radius:50%; background:rgba(201,149,108,.12); }
-.hero-brand { display:flex; align-items:center; gap:8px; font-size:10.5px; letter-spacing:.18em; text-transform:uppercase; opacity:.85; font-weight:600; position:relative; z-index:2; margin-bottom:10px; }
-.hero-brand img { width:24px; height:24px; border-radius:50%; object-fit:cover; }
-.page-hero h1 { font-size:24px; font-weight:700; line-height:1.2; position:relative; z-index:2; margin-bottom:4px; }
-.page-hero p { font-size:12.5px; opacity:.8; position:relative; z-index:2; max-width:380px; }
-.version-pill { display:inline-block; background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.25); border-radius:100px; padding:3px 10px; font-size:9.5px; font-family:'JetBrains Mono',monospace; margin-top:8px; letter-spacing:.05em; position:relative; z-index:2; }
+.page-hero::after { content:''; position:absolute; right:-60px; bottom:-60px; width:240px; height:240px; border-radius:50%; background:rgba(255,255,255,.07); }
+.page-hero::before { content:''; position:absolute; left:-60px; top:-60px; width:180px; height:180px; border-radius:50%; background:rgba(201,149,108,.12); }
+.hero-inner { max-width: 1200px; margin: 0 auto; position: relative; z-index: 2; }
+.page-tag { display:inline-block; background:rgba(255,255,255,.15); color:rgba(255,255,255,.9); font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:4px 14px; border-radius:24px; margin-bottom:16px; }
+.page-hero h1 { font-size: clamp(28px,5vw,46px); font-weight:800; line-height:1.2; margin-bottom:10px; }
+.page-hero p { font-size:16px; opacity:.8; max-width:560px; line-height:1.7; }
+.version-pill { display:inline-block; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25); border-radius:100px; padding:4px 12px; font-size:11px; font-family:'JetBrains Mono',monospace; margin-top:14px; letter-spacing:.05em; }
 
 /* ===== NUDGE ===== */
 .nudge { margin:12px 16px 0; border-radius:12px; padding:10px 13px; display:flex; gap:9px; align-items:flex-start; font-size:12px; }
@@ -260,15 +260,6 @@ select {
   .ai-action-grid { grid-template-columns:1fr; }
 }
 
-/* ===== BACK BUTTON ===== */
-.back-home {
-  display:inline-flex; align-items:center; gap:5px;
-  color:rgba(255,255,255,.75); font-size:12px; font-weight:600;
-  text-decoration:none; margin-bottom:10px;
-  position:relative; z-index:2;
-}
-.back-home:hover { color:white; }
-
 /* ===== RATE BAR ===== */
 .rate-bar {
   margin:8px 16px 0; padding:9px 13px;
@@ -286,7 +277,6 @@ select {
 .dx-layout { }
 @media (min-width: 900px) {
   .wrap { max-width: 1200px; }
-  .page-hero { border-radius: 0 0 16px 16px; margin: 0 0 0 0; }
   .nudge { margin: 12px 20px 0; }
   .dx-layout {
     display: grid;
@@ -304,19 +294,17 @@ select {
 </head>
 <body>
 
-<div class="wrap">
-
-  <!-- HERO -->
-  <div class="page-hero">
-    <div class="hero-brand">
-      <img src="logo.jpg" alt="logo">
-      <span>ONE AQUACULTURE PRODUCT</span>
-    </div>
-    <a href="/" class="back-home">← หน้าหลัก</a>
-    <h1> วิเคราะห์โรคกุ้ง AI</h1>
+<!-- HERO -->
+<div class="page-hero">
+  <div class="hero-inner">
+    <div class="page-tag">🔬 AI · ShrimpDx</div>
+    <h1>วิเคราะห์โรคกุ้ง AI</h1>
     <p>กรอกอาการ ข้อมูลบ่อ และค่าน้ำ — AI วินิจฉัยและให้คำแนะนำทันที</p>
     <div class="version-pill">ONE AI · Powered by Claude · เพื่อเกษตรกรกุ้งไทย</div>
   </div>
+</div>
+
+<div class="wrap">
 
   <div class="nudge warn">
     <span></span>
