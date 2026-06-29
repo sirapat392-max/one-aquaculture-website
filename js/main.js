@@ -124,6 +124,7 @@ async function streamAI(endpoint, body, onToken, onDone) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body)
   });
+  if (!res.ok) throw new Error(`Server error ${res.status}`);
   const reader = res.body.getReader();
   const decoder = new TextDecoder();
   let buffer = '';

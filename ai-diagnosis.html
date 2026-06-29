@@ -602,9 +602,6 @@ select {
         </div>
       </div>
       <div class="ai-meta" id="aiMeta"></div>
-      <button id="saveCaseBtn" onclick="saveCase()" style="display:none;width:100%;margin-top:10px;padding:12px;background:var(--vet-green);color:white;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">
-        💾 บันทึกเคสนี้เพื่อให้สัตวแพทย์รีวิว
-      </button>
     </div>
 
     <!-- SECTION: CHAT -->
@@ -794,27 +791,14 @@ const chatHistory = [];
 let lastCase = null;
 
 async function saveCase() {
-  const btn = document.getElementById('saveCaseBtn');
   if (!lastCase) return;
-  btn.disabled = true;
-  btn.textContent = '⏳ กำลังบันทึก...';
   try {
-    const res = await fetch('/api/save-case', {
+    await fetch('/api/save-case', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(lastCase),
     });
-    const data = await res.json();
-    if (res.ok && data.ok) {
-      btn.textContent = '✅ บันทึกแล้ว (รอ vet รีวิว)';
-      btn.style.background = '#388E3C';
-    } else {
-      throw new Error(data.error);
-    }
-  } catch {
-    btn.textContent = '❌ บันทึกไม่สำเร็จ';
-    btn.disabled = false;
-  }
+  } catch {}
 }
 
 async function runDiagnosis() {
@@ -848,14 +832,14 @@ async function runDiagnosis() {
     const secs = ((Date.now()-t0)/1000).toFixed(1);
     document.getElementById('aiMeta').textContent = `⬢ ONE AI · ${secs}s · ผลเบื้องต้นเท่านั้น`;
 
-    // store for case saving
+    // auto-save every case to vet review
     lastCase = { symptoms, farmDetails, aiRaw: full };
     try {
       const stripped = full.replace(/```(?:json)?\s*/gi,'').replace(/```/g,'');
       const m = stripped.match(/\{[\s\S]*\}/);
       if (m) lastCase.aiDiagnosis = JSON.parse(m[0]);
     } catch {}
-    document.getElementById('saveCaseBtn').style.display = 'block';
+    saveCase();
 
     // seed chat with diagnosis context
     chatHistory.length = 0;
@@ -1069,10 +1053,6 @@ function clearForm() {
   document.getElementById('aiResult').innerHTML=`<div class="ai-card"><div class="ai-empty"><span class="ico">🤖</span><p>กรอกอาการที่พบ<br>แล้วกด "วิเคราะห์ด้วย AI"</p></div></div>`;
   document.getElementById('aiMeta').textContent='';
   lastCase = null;
-  const sb = document.getElementById('saveCaseBtn');
-  sb.style.display='none'; sb.disabled=false;
-  sb.textContent='💾 บันทึกเคสนี้เพื่อให้สัตวแพทย์รีวิว';
-  sb.style.background='var(--vet-green)';
 }
 </script>
 </body>
