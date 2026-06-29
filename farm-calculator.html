@@ -12,7 +12,7 @@
 <link rel="icon" href="/logo.jpg" type="image/jpeg">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>เครื่องคิดเลขฟาร์มกุ้ง — FCR, อัตรารอด, Biomass, ต้นทุน · ONE AQUACULTURE PRODUCT</title>
-<meta name="description" content="เครื่องคิดเลขฟาร์มกุ้งออนไลน์ฟรี 6 ตัว: FCR, ความหนาแน่น, ราคาคุ้มทุน, อัตรารอด, เปอร์เซ็นต์อาหาร (%BW), Biomass, วางแผนจับ — ราคาปากบ่อเรียลไทม์แยกตามไซ์กุ้ง">
+<meta name="description" content="เครื่องคิดเลขฟาร์มกุ้งออนไลน์ฟรี 6 ตัว: FCR, ความหนาแน่น, ราคาคุ้มทุน, อัตรารอด, เปอร์เซ็นต์อาหาร (%BW), Biomass, วางแผนจับ — ราคาปากบ่อเรียลไทม์แยกตามไซส์กุ้ง">
 <meta name="keywords" content="FCR กุ้ง, อัตราแลกเนื้อกุ้ง, อัตรารอดกุ้ง, Biomass กุ้ง, %BW กุ้ง, ความหนาแน่นลูกกุ้ง, คำนวณต้นทุนกุ้ง, ราคาคุ้มทุนกุ้ง, farm calculator กุ้ง">
 <meta property="og:type" content="website">
 <meta property="og:title" content="เครื่องคิดเลขฟาร์มกุ้ง · ONE AQUACULTURE PRODUCT">
@@ -343,11 +343,11 @@
     <!-- ไซ์ selector — always visible -->
     <div style="margin-bottom:18px">
       <div style="font-size:12px;font-weight:600;color:var(--mud);margin-bottom:8px">
-        ไซ์กุ้งที่จะขาย
+        ไซส์กุ้งที่จะขาย
         <span id="be-size-hint-auto" style="font-size:11px;color:var(--wine);margin-left:6px;font-weight:400"></span>
       </div>
       <select id="be-size-select" class="calc-input" onchange="onSizeSelectChange()" style="font-family:inherit;font-size:15px;font-weight:600;cursor:pointer">
-        <option value="">-- เลือกไซ์กุ้ง --</option>
+        <option value="">-- เลือกไซส์กุ้ง --</option>
         <option value="10">L10 · กุ้งใหญ่มาก (100 ก./ตัว)</option>
         <option value="20">L20 · กุ้งใหญ่ (50 ก./ตัว)</option>
         <option value="30">L30 · 33 ก./ตัว</option>
@@ -400,8 +400,8 @@
           <input class="calc-input" id="be-harvest" type="number" min="0" step="10" placeholder="เช่น 4000" oninput="calcBreakeven()">
         </div>
         <div class="input-group">
-          <label>ราคาปากบ่อจริง <span class="unit">บาท/กก. · โหลดจากไซ์ที่เลือก หรือกรอกเอง</span></label>
-          <input class="calc-input" id="be-market" type="number" min="0" step="1" placeholder="เลือกไซ์ด้านบน หรือกรอกเอง" oninput="calcBreakeven()">
+          <label>ราคาปากบ่อจริง <span class="unit">บาท/กก. · โหลดจากไซส์ที่เลือก หรือกรอกเอง</span></label>
+          <input class="calc-input" id="be-market" type="number" min="0" step="1" placeholder="เลือกไซส์ด้านบน หรือกรอกเอง" oninput="calcBreakeven()">
         </div>
       </div>
     </div>
@@ -434,6 +434,104 @@
       <div style="font-size:14px;font-weight:600;margin-top:6px;opacity:.75;" id="be-total-sub"></div>
     </div>
     <p class="result-hint" id="be-hint" style="margin-top:10px"></p>
+  </div>
+
+  <!-- ── FEED RATE %BW ── -->
+  <div class="calc-section-label">FEED RATE · เปอร์เซ็นต์อาหาร</div>
+  <div class="calc-card">
+    <div class="calc-card-header">
+      <div class="calc-icon">🍽️</div>
+      <div>
+        <h2>Feed Rate (%BW) — คำนวณปริมาณอาหารต่อวัน</h2>
+        <p>อาหารที่ให้ต่อวัน = Biomass รวม × %BW — ให้มากไปอาหารเหลือ เพิ่ม Vibrio; ให้น้อยไปกุ้งโตช้า</p>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">
+      <button class="mode-btn active" id="btn-fr-a" onclick="setFeedMode('a')">คำนวณจาก PL</button>
+      <button class="mode-btn" id="btn-fr-c" onclick="setFeedMode('c')">คำนวณจาก Biomass</button>
+      <button class="mode-btn" id="btn-fr-b" onclick="setFeedMode('b')">คำนวณ %BW จากอาหารจริง</button>
+    </div>
+
+    <!-- Mode A: คำนวณจาก PL+SR+น้ำหนักเฉลี่ย -->
+    <div id="fr-mode-a">
+      <div class="input-grid">
+        <div class="input-group">
+          <label>จำนวน PL ที่ปล่อย <span class="unit">ตัว</span></label>
+          <input class="calc-input" id="fr-pl" type="number" min="0" step="1000" placeholder="เช่น 200000" oninput="calcFeedRate()">
+        </div>
+        <div class="input-group">
+          <label>อัตรารอด <span class="unit">%</span></label>
+          <input class="calc-input" id="fr-sr" type="number" min="0" max="100" step="1" placeholder="เช่น 70" oninput="calcFeedRate()">
+        </div>
+        <div class="input-group">
+          <label>น้ำหนักเฉลี่ยปัจจุบัน
+            <span class="unit-toggle-inline">
+              <button class="utbtn active" onclick="setWtUnit('fr-avg','g',this)">ก./ตัว</button>
+              <button class="utbtn" onclick="setWtUnit('fr-avg','k',this)">ตัว/กก.</button>
+            </span>
+          </label>
+          <input class="calc-input" id="fr-avg" type="number" min="0" step="0.5" placeholder="เช่น 12" oninput="calcFeedRate()">
+        </div>
+        <div class="input-group">
+          <label>%BW ที่ต้องการ <span class="unit">%/วัน</span>
+            <button class="suggest-btn" onclick="suggestBw('fr-avg','fr-bw-a')">💡 แนะนำตามไซส์</button>
+          </label>
+          <input class="calc-input" id="fr-bw-a" type="number" min="0" step="0.1" placeholder="เช่น 3.5" oninput="calcFeedRate()">
+        </div>
+      </div>
+    </div>
+
+    <!-- Mode C: คำนวณจาก Biomass ที่รู้แล้ว -->
+    <div id="fr-mode-c" style="display:none">
+      <div class="input-grid">
+        <div class="input-group">
+          <label>Biomass รวม <span class="unit">กก.</span></label>
+          <input class="calc-input" id="fr-biomass" type="number" min="0" step="10" placeholder="เช่น 2000" oninput="calcFeedRate()">
+        </div>
+        <div class="input-group">
+          <label>น้ำหนักเฉลี่ย (เพื่อแนะนำ %BW)
+            <span class="unit-toggle-inline">
+              <button class="utbtn active" onclick="setWtUnit('fr-avg-c','g',this)">ก./ตัว</button>
+              <button class="utbtn" onclick="setWtUnit('fr-avg-c','k',this)">ตัว/กก.</button>
+            </span>
+          </label>
+          <input class="calc-input" id="fr-avg-c" type="number" min="0" step="0.5" placeholder="ไม่บังคับ — ใช้กด 💡" oninput="">
+        </div>
+        <div class="input-group">
+          <label>%BW ที่ต้องการ <span class="unit">%/วัน</span>
+            <button class="suggest-btn" onclick="suggestBw('fr-avg-c','fr-bw')">💡 แนะนำตามไซส์</button>
+          </label>
+          <input class="calc-input" id="fr-bw" type="number" min="0" step="0.1" placeholder="เช่น 3.5" oninput="calcFeedRate()">
+        </div>
+      </div>
+    </div>
+
+    <!-- Mode B: ย้อนหา %BW จากอาหารจริง -->
+    <div id="fr-mode-b" style="display:none">
+      <div class="input-grid">
+        <div class="input-group">
+          <label>Biomass รวม <span class="unit">กก.</span></label>
+          <input class="calc-input" id="fr-biomass-b" type="number" min="0" step="10" placeholder="เช่น 2000" oninput="calcFeedRate()">
+        </div>
+        <div class="input-group">
+          <label>อาหารที่ให้จริง/วัน <span class="unit">กก.</span></label>
+          <input class="calc-input" id="fr-actual" type="number" min="0" step="1" placeholder="เช่น 80" oninput="calcFeedRate()">
+        </div>
+      </div>
+    </div>
+    <div id="fr-result" class="result-box neutral">
+      <div class="result-main">
+        <div class="result-value neutral" id="fr-val">—</div>
+        <div class="result-label" id="fr-unit">อาหารที่ควรให้ต่อวัน (กก.)</div>
+      </div>
+      <span class="result-badge" id="fr-badge" style="display:none"></span>
+    </div>
+    <p class="result-hint" id="fr-hint"></p>
+    <div class="tips-grid">
+      <div class="tip-card"><div class="tip-head">กุ้งเล็ก DOC 1–30</div><p>%BW สูง 8–15% — กุ้งเล็กกินอาหารเทียบสัดส่วนตัวมาก กระเพาะเล็ก ต้องให้บ่อย</p></div>
+      <div class="tip-card"><div class="tip-head">กุ้งกลาง DOC 30–60</div><p>%BW ลดลง 4–8% — กุ้งโตขึ้น Biomass เพิ่ม ปรับอาหารตามตะแกรงชั่งทุกอาทิตย์</p></div>
+      <div class="tip-card"><div class="tip-head">กุ้งใหญ่ DOC 60+</div><p>%BW 2–4% — กุ้งโตแล้ว อัตราการกินต่อน้ำหนักตัวลดลง แต่ปริมาณสูง</p></div>
+    </div>
   </div>
 
   <!-- ── SURVIVAL RATE ── -->
@@ -499,7 +597,7 @@
         </div>
         <div class="input-group">
           <label>%BW ที่ใช้ <span class="unit">%/วัน</span>
-            <button class="suggest-btn" onclick="suggestBw('sr-weight-b','sr-bw')">💡 แนะนำตามไซ์</button>
+            <button class="suggest-btn" onclick="suggestBw('sr-weight-b','sr-bw')">💡 แนะนำตามไซส์</button>
           </label>
           <input class="calc-input" id="sr-bw" type="number" min="0" step="0.1" placeholder="เช่น 3.5" oninput="calcSurvival()">
         </div>
@@ -521,104 +619,6 @@
       <div class="tip-card"><div class="tip-head">อัตรารอดดี · &gt; 70%</div><p>สภาพแวดล้อมดี ลูกกุ้งคุณภาพสูง การจัดการโรคและน้ำมีประสิทธิภาพ</p></div>
       <div class="tip-card"><div class="tip-head">อัตรารอดปานกลาง · 50–70%</div><p>มาตรฐานทั่วไปของฟาร์มกึ่งอินเทนซีฟ ยังมีช่องให้ปรับปรุงได้</p></div>
       <div class="tip-card"><div class="tip-head">อัตรารอดต่ำ · &lt; 50%</div><p>ควรตรวจสอบคุณภาพน้ำ โรค และแหล่งลูกกุ้ง — มีความสูญเสียสูง</p></div>
-    </div>
-  </div>
-
-  <!-- ── FEED RATE %BW ── -->
-  <div class="calc-section-label">FEED RATE · เปอร์เซ็นต์อาหาร</div>
-  <div class="calc-card">
-    <div class="calc-card-header">
-      <div class="calc-icon">🍽️</div>
-      <div>
-        <h2>Feed Rate (%BW) — คำนวณปริมาณอาหารต่อวัน</h2>
-        <p>อาหารที่ให้ต่อวัน = Biomass รวม × %BW — ให้มากไปอาหารเหลือ เพิ่ม Vibrio; ให้น้อยไปกุ้งโตช้า</p>
-      </div>
-    </div>
-    <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">
-      <button class="mode-btn active" id="btn-fr-a" onclick="setFeedMode('a')">คำนวณจาก PL</button>
-      <button class="mode-btn" id="btn-fr-c" onclick="setFeedMode('c')">คำนวณจาก Biomass</button>
-      <button class="mode-btn" id="btn-fr-b" onclick="setFeedMode('b')">คำนวณ %BW จากอาหารจริง</button>
-    </div>
-
-    <!-- Mode A: คำนวณจาก PL+SR+น้ำหนักเฉลี่ย -->
-    <div id="fr-mode-a">
-      <div class="input-grid">
-        <div class="input-group">
-          <label>จำนวน PL ที่ปล่อย <span class="unit">ตัว</span></label>
-          <input class="calc-input" id="fr-pl" type="number" min="0" step="1000" placeholder="เช่น 200000" oninput="calcFeedRate()">
-        </div>
-        <div class="input-group">
-          <label>อัตรารอด <span class="unit">%</span></label>
-          <input class="calc-input" id="fr-sr" type="number" min="0" max="100" step="1" placeholder="เช่น 70" oninput="calcFeedRate()">
-        </div>
-        <div class="input-group">
-          <label>น้ำหนักเฉลี่ยปัจจุบัน
-            <span class="unit-toggle-inline">
-              <button class="utbtn active" onclick="setWtUnit('fr-avg','g',this)">ก./ตัว</button>
-              <button class="utbtn" onclick="setWtUnit('fr-avg','k',this)">ตัว/กก.</button>
-            </span>
-          </label>
-          <input class="calc-input" id="fr-avg" type="number" min="0" step="0.5" placeholder="เช่น 12" oninput="calcFeedRate()">
-        </div>
-        <div class="input-group">
-          <label>%BW ที่ต้องการ <span class="unit">%/วัน</span>
-            <button class="suggest-btn" onclick="suggestBw('fr-avg','fr-bw-a')">💡 แนะนำตามไซ์</button>
-          </label>
-          <input class="calc-input" id="fr-bw-a" type="number" min="0" step="0.1" placeholder="เช่น 3.5" oninput="calcFeedRate()">
-        </div>
-      </div>
-    </div>
-
-    <!-- Mode C: คำนวณจาก Biomass ที่รู้แล้ว -->
-    <div id="fr-mode-c" style="display:none">
-      <div class="input-grid">
-        <div class="input-group">
-          <label>Biomass รวม <span class="unit">กก.</span></label>
-          <input class="calc-input" id="fr-biomass" type="number" min="0" step="10" placeholder="เช่น 2000" oninput="calcFeedRate()">
-        </div>
-        <div class="input-group">
-          <label>น้ำหนักเฉลี่ย (เพื่อแนะนำ %BW)
-            <span class="unit-toggle-inline">
-              <button class="utbtn active" onclick="setWtUnit('fr-avg-c','g',this)">ก./ตัว</button>
-              <button class="utbtn" onclick="setWtUnit('fr-avg-c','k',this)">ตัว/กก.</button>
-            </span>
-          </label>
-          <input class="calc-input" id="fr-avg-c" type="number" min="0" step="0.5" placeholder="ไม่บังคับ — ใช้กด 💡" oninput="">
-        </div>
-        <div class="input-group">
-          <label>%BW ที่ต้องการ <span class="unit">%/วัน</span>
-            <button class="suggest-btn" onclick="suggestBw('fr-avg-c','fr-bw')">💡 แนะนำตามไซ์</button>
-          </label>
-          <input class="calc-input" id="fr-bw" type="number" min="0" step="0.1" placeholder="เช่น 3.5" oninput="calcFeedRate()">
-        </div>
-      </div>
-    </div>
-
-    <!-- Mode B: ย้อนหา %BW จากอาหารจริง -->
-    <div id="fr-mode-b" style="display:none">
-      <div class="input-grid">
-        <div class="input-group">
-          <label>Biomass รวม <span class="unit">กก.</span></label>
-          <input class="calc-input" id="fr-biomass-b" type="number" min="0" step="10" placeholder="เช่น 2000" oninput="calcFeedRate()">
-        </div>
-        <div class="input-group">
-          <label>อาหารที่ให้จริง/วัน <span class="unit">กก.</span></label>
-          <input class="calc-input" id="fr-actual" type="number" min="0" step="1" placeholder="เช่น 80" oninput="calcFeedRate()">
-        </div>
-      </div>
-    </div>
-    <div id="fr-result" class="result-box neutral">
-      <div class="result-main">
-        <div class="result-value neutral" id="fr-val">—</div>
-        <div class="result-label" id="fr-unit">อาหารที่ควรให้ต่อวัน (กก.)</div>
-      </div>
-      <span class="result-badge" id="fr-badge" style="display:none"></span>
-    </div>
-    <p class="result-hint" id="fr-hint"></p>
-    <div class="tips-grid">
-      <div class="tip-card"><div class="tip-head">กุ้งเล็ก DOC 1–30</div><p>%BW สูง 8–15% — กุ้งเล็กกินอาหารเทียบสัดส่วนตัวมาก กระเพาะเล็ก ต้องให้บ่อย</p></div>
-      <div class="tip-card"><div class="tip-head">กุ้งกลาง DOC 30–60</div><p>%BW ลดลง 4–8% — กุ้งโตขึ้น Biomass เพิ่ม ปรับอาหารตามตะแกรงชั่งทุกอาทิตย์</p></div>
-      <div class="tip-card"><div class="tip-head">กุ้งใหญ่ DOC 60+</div><p>%BW 2–4% — กุ้งโตแล้ว อัตราการกินต่อน้ำหนักตัวลดลง แต่ปริมาณสูง</p></div>
     </div>
   </div>
 
