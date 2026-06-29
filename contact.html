@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ติดต่อเรา · ONE AQUACULTURE PRODUCT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/main.css">
+<style>
+body { padding-top: 68px; }
+
+/* HERO */
+.contact-hero { background: linear-gradient(135deg, var(--wine-deeper), var(--wine)); padding: 80px 5% 60px; }
+.contact-hero h1 { color: white; font-size: clamp(28px,5vw,46px); font-weight: 800; margin-bottom: 10px; }
+.contact-hero p { color: rgba(255,255,255,0.75); font-size: 16px; max-width: 500px; line-height: 1.7; }
+
+/* MAIN LAYOUT */
+.contact-body { max-width: 1100px; margin: 0 auto; padding: 64px 5%; display: grid; grid-template-columns: 1fr 1.4fr; gap: 48px; }
+
+/* INFO */
+.contact-info h2 { font-size: 22px; font-weight: 700; color: var(--text-dark); margin-bottom: 28px; }
+.info-item { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 28px; }
+.info-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--wine-pale); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.info-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-soft); margin-bottom: 4px; }
+.info-value { font-size: 15px; font-weight: 600; color: var(--text-dark); }
+.info-sub { font-size: 13px; color: var(--text-soft); margin-top: 2px; }
+
+.quick-links { background: var(--wine-pale); border-radius: 16px; padding: 20px; margin-top: 32px; }
+.quick-links h4 { font-size: 14px; font-weight: 700; color: var(--wine-dark); margin-bottom: 14px; }
+.quick-links a { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--wine); font-size: 13px; font-weight: 600; padding: 8px 0; border-bottom: 1px solid rgba(139,48,96,0.1); transition: gap .2s; }
+.quick-links a:last-child { border-bottom: none; }
+.quick-links a:hover { gap: 14px; }
+
+/* FORM */
+.contact-form-wrap { }
+.contact-form-wrap h2 { font-size: 22px; font-weight: 700; color: var(--text-dark); margin-bottom: 28px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-group { margin-bottom: 18px; }
+.form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-mid); margin-bottom: 6px; }
+.form-group input, .form-group textarea, .form-group select {
+  width: 100%; padding: 12px 16px; border-radius: 10px; border: 1.5px solid var(--gray-mid); font-size: 14px; font-family: inherit; color: var(--text-dark); background: white; transition: border-color .2s;
+}
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--wine); }
+.form-group textarea { resize: vertical; min-height: 120px; }
+.form-group select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238A7A85' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 40px; }
+.submit-btn { width: 100%; padding: 15px; border-radius: 32px; background: var(--wine); color: white; border: none; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all .25s; }
+.submit-btn:hover:not(:disabled) { background: var(--wine-dark); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* AI CHAT SUPPORT */
+.ai-support { background: linear-gradient(135deg, var(--wine-deeper), var(--wine)); border-radius: 20px; padding: 32px; margin-top: 28px; }
+.ai-support h4 { color: white; font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.ai-support p { color: rgba(255,255,255,0.75); font-size: 14px; margin-bottom: 20px; line-height: 1.6; }
+.ai-support-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 24px; background: white; color: var(--wine); font-size: 14px; font-weight: 700; text-decoration: none; transition: all .2s; }
+.ai-support-btn:hover { background: var(--wine-pale); transform: translateY(-2px); }
+
+/* SUCCESS */
+.form-success { display: none; text-align: center; padding: 40px 20px; }
+.form-success .s-icon { font-size: 52px; margin-bottom: 16px; }
+.form-success h3 { font-size: 20px; font-weight: 700; color: var(--text-dark); margin-bottom: 8px; }
+.form-success p { font-size: 14px; color: var(--text-soft); }
+
+@media (max-width: 768px) {
+  .contact-body { grid-template-columns: 1fr; padding: 36px 5%; gap: 32px; }
+  .form-row { grid-template-columns: 1fr; }
+  .contact-hero { padding: 48px 5% 36px; }
+  .contact-hero h1 { font-size: 28px; }
+  .contact-hero p { font-size: 14px; }
+  .ai-support { padding: 24px 20px; }
+}
+@media (max-width: 480px) {
+  .contact-hero h1 { font-size: 24px; }
+  .info-value { font-size: 13px; }
+  .submit-btn { font-size: 14px; }
+}
+</style>
+</head>
+<body>
+
+<div class="contact-hero">
+  <div class="page-tag">ติดต่อเรา · Contact</div>
+  <h1>พูดคุยกับเรา</h1>
+  <p>มีคำถามเกี่ยวกับผลิตภัณฑ์ ต้องการใบเสนอราคา หรืออยากปรึกษาผู้เชี่ยวชาญ ติดต่อเราได้เลย</p>
+</div>
+
+<div class="contact-body">
+
+  <!-- LEFT: INFO -->
+  <div class="contact-info reveal">
+    <h2>ข้อมูลติดต่อ</h2>
+
+    <div class="info-item">
+      <div class="info-icon">📞</div>
+      <div>
+        <div class="info-label">โทรศัพท์</div>
+        <div class="info-value">062-561-5639</div>
+        <div class="info-sub">จันทร์ – ศุกร์ 08:00 – 17:00 น.</div>
+      </div>
+    </div>
+
+    <div class="info-item">
+      <div class="info-icon">📧</div>
+      <div>
+        <div class="info-label">อีเมล</div>
+        <div class="info-value">one.aquaculture.product@gmail.com</div>
+        <div class="info-sub">รับการตอบกลับภายใน 24 ชั่วโมงทำการ</div>
+      </div>
+    </div>
+
+    <div class="info-item">
+      <div class="info-icon">🕐</div>
+      <div>
+        <div class="info-label">เวลาทำการ</div>
+        <div class="info-value">จันทร์ – ศุกร์</div>
+        <div class="info-sub">08:00 – 17:00 น. (เวลาประเทศไทย)</div>
+      </div>
+    </div>
+
+    <div class="info-item">
+      <div class="info-icon">📍</div>
+      <div>
+        <div class="info-label">ที่อยู่</div>
+        <div class="info-value">315/3-X8 ซอยอ่อนนุช39</div>
+        <div class="info-sub">แขวงพัฒนาการ เขตสวนหลวง กรุงเทพมหานคร 10250</div>
+      </div>
+    </div>
+
+    <a href="https://www.facebook.com/profile.php?id=100075538372879" target="_blank" style="display:flex;align-items:center;gap:12px;background:#1877F2;border-radius:12px;padding:14px 18px;text-decoration:none;margin-bottom:12px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+      <div>
+        <div style="color:white;font-size:14px;font-weight:700;">ทักหา ONE Aquaculture ทาง Facebook</div>
+        <div style="color:rgba(255,255,255,0.8);font-size:12px;">ตอบเร็ว · ส่งรูปได้ · ปรึกษาได้เลย</div>
+      </div>
+    </a>
+
+    <div class="quick-links">
+      <h4>ลิงก์ที่เกี่ยวข้อง</h4>
+      <a href="ai-diagnosis.html">🤖 วิเคราะห์โรคกุ้งด้วย AI →</a>
+      <a href="products.html">📦 ดูผลิตภัณฑ์ทั้งหมด →</a>
+      <a href="https://haz.fisheries.go.th" target="_blank">🔗 ระบบ HAZDOF (กรมประมง) →</a>
+    </div>
+  </div>
+
+  <!-- RIGHT: FORM + AI -->
+  <div class="reveal">
+    <h2>ส่งข้อความหาเรา</h2>
+    <form id="contactForm" onsubmit="submitForm(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label>ชื่อ-นามสกุล *</label>
+          <input id="cf-name" type="text" placeholder="ชื่อของคุณ" required>
+        </div>
+        <div class="form-group">
+          <label>บริษัท / ฟาร์ม</label>
+          <input id="cf-company" type="text" placeholder="ชื่อบริษัทหรือฟาร์ม">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>อีเมล *</label>
+        <input id="cf-email" type="email" placeholder="email@example.com" required>
+      </div>
+      <div class="form-group">
+        <label>เรื่องที่ต้องการสอบถาม</label>
+        <select id="cf-product">
+          <option value="">-- เลือกหัวข้อ --</option>
+          <option>สอบถามผลิตภัณฑ์และราคา</option>
+          <option>ปรึกษาปัญหาในบ่อเลี้ยงสัตว์น้ำ</option>
+          <option>ขอใบเสนอราคา</option>
+          <option>ความร่วมมือทางธุรกิจ</option>
+          <option>อื่นๆ</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>ข้อความ *</label>
+        <textarea id="cf-message" placeholder="บอกรายละเอียดที่ต้องการสอบถาม เช่น ชนิดสัตว์น้ำที่เลี้ยง ปัญหาที่พบ จำนวนผลิตภัณฑ์ที่ต้องการ..." required></textarea>
+      </div>
+      <button type="submit" class="submit-btn" id="submitBtn">📨 ส่งข้อความ</button>
+    </form>
+
+    <div class="form-success" id="formSuccess">
+      <div class="s-icon">✅</div>
+      <h3>ส่งข้อความสำเร็จ!</h3>
+      <p>ขอบคุณที่ติดต่อเรา ทีมงานจะตอบกลับภายใน 24 ชั่วโมงทำการ<br>ที่อีเมล: one.aquaculture.product@gmail.com</p>
+    </div>
+
+    <!-- AI CHAT -->
+    <div class="ai-support">
+      <h4>🤖 ต้องการคำตอบทันที?</h4>
+      <p>ลองถาม AI ของเรา — วิเคราะห์โรคกุ้ง ให้คำแนะนำผลิตภัณฑ์ และตอบคำถามเกี่ยวกับการเพาะเลี้ยงสัตว์น้ำได้ทันที</p>
+      <a href="ai-diagnosis.html" class="ai-support-btn">🦐 วิเคราะห์โรคกุ้ง AI →</a>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="js/main.js"></script>
+<script>
+const EJS_PUBLIC_KEY  = 'Y5eWiI4tRaoNAHxEi';
+const EJS_SERVICE_ID  = 'service_jyzf95t';
+const EJS_TEMPLATE_ID = 'template_ndw0cps';
+emailjs.init(EJS_PUBLIC_KEY);
+
+async function submitForm(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ กำลังส่ง...';
+  const params = {
+    name:    document.getElementById('cf-name').value.trim(),
+    company: document.getElementById('cf-company').value.trim(),
+    email:   document.getElementById('cf-email').value.trim(),
+    product: document.getElementById('cf-product').value.trim(),
+    message: document.getElementById('cf-message').value.trim(),
+  };
+  try {
+    await emailjs.send(EJS_SERVICE_ID, EJS_TEMPLATE_ID, params);
+    document.getElementById('contactForm').style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+  } catch (err) {
+    btn.textContent = '❌ ส่งไม่สำเร็จ กรุณาลองใหม่';
+    btn.disabled = false;
+    setTimeout(() => { btn.textContent = '📨 ส่งข้อความ'; }, 4000);
+  }
+}
+</script>
+</body>
+</html>

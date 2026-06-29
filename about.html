@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>เกี่ยวกับเรา · ONE AQUACULTURE PRODUCT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/main.css">
+<style>
+body { padding-top: 68px; }
+
+/* HERO */
+.about-hero { background: linear-gradient(150deg, var(--wine-deeper) 0%, var(--wine) 60%, var(--wine-light) 100%); padding: 100px 5% 80px; text-align: center; }
+.about-hero .logo-ring { width: 110px; height: 110px; border-radius: 50%; overflow: hidden; margin: 0 auto 24px; border: 4px solid rgba(255,255,255,0.3); box-shadow: 0 0 0 8px rgba(255,255,255,0.08); }
+.about-hero .logo-ring img { width: 100%; height: 100%; object-fit: cover; }
+.about-hero h1 { color: white; font-size: clamp(26px,4.5vw,44px); font-weight: 800; margin-bottom: 8px; }
+.about-hero h1 span { display: block; font-size: 0.6em; font-weight: 400; color: rgba(255,255,255,0.7); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
+.about-hero p { color: rgba(255,255,255,0.8); font-size: 16px; max-width: 560px; margin: 0 auto; line-height: 1.8; }
+
+/* MISSION */
+.mission-strip { background: var(--wine-pale); padding: 56px 5%; }
+.mission-inner { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; }
+.mission-item { text-align: center; padding: 28px 20px; background: white; border-radius: 16px; border: 1px solid var(--gray-mid); box-shadow: var(--shadow); }
+.mission-icon { font-size: 38px; margin-bottom: 14px; }
+.mission-item h3 { font-size: 16px; font-weight: 700; color: var(--wine-dark); margin-bottom: 8px; }
+.mission-item p { font-size: 13px; color: var(--text-mid); line-height: 1.75; }
+
+/* STORY */
+.story-section { padding: 80px 5%; max-width: 900px; margin: 0 auto; }
+.story-section h2 { font-size: 28px; font-weight: 700; color: var(--wine-dark); margin-bottom: 20px; }
+.story-section p { font-size: 15px; color: var(--text-mid); line-height: 1.9; margin-bottom: 20px; }
+.highlight-box { background: var(--wine-pale); border-left: 4px solid var(--wine); border-radius: 0 12px 12px 0; padding: 20px 24px; margin: 32px 0; font-size: 15px; color: var(--wine-dark); line-height: 1.8; font-style: italic; }
+
+/* VALUES */
+.values-section { background: var(--gray-light); padding: 72px 5%; }
+.values-inner { max-width: 1100px; margin: 0 auto; }
+.values-title { text-align: center; font-size: 28px; font-weight: 700; color: var(--text-dark); margin-bottom: 40px; }
+.values-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 24px; }
+.value-card { background: white; border-radius: 16px; padding: 28px 24px; border: 1px solid var(--gray-mid); box-shadow: var(--shadow); }
+.value-num { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: var(--wine-light); text-transform: uppercase; margin-bottom: 10px; }
+.value-card h4 { font-size: 17px; font-weight: 700; color: var(--wine-dark); margin-bottom: 10px; }
+.value-card p { font-size: 13px; color: var(--text-mid); line-height: 1.75; }
+
+/* COMPLIANCE */
+.compliance-section { padding: 72px 5%; max-width: 1100px; margin: 0 auto; }
+.compliance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.compliance-card { background: white; border-radius: 16px; border: 1px solid var(--gray-mid); box-shadow: var(--shadow); padding: 28px; }
+.compliance-card h4 { font-size: 17px; font-weight: 700; color: var(--text-dark); margin-bottom: 6px; }
+.compliance-card .sub { font-size: 12px; color: var(--text-soft); margin-bottom: 14px; }
+.compliance-card p { font-size: 14px; color: var(--text-mid); line-height: 1.7; }
+.check-list { list-style: none; margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
+.check-list li { display: flex; gap: 8px; font-size: 13px; color: var(--text-mid); }
+.check-list li::before { content: "✓"; color: var(--wine); font-weight: 700; flex-shrink: 0; }
+
+@media (max-width: 768px) {
+  .mission-inner { grid-template-columns: 1fr; }
+  .compliance-grid { grid-template-columns: 1fr; }
+  .about-hero { padding: 60px 5% 48px; }
+  .about-hero h1 { font-size: 24px; }
+  .about-hero p { font-size: 14px; }
+  .about-hero .logo-ring { width: 80px; height: 80px; }
+  .mission-strip { padding: 40px 5%; }
+  .story-section { padding: 48px 5%; }
+  .values-section { padding: 48px 5%; }
+  .values-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 480px) {
+  .about-hero h1 { font-size: 20px; }
+  .values-grid { grid-template-columns: 1fr; }
+  .story-section h2 { font-size: 22px; }
+  .highlight-box { font-size: 14px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="about-hero">
+  <div class="logo-ring"><img src="logo.jpg" alt="ONE AQUACULTURE PRODUCT"></div>
+  <h1>
+    <span>ONE AQUACULTURE PRODUCT</span>
+    บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด
+  </h1>
+  <p>ผลิตภัณฑ์แบรนด์ตัวเอง ทดสอบจากหน้างานจริง ไว้วางใจโดยกว่า 100 ฟาร์มทั่วภาคใต้อ่าวไทย อันดามัน และภาคกลาง</p>
+  <div style="display:flex;gap:32px;justify-content:center;margin-top:28px;flex-wrap:wrap;">
+    <div style="text-align:center;">
+      <div style="font-size:36px;font-weight:800;color:white;">100<span style="font-size:0.6em">+</span></div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.7);">ฟาร์มที่ไว้วางใจ</div>
+    </div>
+    <div style="width:1px;background:rgba(255,255,255,0.2);"></div>
+    <div style="text-align:center;">
+      <div style="font-size:36px;font-weight:800;color:white;">3</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.7);">ภูมิภาคที่ให้บริการ</div>
+    </div>
+    <div style="width:1px;background:rgba(255,255,255,0.2);"></div>
+    <div style="text-align:center;">
+      <div style="font-size:36px;font-weight:800;color:white;">2564</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.7);">ปีที่ก่อตั้ง</div>
+    </div>
+  </div>
+</div>
+
+<!-- MISSION -->
+<div class="mission-strip">
+  <div class="mission-inner">
+    <div class="mission-item reveal">
+      <div class="mission-icon">🔬</div>
+      <h3>วิทยาศาสตร์และนวัตกรรม</h3>
+      <p>คัดสรรผลิตภัณฑ์ที่ผ่านการพิสูจน์ทางวิทยาศาสตร์ มีประสิทธิภาพและปลอดภัยสำหรับการเพาะเลี้ยง</p>
+    </div>
+    <div class="mission-item reveal">
+      <div class="mission-icon">🌿</div>
+      <h3>ยั่งยืนและปลอดภัย</h3>
+      <p>ผลิตภัณฑ์ชีวภาพปลอดภัยต่อสิ่งแวดล้อม ไม่ตกค้างในผลผลิต สนับสนุนการเพาะเลี้ยงยั่งยืน</p>
+    </div>
+    <div class="mission-item reveal">
+      <div class="mission-icon">🤝</div>
+      <h3>ซื่อสัตย์ โปร่งใส</h3>
+      <p>ดำเนินธุรกิจด้วยความซื่อสัตย์ โปร่งใส และพร้อมให้ข้อมูลที่ถูกต้องแก่ลูกค้าเสมอ</p>
+    </div>
+  </div>
+</div>
+
+<!-- STORY -->
+<div class="story-section">
+  <div class="section-tag reveal">เรื่องราวของเรา · Our Story</div>
+  <h2 class="reveal">จากฟาร์มกุ้งสู่แบรนด์ตัวเอง</h2>
+  <p class="reveal">บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด ก่อตั้งในปี พ.ศ. 2564 ด้วยความเชื่อว่าผู้เลี้ยงกุ้งต้องการมากกว่าแค่สินค้า — พวกเขาต้องการคู่ค้าที่เข้าใจฟาร์มจริง เราจึงพัฒนาผลิตภัณฑ์แบรนด์ตัวเอง ทดสอบในบ่อเลี้ยงจริง และปรับปรุงต่อเนื่องจากข้อมูลหน้างาน</p>
+  <p class="reveal">ปัจจุบันให้บริการกว่า <strong>100 ฟาร์มเชิงพาณิชย์</strong> ครอบคลุมพื้นที่ภาคใต้ฝั่งอ่าวไทย ภาคใต้ฝั่งอันดามัน และภาคกลาง ทีมงานลงพื้นที่จริง ติดตามผล และพร้อมให้คำปรึกษาอย่างต่อเนื่อง</p>
+  <div class="highlight-box reveal">
+    "เราไม่ใช่แค่ผู้ขาย — เราเป็นคู่ค้าที่ยืนอยู่ข้างฟาร์มคุณตั้งแต่เปิดบ่อจนถึงวันเก็บเกี่ยว"
+  </div>
+</div>
+
+<!-- VALUES -->
+<div class="values-section">
+  <div class="values-inner">
+    <div class="values-title">ค่านิยมหลักของเรา</div>
+    <div class="values-grid">
+      <div class="value-card reveal">
+        <div class="value-num">01</div>
+        <h4>คุณภาพ</h4>
+        <p>คัดเลือกผลิตภัณฑ์คุณภาพสูงจากผู้ผลิตที่เชื่อถือได้ ผ่านการทดสอบและรับรอง ก่อนนำมาจัดจำหน่าย</p>
+      </div>
+      <div class="value-card reveal">
+        <div class="value-num">02</div>
+        <h4>ความปลอดภัย</h4>
+        <p>ผลิตภัณฑ์ชีวภาพที่ไม่ก่อให้เกิดสารตกค้างในผลผลิต ปลอดภัยต่อผู้บริโภคและสิ่งแวดล้อม</p>
+      </div>
+      <div class="value-card reveal">
+        <div class="value-num">03</div>
+        <h4>ความซื่อสัตย์</h4>
+        <p>ให้ข้อมูลที่ถูกต้องและโปร่งใสแก่ลูกค้า ไม่อ้างสรรพคุณเกินจริง</p>
+      </div>
+      <div class="value-card reveal">
+        <div class="value-num">04</div>
+        <h4>ความยั่งยืน</h4>
+        <p>สนับสนุนการเพาะเลี้ยงสัตว์น้ำที่ยั่งยืน ดูแลระบบนิเวศ และรักษาสมดุลสิ่งแวดล้อม</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="js/main.js"></script>
+</body>
+</html>

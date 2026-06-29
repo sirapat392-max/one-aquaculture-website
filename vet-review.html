@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vet Review · ONE AQUACULTURE</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --pond: #a8164d;
+  --wine: #8B3060;
+  --wine-dark: #6A1E45;
+  --wine-pale: #F5EBF0;
+  --vet-green: #43a047;
+  --vet-green-soft: #e8f5e9;
+  --amber: #f9a825;
+  --coral: #e53935;
+  --coral-soft: #ffebee;
+  --ai-mid: #7c3aed;
+  --ai-light: #f5f3ff;
+  --ai-deep: #4c1d95;
+  --paper: #fff;
+  --gray: #f5f5f5;
+  --gray-mid: #e0e0e0;
+  --ink: #1c1020;
+  --mud: #6b5c65;
+  --line: #ede0e8;
+}
+body { font-family: 'IBM Plex Sans Thai', 'Inter', sans-serif; background: #f0eaf2; color: var(--ink); font-size: 14px; }
+
+/* ─── HEADER ─── */
+.app-header {
+  background: linear-gradient(135deg, #3A0B28, var(--wine));
+  padding: 0 20px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 2px 12px rgba(0,0,0,.25);
+}
+.app-header h1 { color: white; font-size: 16px; font-weight: 700; }
+.app-header .subtitle { color: rgba(255,255,255,.55); font-size: 11px; }
+.header-badge {
+  margin-left: auto;
+  background: rgba(255,255,255,.15);
+  color: white;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  display: none;
+}
+.header-badge.visible { display: block; }
+.header-pending {
+  background: var(--amber);
+  color: #3d2600;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  display: none;
+  animation: pulse 2s infinite;
+}
+.header-pending.visible { display: block; }
+@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.65; } }
+
+/* ─── LOGIN ─── */
+#loginWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 56px);
+  padding: 24px;
+}
+.login-card {
+  background: white;
+  border-radius: 20px;
+  padding: 40px 36px;
+  max-width: 340px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(139,48,96,.15);
+  border: 1px solid var(--line);
+}
+.login-icon { font-size: 52px; margin-bottom: 16px; }
+.login-card h2 { font-size: 22px; font-weight: 700; color: var(--wine); margin-bottom: 6px; }
+.login-card p { color: var(--mud); font-size: 13px; margin-bottom: 28px; line-height: 1.6; }
+.login-card input {
+  width: 100%; padding: 12px 16px;
+  border: 1.5px solid var(--gray-mid);
+  border-radius: 10px; font-size: 15px;
+  font-family: inherit; margin-bottom: 12px;
+  outline: none; transition: border-color .2s;
+}
+.login-card input:focus { border-color: var(--wine); }
+.login-card button {
+  width: 100%; padding: 13px;
+  background: var(--wine); color: white;
+  border: none; border-radius: 10px;
+  font-size: 15px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+  transition: background .2s;
+}
+.login-card button:hover { background: var(--wine-dark); }
+.login-err { color: var(--coral); font-size: 12px; margin-top: 10px; min-height: 18px; }
+
+/* ─── MAIN LAYOUT ─── */
+#mainWrap { display: none; }
+.app-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  height: calc(100vh - 56px);
+}
+
+/* ─── CASE QUEUE (left panel) ─── */
+.queue-panel {
+  background: white;
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.queue-toolbar {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.queue-toolbar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.queue-title { font-size: 13px; font-weight: 700; color: var(--wine-dark); }
+.refresh-btn {
+  margin-left: auto;
+  padding: 5px 10px;
+  background: white;
+  border: 1.5px solid var(--line);
+  border-radius: 7px;
+  font-size: 11px;
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--mud);
+}
+.refresh-btn:hover { background: var(--gray); }
+.filter-tabs { display: flex; gap: 4px; }
+.ftab {
+  flex: 1; padding: 5px 0;
+  border: 1.5px solid var(--gray-mid);
+  border-radius: 7px;
+  font-size: 11px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+  background: white; color: var(--mud);
+  text-align: center; transition: all .15s;
+}
+.ftab.active { background: var(--wine); border-color: var(--wine); color: white; }
+.case-count { font-size: 11px; color: var(--mud); }
+
+.queue-list { overflow-y: auto; flex: 1; }
+.q-item {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+  transition: background .15s;
+  position: relative;
+}
+.q-item:hover { background: var(--gray); }
+.q-item.active { background: var(--wine-pale); border-left: 3px solid var(--wine); }
+.q-item-head { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.q-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.q-dot.pending { background: var(--amber); animation: pulse 2s infinite; }
+.q-dot.reviewed { background: var(--vet-green); }
+.q-dot.flagged { background: var(--coral); }
+.q-dx { font-size: 13px; font-weight: 700; color: var(--ink); flex: 1; line-height: 1.2; }
+.q-conf { font-size: 10px; font-weight: 700; background: var(--ai-light); color: var(--ai-deep); padding: 2px 6px; border-radius: 5px; }
+.q-meta { font-size: 11px; color: var(--mud); display: flex; gap: 8px; }
+.q-sym { font-size: 11px; color: var(--mud); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.status-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10px; font-weight: 700;
+  padding: 2px 7px; border-radius: 4px;
+  text-transform: uppercase; letter-spacing: .04em;
+}
+.status-tag::before { content: ''; width: 5px; height: 5px; border-radius: 50%; }
+.status-tag.pending { background: #fff8e1; color: #795501; }
+.status-tag.pending::before { background: var(--amber); animation: pulse 2s infinite; }
+.status-tag.reviewed { background: var(--vet-green-soft); color: #1b5e20; }
+.status-tag.reviewed::before { background: var(--vet-green); }
+.status-tag.flagged { background: var(--coral-soft); color: #b71c1c; }
+.status-tag.flagged::before { background: var(--coral); }
+
+/* ─── DETAIL PANEL (right) ─── */
+.detail-panel {
+  overflow-y: auto;
+  background: #f0eaf2;
+  display: flex;
+  flex-direction: column;
+}
+.no-selection {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  color: var(--mud); gap: 12px; padding: 40px;
+}
+.no-selection .ico { font-size: 48px; }
+.no-selection p { font-size: 14px; text-align: center; line-height: 1.6; }
+
+.case-detail { padding: 16px; padding-bottom: 100px; }
+
+/* ─── VET SUMMARY CARD (ShrimpDx style) ─── */
+.summary-card {
+  background: linear-gradient(135deg, #fff 0%, var(--ai-light) 100%);
+  border: 1.5px solid #c4b5fd;
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 14px;
+  box-shadow: 0 4px 16px rgba(107,20,128,.08);
+}
+.sc-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 14px; padding-bottom: 12px;
+  border-bottom: 1px dashed var(--line);
+  flex-wrap: wrap;
+}
+.sc-case-id {
+  font-family: monospace;
+  font-size: 11px; font-weight: 700;
+  background: var(--ai-mid); color: white;
+  padding: 3px 9px; border-radius: 5px;
+  letter-spacing: .04em;
+}
+.sc-meta { font-size: 11px; color: var(--mud); margin-left: auto; }
+.sc-ai-row {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 12px; margin-bottom: 14px;
+}
+.sc-ai-dx-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--ai-mid); margin-bottom: 4px; }
+.sc-ai-dx-name { font-size: 22px; font-weight: 800; color: var(--ink); line-height: 1; }
+.sc-ai-dx-sub { font-size: 11.5px; color: var(--mud); margin-top: 4px; }
+.sc-ai-conf { text-align: center; background: var(--ai-mid); border-radius: 12px; padding: 8px 14px; flex-shrink: 0; }
+.sc-ai-conf-val { font-size: 24px; font-weight: 800; color: white; line-height: 1; }
+.sc-ai-conf-label { font-size: 9px; color: rgba(255,255,255,.7); text-transform: uppercase; letter-spacing: .06em; }
+.sc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+.sc-info-block { background: white; border-radius: 10px; padding: 10px 12px; }
+.sc-info-label { font-size: 10px; color: var(--mud); margin-bottom: 2px; }
+.sc-info-val { font-size: 14px; font-weight: 700; color: var(--ink); }
+.sc-info-val.bad { color: var(--coral); }
+.sc-section-label {
+  font-size: 10.5px; color: var(--mud);
+  font-weight: 700; text-transform: uppercase;
+  letter-spacing: .06em; margin-bottom: 6px;
+}
+.sc-chips-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.sc-chip {
+  background: white; border: 1.5px solid var(--line);
+  border-radius: 20px; padding: 3px 10px;
+  font-size: 12px; font-weight: 600; color: var(--ink);
+}
+.sc-reasoning {
+  background: white; border-radius: 10px;
+  padding: 10px 12px; font-size: 12px;
+  color: var(--mud); line-height: 1.65;
+  border-left: 3px solid var(--ai-mid);
+}
+.sc-treatment {
+  background: var(--vet-green-soft); border-radius: 10px;
+  padding: 10px 12px; font-size: 12px;
+  color: #1b5e20; line-height: 1.65;
+  border-left: 3px solid var(--vet-green);
+  margin-top: 10px;
+}
+
+/* ─── VET REVIEW FORM (ShrimpDx section 8 style) ─── */
+.group {
+  background: white;
+  border-radius: 16px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+.group-head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+  background: var(--gray);
+}
+.group-head h2 { font-size: 15px; font-weight: 700; color: var(--ink); }
+.num { width: 28px; height: 28px; border-radius: 8px; background: var(--wine); color: white; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.num.vet { background: var(--vet-green); font-size: 18px; width: 32px; height: 32px; border-radius: 10px; }
+.who-tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 5px; text-transform: uppercase; letter-spacing: .04em; margin-left: auto; }
+.who-tag.vet { background: var(--vet-green-soft); color: #1b5e20; }
+.group-body { padding: 14px 16px; }
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: 12px; font-weight: 600; color: var(--mud); margin-bottom: 6px; }
+.field input, .field textarea, .field select {
+  width: 100%; padding: 10px 12px;
+  border: 1.5px solid var(--gray-mid);
+  border-radius: 9px; font-size: 13px;
+  font-family: inherit; color: var(--ink);
+  background: white; outline: none;
+  transition: border-color .2s;
+}
+.field input:focus, .field textarea:focus, .field select:focus { border-color: var(--vet-green); }
+.field textarea { min-height: 80px; resize: vertical; }
+.field select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b5c65' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+
+.tag-cloud { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag-chip {
+  padding: 5px 12px; border-radius: 20px;
+  font-size: 12px; font-weight: 600;
+  border: 1.5px solid var(--gray-mid);
+  background: white; color: var(--mud);
+  cursor: pointer; transition: all .15s;
+  font-family: inherit;
+  user-select: none;
+}
+.tag-chip.selected {
+  background: var(--vet-green-soft);
+  border-color: var(--vet-green);
+  color: #1b5e20;
+}
+.tag-chip.drug.selected {
+  background: var(--wine-pale);
+  border-color: var(--wine);
+  color: var(--wine-dark);
+}
+
+/* Already-reviewed display */
+.vet-review-display {
+  background: var(--vet-green-soft);
+  border-radius: 12px; padding: 14px 16px;
+  border-left: 4px solid var(--vet-green);
+  margin-bottom: 12px;
+}
+.vet-review-display .vrd-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--vet-green); margin-bottom: 10px; }
+.vet-review-display .vrd-row { display: flex; gap: 8px; margin-bottom: 6px; align-items: flex-start; }
+.vet-review-display .vrd-label { font-size: 11px; font-weight: 700; color: var(--mud); width: 80px; flex-shrink: 0; }
+.vet-review-display .vrd-val { font-size: 13px; color: var(--ink); line-height: 1.5; }
+
+.flagged-display {
+  background: var(--coral-soft);
+  border-left-color: var(--coral);
+}
+.flagged-display .vrd-title { color: var(--coral); }
+
+/* ─── BOTTOM ACTION BAR ─── */
+.bar {
+  position: fixed; bottom: 0; right: 0;
+  width: calc(100% - 280px);
+  background: white;
+  border-top: 1px solid var(--line);
+  padding: 12px 20px;
+  display: none;
+  box-shadow: 0 -4px 16px rgba(0,0,0,.08);
+  z-index: 100;
+}
+.bar.visible { display: block; }
+.bar-inner { display: flex; gap: 10px; align-items: center; }
+.bar-note { font-size: 11px; color: var(--mud); margin-top: 6px; }
+.btn-approve {
+  flex: 2; padding: 13px 20px;
+  background: var(--vet-green); color: white;
+  border: none; border-radius: 12px;
+  font-size: 14px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+  transition: all .2s;
+}
+.btn-approve:hover { background: #388e3c; transform: translateY(-1px); }
+.btn-flag-bar {
+  flex: 1; padding: 13px 16px;
+  background: white; color: var(--amber);
+  border: 1.5px solid var(--amber);
+  border-radius: 12px; font-size: 13px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+  transition: all .2s;
+}
+.btn-flag-bar:hover { background: #fff8e1; }
+.reject-btn {
+  padding: 13px 16px;
+  background: white; color: var(--coral);
+  border: 1.5px solid var(--coral);
+  border-radius: 12px; font-size: 13px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+  transition: all .2s;
+}
+.reject-btn:hover { background: var(--coral-soft); }
+.bar-msg { font-size: 12px; font-weight: 700; color: var(--vet-green); margin-left: 8px; }
+
+/* ─── DIFFERENTIALS ─── */
+.diff-list { display: flex; flex-direction: column; gap: 8px; }
+.diff-item { display: flex; align-items: center; gap: 8px; }
+.diff-name { font-size: 12px; color: var(--ink); width: 140px; flex-shrink: 0; }
+.diff-bar-wrap { flex: 1; height: 6px; background: rgba(139,48,96,.12); border-radius: 4px; }
+.diff-bar-fill { height: 100%; background: var(--wine); border-radius: 4px; }
+.diff-pct { font-size: 11px; color: var(--mud); width: 32px; text-align: right; }
+
+/* ─── EMPTY / ERROR STATES ─── */
+.empty-state { text-align: center; padding: 60px 20px; color: var(--mud); }
+.empty-state .ico { font-size: 40px; display: block; margin-bottom: 12px; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 768px) {
+  .app-layout { grid-template-columns: 1fr; }
+  .queue-panel { height: auto; max-height: 220px; border-right: none; border-bottom: 1px solid var(--line); }
+  .bar { width: 100%; }
+  .sc-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .app-header h1 { font-size: 14px; }
+  .bar-inner { flex-wrap: wrap; }
+  .btn-approve { flex: 1 1 100%; }
+}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div>
+    <div class="subtitle">ONE AQUACULTURE PRODUCT</div>
+    <h1>🩺 Vet Review Dashboard</h1>
+  </div>
+  <span class="header-pending" id="pendingBadge"></span>
+  <span class="header-badge" id="totalBadge"></span>
+</header>
+
+<!-- LOGIN -->
+<div id="loginWrap">
+  <div class="login-card">
+    <div class="login-icon">🩺</div>
+    <h2>เข้าสู่ระบบ Vet</h2>
+    <p>ระบบรีวิวเคสสัตวแพทย์<br>ONE AQUACULTURE PRODUCT</p>
+    <input type="password" id="passInput" placeholder="รหัสผ่าน" onkeydown="if(event.key==='Enter')doLogin()">
+    <button onclick="doLogin()">เข้าสู่ระบบ</button>
+    <div class="login-err" id="loginErr"></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="mainWrap">
+  <div class="app-layout">
+
+    <!-- LEFT: CASE QUEUE -->
+    <div class="queue-panel">
+      <div class="queue-toolbar">
+        <div class="queue-toolbar-row">
+          <span class="queue-title">เคสทั้งหมด</span>
+          <span class="case-count" id="caseCount"></span>
+          <button class="refresh-btn" onclick="loadCases()">🔄</button>
+        </div>
+        <div class="filter-tabs">
+          <button class="ftab active" data-f="all" onclick="setFilter(this,'all')">ทั้งหมด</button>
+          <button class="ftab" data-f="pending" onclick="setFilter(this,'pending')">รอรีวิว</button>
+          <button class="ftab" data-f="reviewed" onclick="setFilter(this,'reviewed')">แล้ว</button>
+          <button class="ftab" data-f="flagged" onclick="setFilter(this,'flagged')">⚠</button>
+        </div>
+      </div>
+      <div class="queue-list" id="queueList"></div>
+    </div>
+
+    <!-- RIGHT: CASE DETAIL -->
+    <div class="detail-panel" id="detailPanel">
+      <div class="no-selection" id="noSelection">
+        <span class="ico">👆</span>
+        <p>เลือกเคสจากรายการทางซ้าย<br>เพื่อเริ่มรีวิว</p>
+      </div>
+      <div class="case-detail" id="caseDetail" style="display:none;"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BOTTOM BAR (shown when case selected & pending) -->
+<div class="bar" id="actionBar">
+  <div class="bar-inner">
+    <button class="reject-btn" onclick="submitReview('rejected')">✗ ปฏิเสธ</button>
+    <button class="btn-flag-bar" onclick="submitReview('flagged')">⚠ ต้องติดตาม</button>
+    <button class="btn-approve" onclick="submitReview('reviewed')">✓ อนุมัติ / รีวิวแล้ว</button>
+    <span class="bar-msg" id="barMsg"></span>
+  </div>
+  <div class="bar-note">กด "อนุมัติ" = บันทึกรีวิวสัตวแพทย์ + เข้าฐานข้อมูล</div>
+</div>
+
+<script>
+const API_BASE = 'http://localhost:3000';
+let vetPass = '';
+let allCases = [];
+let currentFilter = 'all';
+let selectedId = null;
+
+// ─── AUTH ───
+function doLogin() {
+  const p = document.getElementById('passInput').value.trim();
+  if (!p) return;
+  vetPass = p;
+  loadCases();
+}
+
+// ─── DATA ───
+async function loadCases() {
+  const errEl = document.getElementById('loginErr');
+  try {
+    const res = await fetch(`${API_BASE}/api/cases?pass=${encodeURIComponent(vetPass)}`);
+    if (res.status === 401) {
+      errEl.textContent = 'รหัสผ่านไม่ถูกต้อง';
+      return;
+    }
+    allCases = await res.json();
+    document.getElementById('loginWrap').style.display = 'none';
+    document.getElementById('mainWrap').style.display = 'block';
+    updateHeaderBadges();
+    renderQueue();
+    if (selectedId) {
+      const c = allCases.find(x => x.id === selectedId);
+      if (c) renderDetail(c);
+    }
+  } catch {
+    errEl.textContent = 'ไม่สามารถเชื่อมต่อ server — กรุณารัน: node server.js';
+  }
+}
+
+function updateHeaderBadges() {
+  const pending = allCases.filter(c => c.status === 'pending').length;
+  const pb = document.getElementById('pendingBadge');
+  const tb = document.getElementById('totalBadge');
+  if (pending > 0) { pb.textContent = `${pending} รอรีวิว`; pb.classList.add('visible'); }
+  else { pb.classList.remove('visible'); }
+  tb.textContent = `${allCases.length} เคส`; tb.classList.add('visible');
+}
+
+// ─── FILTER ───
+function setFilter(btn, f) {
+  currentFilter = f;
+  document.querySelectorAll('.ftab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderQueue();
+}
+
+function filteredCases() {
+  if (currentFilter === 'all') return allCases;
+  return allCases.filter(c => c.status === currentFilter);
+}
+
+// ─── QUEUE ───
+function renderQueue() {
+  const list = filteredCases();
+  document.getElementById('caseCount').textContent = `${list.length} เคส`;
+  if (!list.length) {
+    document.getElementById('queueList').innerHTML = `<div class="empty-state"><span class="ico">📋</span><p>ไม่มีเคส</p></div>`;
+    return;
+  }
+  document.getElementById('queueList').innerHTML = list.map(c => buildQItem(c)).join('');
+}
+
+function buildQItem(c) {
+  const dx = c.aiDiagnosis;
+  const top = dx?.topDiagnosis || {};
+  const date = new Date(c.timestamp);
+  const dateStr = date.toLocaleDateString('th-TH', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
+  const statusLabel = { pending:'รอรีวิว', reviewed:'รีวิวแล้ว', flagged:'ต้องติดตาม', rejected:'ปฏิเสธ' }[c.status] || c.status;
+  const sym = (c.symptoms || '').substring(0, 45);
+  return `
+  <div class="q-item${selectedId===c.id?' active':''}" onclick="selectCase('${c.id}')">
+    <div class="q-item-head">
+      <div class="q-dot ${c.status}"></div>
+      <div class="q-dx">${top.nameTH || '(ยังไม่ระบุ)'}</div>
+      ${top.confidence ? `<span class="q-conf">${top.confidence}%</span>` : ''}
+    </div>
+    <div class="q-sym">${sym || '—'}</div>
+    <div class="q-meta">
+      <span>${dateStr}</span>
+      <span class="status-tag ${c.status}">${statusLabel}</span>
+    </div>
+  </div>`;
+}
+
+// ─── SELECT & DETAIL ───
+function selectCase(id) {
+  selectedId = id;
+  renderQueue();
+  const c = allCases.find(x => x.id === id);
+  if (c) renderDetail(c);
+}
+
+function renderDetail(c) {
+  document.getElementById('noSelection').style.display = 'none';
+  const det = document.getElementById('caseDetail');
+  det.style.display = 'block';
+  det.innerHTML = buildDetailHTML(c);
+  const bar = document.getElementById('actionBar');
+  if (c.status === 'pending') bar.classList.add('visible');
+  else bar.classList.remove('visible');
+  // Update bar buttons to correct case
+  document.getElementById('barMsg').textContent = '';
+}
+
+function buildDetailHTML(c) {
+  const dx = c.aiDiagnosis;
+  const top = dx?.topDiagnosis || {};
+  const diffs = dx?.differentials || [];
+  const date = new Date(c.timestamp);
+  const dateStr = date.toLocaleDateString('th-TH', { day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
+  const caseId = `CASE-${c.id.slice(-6).toUpperCase()}`;
+
+  // Summary card
+  const summaryCard = `
+  <div class="summary-card">
+    <div class="sc-header">
+      <span class="sc-case-id">${caseId}</span>
+      <span class="status-tag ${c.status}">${{pending:'รอรีวิว',reviewed:'รีวิวแล้ว',flagged:'ต้องติดตาม',rejected:'ปฏิเสธ'}[c.status]||c.status}</span>
+      <span class="sc-meta">${dateStr}</span>
+    </div>
+
+    <div class="sc-ai-row">
+      <div>
+        <div class="sc-ai-dx-label">⬢ AI วินิจฉัย (หมอปลาวาฬ)</div>
+        <div class="sc-ai-dx-name">${top.nameTH || '—'}</div>
+        ${top.nameEN ? `<div class="sc-ai-dx-sub">${top.nameEN}</div>` : ''}
+        ${dx?.severity ? `<div style="margin-top:6px;"><span style="background:#fff3e0;color:#e65100;font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;">${dx.severity}</span></div>` : ''}
+      </div>
+      ${top.confidence ? `
+      <div class="sc-ai-conf">
+        <div class="sc-ai-conf-val">${top.confidence}%</div>
+        <div class="sc-ai-conf-label">confidence</div>
+      </div>` : ''}
+    </div>
+
+    ${(c.symptoms || c.farmDetails) ? `
+    <div class="sc-section-label">อาการที่บันทึก</div>
+    <div class="sc-chips-row">
+      ${(c.symptoms||'').split(/[,\n·•]+/).filter(s=>s.trim()).map(s=>`<span class="sc-chip">${s.trim()}</span>`).join('')}
+    </div>` : ''}
+
+    ${top.reasoning ? `
+    <div class="sc-section-label">เหตุผล AI</div>
+    <div class="sc-reasoning">${top.reasoning}</div>` : ''}
+
+    ${dx?.treatment ? `
+    <div class="sc-treatment">💊 <b>AI แนะนำ:</b> ${dx.treatment}</div>` : ''}
+
+    ${diffs.length ? `
+    <div style="margin-top:14px;">
+      <div class="sc-section-label">Differentials</div>
+      <div class="diff-list">
+        ${diffs.slice(0,5).map(d=>`
+        <div class="diff-item">
+          <span class="diff-name">${d.nameTH||d.nameEN||''}</span>
+          <div class="diff-bar-wrap"><div class="diff-bar-fill" style="width:${Math.min(d.confidence||0,100)}%"></div></div>
+          <span class="diff-pct">${d.confidence||0}%</span>
+        </div>`).join('')}
+      </div>
+    </div>` : ''}
+  </div>`;
+
+  // Farm details
+  const farmCard = c.farmDetails ? `
+  <div class="group">
+    <div class="group-head">
+      <div class="num">🦐</div>
+      <h2>ข้อมูลฟาร์ม & อาการ</h2>
+    </div>
+    <div class="group-body">
+      <div style="font-size:13px;color:var(--mud);line-height:1.8;white-space:pre-wrap;background:var(--gray);border-radius:8px;padding:12px 14px;">${c.farmDetails}</div>
+    </div>
+  </div>` : '';
+
+  // Already reviewed display
+  const reviewedDisplay = c.status !== 'pending' ? `
+  <div class="${c.status==='flagged'||c.status==='rejected'?'vet-review-display flagged-display':'vet-review-display'}">
+    <div class="vrd-title">${{reviewed:'✓ vet review',flagged:'⚠ vet review — ต้องติดตาม',rejected:'✗ ปฏิเสธ'}[c.status]||'vet review'}</div>
+    ${c.vetDiagnosis ? `<div class="vrd-row"><span class="vrd-label">วินิจฉัย</span><span class="vrd-val">${c.vetDiagnosis}</span></div>` : ''}
+    ${c.vetSeverity ? `<div class="vrd-row"><span class="vrd-label">ความรุนแรง</span><span class="vrd-val">${c.vetSeverity}</span></div>` : ''}
+    ${c.vetDrugs?.length ? `<div class="vrd-row"><span class="vrd-label">ยาแนะนำ</span><span class="vrd-val">${[].concat(c.vetDrugs).join(', ')}</span></div>` : ''}
+    ${c.vetTreatment ? `<div class="vrd-row"><span class="vrd-label">การรักษา</span><span class="vrd-val">${c.vetTreatment}</span></div>` : ''}
+    ${c.vetNotes ? `<div class="vrd-row"><span class="vrd-label">หมายเหตุ</span><span class="vrd-val">${c.vetNotes}</span></div>` : ''}
+    ${c.vetTimestamp ? `<div class="vrd-row"><span class="vrd-label">รีวิวเมื่อ</span><span class="vrd-val" style="font-size:11px;">${new Date(c.vetTimestamp).toLocaleString('th-TH')}</span></div>` : ''}
+  </div>` : '';
+
+  // Vet review form (only for pending)
+  const vetForm = c.status === 'pending' ? `
+  <div class="group">
+    <div class="group-head">
+      <div class="num vet">⚕</div>
+      <h2>รีวิวสัตวแพทย์</h2>
+      <span class="who-tag vet">vet เท่านั้น</span>
+    </div>
+    <div class="group-body">
+
+      <div class="field">
+        <label>วินิจฉัยขั้นสุดท้าย <span style="font-weight:400;font-size:11px;">(เว้นว่างถ้าเห็นด้วยกับ AI)</span></label>
+        <select id="vet-dx-select" onchange="handleDxSelect()">
+          <option value="">— เห็นด้วยกับ AI (${top.nameTH||'—'}) —</option>
+          <option>EHP (Enterocytozoon hepatopenaei)</option>
+          <option>White Feces Disease</option>
+          <option>Vibriosis</option>
+          <option>WSSV</option>
+          <option>AHPND / EMS</option>
+          <option>Gill Disease</option>
+          <option>Muscle Necrosis</option>
+          <option>กำหนดเอง...</option>
+        </select>
+        <input type="text" id="vet-dx-custom" placeholder="พิมพ์ชื่อโรค..." style="margin-top:8px;display:none;" oninput="syncDxInput()">
+      </div>
+
+      <div class="field">
+        <label>ความรุนแรง</label>
+        <div class="tag-cloud" id="severity-chips">
+          <button type="button" class="tag-chip" onclick="toggleChip(this,'severity')">เล็กน้อย</button>
+          <button type="button" class="tag-chip" onclick="toggleChip(this,'severity')">ปานกลาง</button>
+          <button type="button" class="tag-chip" onclick="toggleChip(this,'severity')">รุนแรง</button>
+          <button type="button" class="tag-chip" onclick="toggleChip(this,'severity')">วิกฤต</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>การรักษาที่แนะนำ</label>
+        <textarea id="vet-treatment" placeholder="เช่น ลดอาหาร 50% + เพิ่มออกซิเจน + ProBio+...">${dx?.treatment||''}</textarea>
+      </div>
+
+      <div class="field">
+        <label>ยา/ผลิตภัณฑ์ที่แนะนำ</label>
+        <div class="tag-cloud" id="drug-chips">
+          <button type="button" class="tag-chip drug" onclick="this.classList.toggle('selected')">ONE-EHP</button>
+          <button type="button" class="tag-chip drug" onclick="this.classList.toggle('selected')">ProBio+</button>
+          <button type="button" class="tag-chip drug" onclick="this.classList.toggle('selected')">REDDER</button>
+          <button type="button" class="tag-chip drug" onclick="this.classList.toggle('selected')">Blue Sea</button>
+          <button type="button" class="tag-chip drug" onclick="this.classList.toggle('selected')">GoodWater</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>บันทึก / หมายเหตุภายในทีม <span style="font-weight:400;font-size:11px;">(ไม่ส่งให้ลูกค้า)</span></label>
+        <textarea id="vet-notes" placeholder="สิ่งที่สังเกตได้ คำแนะนำ หรือประเด็นที่ต้องติดตาม..."></textarea>
+      </div>
+
+    </div>
+  </div>` : '';
+
+  return summaryCard + farmCard + reviewedDisplay + vetForm;
+}
+
+function handleDxSelect() {
+  const sel = document.getElementById('vet-dx-select');
+  const custom = document.getElementById('vet-dx-custom');
+  if (sel.value === 'กำหนดเอง...') {
+    custom.style.display = 'block';
+    custom.focus();
+  } else {
+    custom.style.display = 'none';
+  }
+}
+
+function syncDxInput() {}
+
+function toggleChip(btn, group) {
+  document.querySelectorAll(`#${group}-chips .tag-chip`).forEach(c => c.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+// ─── SUBMIT ───
+async function submitReview(status) {
+  if (!selectedId) return;
+  const dxSel = document.getElementById('vet-dx-select');
+  const dxCustom = document.getElementById('vet-dx-custom');
+  const treatEl = document.getElementById('vet-treatment');
+  const notesEl = document.getElementById('vet-notes');
+
+  let vetDiagnosis = '';
+  if (dxSel) {
+    vetDiagnosis = dxSel.value === 'กำหนดเอง...' ? (dxCustom?.value.trim() || '') : dxSel.value;
+  }
+
+  const severityChip = document.querySelector('#severity-chips .tag-chip.selected');
+  const vetSeverity = severityChip ? severityChip.textContent : '';
+  const vetDrugs = [...document.querySelectorAll('#drug-chips .tag-chip.selected')].map(b => b.textContent);
+  const vetTreatment = treatEl?.value.trim() || '';
+  const vetNotes = notesEl?.value.trim() || '';
+
+  if (status === 'rejected') {
+    if (!confirm('ปฏิเสธเคสนี้? เคสจะถูกย้ายไป archive')) return;
+  }
+
+  const msg = document.getElementById('barMsg');
+  msg.textContent = '⏳ กำลังบันทึก...';
+  msg.style.color = 'var(--mud)';
+
+  try {
+    const res = await fetch(`${API_BASE}/api/cases/${selectedId}?pass=${encodeURIComponent(vetPass)}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ vetDiagnosis, vetNotes, vetSeverity, vetDrugs, vetTreatment, status }),
+    });
+    if (res.ok) {
+      msg.textContent = '✅ บันทึกแล้ว';
+      msg.style.color = 'var(--vet-green)';
+      await loadCases();
+    } else {
+      msg.textContent = '❌ ผิดพลาด';
+      msg.style.color = 'var(--coral)';
+    }
+  } catch {
+    msg.textContent = '❌ ไม่สามารถเชื่อมต่อ';
+    msg.style.color = 'var(--coral)';
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ผลิตภัณฑ์ · ONE AQUACULTURE PRODUCT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/main.css">
+<style>
+body { padding-top: 68px; }
+.products-hero { background: linear-gradient(135deg, var(--wine-deeper), var(--wine)); padding: 80px 5% 60px; }
+.products-hero h1 { color: white; font-size: clamp(28px,5vw,46px); font-weight: 800; margin-bottom: 10px; }
+.products-hero p { color: rgba(255,255,255,0.75); font-size: 16px; max-width: 560px; line-height: 1.7; }
+.badge-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
+.badge { background: rgba(255,255,255,0.15); color: white; padding: 6px 16px; border-radius: 24px; font-size: 12px; font-weight: 600; backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.2); }
+
+/* FILTER TABS */
+.filter-bar { background: white; border-bottom: 1px solid var(--gray-mid); sticky: top 68px; padding: 0 5%; display: flex; gap: 0; overflow-x: auto; }
+.filter-tab { padding: 16px 24px; font-size: 14px; font-weight: 600; color: var(--text-soft); cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; transition: all .2s; background: none; border-top: none; border-left: none; border-right: none; font-family: inherit; }
+.filter-tab:hover { color: var(--wine); }
+.filter-tab.active { color: var(--wine); border-bottom-color: var(--wine); }
+
+/* PRODUCT GRID */
+.products-section { padding: 60px 5%; max-width: 1200px; margin: 0 auto; }
+.product-category { margin-bottom: 72px; }
+.cat-header { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; padding-bottom: 16px; border-bottom: 2px solid var(--gray-mid); }
+.cat-icon { width: 52px; height: 52px; border-radius: 14px; background: var(--wine-pale); display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; }
+.cat-title { font-size: 22px; font-weight: 700; color: var(--text-dark); }
+.cat-sub { font-size: 13px; color: var(--text-soft); margin-top: 2px; }
+
+.product-card { background: white; border-radius: 16px; border: 1px solid var(--gray-mid); box-shadow: var(--shadow); overflow: hidden; transition: all .3s; }
+.product-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+.product-card-top { background: linear-gradient(135deg, var(--wine-deeper), var(--wine)); padding: 28px 24px 20px; }
+.product-card-name { color: white; font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+.product-card-name-en { color: rgba(255,255,255,0.65); font-size: 13px; }
+.registered-tag { display: inline-flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.15); color: white; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 12px; margin-top: 12px; }
+.product-card-body { padding: 24px; }
+.product-desc { font-size: 14px; color: var(--text-mid); line-height: 1.75; margin-bottom: 20px; }
+
+.section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-soft); margin-bottom: 8px; }
+.strain-list { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.strain-chip { font-size: 11px; font-style: italic; background: var(--gray-light); color: var(--text-mid); padding: 4px 10px; border-radius: 8px; border: 1px solid var(--gray-mid); }
+.uses-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.uses-list li { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--text-mid); }
+.uses-list li::before { content: "✓"; color: var(--wine); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+.cert-banner { background: var(--gold-light); border: 1px solid rgba(201,149,108,0.3); border-radius: 12px; padding: 16px 20px; margin-top: 24px; display: flex; align-items: center; gap: 14px; }
+.cert-banner .cert-icon { font-size: 28px; flex-shrink: 0; }
+.cert-banner h4 { font-size: 13px; font-weight: 700; color: #6B4A2A; margin-bottom: 2px; }
+.cert-banner p { font-size: 12px; color: #8B6A4A; line-height: 1.5; }
+
+@media (max-width: 768px) {
+  body { padding-top: 68px; }
+  .products-hero { padding: 48px 5% 36px; }
+  .products-hero h1 { font-size: 26px; }
+  .badge-row { gap: 6px; }
+  .badge { font-size: 11px; padding: 5px 12px; }
+  .filter-bar { padding: 0 4%; }
+  .filter-tab { padding: 12px 14px; font-size: 13px; }
+  .products-section { padding: 36px 4%; }
+  .cat-title { font-size: 18px; }
+  .product-card-name { font-size: 16px; }
+}
+@media (max-width: 480px) {
+  .products-hero h1 { font-size: 22px; }
+  .filter-tab { padding: 10px 10px; font-size: 12px; }
+  .products-section { padding: 28px 4%; }
+  .product-card-body { padding: 16px; }
+  .product-desc { font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<div class="products-hero">
+  <div class="page-tag">ผลิตภัณฑ์ · Products</div>
+  <h1>ผลิตภัณฑ์แบรนด์ ONE<br>ทดสอบจากฟาร์มจริงกว่า 100 แห่ง</h1>
+  <p>เวชภัณฑ์สัตว์น้ำแบรนด์ตัวเอง พัฒนาและทดสอบในบ่อเลี้ยงเชิงพาณิชย์จริง ครอบคลุมทุกความต้องการของฟาร์มกุ้ง</p>
+  <div class="badge-row">
+    <span class="badge">🏷️ แบรนด์ตัวเอง</span>
+    <span class="badge">✅ ทดสอบจากฟาร์มจริง</span>
+    <span class="badge">🐠 สำหรับกุ้งและสัตว์น้ำ</span>
+    <span class="badge">🤖 AI หมอปลาวาฬ ช่วยแนะนำ</span>
+  </div>
+</div>
+
+<div class="filter-bar">
+  <button class="filter-tab active" onclick="filterCat('all', this)">ทั้งหมด</button>
+  <button class="filter-tab" onclick="filterCat('vitamin', this)">💊 วิตามิน & อาหารเสริม</button>
+  <button class="filter-tab" onclick="filterCat('mineral', this)">⚡ แร่ธาตุ</button>
+  <button class="filter-tab" onclick="filterCat('water', this)">💧 สารบำบัดน้ำ</button>
+  <button class="filter-tab" onclick="filterCat('disinfect', this)">🛡️ สารฆ่าเชื้อ</button>
+  <button class="filter-tab" onclick="filterCat('conditioner', this)">🌊 สารปรับสภาพน้ำ</button>
+</div>
+
+<div class="products-section" id="productContainer">
+
+  <!-- VITAMINS & SUPPLEMENTS -->
+  <div class="product-category reveal" id="cat-vitamin">
+    <div class="cat-header">
+      <div class="cat-icon">💊</div>
+      <div>
+        <div class="cat-title">วิตามิน และ อาหารเสริม</div>
+        <div class="cat-sub">Vitamins &amp; Supplements</div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-card-top">
+        <div class="product-card-name">วิตามิน และ อาหารเสริม</div>
+        <div class="product-card-name-en">Vitamins &amp; Supplements</div>
+      </div>
+      <div class="product-card-body">
+        <p class="product-desc">กลุ่มวิตามินและอาหารเสริมคุณภาพสูงสำหรับสัตว์น้ำ เสริมภูมิคุ้มกัน เพิ่มความแข็งแรง และส่งเสริมการเจริญเติบโต คัดสรรสินค้าที่ใช้งานได้จริงในฟาร์มเชิงพาณิชย์</p>
+        <div class="section-label">ประโยชน์</div>
+        <ul class="uses-list">
+          <li>เสริมภูมิคุ้มกันและความแข็งแรง</li>
+          <li>ส่งเสริมการเจริญเติบโตของสัตว์น้ำ</li>
+          <li>ช่วยให้สัตว์น้ำทนต่อความเครียดจากสภาพแวดล้อม</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- MINERALS -->
+  <div class="product-category reveal" id="cat-mineral">
+    <div class="cat-header">
+      <div class="cat-icon">⚡</div>
+      <div>
+        <div class="cat-title">แร่ธาตุ</div>
+        <div class="cat-sub">Minerals</div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-card-top">
+        <div class="product-card-name">แร่ธาตุ</div>
+        <div class="product-card-name-en">Minerals</div>
+      </div>
+      <div class="product-card-body">
+        <p class="product-desc">กลุ่มแร่ธาตุที่จำเป็นสำหรับการลอกคราบและการเจริญเติบโตของสัตว์น้ำ ปรับสมดุลแคลเซียม แมกนีเซียม และแร่ธาตุอื่นๆ ในน้ำและร่างกายสัตว์น้ำ</p>
+        <div class="section-label">ประโยชน์</div>
+        <ul class="uses-list">
+          <li>ส่งเสริมการลอกคราบที่สมบูรณ์</li>
+          <li>เสริมความแข็งแรงของเปลือก</li>
+          <li>ปรับสมดุลแร่ธาตุในระบบน้ำและร่างกาย</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- WATER TREATMENT -->
+  <div class="product-category reveal" id="cat-water">
+    <div class="cat-header">
+      <div class="cat-icon">💧</div>
+      <div>
+        <div class="cat-title">สารบำบัดน้ำ</div>
+        <div class="cat-sub">Water Treatment</div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-card-top">
+        <div class="product-card-name">สารบำบัดน้ำ</div>
+        <div class="product-card-name-en">Water Treatment</div>
+      </div>
+      <div class="product-card-body">
+        <p class="product-desc">กลุ่มผลิตภัณฑ์โปรไบโอติกส์และสารบำบัดน้ำสำหรับบ่อเลี้ยงสัตว์น้ำ ปรับสมดุลจุลินทรีย์ในบ่อ ลดแอมโมเนีย และปรับปรุงคุณภาพน้ำให้เหมาะสมกับการเพาะเลี้ยง</p>
+        <div class="section-label">ประโยชน์</div>
+        <ul class="uses-list">
+          <li>ลดแอมโมเนียและสารพิษในน้ำ</li>
+          <li>ปรับสมดุลจุลินทรีย์ในระบบน้ำ</li>
+          <li>ปรับปรุงคุณภาพน้ำให้เหมาะกับการเพาะเลี้ยง</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISINFECTANTS -->
+  <div class="product-category reveal" id="cat-disinfect">
+    <div class="cat-header">
+      <div class="cat-icon">🛡️</div>
+      <div>
+        <div class="cat-title">สารฆ่าเชื้อ</div>
+        <div class="cat-sub">Disinfectants</div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-card-top">
+        <div class="product-card-name">สารฆ่าเชื้อ</div>
+        <div class="product-card-name-en">Disinfectants</div>
+      </div>
+      <div class="product-card-body">
+        <p class="product-desc">กลุ่มสารฆ่าเชื้อและควบคุมเชื้อโรคในบ่อเลี้ยงสัตว์น้ำ ช่วยลดความเสี่ยงการเกิดโรคระบาด ควบคุมเชื้อก่อโรคในระบบน้ำและพื้นบ่อ</p>
+        <div class="section-label">ประโยชน์</div>
+        <ul class="uses-list">
+          <li>ฆ่าเชื้อโรคในบ่อและระบบน้ำ</li>
+          <li>ควบคุมเชื้อก่อโรคที่เป็นอันตราย</li>
+          <li>ลดความเสี่ยงการระบาดของโรค</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- WATER CONDITIONERS -->
+  <div class="product-category reveal" id="cat-conditioner">
+    <div class="cat-header">
+      <div class="cat-icon">🌊</div>
+      <div>
+        <div class="cat-title">สารปรับสภาพน้ำ</div>
+        <div class="cat-sub">Water Conditioners</div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-card-top">
+        <div class="product-card-name">สารปรับสภาพน้ำ</div>
+        <div class="product-card-name-en">Water Conditioners</div>
+      </div>
+      <div class="product-card-body">
+        <p class="product-desc">กลุ่มสารปรับสภาพน้ำสำหรับบ่อเลี้ยงสัตว์น้ำ ปรับ pH ปรับความกระด้าง และสร้างสภาพแวดล้อมน้ำที่เหมาะสมกับการเพาะเลี้ยงสัตว์น้ำเชิงพาณิชย์</p>
+        <div class="section-label">ประโยชน์</div>
+        <ul class="uses-list">
+          <li>ปรับ pH น้ำให้เหมาะสม</li>
+          <li>ปรับความกระด้างและแร่ธาตุในน้ำ</li>
+          <li>สร้างสภาพแวดล้อมที่เหมาะกับการเพาะเลี้ยง</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="js/main.js"></script>
+<script>
+function filterCat(cat, btn) {
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.product-category').forEach(el => {
+    if (cat === 'all') { el.style.display = ''; }
+    else { el.style.display = el.id === `cat-${cat}` ? '' : 'none'; }
+  });
+}
+</script>
+</body>
+</html>

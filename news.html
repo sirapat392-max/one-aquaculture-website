@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ข่าวสาร · ONE AQUACULTURE PRODUCT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/main.css">
+<style>
+body { padding-top: 68px; }
+.page-header { padding: 80px 5% 48px; }
+
+/* AI UPDATE BAR */
+.ai-update-bar { background: var(--wine-pale); border-bottom: 1px solid rgba(139,48,96,0.1); padding: 10px 5%; display: flex; align-items: center; gap: 12px; }
+.ai-update-bar .dot { width: 7px; height: 7px; border-radius: 50%; background: #22C55E; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
+.ai-update-bar span { font-size: 12px; color: var(--wine-dark); font-weight: 500; }
+.ai-update-bar button { margin-left: auto; padding: 6px 16px; border-radius: 20px; border: 1.5px solid var(--wine); color: var(--wine); background: white; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all .2s; }
+.ai-update-bar button:hover { background: var(--wine); color: white; }
+.ai-update-bar button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* CATEGORY FILTER */
+.cat-filter { padding: 16px 5%; background: white; border-bottom: 1px solid var(--gray-mid); display: flex; gap: 8px; flex-wrap: wrap; }
+.cat-pill { padding: 7px 16px; border-radius: 24px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1.5px solid var(--gray-mid); background: white; color: var(--text-soft); transition: all .2s; font-family: inherit; }
+.cat-pill:hover { border-color: var(--wine); color: var(--wine); }
+.cat-pill.active { background: var(--wine); color: white; border-color: var(--wine); }
+
+/* NEWS GRID */
+.news-container { max-width: 1200px; margin: 0 auto; padding: 48px 5%; }
+.news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; }
+
+.news-card { background: white; border-radius: 16px; border: 1px solid var(--gray-mid); box-shadow: var(--shadow); overflow: hidden; transition: all .3s; text-decoration: none; display: flex; flex-direction: column; }
+.news-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.news-card-body { padding: 20px 22px; flex: 1; display: flex; flex-direction: column; }
+.news-cat-label { display: inline-flex; align-items: center; gap: 5px; padding: 4px 12px; border-radius: 16px; font-size: 11px; font-weight: 700; margin-bottom: 12px; }
+.cat-regulation { background: #FFF3CD; color: #856404; }
+.cat-research { background: #D1FAE5; color: #065F46; }
+.cat-industry { background: var(--wine-pale); color: var(--wine-dark); }
+.cat-disease { background: #FFE4E6; color: #9F1239; }
+.news-title { font-size: 15px; font-weight: 700; color: var(--text-dark); line-height: 1.5; margin-bottom: 10px; flex: 1; }
+.news-summary { font-size: 13px; color: var(--text-mid); line-height: 1.7; margin-bottom: 14px; }
+.news-meta { display: flex; justify-content: space-between; align-items: center; padding-top: 14px; border-top: 1px solid var(--gray-mid); }
+.news-source { font-size: 12px; font-weight: 600; color: var(--text-soft); }
+.news-date { font-size: 11px; color: var(--text-soft); }
+.news-read-more { font-size: 12px; font-weight: 600; color: var(--wine); }
+
+/* EMPTY STATE */
+.empty-news { text-align: center; padding: 80px 20px; }
+.empty-news .icon { font-size: 52px; margin-bottom: 16px; }
+.empty-news h3 { font-size: 20px; color: var(--text-mid); margin-bottom: 10px; }
+.empty-news p { font-size: 14px; color: var(--text-soft); margin-bottom: 24px; line-height: 1.7; }
+.last-updated { text-align: center; font-size: 12px; color: var(--text-soft); margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--gray-mid); }
+
+@media (max-width: 768px) {
+  .news-grid { grid-template-columns: 1fr; }
+  .news-container { padding: 32px 5%; }
+  .page-header { padding: 48px 5% 32px; }
+  .cat-filter { padding: 12px 5%; gap: 6px; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 12px; }
+  .cat-pill { white-space: nowrap; font-size: 12px; padding: 6px 12px; flex-shrink: 0; }
+  .ai-update-bar { flex-wrap: wrap; gap: 6px; }
+  .ai-update-bar button { margin-left: 0; }
+}
+@media (max-width: 480px) {
+  .news-card-body { padding: 16px; }
+  .news-title { font-size: 14px; }
+}
+</style>
+</head>
+<body>
+
+<div class="ai-update-bar">
+  <div class="dot"></div>
+  <span id="updateStatus">ข่าวสารอัปเดตโดย AI</span>
+  <button id="refreshBtn" onclick="refreshNews()">🔄 อัปเดตข่าว</button>
+</div>
+
+<div class="page-header">
+  <div class="page-tag">ข่าวสาร · News</div>
+  <h1>ข่าวสารและความรู้<br>อุตสาหกรรมประมง</h1>
+  <p>ติดตามข่าวสาร งานวิจัย และกฎระเบียบล่าสุด คัดสรรและอัปเดตโดย AI</p>
+</div>
+
+<div class="cat-filter">
+  <button class="cat-pill active" onclick="filterNews('all', this)">ทั้งหมด</button>
+  <button class="cat-pill" onclick="filterNews('regulation', this)">⚖️ กฎระเบียบ</button>
+  <button class="cat-pill" onclick="filterNews('research', this)">🔬 งานวิจัย</button>
+  <button class="cat-pill" onclick="filterNews('industry', this)">🏭 อุตสาหกรรม</button>
+  <button class="cat-pill" onclick="filterNews('disease', this)">🦠 โรคสัตว์น้ำ</button>
+</div>
+
+<div class="news-container">
+  <div class="news-grid" id="newsGrid">
+    <div class="empty-news" style="grid-column:1/-1">
+      <div class="icon">📰</div>
+      <h3>กำลังโหลดข่าวสาร...</h3>
+      <p>รอสักครู่</p>
+    </div>
+  </div>
+  <div class="last-updated" id="lastUpdated"></div>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+let allArticles = [];
+let currentFilter = 'all';
+
+const catMap = {
+  regulation: { label: '⚖️ กฎระเบียบ', cls: 'cat-regulation' },
+  research:   { label: '🔬 งานวิจัย',   cls: 'cat-research' },
+  industry:   { label: '🏭 อุตสาหกรรม', cls: 'cat-industry' },
+  disease:    { label: '🦠 โรคสัตว์น้ำ', cls: 'cat-disease' },
+};
+
+async function loadNews() {
+  try {
+    const res = await fetch(`${API}/api/news`);
+    const data = await res.json();
+    allArticles = data.articles || [];
+    renderNews(allArticles);
+    if (data.lastUpdated) {
+      const d = new Date(data.lastUpdated);
+      document.getElementById('lastUpdated').textContent =
+        `อัปเดตล่าสุด: ${d.toLocaleDateString('th-TH', { year:'numeric', month:'long', day:'numeric' })} · อัปเดตโดย ${data.updatedBy || 'AI'}`;
+      document.getElementById('updateStatus').textContent = 'ข่าวสารอัปเดตโดย AI · ' + d.toLocaleDateString('th-TH');
+    }
+  } catch {
+    document.getElementById('newsGrid').innerHTML = `
+      <div class="empty-news" style="grid-column:1/-1">
+        <div class="icon">⚠️</div>
+        <h3>ยังไม่มีข้อมูลข่าวสาร</h3>
+        <p>กด "อัปเดตข่าว" เพื่อให้ AI ไปหาข่าวล่าสุดมาให้<br>หรือรันคำสั่ง <code>npm run update-news</code> ใน terminal</p>
+      </div>`;
+  }
+}
+
+function renderNews(articles) {
+  const grid = document.getElementById('newsGrid');
+  const filtered = currentFilter === 'all' ? articles : articles.filter(a => a.category === currentFilter);
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="empty-news" style="grid-column:1/-1"><div class="icon">🔍</div><h3>ไม่พบข่าวในหมวดนี้</h3><p>ลองกด "อัปเดตข่าว" เพื่อค้นหาใหม่</p></div>`;
+    return;
+  }
+  grid.innerHTML = filtered.map(a => {
+    const cat = catMap[a.category] || { label: a.categoryLabel || a.category, cls: 'cat-industry' };
+    return `
+    <a class="news-card" href="${a.url || '#'}" target="_blank" rel="noopener">
+      <div class="news-card-body">
+        <span class="news-cat-label ${cat.cls}">${cat.label}</span>
+        <div class="news-title">${a.titleTH || a.title}</div>
+        ${a.summary ? `<div class="news-summary">${a.summary}</div>` : ''}
+        <div class="news-meta">
+          <span class="news-source">${a.source || ''}</span>
+          <span class="news-date">${a.date || ''}</span>
+        </div>
+      </div>
+    </a>`;
+  }).join('');
+}
+
+function filterNews(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  renderNews(allArticles);
+}
+
+async function refreshNews() {
+  const btn = document.getElementById('refreshBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ กำลังอัปเดต...';
+  document.getElementById('updateStatus').textContent = 'AI กำลังค้นหาข่าวใหม่...';
+  try {
+    await fetch(`${API}/api/refresh-news`, { method: 'POST' });
+    setTimeout(loadNews, 2000);
+  } catch {
+    // fallback: just reload
+    await loadNews();
+  }
+  btn.disabled = false;
+  btn.textContent = '🔄 อัปเดตข่าว';
+}
+
+loadNews();
+</script>
+</body>
+</html>

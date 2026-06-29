@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ONE AQUACULTURE PRODUCT | บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --wine:        #8B3060;
+    --wine-dark:   #6A1E45;
+    --wine-deeper: #4D1232;
+    --wine-light:  #B04880;
+    --wine-pale:   #F5EBF0;
+    --gold:        #C9956C;
+    --gold-dark:   #A67450;
+    --gold-light:  #F0E6D9;
+    --white:       #FFFFFF;
+    --gray-light:  #F8F5F7;
+    --gray-mid:    #E8E0E5;
+    --text-dark:   #1C1020;
+    --text-mid:    #5A4A56;
+    --text-soft:   #8A7A85;
+    --radius:      12px;
+    --shadow:      0 4px 24px rgba(139,48,96,0.10);
+    --shadow-lg:   0 12px 48px rgba(139,48,96,0.16);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Noto Sans Thai', 'Inter', sans-serif;
+    color: var(--text-dark);
+    background: var(--white);
+    overflow-x: hidden;
+  }
+
+  /* ─── NAVBAR ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--gray-mid);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%;
+    height: 68px;
+    box-shadow: 0 2px 16px rgba(139,48,96,0.08);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .nav-logo-icon {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .nav-logo-icon img { width: 100%; height: 100%; object-fit: cover; }
+  .nav-logo-text { line-height: 1.2; }
+  .nav-logo-text strong { display: block; font-size: 15px; font-weight: 700; color: var(--wine-dark); }
+  .nav-logo-text span { font-size: 10px; color: var(--text-soft); letter-spacing: 1px; text-transform: uppercase; }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    text-decoration: none; font-size: 14px; font-weight: 500;
+    color: var(--text-mid);
+    transition: color .2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+    height: 2px; background: var(--wine); border-radius: 2px;
+    transform: scaleX(0); transition: transform .2s;
+  }
+  .nav-links a:hover { color: var(--wine); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+  .nav-cta {
+    background: var(--wine); color: white;
+    padding: 9px 22px; border-radius: 24px;
+    text-decoration: none; font-size: 13px; font-weight: 600;
+    transition: background .2s, transform .2s;
+  }
+  .nav-cta:hover { background: var(--wine-dark); transform: translateY(-1px); }
+  .nav-hamburger { display: none; background: none; border: none; cursor: pointer; }
+  .nav-hamburger span {
+    display: block; width: 22px; height: 2px;
+    background: var(--wine); margin: 5px 0;
+    transition: all .3s;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(145deg, var(--wine-deeper) 0%, var(--wine) 50%, var(--wine-light) 100%);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    padding: 100px 5% 80px;
+  }
+  .hero-bg-geo {
+    position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+  }
+  .geo-circle {
+    position: absolute; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .geo-circle:nth-child(1) { width: 600px; height: 600px; top: -200px; right: -150px; }
+  .geo-circle:nth-child(2) { width: 400px; height: 400px; top: 50px; right: 50px; border-color: rgba(255,255,255,0.05); }
+  .geo-circle:nth-child(3) { width: 300px; height: 300px; bottom: -100px; left: -100px; }
+  .geo-hex {
+    position: absolute;
+    width: 80px; height: 80px;
+    background: rgba(255,255,255,0.04);
+    clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  }
+  .geo-hex:nth-child(4) { top: 20%; left: 8%; animation: float 6s ease-in-out infinite; }
+  .geo-hex:nth-child(5) { top: 60%; left: 4%; width: 50px; height: 50px; animation: float 8s ease-in-out infinite 1s; }
+  .geo-hex:nth-child(6) { bottom: 20%; right: 12%; width: 60px; height: 60px; animation: float 7s ease-in-out infinite 2s; }
+  @keyframes float { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-15px) rotate(5deg); } }
+
+  .hero-waves {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 120px;
+    overflow: hidden;
+  }
+  .hero-waves svg { position: absolute; bottom: 0; width: 100%; }
+  .wave1 { animation: wave 8s ease-in-out infinite; }
+  .wave2 { animation: wave 10s ease-in-out infinite 1s; opacity: 0.5; }
+  @keyframes wave { 0%,100% { transform: translateX(0); } 50% { transform: translateX(-30px); } }
+
+  .hero-content { position: relative; z-index: 2; text-align: center; max-width: 860px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.15); backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 6px 16px; border-radius: 24px;
+    font-size: 12px; color: rgba(255,255,255,0.9);
+    letter-spacing: 1.5px; text-transform: uppercase; font-weight: 500;
+    margin-bottom: 28px;
+  }
+  .hero-badge::before { content: '●'; color: var(--gold-light); font-size: 8px; }
+  .hero-title-en {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(42px, 7vw, 80px);
+    font-weight: 800; color: white;
+    line-height: 1.0; letter-spacing: -2px;
+    margin-bottom: 8px;
+  }
+  .hero-title-en span { color: var(--gold-light); }
+  .hero-title-th {
+    font-size: clamp(18px, 2.5vw, 26px);
+    font-weight: 400; color: rgba(255,255,255,0.75);
+    margin-bottom: 28px; letter-spacing: 0.5px;
+  }
+  .hero-desc {
+    font-size: clamp(15px, 1.8vw, 18px);
+    color: rgba(255,255,255,0.75); line-height: 1.8;
+    max-width: 620px; margin: 0 auto 44px;
+  }
+  .hero-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: white; color: var(--wine-dark);
+    padding: 14px 32px; border-radius: 32px;
+    font-size: 15px; font-weight: 700; text-decoration: none;
+    transition: all .25s; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+  .btn-outline {
+    border: 2px solid rgba(255,255,255,0.5); color: white;
+    padding: 14px 32px; border-radius: 32px;
+    font-size: 15px; font-weight: 600; text-decoration: none;
+    transition: all .25s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-outline:hover { background: rgba(255,255,255,0.12); border-color: white; }
+  .hero-stats {
+    display: flex; gap: 48px; justify-content: center; flex-wrap: wrap;
+    margin-top: 60px; padding-top: 40px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+  }
+  .stat { text-align: center; }
+  .stat-num { font-family: 'Inter', sans-serif; font-size: 36px; font-weight: 800; color: white; line-height: 1; }
+  .stat-label { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 4px; }
+
+  /* ─── SECTION BASE ─── */
+  section { padding: 96px 5%; }
+  .section-tag {
+    display: inline-block;
+    font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--wine); margin-bottom: 14px;
+    padding: 4px 14px; background: var(--wine-pale); border-radius: 24px;
+  }
+  .section-title {
+    font-size: clamp(28px, 4vw, 44px); font-weight: 700;
+    color: var(--text-dark); line-height: 1.2; margin-bottom: 8px;
+  }
+  .section-title-en {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(13px, 1.5vw, 16px); font-weight: 500;
+    color: var(--text-soft); letter-spacing: 1px; text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .section-desc {
+    font-size: 16px; color: var(--text-mid); line-height: 1.85;
+    max-width: 580px;
+  }
+  .text-center { text-align: center; }
+  .text-center .section-desc { margin: 0 auto; }
+
+  /* ─── ABOUT ─── */
+  .about { background: var(--gray-light); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; max-width: 1100px; margin: 0 auto; }
+  .about-visual {
+    position: relative; display: flex; align-items: center; justify-content: center;
+  }
+  .about-logo-frame {
+    width: 280px; height: 280px; border-radius: 50%;
+    background: white; box-shadow: var(--shadow-lg);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .about-logo-frame::before {
+    content: '';
+    position: absolute; inset: 12px; border-radius: 50%;
+    border: 2px dashed var(--wine-pale);
+    animation: spin 20s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .about-logo-frame img { width: 200px; height: 200px; object-fit: contain; position: relative; z-index: 1; }
+  .about-orbit {
+    position: absolute;
+    width: 340px; height: 340px; border-radius: 50%;
+    border: 1px solid var(--wine-pale);
+  }
+  .about-orbit-dot {
+    position: absolute; width: 10px; height: 10px; border-radius: 50%;
+    background: var(--wine); top: -5px; left: 50%; transform: translateX(-50%);
+  }
+  .about-orbit { animation: spin 15s linear infinite; }
+  .about-features { display: flex; flex-direction: column; gap: 24px; margin-top: 36px; }
+  .feature-item { display: flex; gap: 16px; align-items: flex-start; }
+  .feature-icon {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: var(--wine-pale); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 20px;
+  }
+  .feature-item h4 { font-size: 15px; font-weight: 700; color: var(--wine-dark); margin-bottom: 4px; }
+  .feature-item p { font-size: 14px; color: var(--text-mid); line-height: 1.7; }
+
+  /* ─── PRODUCTS ─── */
+  .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; margin-top: 56px; max-width: 1200px; margin-left: auto; margin-right: auto; }
+  .product-card {
+    background: white; border-radius: var(--radius);
+    border: 1px solid var(--gray-mid);
+    overflow: hidden; transition: all .3s;
+    box-shadow: var(--shadow);
+  }
+  .product-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: var(--wine-pale); }
+  .product-card-header {
+    background: linear-gradient(135deg, var(--wine-dark), var(--wine));
+    padding: 32px 28px; text-align: center; position: relative; overflow: hidden;
+  }
+  .product-card-header::after {
+    content: ''; position: absolute; bottom: -20px; left: -10%; right: -10%;
+    height: 40px; background: white; border-radius: 50% 50% 0 0;
+  }
+  .product-icon { font-size: 42px; margin-bottom: 8px; display: block; }
+  .product-card-header h3 { color: white; font-size: 18px; font-weight: 700; position: relative; z-index: 1; }
+  .product-card-header p { color: rgba(255,255,255,0.8); font-size: 12px; letter-spacing: 1px; text-transform: uppercase; position: relative; z-index: 1; margin-top: 4px; }
+  .product-card-body { padding: 36px 28px 28px; }
+  .product-card-body p { font-size: 14px; color: var(--text-mid); line-height: 1.8; margin-bottom: 20px; }
+  .product-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .product-tag {
+    font-size: 11px; padding: 3px 10px; border-radius: 12px;
+    background: var(--wine-pale); color: var(--wine-dark); font-weight: 600;
+  }
+  .product-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--wine); font-size: 13px; font-weight: 700;
+    text-decoration: none; margin-top: 20px;
+    transition: gap .2s;
+  }
+  .product-link:hover { gap: 10px; }
+
+  /* ─── WHY ONE ─── */
+  .why { background: var(--wine-deeper); }
+  .why .section-title { color: white; }
+  .why .section-title-en { color: rgba(255,255,255,0.5); }
+  .why .section-desc { color: rgba(255,255,255,0.7); }
+  .why .section-tag { background: rgba(255,255,255,0.1); color: var(--gold-light); }
+  .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 28px; margin-top: 56px; max-width: 1100px; margin-left: auto; margin-right: auto; }
+  .why-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius); padding: 32px 24px;
+    transition: all .3s;
+  }
+  .why-card:hover { background: rgba(255,255,255,0.10); transform: translateY(-4px); }
+  .why-num {
+    font-family: 'Inter', sans-serif;
+    font-size: 48px; font-weight: 800; color: rgba(255,255,255,0.08);
+    line-height: 1; margin-bottom: 16px;
+  }
+  .why-icon { font-size: 32px; margin-bottom: 16px; display: block; }
+  .why-card h4 { font-size: 17px; font-weight: 700; color: white; margin-bottom: 10px; }
+  .why-card p { font-size: 14px; color: rgba(255,255,255,0.65); line-height: 1.8; }
+  .why-cert {
+    margin-top: 64px; padding-top: 48px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    flex-wrap: wrap; gap: 40px; max-width: 1100px; margin-left: auto; margin-right: auto;
+  }
+  .cert-badge {
+    display: flex; align-items: center; gap: 12px;
+    color: rgba(255,255,255,0.7); font-size: 13px; font-weight: 500;
+  }
+  .cert-badge-icon {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center; font-size: 20px;
+  }
+
+  /* ─── PROCESS ─── */
+  .process-steps { display: flex; gap: 0; margin-top: 56px; max-width: 1100px; margin-left: auto; margin-right: auto; position: relative; }
+  .process-steps::before {
+    content: ''; position: absolute;
+    top: 40px; left: 10%; right: 10%; height: 2px;
+    background: linear-gradient(to right, var(--wine-pale), var(--wine), var(--wine-pale));
+    z-index: 0;
+  }
+  .process-step { flex: 1; text-align: center; padding: 0 16px; position: relative; z-index: 1; }
+  .step-num {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: var(--wine); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Inter', sans-serif; font-size: 28px; font-weight: 800;
+    margin: 0 auto 20px; box-shadow: 0 4px 20px rgba(139,48,96,0.3);
+    border: 4px solid white;
+  }
+  .process-step h4 { font-size: 15px; font-weight: 700; color: var(--wine-dark); margin-bottom: 8px; }
+  .process-step p { font-size: 13px; color: var(--text-mid); line-height: 1.7; }
+
+  /* ─── CONTACT ─── */
+  .contact { background: var(--gray-light); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; max-width: 1100px; margin: 56px auto 0; align-items: start; }
+  .contact-info { display: flex; flex-direction: column; gap: 28px; }
+  .contact-item { display: flex; gap: 16px; align-items: flex-start; }
+  .contact-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    background: var(--wine); color: white; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 20px;
+  }
+  .contact-item h4 { font-size: 13px; font-weight: 700; color: var(--wine-dark); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .contact-item p { font-size: 15px; color: var(--text-dark); line-height: 1.7; }
+  .contact-form { background: white; border-radius: 16px; padding: 40px; box-shadow: var(--shadow); }
+  .form-title { font-size: 20px; font-weight: 700; color: var(--text-dark); margin-bottom: 6px; }
+  .form-subtitle { font-size: 14px; color: var(--text-soft); margin-bottom: 28px; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group.full { grid-column: 1 / -1; }
+  label { font-size: 13px; font-weight: 600; color: var(--text-mid); }
+  input, select, textarea {
+    padding: 11px 14px; border-radius: 8px;
+    border: 1.5px solid var(--gray-mid); font-size: 14px;
+    font-family: inherit; color: var(--text-dark);
+    transition: border-color .2s, box-shadow .2s;
+    background: white;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none; border-color: var(--wine);
+    box-shadow: 0 0 0 3px rgba(139,48,96,0.08);
+  }
+  textarea { resize: vertical; min-height: 100px; }
+  .form-submit {
+    width: 100%; padding: 14px; border-radius: 32px;
+    background: var(--wine); color: white; border: none;
+    font-size: 15px; font-weight: 700; cursor: pointer;
+    transition: all .25s; margin-top: 8px; font-family: inherit;
+  }
+  .form-submit:hover { background: var(--wine-dark); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(139,48,96,0.3); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--text-dark); color: rgba(255,255,255,0.7);
+    padding: 64px 5% 32px;
+  }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; max-width: 1100px; margin: 0 auto; }
+  .footer-brand { }
+  .footer-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .footer-logo-icon {
+    width: 40px; height: 40px;
+    border-radius: 50%; overflow: hidden; flex-shrink: 0;
+  }
+  .footer-logo-icon img { width: 100%; height: 100%; object-fit: cover; }
+  .footer-logo-text strong { display: block; font-size: 14px; font-weight: 700; color: white; }
+  .footer-logo-text span { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; }
+  .footer-desc { font-size: 13px; line-height: 1.8; max-width: 260px; }
+  .footer-wave { margin-top: 16px; }
+  .footer-wave svg { width: 80px; opacity: 0.3; }
+  .footer-col h5 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: white; margin-bottom: 18px; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-col a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 13px; transition: color .2s; }
+  .footer-col a:hover { color: var(--wine-light); }
+  .footer-bottom {
+    max-width: 1100px; margin: 48px auto 0;
+    padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+  }
+  .footer-bottom p { font-size: 12px; color: rgba(255,255,255,0.4); }
+  .footer-legal { display: flex; gap: 20px; }
+  .footer-legal a { font-size: 12px; color: rgba(255,255,255,0.4); text-decoration: none; }
+  .footer-legal a:hover { color: rgba(255,255,255,0.7); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    .nav-links, .nav-cta { display: none; }
+    .nav-hamburger { display: block; }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .about-visual { justify-content: center; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; }
+    .process-steps { flex-direction: column; gap: 28px; }
+    .process-steps::before { display: none; }
+    .step-num { width: 60px; height: 60px; font-size: 22px; }
+    .why-grid { grid-template-columns: 1fr 1fr; }
+    .hero { padding: 80px 5% 60px; min-height: auto; }
+    .about-logo-frame { width: 200px; height: 200px; }
+    .about-orbit { width: 260px; height: 260px; }
+    .about-logo-frame img { width: 140px; height: 140px; }
+  }
+  @media (max-width: 600px) {
+    section { padding: 56px 5%; }
+    .hero { padding: 72px 5% 48px; }
+    .hero-stats { gap: 20px; margin-top: 36px; padding-top: 28px; }
+    .stat-num { font-size: 26px; }
+    .stat-label { font-size: 11px; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .form-grid { grid-template-columns: 1fr; }
+    .hero-title-en { letter-spacing: -1px; }
+    .hero-badge { font-size: 11px; }
+    .hero-actions { flex-direction: column; align-items: center; }
+    .btn-primary, .btn-outline { width: 100%; max-width: 320px; justify-content: center; }
+    .why-grid { grid-template-columns: 1fr; }
+    .why-card { padding: 22px 18px; }
+    .products-grid { grid-template-columns: 1fr; }
+    .contact-form { padding: 24px 20px; }
+    .news-grid { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; text-align: center; gap: 6px; }
+  }
+  @media (max-width: 400px) {
+    .hero-stats { flex-direction: column; gap: 16px; }
+    .stat-num { font-size: 22px; }
+  }
+
+  /* ─── SCROLL REVEAL ─── */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  // ── EmailJS config ──────────────────────────────────────────────
+  // 1. PUBLIC_KEY  → EmailJS dashboard → Account → API Keys
+  // 2. SERVICE_ID  → service_jyzf95t  (already set)
+  // 3. TEMPLATE_ID → EmailJS dashboard → Email Templates → Template ID
+  const EJS_PUBLIC_KEY  = 'Y5eWiI4tRaoNAHxEi';
+  const EJS_SERVICE_ID  = 'service_jyzf95t';
+  const EJS_TEMPLATE_ID = 'template_ndw0cps';
+  emailjs.init(EJS_PUBLIC_KEY);
+</script>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon"><img src="logo.jpg" alt="ONE logo"></div>
+    <div class="nav-logo-text">
+      <strong>ONE AQUACULTURE</strong>
+      <span>บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">เกี่ยวกับเรา</a></li>
+    <li><a href="#products">ผลิตภัณฑ์</a></li>
+    <li><a href="ai-diagnosis.html" style="color:var(--wine);font-weight:700;">🤖 วิเคราะห์โรคกุ้ง</a></li>
+    <li><a href="#why">ทำไมต้องเรา</a></li>
+    <li><a href="#contact">ติดต่อ</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">ปรึกษาผู้เชี่ยวชาญ</a>
+  <button class="nav-hamburger" aria-label="menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg-geo">
+    <div class="geo-circle"></div>
+    <div class="geo-circle"></div>
+    <div class="geo-circle"></div>
+    <div class="geo-hex"></div>
+    <div class="geo-hex"></div>
+    <div class="geo-hex"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">● ผลิตภัณฑ์แบรนด์ตัวเอง · เชื่อใจโดยกว่า 100 ฟาร์มทั่วไทย</div>
+    <div class="hero-title-en">ONE<br><span>AQUACULTURE</span></div>
+    <div class="hero-title-th">บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด</div>
+    <p class="hero-desc">
+      เวชภัณฑ์สัตว์น้ำแบรนด์ตัวเอง ทดสอบจากหน้างานจริง<br>
+      ให้บริการกว่า 100 ฟาร์มทั่วภาคใต้อ่าวไทย อันดามัน และภาคกลาง
+    </p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">📞 ปรึกษาผู้เชี่ยวชาญฟรี</a>
+      <a href="https://www.facebook.com/profile.php?id=100075538372879" target="_blank" class="btn-outline" style="display:inline-flex;align-items:center;gap:8px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        Facebook
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">100<span style="font-size:0.6em">+</span></div><div class="stat-label">ฟาร์มที่ไว้วางใจ<br>Trusted Farms</div></div>
+      <div class="stat"><div class="stat-num" style="font-size:22px;line-height:1.6;">แบรนด์<br>ตัวเอง</div><div class="stat-label">ควบคุมคุณภาพทุกขั้นตอน<br>Own Brand</div></div>
+      <div class="stat"><div class="stat-num">3</div><div class="stat-label">ภูมิภาคที่ให้บริการ<br>Regions Served</div></div>
+    </div>
+  </div>
+  <div class="hero-waves">
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none" class="wave1">
+      <path d="M0,60 C360,100 720,20 1080,60 C1260,80 1380,50 1440,60 L1440,120 L0,120 Z" fill="rgba(201,149,108,0.2)"/>
+    </svg>
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none" class="wave2">
+      <path d="M0,80 C300,40 600,100 900,70 C1100,50 1300,90 1440,80 L1440,120 L0,120 Z" fill="rgba(255,255,255,0.08)"/>
+    </svg>
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+      <path d="M0,100 C360,60 720,120 1080,90 C1260,75 1380,100 1440,95 L1440,120 L0,120 Z" fill="white"/>
+    </svg>
+  </div>
+</section>
+
+<!-- TRUST BAND -->
+<div style="background:var(--wine-deeper);padding:16px 5%;display:flex;align-items:center;justify-content:center;gap:40px;flex-wrap:wrap;">
+  <div style="display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.85);font-size:13px;font-weight:600;">
+    <span style="font-size:18px;">✅</span> ผลิตภัณฑ์แบรนด์ตัวเอง ควบคุมคุณภาพ 100%
+  </div>
+  <div style="width:1px;height:20px;background:rgba(255,255,255,0.2);flex-shrink:0;"></div>
+  <div style="display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.85);font-size:13px;font-weight:600;">
+    <span style="font-size:18px;">🐠</span> ภาคใต้อ่าวไทย · อันดามัน · ภาคกลาง
+  </div>
+  <div style="width:1px;height:20px;background:rgba(255,255,255,0.2);flex-shrink:0;"></div>
+  <div style="display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.85);font-size:13px;font-weight:600;">
+    <span style="font-size:18px;">🤝</span> ไว้วางใจโดยกว่า 100 ฟาร์มเชิงพาณิชย์
+  </div>
+  <div style="width:1px;height:20px;background:rgba(255,255,255,0.2);flex-shrink:0;"></div>
+  <a href="https://www.facebook.com/profile.php?id=100075538372879" target="_blank" style="display:flex;align-items:center;gap:8px;color:#90CAF9;font-size:13px;font-weight:700;text-decoration:none;">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+    ติดตามบน Facebook
+  </a>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-grid">
+    <div class="about-visual reveal">
+      <div class="about-orbit"><div class="about-orbit-dot"></div></div>
+      <div class="about-logo-frame">
+        <img src="logo.jpg" alt="ONE Aquaculture Product Logo" style="width:220px;height:220px;object-fit:contain;position:relative;z-index:1;">
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="section-tag">เกี่ยวกับเรา · About Us</div>
+      <h2 class="section-title">วัน อควาคัลเจอร์ โปรดัคท์</h2>
+      <p class="section-title-en">One Aquaculture Product Co., Ltd. · ก่อตั้ง 2564</p>
+      <p class="section-desc">
+        ผลิตและจำหน่ายเวชภัณฑ์สัตว์น้ำ<strong>แบรนด์ตัวเอง</strong> ครอบคลุมวิตามิน แร่ธาตุ สารบำบัดน้ำ สารฆ่าเชื้อ และสารปรับสภาพน้ำ สำหรับการเพาะเลี้ยงกุ้งเชิงพาณิชย์ ทดสอบและพัฒนาจากหน้างานจริง ปัจจุบันดูแลกว่า <strong>100 ฟาร์ม</strong> ทั่วภาคใต้อ่าวไทย อันดามัน และภาคกลาง
+      </p>
+      <div class="about-features">
+        <div class="feature-item">
+          <div class="feature-icon">🎯</div>
+          <div>
+            <h4>คัดสินค้าจากหน้างานจริง</h4>
+            <p>เลือกเฉพาะสินค้าที่ใช้ได้จริงในฟาร์ม ไม่ขายเกินจำเป็น เน้นผลลัพธ์</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🌾</div>
+          <div>
+            <h4>ฟาร์มตัวอย่างให้เยี่ยมชม</h4>
+            <p>มีฟาร์มตัวอย่างที่ประสบความสำเร็จ เป็นแหล่งทดสอบและถ่ายทอดองค์ความรู้</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🤖</div>
+          <div>
+            <h4>ผสานหน้างานกับ AI</h4>
+            <p>AI หมอปลาวาฬ ตอบคำถามด้านการเลี้ยงกุ้ง 24 ชั่วโมง พัฒนาโดยทีมงาน ONE</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products">
+  <div class="text-center reveal">
+    <div class="section-tag">ผลิตภัณฑ์ · Products</div>
+    <h2 class="section-title">กลุ่มผลิตภัณฑ์ของเรา</h2>
+    <p class="section-title-en">Our Product Lines</p>
+    <p class="section-desc">
+      ผลิตภัณฑ์ชีวภาพครบวงจร ออกแบบมาสำหรับทุกขั้นตอนของการเพาะเลี้ยงสัตว์น้ำ
+    </p>
+  </div>
+  <div class="products-grid">
+    <div class="product-card reveal">
+      <div class="product-card-header">
+        <span class="product-icon">💊</span>
+        <h3>วิตามิน และ อาหารเสริม</h3>
+        <p>Vitamins &amp; Supplements</p>
+      </div>
+      <div class="product-card-body">
+        <p>วิตามินและอาหารเสริมคุณภาพสูงสำหรับสัตว์น้ำ เสริมภูมิคุ้มกัน เพิ่มความแข็งแรง และส่งเสริมการเจริญเติบโต</p>
+        <div class="product-tags">
+          <span class="product-tag">เสริมภูมิคุ้มกัน</span>
+          <span class="product-tag">เพิ่มการเจริญเติบโต</span>
+        </div>
+        <a href="products.html" class="product-link">ดูรายละเอียด →</a>
+      </div>
+    </div>
+    <div class="product-card reveal">
+      <div class="product-card-header">
+        <span class="product-icon">⚡</span>
+        <h3>แร่ธาตุ</h3>
+        <p>Minerals</p>
+      </div>
+      <div class="product-card-body">
+        <p>แร่ธาตุที่จำเป็นสำหรับการลอกคราบและการเจริญเติบโตของสัตว์น้ำ ปรับสมดุลแร่ธาตุในน้ำและร่างกายสัตว์น้ำ</p>
+        <div class="product-tags">
+          <span class="product-tag">ส่งเสริมการลอกคราบ</span>
+          <span class="product-tag">สมดุลแร่ธาตุ</span>
+        </div>
+        <a href="products.html" class="product-link">ดูรายละเอียด →</a>
+      </div>
+    </div>
+    <div class="product-card reveal">
+      <div class="product-card-header">
+        <span class="product-icon">💧</span>
+        <h3>สารบำบัดน้ำ</h3>
+        <p>Water Treatment</p>
+      </div>
+      <div class="product-card-body">
+        <p>โปรไบโอติกส์และสารบำบัดน้ำสำหรับบ่อเลี้ยงสัตว์น้ำ ปรับสมดุลจุลินทรีย์ ลดแอมโมเนีย และปรับปรุงคุณภาพน้ำ</p>
+        <div class="product-tags">
+          <span class="product-tag">ลดแอมโมเนีย</span>
+          <span class="product-tag">Probiotics</span>
+        </div>
+        <a href="products.html" class="product-link">ดูรายละเอียด →</a>
+      </div>
+    </div>
+    <div class="product-card reveal">
+      <div class="product-card-header">
+        <span class="product-icon">🛡️</span>
+        <h3>สารฆ่าเชื้อ</h3>
+        <p>Disinfectants</p>
+      </div>
+      <div class="product-card-body">
+        <p>สารฆ่าเชื้อและควบคุมเชื้อโรคในบ่อเลี้ยงสัตว์น้ำ ลดความเสี่ยงการเกิดโรคและควบคุมเชื้อก่อโรคในระบบน้ำ</p>
+        <div class="product-tags">
+          <span class="product-tag">ฆ่าเชื้อโรค</span>
+          <span class="product-tag">ป้องกันโรค</span>
+        </div>
+        <a href="products.html" class="product-link">ดูรายละเอียด →</a>
+      </div>
+    </div>
+    <div class="product-card reveal">
+      <div class="product-card-header">
+        <span class="product-icon">🌊</span>
+        <h3>สารปรับสภาพน้ำ</h3>
+        <p>Water Conditioners</p>
+      </div>
+      <div class="product-card-body">
+        <p>สารปรับสภาพน้ำสำหรับบ่อเลี้ยงสัตว์น้ำ ปรับ pH ปรับความกระด้าง และสร้างสภาพแวดล้อมที่เหมาะสมกับการเพาะเลี้ยง</p>
+        <div class="product-tags">
+          <span class="product-tag">ปรับ pH</span>
+          <span class="product-tag">ปรับสภาพน้ำ</span>
+        </div>
+        <a href="products.html" class="product-link">ดูรายละเอียด →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI DIAGNOSIS -->
+<section id="ai-diag" style="background:linear-gradient(135deg,var(--wine-deeper) 0%,var(--wine) 60%,#9B206A 100%);padding:80px 5%;position:relative;overflow:hidden;">
+  <div style="position:absolute;top:-80px;right:-80px;width:320px;height:320px;border-radius:50%;background:rgba(255,255,255,.04);pointer-events:none;"></div>
+  <div style="position:absolute;bottom:-60px;left:-60px;width:220px;height:220px;border-radius:50%;background:rgba(201,149,108,.08);pointer-events:none;"></div>
+  <div style="max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;position:relative;z-index:1;" class="ai-diag-grid">
+    <div class="reveal">
+      <div style="display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:24px;padding:5px 16px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.9);margin-bottom:20px;">
+        🤖 ONE AI · วิเคราะห์โรคกุ้ง
+      </div>
+      <h2 style="font-size:clamp(28px,4vw,42px);font-weight:800;color:white;line-height:1.2;margin-bottom:12px;">วินิจฉัยโรคกุ้ง<br>ด้วย AI ทันที</h2>
+      <p style="font-size:16px;color:rgba(255,255,255,.75);line-height:1.8;max-width:440px;margin-bottom:28px;">กรอกอาการที่พบ ข้อมูลบ่อ และค่าน้ำ — AI วิเคราะห์โรคที่เป็นไปได้พร้อม Differential Diagnosis confidence bars และแนะนำผลิตภัณฑ์ ONE ที่เหมาะสม</p>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px;">
+        <span style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:6px 14px;font-size:13px;color:rgba(255,255,255,.85);font-weight:500;">🩺 วินิจฉัยโรค</span>
+        <span style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:6px 14px;font-size:13px;color:rgba(255,255,255,.85);font-weight:500;">💧 วิเคราะห์ค่าน้ำ</span>
+        <span style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:6px 14px;font-size:13px;color:rgba(255,255,255,.85);font-weight:500;">🔬 Differential Dx</span>
+        <span style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:6px 14px;font-size:13px;color:rgba(255,255,255,.85);font-weight:500;">💬 ถาม-ตอบ AI</span>
+      </div>
+      <a href="ai-diagnosis.html" style="display:inline-flex;align-items:center;gap:10px;background:white;color:var(--wine-dark);padding:15px 32px;border-radius:32px;font-size:16px;font-weight:700;text-decoration:none;transition:all .25s;box-shadow:0 6px 24px rgba(0,0,0,.2);" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 10px 32px rgba(0,0,0,.3)'" onmouseout="this.style.transform='';this.style.boxShadow='0 6px 24px rgba(0,0,0,.2)'">
+        🔍 เริ่มวิเคราะห์โรคกุ้ง →
+      </a>
+      <div style="margin-top:16px;font-size:12px;color:rgba(255,255,255,.5);">ฟรี · ไม่ต้องสมัครสมาชิก · ใช้งานได้ทันที</div>
+    </div>
+    <div class="reveal" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:24px;backdrop-filter:blur(8px);">
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px;">
+        <span style="width:7px;height:7px;background:#f57c5a;border-radius:50%;animation:ai-pulse 2s infinite;display:inline-block;"></span>
+        ตัวอย่างผลวิเคราะห์ · Sample Output
+      </div>
+      <div style="font-size:26px;font-weight:700;color:white;margin-bottom:2px;">Early Mortality Syndrome</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.6);margin-bottom:16px;">EMS / AHPND · ความรุนแรง: รุนแรงมาก</div>
+      <div style="background:rgba(255,255,255,.08);border-radius:10px;padding:14px;">
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:10px;">Differential Diagnosis</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+          <span style="flex:0 0 100px;font-size:12px;color:white;font-weight:500;">EMS/AHPND</span>
+          <div style="flex:1;height:4px;background:rgba(255,255,255,.15);border-radius:100px;overflow:hidden;"><div style="width:85%;height:100%;background:#f57c5a;border-radius:100px;"></div></div>
+          <span style="font-family:monospace;font-size:11px;color:white;font-weight:600;min-width:30px;text-align:right;">85%</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;border-top:1px solid rgba(255,255,255,.08);padding-top:8px;">
+          <span style="flex:0 0 100px;font-size:12px;color:rgba(255,255,255,.7);font-weight:500;">EHP</span>
+          <div style="flex:1;height:4px;background:rgba(255,255,255,.15);border-radius:100px;overflow:hidden;"><div style="width:40%;height:100%;background:rgba(255,255,255,.4);border-radius:100px;"></div></div>
+          <span style="font-family:monospace;font-size:11px;color:rgba(255,255,255,.7);font-weight:600;min-width:30px;text-align:right;">40%</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;border-top:1px solid rgba(255,255,255,.08);padding-top:8px;">
+          <span style="flex:0 0 100px;font-size:12px;color:rgba(255,255,255,.5);font-weight:500;">White Feces</span>
+          <div style="flex:1;height:4px;background:rgba(255,255,255,.15);border-radius:100px;overflow:hidden;"><div style="width:15%;height:100%;background:rgba(255,255,255,.3);border-radius:100px;"></div></div>
+          <span style="font-family:monospace;font-size:11px;color:rgba(255,255,255,.5);font-weight:600;min-width:30px;text-align:right;">15%</span>
+        </div>
+      </div>
+      <div style="margin-top:12px;font-size:12px;color:rgba(255,255,255,.55);line-height:1.6;">⚡ ทำทันที: หยุดให้อาหาร ถ่ายน้ำ 30% เพิ่มออกซิเจน — ผลิตภัณฑ์ ONE ที่แนะนำ: โพรไบโอติกปรับน้ำ</div>
+    </div>
+  </div>
+</section>
+<style>
+@keyframes ai-pulse { 0%,100%{box-shadow:0 0 0 2px rgba(245,124,90,.2)}50%{box-shadow:0 0 0 5px rgba(245,124,90,.08)} }
+.ai-diag-grid { }
+@media(max-width:900px){.ai-diag-grid{grid-template-columns:1fr!important;gap:36px!important;}}
+</style>
+
+<!-- WHY ONE -->
+<section class="why" id="why">
+  <div class="text-center reveal">
+    <div class="section-tag">ทำไมต้องเลือกเรา · Why ONE</div>
+    <h2 class="section-title">100+ ฟาร์มเลือกเรา ไม่ใช่เพราะโฆษณา</h2>
+    <p class="section-title-en">Chosen by Farmers, Proven in the Field</p>
+    <p class="section-desc">
+      เราไม่ใช่นายหน้าขายสินค้า — เราพัฒนาผลิตภัณฑ์แบรนด์ตัวเอง ทดสอบจากฟาร์มจริง และยืนหยัดข้างผู้เลี้ยงทุกขั้นตอน
+    </p>
+  </div>
+  <div class="why-grid">
+    <div class="why-card reveal">
+      <div class="why-num">01</div>
+      <span class="why-icon">🏷️</span>
+      <h4>แบรนด์ตัวเอง ไม่ใช่แค่รีเซลเลอร์</h4>
+      <p>ผลิตภัณฑ์ ONE AQUACULTURE PRODUCT เป็นของเราเอง ควบคุมสูตร คุณภาพ และราคาได้โดยตรง ไม่มีต้นทุนคนกลาง</p>
+    </div>
+    <div class="why-card reveal">
+      <div class="why-num">02</div>
+      <span class="why-icon">🌾</span>
+      <h4>ทดสอบจากฟาร์มจริง ไม่ใช่ห้องแล็บ</h4>
+      <p>มีฟาร์มตัวอย่างให้เยี่ยมชม เห็นผลจริงก่อนซื้อ ทุกผลิตภัณฑ์ผ่านการทดสอบในบ่อเลี้ยงเชิงพาณิชย์จริง</p>
+    </div>
+    <div class="why-card reveal">
+      <div class="why-num">03</div>
+      <span class="why-icon">🤖</span>
+      <h4>AI หมอปลาวาฬ ช่วยได้ทันที 24 ชม.</h4>
+      <p>วิเคราะห์โรคกุ้ง ค่าน้ำ และแนะนำผลิตภัณฑ์ที่เหมาะสม ตอบคำถามได้ทันทีไม่ต้องรอทีมงาน</p>
+    </div>
+    <div class="why-card reveal">
+      <div class="why-num">04</div>
+      <span class="why-icon">📍</span>
+      <h4>ลงพื้นที่ 3 ภูมิภาค ไม่ใช่แค่ขายออนไลน์</h4>
+      <p>ทีมงานลงพื้นที่จริงทั่วภาคใต้อ่าวไทย อันดามัน และภาคกลาง ติดตามผลต่อเนื่อง ไม่หายหลังขาย</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="text-center reveal">
+    <div class="section-tag">กระบวนการ · Process</div>
+    <h2 class="section-title">เริ่มต้นกับเราง่ายๆ</h2>
+    <p class="section-title-en">How to Get Started</p>
+    <p class="section-desc">เพียง 4 ขั้นตอนสู่ผลิตภัณฑ์คุณภาพในมือคุณ</p>
+  </div>
+  <div class="process-steps">
+    <div class="process-step reveal">
+      <div class="step-num">1</div>
+      <h4>ปรึกษาผู้เชี่ยวชาญ<br><small style="font-weight:400;font-size:11px;">Consultation</small></h4>
+      <p>แจ้งข้อมูลบ่อเลี้ยง ชนิดสัตว์น้ำ และปัญหาที่พบ</p>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-num">2</div>
+      <h4>เลือกผลิตภัณฑ์<br><small style="font-weight:400;font-size:11px;">Product Selection</small></h4>
+      <p>ทีมผู้เชี่ยวชาญแนะนำผลิตภัณฑ์ที่เหมาะสม</p>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-num">3</div>
+      <h4>ทดลองใช้<br><small style="font-weight:400;font-size:11px;">Trial Run</small></h4>
+      <p>ทดสอบในบ่อจริง ติดตามผล และปรับแผนการใช้</p>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-num">4</div>
+      <h4>ติดตามผลลัพธ์<br><small style="font-weight:400;font-size:11px;">Follow-up</small></h4>
+      <p>ทีมงานติดตามผลและให้คำแนะนำต่อเนื่อง</p>
+    </div>
+  </div>
+</section>
+
+<!-- NEWS & KNOWLEDGE -->
+<section id="news" style="background:var(--gray-light);">
+  <div class="text-center reveal">
+    <div class="section-tag">ข่าวสาร &amp; ความรู้ · News &amp; Knowledge</div>
+    <h2 class="section-title">อัปเดตจากวงการ</h2>
+    <p class="section-title-en">Industry Updates &amp; Research</p>
+    <p class="section-desc">คัดสรรข่าวสารและงานวิจัยล่าสุดจากแหล่งข้อมูลที่น่าเชื่อถือ</p>
+    <div style="display:inline-flex;align-items:center;gap:8px;background:var(--wine-pale);border:1px solid var(--wine-pale);padding:6px 14px;border-radius:24px;margin-top:12px;font-size:12px;color:var(--wine-dark);font-weight:600;">
+      🤖 อัปเดตโดย AI · AI-curated links
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;margin-top:48px;max-width:1100px;margin-left:auto;margin-right:auto;">
+
+    <a href="https://www4.fisheries.go.th/local/index.php/main/site/fishinspector/5" target="_blank" rel="noopener" class="news-card reveal">
+      <div class="news-cat news-cat-reg">⚖️ กฎระเบียบ</div>
+      <div class="news-source">กรมประมง · Department of Fisheries</div>
+      <h4 class="news-title">กลุ่มควบคุมวัตถุอันตรายและการค้าปัจจัยการผลิต</h4>
+      <p class="news-desc">ศูนย์ข้อมูลหลักของกองตรวจสอบเรือประมง สินค้าสัตว์น้ำ และปัจจัยการผลิต กรมประมง — ประกาศ กฎระเบียบ และแบบฟอร์มการขึ้นทะเบียนวัตถุอันตราย</p>
+      <div class="news-footer"><span class="news-date">อัปเดตต่อเนื่อง</span><span class="news-link">อ่านเพิ่มเติม →</span></div>
+    </a>
+
+    <a href="https://infocenter.oic.go.th/%E0%B8%81%E0%B8%A3%E0%B8%A1%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%A1%E0%B8%87/topic.php?p=11&gid=13679&mid=1017" target="_blank" rel="noopener" class="news-card reveal">
+      <div class="news-cat news-cat-reg">⚖️ กฎระเบียบ</div>
+      <div class="news-source">กรมประมง · OIC Info Center</div>
+      <h4 class="news-title">ประกาศกรมประมง ประจำปีงบประมาณ พ.ศ. 2568</h4>
+      <p class="news-desc">รวมประกาศกรมประมงปี 2568 ที่เกี่ยวกับการควบคุมวัตถุอันตราย ฉลาก และมาตรฐานผลิตภัณฑ์ทางการประมง</p>
+      <div class="news-footer"><span class="news-date">พ.ศ. 2568</span><span class="news-link">อ่านเพิ่มเติม →</span></div>
+    </a>
+
+    <a href="https://www.frontiersin.org/journals/microbiology/articles/10.3389/fmicb.2026.1864753/abstract" target="_blank" rel="noopener" class="news-card reveal">
+      <div class="news-cat news-cat-research">🔬 งานวิจัย</div>
+      <div class="news-source">Frontiers in Microbiology</div>
+      <h4 class="news-title">Probiotics in Aquaculture: Enhancing Health and Sustainability</h4>
+      <p class="news-desc">บทบรรณาธิการล่าสุด 2026 รวบรวมงานวิจัยทั่วโลกเกี่ยวกับการใช้โปรไบโอติกส์ในการเพาะเลี้ยงสัตว์น้ำ และแนวทางยั่งยืนในอนาคต</p>
+      <div class="news-footer"><span class="news-date">2026</span><span class="news-link">Read more →</span></div>
+    </a>
+
+    <a href="https://www.frontiersin.org/journals/marine-science/articles/10.3389/fmars.2024.1455905/full" target="_blank" rel="noopener" class="news-card reveal">
+      <div class="news-cat news-cat-research">🔬 งานวิจัย</div>
+      <div class="news-source">Frontiers in Marine Science</div>
+      <h4 class="news-title">Probiotics Application in Aquaculture: Potential Effects &amp; Future Prospects</h4>
+      <p class="news-desc">งานวิจัยเชิงลึกเกี่ยวกับกลไกการทำงาน ประสิทธิภาพ และทิศทางการพัฒนาโปรไบโอติกส์สำหรับสัตว์น้ำในระดับสากล</p>
+      <div class="news-footer"><span class="news-date">2024</span><span class="news-link">Read more →</span></div>
+    </a>
+
+    <a href="https://www.frontiersin.org/journals/veterinary-science/articles/10.3389/fvets.2025.1600051/full" target="_blank" rel="noopener" class="news-card reveal">
+      <div class="news-cat news-cat-research">🔬 งานวิจัย</div>
+      <div class="news-source">Frontiers in Veterinary Science</div>
+      <h4 class="news-title">การจัดการสุขภาพในฟาร์มน้ำจืดขนาดเล็กของไทย</h4>
+      <p class="news-desc">งานวิจัยจากประเทศไทยปี 2025 วิเคราะห์ปัจจัยสุขภาพสัตว์น้ำและแนวทางจัดการฟาร์มน้ำจืดอย่างยั่งยืน — สนับสนุนแนวทาง probiotics</p>
+      <div class="news-footer"><span class="news-date">2025</span><span class="news-link">Read more →</span></div>
+    </a>
+
+    <a href="https://www.seafoodsource.com/news/aquaculture/thai-aquaculture-firms-target-vietnam-as-domestic-growth-opportunities-plateau" target="_blank" rel="noopener" class="news-card reveal">
+      <div class="news-cat news-cat-industry">📈 อุตสาหกรรม</div>
+      <div class="news-source">SeafoodSource</div>
+      <h4 class="news-title">Thai Aquaculture Firms Target Vietnam as Domestic Growth Plateaus</h4>
+      <p class="news-desc">ผู้ประกอบการไทยในอุตสาหกรรม aquaculture เริ่มมองตลาดเวียดนาม เมื่อการเติบโตในประเทศเข้าสู่ระยะคงตัว — โอกาสและความท้าทาย</p>
+      <div class="news-footer"><span class="news-date">2025</span><span class="news-link">Read more →</span></div>
+    </a>
+
+  </div>
+  <div style="text-align:center;margin-top:40px;">
+    <p style="font-size:12px;color:var(--text-soft);">🤖 ลิงก์เหล่านี้คัดสรรและตรวจสอบโดย AI · AI-verified links from trusted sources</p>
+  </div>
+</section>
+
+<style>
+  .news-card {
+    display:flex; flex-direction:column; gap:10px;
+    background:white; border-radius:var(--radius);
+    border:1px solid var(--gray-mid);
+    padding:28px; text-decoration:none; color:inherit;
+    transition:all .3s; box-shadow:var(--shadow);
+  }
+  .news-card:hover { transform:translateY(-5px); box-shadow:var(--shadow-lg); border-color:var(--wine-pale); }
+  .news-cat { font-size:11px; font-weight:700; padding:3px 10px; border-radius:12px; display:inline-flex; align-items:center; gap:5px; width:fit-content; }
+  .news-cat-reg { background:var(--wine-pale); color:var(--wine-dark); }
+  .news-cat-research { background:#EEF5FF; color:#2155A3; }
+  .news-cat-industry { background:#FFF4E6; color:#A05A00; }
+  .news-source { font-size:11px; color:var(--text-soft); font-weight:600; letter-spacing:.5px; text-transform:uppercase; }
+  .news-title { font-size:16px; font-weight:700; color:var(--text-dark); line-height:1.4; }
+  .news-desc { font-size:13px; color:var(--text-mid); line-height:1.75; flex:1; }
+  .news-footer { display:flex; justify-content:space-between; align-items:center; margin-top:auto; padding-top:12px; border-top:1px solid var(--gray-mid); }
+  .news-date { font-size:12px; color:var(--text-soft); }
+  .news-link { font-size:13px; color:var(--wine); font-weight:700; }
+  .news-card:hover .news-link { text-decoration:underline; }
+</style>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="text-center reveal">
+    <div class="section-tag">ติดต่อเรา · Contact</div>
+    <h2 class="section-title">พูดคุยกับเราได้เลย ฟรี ไม่มีข้อผูกมัด</h2>
+    <p class="section-title-en">Free Consultation · No Obligation</p>
+    <p class="section-desc" style="margin:0 auto;max-width:560px;">ทีมผู้เชี่ยวชาญพร้อมให้คำแนะนำเรื่องผลิตภัณฑ์และปัญหาในฟาร์มโดยตรง โทรหาเราเลยหรือทักทาง Facebook ได้ทันที</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px;">
+      <a href="tel:0625615639" style="display:inline-flex;align-items:center;gap:8px;background:var(--wine);color:white;padding:12px 24px;border-radius:32px;font-size:15px;font-weight:700;text-decoration:none;">📞 062-561-5639</a>
+      <a href="https://www.facebook.com/profile.php?id=100075538372879" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#1877F2;color:white;padding:12px 24px;border-radius:32px;font-size:15px;font-weight:700;text-decoration:none;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        Facebook
+      </a>
+    </div>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-info reveal">
+      <div class="contact-item">
+        <div class="contact-icon">📍</div>
+        <div>
+          <h4>ที่อยู่ · Address</h4>
+          <p>บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด<br>315/3-X8 ซอยอ่อนนุช39 แขวงพัฒนาการ เขตสวนหลวง กรุงเทพมหานคร 10250</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">📞</div>
+        <div>
+          <h4>โทรศัพท์ · Phone</h4>
+          <p>062-561-5639</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">📧</div>
+        <div>
+          <h4>อีเมล · Email</h4>
+          <p>one.aquaculture.product@gmail.com</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">🕐</div>
+        <div>
+          <h4>เวลาทำการ · Business Hours</h4>
+          <p>จันทร์ – ศุกร์: 08:00 – 17:00 น.<br>Mon – Fri: 8AM – 5PM</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon" style="background:#1877F2;display:flex;align-items:center;justify-content:center;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </div>
+        <div>
+          <h4>Facebook · ติดต่อทันที</h4>
+          <p><a href="https://www.facebook.com/profile.php?id=100075538372879" target="_blank" style="color:var(--wine);font-weight:600;text-decoration:none;">ONE Aquaculture Product →</a></p>
+        </div>
+      </div>
+    </div>
+    <div class="contact-form reveal">
+      <div class="form-title">ส่งข้อความถึงเรา</div>
+      <div class="form-subtitle">Send us a message · เราจะติดต่อกลับภายใน 24 ชั่วโมง</div>
+      <form onsubmit="handleSubmit(event)">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>ชื่อ-นามสกุล · Name</label>
+            <input id="contact-name" type="text" placeholder="ชื่อของคุณ / Your name" required>
+          </div>
+          <div class="form-group">
+            <label>บริษัท / ฟาร์ม · Company</label>
+            <input id="contact-company" type="text" placeholder="ชื่อบริษัทหรือฟาร์ม">
+          </div>
+          <div class="form-group">
+            <label>โทรศัพท์ · Phone</label>
+            <input id="contact-phone" type="tel" placeholder="0812345678">
+          </div>
+          <div class="form-group">
+            <label>อีเมล · Email</label>
+            <input id="contact-email" type="email" placeholder="email@example.com">
+          </div>
+          <div class="form-group full">
+            <label>ผลิตภัณฑ์ที่สนใจ · Product Interest</label>
+            <select id="contact-product">
+              <option value="">เลือกกลุ่มผลิตภัณฑ์ / Select a product line</option>
+              <option>วิตามิน และ อาหารเสริม / Vitamins &amp; Supplements</option>
+              <option>แร่ธาตุ / Minerals</option>
+              <option>สารบำบัดน้ำ / Water Treatment</option>
+              <option>สารฆ่าเชื้อ / Disinfectants</option>
+              <option>สารปรับสภาพน้ำ / Water Conditioners</option>
+              <option>สอบถามทั่วไป / General Inquiry</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label>ข้อความ · Message</label>
+            <textarea id="contact-message" placeholder="บอกเราเพิ่มเติมเกี่ยวกับฟาร์มหรือความต้องการของคุณ...&#10;Tell us about your farm or needs..."></textarea>
+          </div>
+        </div>
+        <button type="submit" class="form-submit">ส่งข้อความ · Send Message</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <div class="footer-logo-icon"><img src="logo.jpg" alt="ONE logo"></div>
+        <div class="footer-logo-text">
+          <strong>ONE AQUACULTURE PRODUCT</strong>
+          <span>วัน อควาคัลเจอร์ โปรดัคท์</span>
+        </div>
+      </div>
+      <p class="footer-desc">ผลิตภัณฑ์เวชภัณฑ์สัตว์น้ำแบรนด์ตัวเอง ไว้วางใจโดยกว่า 100 ฟาร์มทั่วภาคใต้อ่าวไทย อันดามัน และภาคกลาง ก่อตั้ง 2564</p>
+      <a href="https://www.facebook.com/profile.php?id=100075538372879" target="_blank" style="display:inline-flex;align-items:center;gap:8px;color:#90CAF9;font-size:13px;font-weight:600;text-decoration:none;margin-top:12px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        ติดตามบน Facebook
+      </a>
+      <div class="footer-wave">
+        <svg viewBox="0 0 100 20" fill="none"><path d="M0,10 C25,2 50,18 75,10 C87,6 95,12 100,10" stroke="#C9956C" stroke-width="2" fill="none"/><path d="M0,15 C20,8 45,20 70,13 C82,9 92,15 100,14" stroke="#C9956C" stroke-width="1.5" fill="none" opacity="0.5"/></svg>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>ผลิตภัณฑ์ · Products</h5>
+      <ul>
+        <li><a href="#">จุลินทรีย์ปรับสภาพน้ำ</a></li>
+        <li><a href="#">ผลิตภัณฑ์เสริมอาหาร</a></li>
+        <li><a href="#">ควบคุมโรค</a></li>
+        <li><a href="#">ปรับปรุงดินก้นบ่อ</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>บริษัท · Company</h5>
+      <ul>
+        <li><a href="#about">เกี่ยวกับเรา</a></li>
+        <li><a href="#why">ทำไมต้องเรา</a></li>
+        <li><a href="#process">กระบวนการ</a></li>
+        <li><a href="#contact">ติดต่อเรา</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>บริการ · Services</h5>
+      <ul>
+        <li><a href="ai-diagnosis.html">วิเคราะห์โรคกุ้ง AI</a></li>
+        <li><a href="contact.html">ขอใบเสนอราคา</a></li>
+        <li><a href="contact.html">ปรึกษาผู้เชี่ยวชาญ</a></li>
+        <li><a href="contact.html">ติดต่อเรา</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2569 บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด · One Aquaculture Product Co., Ltd. All rights reserved.</p>
+    <div class="footer-legal">
+      <a href="#">นโยบายความเป็นส่วนตัว</a>
+      <a href="#">ข้อกำหนดการใช้งาน</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Stagger siblings
+  document.querySelectorAll('.products-grid, .why-grid, .process-steps').forEach(grid => {
+    grid.querySelectorAll('.reveal').forEach((el, i) => {
+      el.style.transitionDelay = `${i * 0.1}s`;
+    });
+  });
+
+  // Form
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.form-submit');
+    btn.disabled = true;
+    btn.textContent = '⏳ กำลังส่ง…';
+    const params = {
+      name:    document.getElementById('contact-name').value.trim(),
+      company: document.getElementById('contact-company').value.trim(),
+      phone:   document.getElementById('contact-phone').value.trim(),
+      email:   document.getElementById('contact-email').value.trim(),
+      product: document.getElementById('contact-product').value.trim(),
+      message: document.getElementById('contact-message').value.trim(),
+    };
+    try {
+      await emailjs.send(EJS_SERVICE_ID, EJS_TEMPLATE_ID, params);
+      btn.textContent = '✓ ส่งข้อความแล้ว · Message Sent!';
+      btn.style.background = '#2ecc71';
+      e.target.reset();
+      setTimeout(() => {
+        btn.textContent = 'ส่งข้อความ · Send Message';
+        btn.style.background = '';
+        btn.disabled = false;
+      }, 4000);
+    } catch (err) {
+      btn.textContent = '❌ ส่งไม่สำเร็จ กรุณาลองใหม่';
+      btn.style.background = '#e74c3c';
+      btn.disabled = false;
+      setTimeout(() => {
+        btn.textContent = 'ส่งข้อความ · Send Message';
+        btn.style.background = '';
+      }, 4000);
+    }
+  }
+
+  // Mobile nav
+  document.querySelector('.nav-hamburger').addEventListener('click', function() {
+    const links = document.querySelector('.nav-links');
+    const cta = document.querySelector('.nav-cta');
+    if (links.style.display === 'flex') {
+      links.style.display = '';
+      cta.style.display = '';
+    } else {
+      links.style.cssText = 'display:flex; flex-direction:column; position:fixed; top:68px; left:0; right:0; background:white; padding:20px 5%; gap:20px; box-shadow:0 8px 24px rgba(0,0,0,0.1); z-index:99;';
+      cta.style.cssText = 'display:block; position:fixed; bottom:24px; left:5%; right:5%; text-align:center; padding:16px; z-index:99;';
+    }
+  });
+
+  // Nav shadow on scroll
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').style.boxShadow = window.scrollY > 10
+      ? '0 4px 24px rgba(139,48,96,0.12)' : '0 2px 16px rgba(139,48,96,0.08)';
+  });
+</script>
+</body>
+</html>
