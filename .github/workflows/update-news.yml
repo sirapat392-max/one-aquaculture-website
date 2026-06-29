@@ -21,7 +21,6 @@ jobs:
       - name: Run news updater
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          SERP_API_KEY: ${{ secrets.SERP_API_KEY }}
         run: node update-news.js
 
       - name: Commit updated news

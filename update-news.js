@@ -1,115 +1,131 @@
 require('dotenv').config();
 const Anthropic = require('@anthropic-ai/sdk');
-const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-const SERP_KEY = process.env.SERP_API_KEY || '';
 
-function serpSearch(query) {
-  return new Promise((resolve) => {
-    if (!SERP_KEY) { resolve([]); return; }
-    const url = `https://serpapi.com/search.json?q=${encodeURIComponent(query)}&tbm=nws&hl=th&gl=th&num=5&api_key=${SERP_KEY}`;
-    https.get(url, (res) => {
-      let data = '';
-      res.on('data', d => data += d);
-      res.on('end', () => {
-        try {
-          const json = JSON.parse(data);
-          resolve((json.news_results || []).map(r => ({
-            title: r.title,
-            source: r.source,
-            url: r.link,
-            date: r.date,
-            snippet: r.snippet,
-          })));
-        } catch { resolve([]); }
-      });
-    }).on('error', () => resolve([]));
-  });
+const RSS_SOURCES = [
+  { url: 'https://hatcheryinternational.com/feed/',              name: 'Hatchery International' },
+  { url: 'https://www.aquaculturealliance.org/advocate/feed/',   name: 'GAA Advocate' },
+  { url: 'https://www.undercurrentnews.com/feed/',               name: 'Undercurrent News' },
+  { url: 'https://www.aquaculturenorthamerica.com/feed/',        name: 'Aquaculture North America' },
+];
+
+const AQUA_KEYWORDS = ['shrimp','prawn','vannamei','aquaculture','fish','ems','wssv',
+  'white spot','seafood','fishery','hatchery','pathogen','feed','disease','marine',
+  'tilapia','salmon','water quality','farming','harvest','export','import'];
+
+function parseRSS(xml, sourceName) {
+  const items = [];
+  const rx = /<item>([\s\S]*?)<\/item>/gi;
+  let m;
+  while ((m = rx.exec(xml)) !== null) {
+    const block = m[1];
+    const get = (tag) => {
+      const r = block.match(new RegExp(`<${tag}[\\s][^>]*>(?:<!\\[CDATA\\[)?([\\s\\S]*?)(?:\\]\\]>)?<\\/${tag}>|<${tag}>(?:<!\\[CDATA\\[)?([\\s\\S]*?)(?:\\]\\]>)?<\\/${tag}>`, 'i'));
+      return r ? (r[1] || r[2] || '').replace(/<[^>]+>/g, '').trim() : '';
+    };
+    const linkM = block.match(/<link>([^<]+)<\/link>/i);
+    const title = get('title');
+    if (title) items.push({
+      title, url: linkM ? linkM[1].trim() : '',
+      summary: get('description').slice(0, 300),
+      pubDate: get('pubDate') || get('dc:date') || '',
+      source: sourceName,
+    });
+  }
+  return items;
+}
+
+function catLabel(cat) {
+  return { industry:'🌏 อุตสาหกรรม', regulation:'📋 กฎระเบียบ', research:'🔬 งานวิจัย', disease:'🦠 โรคสัตว์น้ำ' }[cat] || '🌏 อุตสาหกรรม';
+}
+
+function guessCategory(title, summary) {
+  const t = `${title} ${summary}`.toLowerCase();
+  if (/disease|virus|bacteria|pathogen|wssv|ehp|ems|outbreak/.test(t)) return 'disease';
+  if (/regulation|law|ban|standard|certification|fda|eu|import restriction/.test(t)) return 'regulation';
+  if (/research|study|trial|technology|genome|crispr|vaccine/.test(t)) return 'research';
+  return 'industry';
 }
 
 async function updateNews() {
-  console.log('🔍 กำลังค้นข่าวจาก SERP API...');
+  console.log('📡 กำลังดึง RSS จาก', RSS_SOURCES.length, 'แหล่ง...');
 
-  const queries = [
-    'โรคกุ้ง EHP WSSV 2025',
-    'aquaculture Thailand shrimp 2025',
-    'จุลินทรีย์โปรไบโอติก สัตว์น้ำ',
-    'กรมประมง ข่าว 2025',
-    'shrimp disease outbreak Asia 2025',
-  ];
+  const feedResults = await Promise.allSettled(
+    RSS_SOURCES.map(async ({ url, name }) => {
+      const r = await fetch(url, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; OneAquacultureNewsBot/1.0)' },
+        signal: AbortSignal.timeout(15000),
+      });
+      if (!r.ok) throw new Error(`${name}: HTTP ${r.status}`);
+      const items = parseRSS(await r.text(), name);
+      console.log(`  ✓ ${name}: ${items.length} items`);
+      return items;
+    })
+  );
 
-  const rawResults = await Promise.all(queries.map(serpSearch));
-  const allRaw = rawResults.flat();
-  console.log(`📰 พบข่าวดิบ ${allRaw.length} รายการ`);
+  let items = [];
+  feedResults.forEach((r, i) => {
+    if (r.status === 'fulfilled') items.push(...r.value);
+    else console.warn(`  ✗ ${RSS_SOURCES[i].name}:`, r.reason.message);
+  });
 
-  const prompt = `คุณคือนักวิเคราะห์ข่าวด้านอุตสาหกรรมเพาะเลี้ยงสัตว์น้ำ
+  const relevant = items.filter(it =>
+    AQUA_KEYWORDS.some(kw => `${it.title} ${it.summary}`.toLowerCase().includes(kw))
+  );
+  relevant.sort((a, b) => new Date(b.pubDate || 0) - new Date(a.pubDate || 0));
+  const top = relevant.slice(0, 12);
+  console.log(`\n📰 บทความที่เกี่ยวข้อง: ${relevant.length} → ใช้ ${top.length} บทความ`);
 
-นี่คือผลการค้นหาข่าวล่าสุด:
-${JSON.stringify(allRaw, null, 2)}
-
-เลือกและสรุปข่าวที่เกี่ยวข้องกับ:
-- โรคกุ้ง/ปลา และการป้องกัน
-- จุลินทรีย์และโปรไบโอติกสำหรับสัตว์น้ำ
-- กฎระเบียบกรมประมง / มาตรฐานอาหารสัตว์น้ำ
-- อุตสาหกรรม aquaculture ไทยและเอเชีย
-- ความยั่งยืนในการเพาะเลี้ยงสัตว์น้ำ
-
-${allRaw.length === 0 ? 'ไม่มีข้อมูล SERP — สร้างข่าวสำคัญที่น่าเชื่อถือจากความรู้ที่มี (ใส่เฉพาะ URL ที่มีอยู่จริงจากแหล่งที่เชื่อถือได้อย่าง fisheries.go.th, fao.org, pubmed.ncbi.nlm.nih.gov, seafoodsource.com, thefishsite.com)' : ''}
-
-ตอบเป็น JSON array (5-8 รายการ):
-[
-  {
-    "title": "หัวข้อภาษาต้นฉบับ",
-    "titleTH": "หัวข้อภาษาไทย",
-    "source": "ชื่อแหล่งข่าว",
-    "url": "URL จริง",
-    "date": "วันที่",
-    "category": "regulation | research | industry | disease",
-    "categoryLabel": "ป้าย เช่น ⚖️ กฎระเบียบ | 🔬 งานวิจัย | 🌏 อุตสาหกรรม | 🦐 โรคสัตว์น้ำ",
-    "summary": "สรุปภาษาไทย 2-3 ประโยค"
-  }
-]
-
-ตอบเฉพาะ JSON ไม่ต้องมีคำอธิบายเพิ่ม`;
-
-  try {
-    const response = await client.messages.create({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 4000,
-      messages: [{ role: 'user', content: prompt }],
-    });
-
-    const raw = response.content[0].text;
-    const match = raw.match(/\[[\s\S]*\]/);
-    if (!match) throw new Error('ไม่พบ JSON ในคำตอบ');
-
-    const newArticles = JSON.parse(match[0]);
-
-    // Load existing archive and merge (dedup by URL)
-    const newsFile = path.join(__dirname, 'news-data.json');
-    let existing = [];
-    try { existing = JSON.parse(fs.readFileSync(newsFile, 'utf-8')).articles || []; } catch {}
-    const existingUrls = new Set(existing.map(a => a.url));
-    const fresh = newArticles.filter(a => !existingUrls.has(a.url));
-    const articles = [...fresh, ...existing].slice(0, 100); // สูงสุด 100 บทความ
-
-    const newsData = {
-      articles,
-      lastUpdated: new Date().toISOString(),
-    };
-
-    fs.writeFileSync(newsFile, JSON.stringify(newsData, null, 2), 'utf-8');
-
-    console.log(`✅ เพิ่มใหม่ ${fresh.length} บทความ · รวมทั้งหมด ${articles.length} บทความ`);
-    console.log(`📅 ${new Date().toLocaleString('th-TH')}`);
-    fresh.forEach((a, i) => console.log(`  +${i + 1}. [${a.category}] ${a.titleTH || a.title}`));
-  } catch (err) {
-    console.error('❌ เกิดข้อผิดพลาด:', err.message);
+  if (!top.length) {
+    console.error('❌ ไม่พบบทความที่เกี่ยวข้อง');
     process.exit(1);
   }
+
+  // Save English fallback first
+  const fallback = top.map(it => {
+    const cat = guessCategory(it.title, it.summary);
+    return { title: it.title, titleTH: it.title, source: it.source, url: it.url,
+      date: it.pubDate ? new Date(it.pubDate).toISOString().slice(0, 10) : '',
+      category: cat, categoryLabel: catLabel(cat), summary: it.summary };
+  });
+
+  // Translate with Claude
+  console.log('\n🤖 กำลังแปลด้วย Claude Haiku...');
+  const listed = top.map((it, i) =>
+    `[${i}] title: ${it.title}\nsource: ${it.source}\ndate: ${it.pubDate}\nexcerpt: ${it.summary}`
+  ).join('\n---\n');
+
+  const msg = await client.messages.create({
+    model: 'claude-haiku-4-5-20251001',
+    max_tokens: 3000,
+    messages: [{ role: 'user', content: `Below are ${top.length} real aquaculture news articles. Return ONLY a valid JSON array, no markdown.
+
+Schema: { "idx": N, "titleTH": "ชื่อภาษาไทย", "category": "industry|regulation|research|disease", "summary": "สรุป 2 ประโยคภาษาไทย" }
+
+Category: disease=disease/pathogen/virus; regulation=law/ban/standard; research=study/trial/technology; else industry.
+
+Articles:\n${listed}` }]
+  });
+
+  const raw = msg.content[0].text.trim();
+  const parsed = JSON.parse(raw.slice(raw.indexOf('['), raw.lastIndexOf(']') + 1));
+  const byIdx = Object.fromEntries(parsed.map(p => [p.idx, p]));
+
+  const articles = top.map((it, i) => {
+    const ai = byIdx[i] || {};
+    const cat = ['industry','regulation','research','disease'].includes(ai.category) ? ai.category : guessCategory(it.title, it.summary);
+    return { title: it.title, titleTH: ai.titleTH || it.title, source: it.source, url: it.url,
+      date: it.pubDate ? new Date(it.pubDate).toISOString().slice(0, 10) : '',
+      category: cat, categoryLabel: catLabel(cat), summary: ai.summary || it.summary };
+  });
+
+  const payload = { articles, lastUpdated: new Date().toISOString(), translated: true };
+  fs.writeFileSync(path.join(__dirname, 'news-data.json'), JSON.stringify(payload, null, 2));
+  console.log(`\n✅ บันทึก ${articles.length} บทความลง news-data.json`);
+  articles.slice(0, 5).forEach((a, i) => console.log(`  ${i+1}. [${a.date}] ${a.titleTH.slice(0, 60)}`));
 }
 
-updateNews();
+updateNews().catch(err => { console.error('❌ Error:', err.message); process.exit(1); });

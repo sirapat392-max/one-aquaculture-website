@@ -1,6 +1,5 @@
 node_modules/
 .env
 cases.json
-news-data.json
 *.log
 .DS_Store
