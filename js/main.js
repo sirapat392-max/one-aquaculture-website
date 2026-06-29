@@ -114,8 +114,8 @@ document.addEventListener('DOMContentLoaded', () => {
   reveals.forEach(el => obs.observe(el));
 });
 
-// API base URL
-const API = 'http://localhost:3000';
+// API base URL — empty string = relative to current host (works local + production)
+const API = '';
 
 // SSE helper — streams AI response token by token
 async function streamAI(endpoint, body, onToken, onDone) {
