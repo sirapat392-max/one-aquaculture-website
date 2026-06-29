@@ -15,7 +15,7 @@ const client = new OpenAI({
   apiKey: process.env.OPENROUTER_API_KEY || 'missing-key',
   baseURL: 'https://openrouter.ai/api/v1',
   defaultHeaders: {
-    'HTTP-Referer': 'https://one-aquaculture-website-production.up.railway.app',
+    'HTTP-Referer': 'https://oneaquaculture.com',
     'X-Title': 'ONE AQUACULTURE PRODUCT',
   },
 });
@@ -276,7 +276,7 @@ app.post('/api/refresh-news', async (req, res) => {
     const feedResults = await Promise.allSettled(
       RSS_SOURCES.map(async ({ url, name }) => {
         const r = await fetch(url, {
-          headers: { 'User-Agent': 'Mozilla/5.0 (compatible; OneAquacultureNewsBot/1.0; +https://one-aquaculture.onrender.com)' },
+          headers: { 'User-Agent': 'Mozilla/5.0 (compatible; OneAquacultureNewsBot/1.0; +https://oneaquaculture.com)' },
           signal: AbortSignal.timeout(15000),
         });
         if (!r.ok) throw new Error(`${r.status}`);
@@ -385,7 +385,7 @@ async function autoRefreshNews() {
     const feedResults = await Promise.allSettled(
       RSS_SOURCES.map(async ({ url, name }) => {
         const r = await fetch(url, {
-          headers: { 'User-Agent': 'Mozilla/5.0 (compatible; OneAquacultureNewsBot/1.0; +https://one-aquaculture.onrender.com)' },
+          headers: { 'User-Agent': 'Mozilla/5.0 (compatible; OneAquacultureNewsBot/1.0; +https://oneaquaculture.com)' },
           signal: AbortSignal.timeout(15000),
         });
         if (!r.ok) throw new Error(`${r.status}`);

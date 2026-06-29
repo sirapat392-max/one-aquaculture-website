@@ -7,7 +7,7 @@ const client = new OpenAI({
   apiKey: process.env.OPENROUTER_API_KEY,
   baseURL: 'https://openrouter.ai/api/v1',
   defaultHeaders: {
-    'HTTP-Referer': 'https://one-aquaculture-website-production.up.railway.app',
+    'HTTP-Referer': 'https://oneaquaculture.com',
     'X-Title': 'ONE AQUACULTURE PRODUCT',
   },
 });
