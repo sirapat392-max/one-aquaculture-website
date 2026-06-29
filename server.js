@@ -14,6 +14,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
+// redirect /index.html → /
+app.get('/index.html', (req, res) => res.redirect(301, '/'));
+
 // Load locked company data — AI must not deviate from this
 const companyData = JSON.parse(fs.readFileSync(path.join(__dirname, 'company-data.json'), 'utf-8'));
 
