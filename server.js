@@ -215,6 +215,76 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
+// ─── AI FARM CALCULATOR CHAT ───────────────────────────────────────────────
+const farmChatRateMap = new Map(); // ip → { hour: 'YYYY-MM-DDTHH', count: N }
+
+function farmChatRateLimiter(req, res, next) {
+  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.ip || 'unknown';
+  const hour = new Date().toISOString().slice(0, 13);
+  let e = farmChatRateMap.get(ip);
+  if (!e || e.hour !== hour) { e = { hour, count: 0 }; farmChatRateMap.set(ip, e); }
+  if (e.count >= 30) return res.status(429).json({ error: 'ถึงขีดจำกัด 30 ข้อความ/ชั่วโมงแล้ว กรุณาลองใหม่ในภายหลัง' });
+  e.count++;
+  next();
+}
+
+app.post('/api/farm-chat', farmChatRateLimiter, async (req, res) => {
+  const { message, history } = req.body;
+  if (!message) return res.status(400).json({ error: 'กรุณาระบุข้อความ' });
+
+  const FARM_SYSTEM = `คุณคือผู้ช่วยคำนวณฟาร์มกุ้งอัจฉริยะของบริษัท ONE AQUACULTURE PRODUCT
+ตอบได้เฉพาะเรื่องที่เกี่ยวกับการเลี้ยงกุ้งและตัวเลขฟาร์มเท่านั้น ได้แก่:
+- FCR (อัตราแลกเนื้อ) · อัตรารอด (Survival Rate)
+- %BW (เปอร์เซ็นต์อาหารต่อน้ำหนักตัว) · Biomass รวมในบ่อ
+- ราคาคุ้มทุน · กำไร/ขาดทุนต่อรุ่น
+- ความหนาแน่น PL · คุณภาพน้ำ DO pH แอมโมเนีย
+- Growth rate · การวางแผนจับ
+- การตีความค่าตัวเลขว่าดี/ปานกลาง/แย่ และแนะนำวิธีปรับปรุง
+
+กฎเหล็ก:
+1. ถ้าถามเรื่องอื่นที่ไม่เกี่ยวกับการเลี้ยงกุ้งหรือตัวเลขฟาร์มให้ตอบว่า "ขออภัยครับ ผมตอบได้เฉพาะเรื่องการคำนวณฟาร์มกุ้ง ลองถามเรื่อง FCR, อัตรารอด, %BW, Biomass, หรือต้นทุนได้เลยครับ"
+2. ตอบสั้น กระชับ ไม่เกิน 4-5 ประโยค
+3. ถ้าผู้ใช้บอกตัวเลขมา → บอกว่าดี/ปานกลาง/ต่ำกว่ามาตรฐาน พร้อมเหตุผลสั้นๆ
+4. ถ้าตัวเลขผิดปกติหรือกรอกผิด → ชี้แนะสาเหตุที่เป็นไปได้และวิธีตรวจสอบ
+5. ตอบเป็นภาษาไทย ใช้ภาษาเข้าใจง่ายเหมือนคุยกับเกษตรกร
+6. ห้ามตอบเรื่องโรคกุ้งในเชิงการวินิจฉัย — ให้แนะนำไปใช้ ShrimpDx แทน
+
+ตัวอย่างค่ามาตรฐานที่รู้จัก:
+- FCR ดี < 1.2 | ปกติ 1.2–1.6 | สูง > 1.6
+- อัตรารอด ดี > 70% | ปกติ 50–70% | ต่ำ < 50%
+- %BW กุ้งเล็ก < 1ก. = ~20% | 5–10ก. = ~7% | 15–20ก. = ~3.5% | > 20ก. = ~2.5–3%
+- DO ควร > 5 mg/L | pH 7.5–8.5 | แอมโมเนีย < 0.1 mg/L`;
+
+  try {
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+
+    const messages = [
+      { role: 'system', content: FARM_SYSTEM },
+      ...(history || []).slice(-10).map(h => ({ role: h.role, content: h.content })),
+      { role: 'user', content: message },
+    ];
+
+    const stream = await client.chat.completions.create({
+      model: 'google/gemini-2.5-flash-lite',
+      max_tokens: 512,
+      stream: true,
+      messages,
+    });
+
+    for await (const chunk of stream) {
+      const text = chunk.choices[0]?.delta?.content || '';
+      if (text) res.write(`data: ${JSON.stringify({ text })}\n\n`);
+    }
+    res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
+    res.end();
+  } catch (err) {
+    console.error('farm-chat error:', err);
+    res.status(500).json({ error: 'เกิดข้อผิดพลาด กรุณาลองใหม่' });
+  }
+});
+
 // ─── GET COMPANY DATA (for frontend) ──────────────────────────────────────
 app.get('/api/company', (req, res) => {
   res.json(companyData);

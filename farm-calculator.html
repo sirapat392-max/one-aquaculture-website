@@ -714,6 +714,220 @@
   <p style="margin:0;opacity:.6;font-size:11px">ผลการคำนวณเป็นค่าประมาณ ใช้เพื่ออ้างอิงเบื้องต้นเท่านั้น</p>
 </footer>
 
+<!-- ── FARM CHAT WIDGET ─────────────────────────────────────── -->
+<style>
+#fc-bubble {
+  position: fixed; bottom: 24px; right: 24px; z-index: 999;
+  width: 52px; height: 52px; border-radius: 50%;
+  background: linear-gradient(135deg,#4D1232,#8B3060);
+  box-shadow: 0 4px 20px rgba(139,48,96,.4);
+  border: none; cursor: pointer; font-size: 22px;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .15s, box-shadow .15s;
+}
+#fc-bubble:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(139,48,96,.55); }
+#fc-bubble .fc-badge {
+  position: absolute; top: -4px; right: -4px;
+  background: #dc2626; color: white; border-radius: 50%;
+  width: 18px; height: 18px; font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  display: none;
+}
+
+#fc-panel {
+  position: fixed; bottom: 88px; right: 24px; z-index: 998;
+  width: 360px; max-width: calc(100vw - 32px);
+  background: white; border-radius: 20px;
+  box-shadow: 0 8px 40px rgba(0,0,0,.18);
+  border: 1px solid #E8E0E5;
+  display: none; flex-direction: column;
+  overflow: hidden;
+  max-height: min(520px, calc(100vh - 120px));
+}
+#fc-panel.open { display: flex; }
+
+.fc-header {
+  background: linear-gradient(135deg,#4D1232,#8B3060);
+  color: white; padding: 14px 16px;
+  display: flex; align-items: center; gap: 10px;
+  flex-shrink: 0;
+}
+.fc-header-icon { font-size: 18px; }
+.fc-header-text { flex: 1; }
+.fc-header-title { font-size: 14px; font-weight: 700; }
+.fc-header-sub { font-size: 11px; opacity: .75; }
+.fc-close { background: none; border: none; color: white; font-size: 18px; cursor: pointer; opacity: .8; padding: 0 4px; }
+.fc-close:hover { opacity: 1; }
+
+#fc-messages {
+  flex: 1; overflow-y: auto; padding: 14px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.fc-msg { max-width: 88%; font-size: 13px; line-height: 1.55; padding: 9px 13px; border-radius: 14px; }
+.fc-msg.user { background: #4D1232; color: white; border-radius: 14px 14px 4px 14px; align-self: flex-end; }
+.fc-msg.bot  { background: #F5EBF0; color: #1a1a1a; border-radius: 14px 14px 14px 4px; align-self: flex-start; }
+.fc-msg.typing { color: #aaa; font-style: italic; }
+
+.fc-suggestions { padding: 0 14px 10px; display: flex; gap: 6px; flex-wrap: wrap; flex-shrink: 0; }
+.fc-sugg { background: #FAF6F1; border: 1px solid #E8E0E5; border-radius: 20px; padding: 5px 12px; font-size: 11px; font-weight: 600; color: #5C3D4E; cursor: pointer; font-family: inherit; transition: all .1s; }
+.fc-sugg:hover { background: #F5EBF0; border-color: #8B3060; color: #4D1232; }
+
+.fc-input-row {
+  display: flex; gap: 8px; padding: 10px 14px 14px;
+  border-top: 1px solid #F0E8EF; flex-shrink: 0;
+}
+#fc-input {
+  flex: 1; border: 1.5px solid #E8E0E5; border-radius: 22px;
+  padding: 9px 14px; font-size: 13px; font-family: inherit;
+  color: #1a1a1a; background: #FAF6F1; outline: none;
+  resize: none; line-height: 1.4; max-height: 80px;
+}
+#fc-input:focus { border-color: #8B3060; background: white; }
+#fc-send {
+  width: 38px; height: 38px; border-radius: 50%; border: none;
+  background: #8B3060; color: white; font-size: 16px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: background .12s;
+}
+#fc-send:hover { background: #4D1232; }
+#fc-send:disabled { background: #ccc; cursor: default; }
+</style>
+
+<!-- Bubble button -->
+<button id="fc-bubble" onclick="toggleFarmChat()" title="ถามผู้ช่วยคำนวณ AI">
+  🤖
+  <span class="fc-badge" id="fc-badge"></span>
+</button>
+
+<!-- Chat panel -->
+<div id="fc-panel">
+  <div class="fc-header">
+    <div class="fc-header-icon">🤖</div>
+    <div class="fc-header-text">
+      <div class="fc-header-title">ผู้ช่วยคำนวณฟาร์ม AI</div>
+      <div class="fc-header-sub">ถามเรื่อง FCR · อัตรารอด · %BW · ต้นทุน</div>
+    </div>
+    <button class="fc-close" onclick="toggleFarmChat()">✕</button>
+  </div>
+  <div id="fc-messages">
+    <div class="fc-msg bot">สวัสดีครับ! ถามเรื่องตัวเลขฟาร์มกุ้งได้เลย เช่น "FCR 1.8 ดีไหม" หรือ "PL 200,000 บ่อ 1 ไร่ ควรปล่อยไหม" ครับ 🦐</div>
+  </div>
+  <div class="fc-suggestions" id="fc-suggs">
+    <button class="fc-sugg" onclick="fcAsk('FCR 1.5 ดีไหม')">FCR 1.5 ดีไหม?</button>
+    <button class="fc-sugg" onclick="fcAsk('อัตรารอด 55% ถือว่าเป็นยังไง')">SR 55% โอเคไหม?</button>
+    <button class="fc-sugg" onclick="fcAsk('%BW ควรใช้เท่าไหร่สำหรับกุ้ง 15 กรัม')">%BW กุ้ง 15ก.?</button>
+    <button class="fc-sugg" onclick="fcAsk('Biomass คืออะไร ใช้ทำอะไร')">Biomass คืออะไร?</button>
+  </div>
+  <div class="fc-input-row">
+    <textarea id="fc-input" placeholder="ถามเรื่องตัวเลขฟาร์มกุ้ง..." rows="1"
+      oninput="fcAutoResize(this)" onkeydown="fcKeyDown(event)"></textarea>
+    <button id="fc-send" onclick="fcSend()" title="ส่ง">➤</button>
+  </div>
+</div>
+
+<script>
+// ── FARM CHAT ────────────────────────────────────────────────────────────────
+let fcHistory = [];
+let fcStreaming = false;
+let fcOpen = false;
+
+function toggleFarmChat() {
+  fcOpen = !fcOpen;
+  document.getElementById('fc-panel').classList.toggle('open', fcOpen);
+  if (fcOpen) {
+    document.getElementById('fc-input').focus();
+    document.getElementById('fc-badge').style.display = 'none';
+  }
+}
+
+function fcAutoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 80) + 'px';
+}
+
+function fcKeyDown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); fcSend(); }
+}
+
+function fcAsk(text) {
+  document.getElementById('fc-input').value = text;
+  document.getElementById('fc-suggs').style.display = 'none';
+  fcSend();
+}
+
+function fcAppend(role, text) {
+  const msgs = document.getElementById('fc-messages');
+  const div  = document.createElement('div');
+  div.className = `fc-msg ${role}`;
+  div.textContent = text;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  return div;
+}
+
+async function fcSend() {
+  if (fcStreaming) return;
+  const input = document.getElementById('fc-input');
+  const msg   = input.value.trim();
+  if (!msg) return;
+
+  input.value = ''; input.style.height = 'auto';
+  document.getElementById('fc-send').disabled = true;
+  document.getElementById('fc-suggs').style.display = 'none';
+
+  fcAppend('user', msg);
+  fcHistory.push({ role: 'user', content: msg });
+
+  const botDiv = fcAppend('bot', '...');
+  botDiv.classList.add('typing');
+  fcStreaming = true;
+  let botText = '';
+
+  try {
+    const resp = await fetch('/api/farm-chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: msg, history: fcHistory.slice(-10) }),
+    });
+
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      botDiv.textContent = err.error || 'เกิดข้อผิดพลาด กรุณาลองใหม่';
+      botDiv.classList.remove('typing');
+      return;
+    }
+
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    botDiv.classList.remove('typing');
+    botDiv.textContent = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const lines = decoder.decode(value).split('\n');
+      for (const line of lines) {
+        if (!line.startsWith('data:')) continue;
+        try {
+          const d = JSON.parse(line.slice(5).trim());
+          if (d.text) { botText += d.text; botDiv.textContent = botText; }
+          if (d.done) break;
+        } catch {}
+      }
+      document.getElementById('fc-messages').scrollTop = 9999;
+    }
+
+    fcHistory.push({ role: 'assistant', content: botText });
+  } catch (err) {
+    botDiv.textContent = 'เชื่อมต่อไม่ได้ กรุณาลองใหม่';
+    botDiv.classList.remove('typing');
+  } finally {
+    fcStreaming = false;
+    document.getElementById('fc-send').disabled = false;
+  }
+}
+</script>
+
 <script src="js/i18n.js"></script>
 <script src="js/main.js"></script>
 <style>
