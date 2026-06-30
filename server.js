@@ -84,6 +84,10 @@ app.use((req, res, next) => {
   next();
 });
 
+// guides/ directory conflicts with guides.html — must be before static middleware
+app.get('/guides', (req, res) => res.sendFile(path.join(__dirname, 'guides.html')));
+app.get('/guides/', (req, res) => res.redirect(301, '/guides'));
+
 // serve static files; fall back to .html extension for clean URLs
 app.use(express.static(path.join(__dirname), { extensions: ['html'] }));
 
