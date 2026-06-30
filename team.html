@@ -42,10 +42,10 @@
 .team-hero p  { font-size: 14px; opacity: .8; margin: 0; }
 
 .team-wrap {
-  max-width: 920px; margin: 0 auto; padding: 40px 5% 72px;
-  display: flex; gap: 36px; align-items: flex-start;
+  max-width: 1060px; margin: 0 auto; padding: 40px 5% 72px;
+  display: flex; gap: 32px; align-items: flex-start;
 }
-.map-col  { flex: 0 0 280px; position: sticky; top: 88px; }
+.map-col  { flex: 0 0 420px; position: sticky; top: 88px; }
 .cards-col{ flex: 1; display: flex; flex-direction: column; gap: 12px; }
 
 /* ─── MAP ─── */
@@ -53,6 +53,8 @@
   font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
   color: #8B3060; font-weight: 700; margin-bottom: 8px;
 }
+.map-body { display: flex; gap: 14px; align-items: flex-start; }
+#th-map   { flex: 1; min-width: 0; }
 .map-svg { width: 100%; height: auto; display: block; }
 
 /* ─── CARDS ─── */
@@ -116,17 +118,22 @@
 .btn-line:hover { background: #04a544; transform: translateY(-1px); }
 .btn-line svg { width: 14px; height: 14px; fill: white; flex-shrink: 0; }
 
-.legend { margin-top: 10px; display: flex; flex-direction: column; gap: 4px; }
-.legend-item { display: flex; align-items: center; gap: 5px; font-size: 10.5px; color: #555; }
+.legend { display: flex; flex-direction: column; gap: 7px; padding-top: 2px; flex-shrink: 0; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 10.5px; color: #444; white-space: nowrap; }
 .legend-dot {
-  width: 11px; height: 11px; border-radius: 2px; flex-shrink: 0;
-  border-width: 1.5px; border-style: solid;
+  width: 13px; height: 13px; border-radius: 3px; flex-shrink: 0;
+  border-width: 2px; border-style: solid;
 }
 
-@media (max-width: 660px) {
+@media (max-width: 760px) {
   .team-wrap { flex-direction: column; gap: 24px; padding: 28px 4% 56px; }
-  .map-col { position: static; flex: none; width: 100%; max-width: 280px; margin: 0 auto; }
+  .map-col { position: static; flex: none; width: 100%; max-width: 420px; margin: 0 auto; }
   .team-card:hover { transform: scale(1.04) translateY(-2px); }
+}
+@media (max-width: 480px) {
+  .map-body { flex-direction: column; }
+  .legend { flex-direction: row; flex-wrap: wrap; gap: 6px; padding-top: 8px; }
+  .legend-item { white-space: normal; }
 }
 </style>
 </head>
@@ -144,27 +151,29 @@
   <div class="map-col">
     <div class="map-title">พื้นที่รับผิดชอบ</div>
 
-    <div id="th-map" style="width:100%">
-      <div style="text-align:center;color:#9c5e7a;font-size:11px;padding:28px 0">⟳ กำลังโหลดแผนที่...</div>
-    </div>
+    <div class="map-body">
+      <div id="th-map">
+        <div style="text-align:center;color:#9c5e7a;font-size:11px;padding:28px 0">⟳ กำลังโหลดแผนที่...</div>
+      </div>
 
-    <!-- Legend -->
-    <div class="legend">
-      <div class="legend-item">
-        <span class="legend-dot" style="background:var(--c-beam-lt);border-color:var(--c-beam)"></span>
-        บีม · ภาคกลาง
-      </div>
-      <div class="legend-item">
-        <span class="legend-dot" style="background:var(--c-ad-lt);border-color:var(--c-ad)"></span>
-        อัด · ภาคใต้ตอนบน
-      </div>
-      <div class="legend-item">
-        <span class="legend-dot" style="background:var(--c-first-lt);border-color:var(--c-first)"></span>
-        เฟิร์ส · ใต้ตะวันออก
-      </div>
-      <div class="legend-item">
-        <span class="legend-dot" style="background:var(--c-ice-lt);border-color:var(--c-ice)"></span>
-        ไอซ์ · ใต้ตะวันตก
+      <!-- Legend -->
+      <div class="legend">
+        <div class="legend-item">
+          <span class="legend-dot" style="background:#5eead4;border-color:#047857"></span>
+          บีม · ภาคกลาง
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot" style="background:#fcd34d;border-color:#92400e"></span>
+          อัด · ภาคใต้ตอนบน
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot" style="background:#fda4af;border-color:#9f1239"></span>
+          เฟิร์ส · ใต้ตะวันออก
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot" style="background:#c4b5fd;border-color:#4c1d95"></span>
+          ไอซ์ · ใต้ตะวันตก
+        </div>
       </div>
     </div>
   </div>
