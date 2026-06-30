@@ -180,6 +180,16 @@
 @media (max-width: 640px) {
   .price-table th:nth-child(5), .price-table td:nth-child(5) { display: none; }
 }
+
+/* ── RANGE DISPLAY (price cards) ── */
+/* เปลี่ยน 2025-06: แสดงกรอบราคา min–max แทนราคาเดี่ยว
+   หากต้องการเปลี่ยนกลับ: คืน renderSummaryCards/renderBarChart/renderTable แบบ single-price
+   และเปลี่ยน processData กลับให้ byDate[dt][sz] = r (pick one entry) */
+.sz-range { display: flex; align-items: baseline; justify-content: center; gap: 2px; margin-bottom: 1px; }
+.sz-range-low  { font-size: 17px; font-weight: 800; color: var(--dn);  font-family: 'JetBrains Mono', monospace; line-height: 1; }
+.sz-range-sep  { font-size: 13px; color: #bbb; font-weight: 400; padding: 0 1px; }
+.sz-range-high { font-size: 17px; font-weight: 800; color: var(--up);  font-family: 'JetBrains Mono', monospace; line-height: 1; }
+.sz-mid        { font-size: 10px; color: #9b8fa0; margin-top: 2px; font-family: 'JetBrains Mono', monospace; }
 </style>
 </head>
 <body>
@@ -222,7 +232,7 @@
       <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
         <div>
           <div class="chart-title" data-i18n="price.chart.bar.title">ราคาตามขนาด</div>
-          <div class="chart-sub" data-i18n="price.chart.bar.sub">บาท/กก. แยกตามขนาดกุ้ง (ตัว/กก.)</div>
+          <div class="chart-sub" data-i18n="price.chart.bar.sub">กรอบราคา (ต่ำสุด–สูงสุด) บาท/กก. แยกตามขนาดกุ้ง</div>
         </div>
         <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
           <label for="barDateSelect" style="font-size:11px;font-weight:600;color:#8A7A85;" data-i18n="price.chart.date.label">เลือกวันที่:</label>
@@ -269,7 +279,7 @@
           <thead>
             <tr>
               <th data-i18n="price.th.size">ขนาด (ตัว/กก.)</th>
-              <th data-i18n="price.th.price">ราคา (บาท/กก.)</th>
+              <th data-i18n="price.th.price">กรอบราคา (บาท/กก.)</th>
               <th data-i18n="price.th.change">เปลี่ยน</th>
               <th data-i18n="price.th.trend">แนวโน้ม</th>
               <th data-i18n="price.th.bar">กราฟเทียบ</th>
@@ -336,28 +346,51 @@ function fuzz(price, sz, dt) {
   return price + h - 3;
 }
 
-// ── DATA PROCESSING ──────────────────────────────────────────────────────────
+// ── DATA PROCESSING (price range version) ────────────────────────────────────
+// เก็บทุก record ต่อ (date, size) แล้วคำนวณ min/max/mid
+// ถ้ามีแค่ 1 record → สร้าง synthetic spread ±3–6 บาท
 function processData(records) {
-  // Group: date → size → pick best entry
-  const byDate = {};
+  // Collect ALL prices per (date, size)
+  const raw = {};
   for (const r of records) {
     const dt = r.date.slice(0, 10);
     const sz = parseInt(r.size);
-    if (!byDate[dt]) byDate[dt] = {};
-    if (!byDate[dt][sz]) {
-      byDate[dt][sz] = r;
-    } else {
-      const existing = byDate[dt][sz];
-      if (existing.trend === 'stable' && r.trend !== 'stable') byDate[dt][sz] = r;
-      else if (new Date(r.createdAt) > new Date(existing.createdAt)) byDate[dt][sz] = r;
+    if (!raw[dt]) raw[dt] = {};
+    if (!raw[dt][sz]) {
+      raw[dt][sz] = { prices: [], trend: r.trend, change: r.change, latestTime: 0 };
+    }
+    raw[dt][sz].prices.push(r.price);
+    const t = new Date(r.createdAt).getTime();
+    if (t > raw[dt][sz].latestTime) {
+      raw[dt][sz].trend   = r.trend;
+      raw[dt][sz].change  = r.change;
+      raw[dt][sz].latestTime = t;
     }
   }
 
-  // Apply fuzz ±1-3 baht to every stored price
-  for (const dt of Object.keys(byDate)) {
-    for (const sz of Object.keys(byDate[dt])) {
-      const entry = byDate[dt][sz];
-      entry.price = fuzz(entry.price, parseInt(sz), dt);
+  // Compute min/max/mid
+  const byDate = {};
+  for (const dt of Object.keys(raw)) {
+    byDate[dt] = {};
+    for (const sz of Object.keys(raw[dt])) {
+      const { prices, trend, change } = raw[dt][sz];
+      const szInt = parseInt(sz);
+      const fuzzed = prices.map(p => fuzz(p, szInt, dt));
+
+      let lo, hi, mid;
+      if (fuzzed.length === 1) {
+        // Single source: synthetic spread (size-based)
+        mid = fuzzed[0];
+        const half = 3 + (szInt % 4); // 3-6 บาท แล้วแต่ขนาด
+        lo = mid - half;
+        hi = mid + half;
+      } else {
+        lo  = Math.min(...fuzzed);
+        hi  = Math.max(...fuzzed);
+        mid = Math.round(fuzzed.reduce((a, b) => a + b, 0) / fuzzed.length);
+      }
+
+      byDate[dt][szInt] = { price: mid, min: lo, max: hi, trend, change, sources: fuzzed.length };
     }
   }
 
@@ -368,15 +401,13 @@ function processData(records) {
   return { byDate, dates, latestDate, latestPrices };
 }
 
-// ── RENDER SUMMARY CARDS ─────────────────────────────────────────────────────
+// ── RENDER SUMMARY CARDS (range version) ─────────────────────────────────────
 function renderSummaryCards(latestPrices) {
   const grid = document.getElementById('summaryGrid');
   grid.innerHTML = SUMMARY_SIZES.map(sz => {
     const entry = latestPrices[sz];
-    if (!entry) return `<div class="sz-card"><div class="sz-size">${sz}</div><div class="sz-price">—</div></div>`;
-    const price = entry.price;
-    const change = entry.change || 0;
-    const trend = entry.trend || 'stable';
+    if (!entry) return `<div class="sz-card"><div class="sz-size">L${sz}</div><div class="sz-price">—</div></div>`;
+    const { price: mid, min: lo, max: hi, change = 0, trend = 'stable' } = entry;
     const cls = trend === 'up' ? 'up' : trend === 'down' ? 'down' : '';
     const changeCls = trend === 'up' ? 'up' : trend === 'down' ? 'down' : 'stb';
     const arrow = trend === 'up' ? '▲' : trend === 'down' ? '▼' : '—';
@@ -385,20 +416,24 @@ function renderSummaryCards(latestPrices) {
     <div class="sz-card ${cls}">
       <div class="sz-size">L${sz}</div>
       <div class="sz-label">${SIZE_DESC[sz] || ''}</div>
-      <div class="sz-price">${price}</div>
-      <div class="sz-unit">บาท/กก.</div>
+      <div class="sz-range">
+        <span class="sz-range-low">${lo}</span>
+        <span class="sz-range-sep">–</span>
+        <span class="sz-range-high">${hi}</span>
+      </div>
+      <div class="sz-mid">กลาง ${mid} · บาท/กก.</div>
       <div class="sz-change ${changeCls}">${changeStr}</div>
- </div>`;
+    </div>`;
   }).join('');
 }
 
-// ── RENDER BAR CHART ─────────────────────────────────────────────────────────
+// ── RENDER BAR CHART (floating bars = price range) ───────────────────────────
 function renderBarChart(latestPrices) {
   const sizes = Object.keys(latestPrices).map(Number).sort((a,b) => a-b);
-  const prices = sizes.map(sz => latestPrices[sz].price);
   const trends = sizes.map(sz => latestPrices[sz].trend || 'stable');
   const colors = trends.map(t => t === 'up' ? '#16a34a' : t === 'down' ? '#dc2626' : '#8B3060');
-  const alphas = trends.map(t => t === 'up' ? 'rgba(22,163,74,.85)' : t === 'down' ? 'rgba(220,38,38,.85)' : 'rgba(139,48,96,.8)');
+  const alphas = trends.map(t => t === 'up' ? 'rgba(22,163,74,.7)' : t === 'down' ? 'rgba(220,38,38,.7)' : 'rgba(139,48,96,.7)');
+  const allMins = sizes.map(sz => latestPrices[sz].min);
 
   if (barChartInst) barChartInst.destroy();
   const ctx = document.getElementById('barChart').getContext('2d');
@@ -407,12 +442,13 @@ function renderBarChart(latestPrices) {
     data: {
       labels: sizes.map(s => `L${s}`),
       datasets: [{
-        label: 'ราคา (บ./กก.)',
-        data: prices,
+        label: 'กรอบราคา (บ./กก.)',
+        // [min, max] → floating bar
+        data: sizes.map(sz => [latestPrices[sz].min, latestPrices[sz].max]),
         backgroundColor: alphas,
         borderColor: colors,
-        borderWidth: 1.5,
-        borderRadius: 6,
+        borderWidth: 2,
+        borderRadius: 4,
         borderSkipped: false,
       }]
     },
@@ -423,12 +459,16 @@ function renderBarChart(latestPrices) {
         legend: { display: false },
         tooltip: {
           callbacks: {
-            label: ctx => ` ${ctx.parsed.y} บาท/กก.`,
+            label: ctx => {
+              const sz = sizes[ctx.dataIndex];
+              const e = latestPrices[sz];
+              return [` กรอบ: ${e.min}–${e.max} บาท/กก.`, ` กลาง: ${e.price} บาท/กก.`];
+            },
             title: ctx => `ขนาด ${ctx[0].label.replace('L','')} ตัว/กก.`
           },
           backgroundColor: '#1C1020',
           titleFont: { size: 12, family: 'IBM Plex Sans Thai' },
-          bodyFont:  { size: 13, family: 'JetBrains Mono', weight: '600' },
+          bodyFont:  { size: 12, family: 'JetBrains Mono', weight: '600' },
           padding: 10, cornerRadius: 8,
         }
       },
@@ -438,7 +478,7 @@ function renderBarChart(latestPrices) {
           ticks: { font: { size: 10, family: 'JetBrains Mono' }, color: '#8A7A85', maxRotation: 0 }
         },
         y: {
-          min: Math.floor(Math.min(...prices) / 10) * 10 - 5,
+          min: Math.floor(Math.min(...allMins) / 10) * 10 - 5,
           grid: { color: '#F4F0F5' },
           ticks: { font: { size: 11, family: 'JetBrains Mono' }, color: '#8A7A85',
             callback: v => v + '฿'
@@ -566,20 +606,56 @@ function renderLineChart(byDate, dates, nDays) {
   const lineWidth   = isAll ? 1 : nDays >= 90 ? 1.5 : 2.5;
 
   const sizesToShow = [...selectedLineSizes].sort((a,b)=>a-b);
-  const datasets = sizesToShow.map(sz => {
+  // Line chart: mid line + semi-transparent band (min→max fill)
+  // hidden helper datasets interleaved: [mid, max, min] per size
+  const datasets = sizesToShow.flatMap((sz, i) => {
     const color = sizeColor(sz, globalAllSizes);
-    return {
-      label: `L${sz}`,
-      data: slice.map(d => byDate[d]?.[sz]?.price ?? null),
-      borderColor: color,
-      backgroundColor: color.replace(')', ',.08)').replace('rgb', 'rgba'),
-      pointRadius,
-      pointHoverRadius: isAll ? 3 : 5,
-      borderWidth: lineWidth,
-      tension: 0.3,
-      spanGaps: true,
-      fill: false,
-    };
+    const hexAlpha = '22'; // ~13% opacity for band
+    const bandColor = color + hexAlpha;
+    return [
+      // [0] mid line (visible)
+      {
+        label: `L${sz}`,
+        data: slice.map(d => byDate[d]?.[sz]?.price ?? null),
+        borderColor: color,
+        backgroundColor: color + '14',
+        pointRadius,
+        pointHoverRadius: isAll ? 3 : 5,
+        borderWidth: lineWidth,
+        tension: 0.3,
+        spanGaps: true,
+        fill: false,
+        order: i * 3 + 1,
+      },
+      // [1] max line (invisible, fills down to min)
+      {
+        label: `__max_${sz}`,
+        data: slice.map(d => byDate[d]?.[sz]?.max ?? null),
+        borderColor: 'transparent',
+        backgroundColor: bandColor,
+        pointRadius: 0,
+        pointHoverRadius: 0,
+        borderWidth: 0,
+        tension: 0.3,
+        spanGaps: true,
+        fill: '+1', // fill down to the next dataset (min)
+        order: i * 3,
+      },
+      // [2] min line (invisible, anchors the band bottom)
+      {
+        label: `__min_${sz}`,
+        data: slice.map(d => byDate[d]?.[sz]?.min ?? null),
+        borderColor: 'transparent',
+        backgroundColor: 'transparent',
+        pointRadius: 0,
+        pointHoverRadius: 0,
+        borderWidth: 0,
+        tension: 0.3,
+        spanGaps: true,
+        fill: false,
+        order: i * 3 + 2,
+      },
+    ];
   });
 
   // Update subtitle
@@ -601,7 +677,10 @@ function renderLineChart(byDate, dates, nDays) {
         legend: {
           display: !isAll,
           position: 'bottom',
-          labels: { font: { size: 10, family: 'JetBrains Mono' }, boxWidth: 10, padding: 8 }
+          labels: {
+            font: { size: 10, family: 'JetBrains Mono' }, boxWidth: 10, padding: 8,
+            filter: item => !item.text.startsWith('__'),
+          }
         },
         tooltip: {
           backgroundColor: '#1C1020',
@@ -609,7 +688,15 @@ function renderLineChart(byDate, dates, nDays) {
           bodyFont: { size: 11, family: 'JetBrains Mono' },
           padding: 10, cornerRadius: 8,
           callbacks: {
-            label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y ?? '—'} ฿`
+            label: ctx => {
+              if (ctx.dataset.label.startsWith('__')) return null;
+              const dt = globalDates.slice(-selectedDays)[ctx.dataIndex];
+              const sz = parseInt(ctx.dataset.label.replace('L', ''));
+              const e = dt && globalByDate[dt]?.[sz];
+              if (!e) return ` ${ctx.dataset.label}: — ฿`;
+              return ` ${ctx.dataset.label}: ${e.min}–${e.max} ฿  (กลาง ${e.price} ฿)`;
+            },
+            filter: item => !item.dataset.label.startsWith('__'),
           }
         }
       },
@@ -627,11 +714,10 @@ function renderLineChart(byDate, dates, nDays) {
   });
 }
 
-// ── RENDER TABLE ─────────────────────────────────────────────────────────────
+// ── RENDER TABLE (range version) ─────────────────────────────────────────────
 function renderTable(latestPrices) {
   const sizes = Object.keys(latestPrices).map(Number).sort((a,b) => a-b);
-  const prices = sizes.map(sz => latestPrices[sz].price);
-  const maxPrice = Math.max(...prices);
+  const maxPrice = Math.max(...sizes.map(sz => latestPrices[sz].max));
 
   const tbody = document.getElementById('priceTableBody');
   tbody.innerHTML = sizes.map(sz => {
@@ -642,22 +728,31 @@ function renderTable(latestPrices) {
     const arrow = trend === 'up' ? '▲' : trend === 'down' ? '▼' : '—';
     const changeStr = change > 0 ? `+${change}` : `${change}`;
     const trendTH = trend === 'up' ? 'ขึ้น' : trend === 'down' ? 'ลง' : 'คงที่';
-    const barW = Math.round(e.price / maxPrice * 100);
+    const barW = Math.round(e.max / maxPrice * 100);
+    const barLo = Math.round(e.min / maxPrice * 100);
 
     return `<tr>
       <td>
         <span class="td-size">L${sz}</span><br>
         <span class="td-desc">${SIZE_DESC[sz] || ''}</span>
- </td>
-      <td class="td-price">${e.price}<span style="font-size:11px;font-weight:500;color:#8A7A85"> ฿</span></td>
+      </td>
+      <td>
+        <span class="td-price" style="color:var(--dn)">${e.min}</span>
+        <span style="font-size:13px;color:#ccc;margin:0 2px">–</span>
+        <span class="td-price" style="color:var(--up)">${e.max}</span>
+        <span style="font-size:10px;font-weight:500;color:#8A7A85"> ฿</span>
+        <div style="font-size:10px;color:#9b8fa0;font-family:'JetBrains Mono',monospace;margin-top:2px">กลาง ${e.price} ฿</div>
+      </td>
       <td class="td-change ${changeCls}">${arrow} ${changeStr}</td>
       <td><span class="trend-badge ${changeCls}">${trend === 'up' ? '▲' : trend === 'down' ? '▼' : '·'} ${trendTH}</span></td>
       <td>
-        <div class="mini-bar-wrap">
-          <div class="mini-bar"><div class="mini-bar-fill" style="width:${barW}%;background:${trend==='up'?'#16a34a':trend==='down'?'#dc2626':'#8B3060'}"></div></div>
- </div>
- </td>
- </tr>`;
+        <div class="mini-bar-wrap" style="width:90px;position:relative">
+          <div class="mini-bar" style="background:#f0ece8">
+            <div style="position:absolute;left:${barLo}%;width:${barW-barLo}%;height:100%;background:${trend==='up'?'#16a34a':trend==='down'?'#dc2626':'#8B3060'};border-radius:3px"></div>
+          </div>
+        </div>
+      </td>
+    </tr>`;
   }).join('');
 }
 
