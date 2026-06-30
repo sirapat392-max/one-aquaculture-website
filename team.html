@@ -157,72 +157,68 @@
     <div class="map-title">พื้นที่รับผิดชอบ</div>
 
     <!--
-      Thailand SVG — viewBox 0 0 180 430
-      path calibrated from real lat/lon:
-        x = (lon-97.5)/8 * 180
-        y = (21-lat)/15.5 * 430
-      Key latitudes: Bangkok 13.8°N≈y208, Chumphon 10.5°N≈y268, S.Thani 9°N≈y302
+      Thailand SVG — calibrated from actual map image
+      viewBox 0 0 180 430
+      NE plateau extends far right; peninsula shifts west going south
     -->
     <svg class="map-svg" viewBox="0 0 180 430" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <!-- clipPath = exact Thailand outline so zones stay inside borders -->
         <clipPath id="th-clip">
+          <!-- Thailand outline traced from actual map proportions -->
           <path d="
-            M 30,26 L 50,9 L 75,4 L 100,9 L 124,24
-            L 140,48 L 148,78 L 145,110 L 152,138 L 148,162
-            L 138,182 L 122,198
-            L 118,222 L 114,248 L 110,274 L 107,298
-            L 104,320 L 101,342 L 98,362 L 96,380
-            L 94,396 L 92,410 L 91,420
-            L 86,422 L 84,410 L 82,394
-            L 80,378 L 78,360 L 75,340 L 73,318
-            L 71,296 L 69,272 L 68,248 L 67,224
-            L 64,202 L 58,188
-            L 44,172 L 34,148 L 26,118 L 25,84 L 28,52
+            M 5,46
+            L 16,28 L 40,20 L 64,13 L 88,12 L 112,20 L 136,30
+            L 144,57 L 152,82 L 150,96 L 164,123 L 173,152 L 176,163
+            L 168,183 L 152,197 L 130,200 L 108,200 L 90,204 L 73,200
+            L 65,206 L 58,218 L 62,242 L 71,254
+            L 90,301 L 90,321 L 83,358 L 91,375 L 95,415
+            L 85,425 L 78,425
+            L 65,418 L 52,400 L 40,378 L 30,350 L 23,332 L 17,314
+            L 14,298 L 22,258 L 32,240
+            L 24,230 L 18,212 L 15,200 L 8,178 L 8,128 L 10,90 L 8,68
             Z"/>
         </clipPath>
       </defs>
 
-      <!-- Gray base — full Thailand -->
+      <!-- Gray base -->
       <path class="z-bg" d="
-        M 30,26 L 50,9 L 75,4 L 100,9 L 124,24
-        L 140,48 L 148,78 L 145,110 L 152,138 L 148,162
-        L 138,182 L 122,198
-        L 118,222 L 114,248 L 110,274 L 107,298
-        L 104,320 L 101,342 L 98,362 L 96,380
-        L 94,396 L 92,410 L 91,420
-        L 86,422 L 84,410 L 82,394
-        L 80,378 L 78,360 L 75,340 L 73,318
-        L 71,296 L 69,272 L 68,248 L 67,224
-        L 64,202 L 58,188
-        L 44,172 L 34,148 L 26,118 L 25,84 L 28,52
+        M 5,46
+        L 16,28 L 40,20 L 64,13 L 88,12 L 112,20 L 136,30
+        L 144,57 L 152,82 L 150,96 L 164,123 L 173,152 L 176,163
+        L 168,183 L 152,197 L 130,200 L 108,200 L 90,204 L 73,200
+        L 65,206 L 58,218 L 62,242 L 71,254
+        L 90,301 L 90,321 L 83,358 L 91,375 L 95,415
+        L 85,425 L 78,425
+        L 65,418 L 52,400 L 40,378 L 30,350 L 23,332 L 17,314
+        L 14,298 L 22,258 L 32,240
+        L 24,230 L 18,212 L 15,200 L 8,178 L 8,128 L 10,90 L 8,68
         Z"/>
 
-      <!-- Zone: บีม — Bangkok cluster (Central, y=190–222) -->
+      <!-- Zone: บีม — Bangkok cluster (y=190–255) -->
       <rect class="z-beam" data-zone="beam"
         clip-path="url(#th-clip)"
-        x="25" y="188" width="135" height="36"/>
+        x="0" y="190" width="180" height="66"/>
 
-      <!-- Zone: อัด — Surat Thani (upper peninsula, y=222–320) -->
+      <!-- Zone: อัด — Surat Thani upper peninsula (y=255–358) -->
       <rect class="z-ad" data-zone="ad"
         clip-path="url(#th-clip)"
-        x="55" y="222" width="90" height="100"/>
+        x="0" y="255" width="180" height="105"/>
 
-      <!-- Zone: เฟิร์ส — Gulf/east side (y=320–422) -->
+      <!-- Zone: เฟิร์ส — Gulf/east lower peninsula (y=358–426) -->
       <polygon class="z-first" data-zone="first"
         clip-path="url(#th-clip)"
-        points="79,320 115,320 92,422 86,422"/>
+        points="57,358 180,358 180,426 80,426"/>
 
-      <!-- Zone: ไอซ์ — Andaman/west side (y=320–422) -->
+      <!-- Zone: ไอซ์ — Andaman/west lower peninsula (y=358–426) -->
       <polygon class="z-ice" data-zone="ice"
         clip-path="url(#th-clip)"
-        points="55,320 79,320 86,422 80,422"/>
+        points="0,358 57,358 80,426 0,426"/>
 
-      <!-- Zone labels -->
-      <text x="92"  y="212" text-anchor="middle" font-size="6.5" font-weight="700" fill="#047857">บีม</text>
-      <text x="89"  y="278" text-anchor="middle" font-size="6.5" font-weight="700" fill="#92400e">อัด</text>
-      <text x="96"  y="375" text-anchor="middle" font-size="6"   font-weight="700" fill="#881337">เฟิร์ส</text>
-      <text x="71"  y="368" text-anchor="middle" font-size="6"   font-weight="700" fill="#4c1d95">ไอซ์</text>
+      <!-- Labels -->
+      <text x="68"  y="232" text-anchor="middle" font-size="6.5" font-weight="700" fill="#047857">บีม</text>
+      <text x="52"  y="308" text-anchor="middle" font-size="6.5" font-weight="700" fill="#92400e">อัด</text>
+      <text x="84"  y="395" text-anchor="middle" font-size="6"   font-weight="700" fill="#881337">เฟิร์ส</text>
+      <text x="27"  y="390" text-anchor="middle" font-size="6"   font-weight="700" fill="#4c1d95">ไอซ์</text>
     </svg>
 
     <!-- Legend -->
