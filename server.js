@@ -72,6 +72,7 @@ setInterval(() => {
   const hour = new Date().toISOString().slice(0, 13);
   for (const [ip, e] of diagRateMap) { if (e.date !== today) diagRateMap.delete(ip); }
   for (const [ip, e] of chatRateMap) { if (e.hour !== hour) chatRateMap.delete(ip); }
+  for (const [ip, e] of newsRefreshRateMap) { if (e.hour !== hour) newsRefreshRateMap.delete(ip); }
 }, 3600_000);
 
 // redirect *.html → clean URL (must be before static)
@@ -449,8 +450,20 @@ function catLabel(cat) {
   return { industry:'🌏 อุตสาหกรรม', regulation:'📋 กฎระเบียบ', research:'🔬 งานวิจัย', disease:'🦠 โรคสัตว์น้ำ' }[cat] || '🌏 อุตสาหกรรม';
 }
 
+const newsRefreshRateMap = new Map();
+
+function newsRefreshRateLimiter(req, res, next) {
+  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.ip || 'unknown';
+  const hour = new Date().toISOString().slice(0, 13);
+  let e = newsRefreshRateMap.get(ip);
+  if (!e || e.hour !== hour) { e = { hour, count: 0 }; newsRefreshRateMap.set(ip, e); }
+  if (e.count >= 2) return res.status(429).json({ error: 'รีเฟรชข่าวได้สูงสุด 2 ครั้ง/ชั่วโมง' });
+  e.count++;
+  next();
+}
+
 let newsRefreshLock = false;
-app.post('/api/refresh-news', async (req, res) => {
+app.post('/api/refresh-news', newsRefreshRateLimiter, async (req, res) => {
   if (newsRefreshLock) return res.status(429).json({ error: 'กำลังอัปเดตอยู่ รอสักครู่' });
   newsRefreshLock = true;
   try {
