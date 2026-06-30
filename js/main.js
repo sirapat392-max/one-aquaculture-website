@@ -8,6 +8,8 @@ function langSwitcherHTML() {
   return `<div class="lang-switcher">
     <button class="lang-btn" data-lang="th" onclick="setLang('th')">TH</button>
     <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" data-lang="vi" onclick="setLang('vi')">VI</button>
+    <button class="lang-btn" data-lang="zh" onclick="setLang('zh')">ZH</button>
   </div>`;
 }
 
