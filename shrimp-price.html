@@ -182,14 +182,10 @@
 }
 
 /* ── RANGE DISPLAY (price cards) ── */
-/* เปลี่ยน 2025-06: แสดงกรอบราคา min–max แทนราคาเดี่ยว
-   หากต้องการเปลี่ยนกลับ: คืน renderSummaryCards/renderBarChart/renderTable แบบ single-price
-   และเปลี่ยน processData กลับให้ byDate[dt][sz] = r (pick one entry) */
 .sz-range { display: flex; align-items: baseline; justify-content: center; gap: 2px; margin-bottom: 1px; }
 .sz-range-low  { font-size: 17px; font-weight: 800; color: var(--dn);  font-family: 'JetBrains Mono', monospace; line-height: 1; }
 .sz-range-sep  { font-size: 13px; color: #bbb; font-weight: 400; padding: 0 1px; }
 .sz-range-high { font-size: 17px; font-weight: 800; color: var(--up);  font-family: 'JetBrains Mono', monospace; line-height: 1; }
-.sz-mid        { font-size: 10px; color: #9b8fa0; margin-top: 2px; font-family: 'JetBrains Mono', monospace; }
 </style>
 </head>
 <body>
@@ -303,7 +299,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <script>
 // ── CONFIG ──────────────────────────────────────────────────────────────────
-const PRICE_API = 'https://pricen8n-production.up.railway.app/api/prices?limit=100000&sortBy=date&oreder=asc';
 const SUMMARY_SIZES = [40, 50, 60, 80, 100, 120];
 const TREND_SIZES   = [60, 80, 100, 120];
 const SIZE_DESC = {
@@ -338,68 +333,6 @@ let selectedLineSizes = [60, 80, 100, 120];
 let selectedDays = 30;
 let selectedBarDate = null; // null = latest
 
-// ── FUZZ: ±1-3 baht deterministic noise per (date, size) ─────────────────────
-function fuzz(price, sz, dt) {
-  // hash of size + date → integer 0-6 → noise -3..+3
-  const dateNum = parseInt(dt.replace(/-/g, ''), 10) % 100000;
-  const h = (sz * 7919 + dateNum * 131) % 7;
-  return price + h - 3;
-}
-
-// ── DATA PROCESSING (price range version) ────────────────────────────────────
-// เก็บทุก record ต่อ (date, size) แล้วคำนวณ min/max/mid
-// ถ้ามีแค่ 1 record → สร้าง synthetic spread ±3–6 บาท
-function processData(records) {
-  // Collect ALL prices per (date, size)
-  const raw = {};
-  for (const r of records) {
-    const dt = r.date.slice(0, 10);
-    const sz = parseInt(r.size);
-    if (!raw[dt]) raw[dt] = {};
-    if (!raw[dt][sz]) {
-      raw[dt][sz] = { prices: [], trend: r.trend, change: r.change, latestTime: 0 };
-    }
-    raw[dt][sz].prices.push(r.price);
-    const t = new Date(r.createdAt).getTime();
-    if (t > raw[dt][sz].latestTime) {
-      raw[dt][sz].trend   = r.trend;
-      raw[dt][sz].change  = r.change;
-      raw[dt][sz].latestTime = t;
-    }
-  }
-
-  // Compute min/max/mid
-  const byDate = {};
-  for (const dt of Object.keys(raw)) {
-    byDate[dt] = {};
-    for (const sz of Object.keys(raw[dt])) {
-      const { prices, trend, change } = raw[dt][sz];
-      const szInt = parseInt(sz);
-      const fuzzed = prices.map(p => fuzz(p, szInt, dt));
-
-      let lo, hi, mid;
-      if (fuzzed.length === 1) {
-        // Single source: synthetic spread (size-based)
-        mid = fuzzed[0];
-        const half = 3 + (szInt % 4); // 3-6 บาท แล้วแต่ขนาด
-        lo = mid - half;
-        hi = mid + half;
-      } else {
-        lo  = Math.min(...fuzzed);
-        hi  = Math.max(...fuzzed);
-        mid = Math.round(fuzzed.reduce((a, b) => a + b, 0) / fuzzed.length);
-      }
-
-      byDate[dt][szInt] = { price: mid, min: lo, max: hi, trend, change, sources: fuzzed.length };
-    }
-  }
-
-  const dates = Object.keys(byDate).sort();
-  const latestDate = dates[dates.length - 1];
-  const latestPrices = byDate[latestDate] || {};
-
-  return { byDate, dates, latestDate, latestPrices };
-}
 
 // ── RENDER SUMMARY CARDS (range version) ─────────────────────────────────────
 function renderSummaryCards(latestPrices) {
@@ -407,7 +340,7 @@ function renderSummaryCards(latestPrices) {
   grid.innerHTML = SUMMARY_SIZES.map(sz => {
     const entry = latestPrices[sz];
     if (!entry) return `<div class="sz-card"><div class="sz-size">L${sz}</div><div class="sz-price">—</div></div>`;
-    const { price: mid, min: lo, max: hi, change = 0, trend = 'stable' } = entry;
+    const { min: lo, max: hi, change = 0, trend = 'stable' } = entry;
     const cls = trend === 'up' ? 'up' : trend === 'down' ? 'down' : '';
     const changeCls = trend === 'up' ? 'up' : trend === 'down' ? 'down' : 'stb';
     const arrow = trend === 'up' ? '▲' : trend === 'down' ? '▼' : '—';
@@ -421,7 +354,6 @@ function renderSummaryCards(latestPrices) {
         <span class="sz-range-sep">–</span>
         <span class="sz-range-high">${hi}</span>
       </div>
-      <div class="sz-mid">กลาง ${mid} · บาท/กก.</div>
       <div class="sz-change ${changeCls}">${changeStr}</div>
     </div>`;
   }).join('');
@@ -462,7 +394,7 @@ function renderBarChart(latestPrices) {
             label: ctx => {
               const sz = sizes[ctx.dataIndex];
               const e = latestPrices[sz];
-              return [` กรอบ: ${e.min}–${e.max} บาท/กก.`, ` กลาง: ${e.price} บาท/กก.`];
+              return ` กรอบ: ${e.min}–${e.max} บาท/กก.`;
             },
             title: ctx => `ขนาด ${ctx[0].label.replace('L','')} ตัว/กก.`
           },
@@ -613,10 +545,10 @@ function renderLineChart(byDate, dates, nDays) {
     const hexAlpha = '22'; // ~13% opacity for band
     const bandColor = color + hexAlpha;
     return [
-      // [0] mid line (visible)
+      // [0] mid line (visible) — uses visual midpoint of displayed range, not real price
       {
         label: `L${sz}`,
-        data: slice.map(d => byDate[d]?.[sz]?.price ?? null),
+        data: slice.map(d => { const e = byDate[d]?.[sz]; return e ? Math.round((e.min+e.max)/2) : null; }),
         borderColor: color,
         backgroundColor: color + '14',
         pointRadius,
@@ -694,7 +626,7 @@ function renderLineChart(byDate, dates, nDays) {
               const sz = parseInt(ctx.dataset.label.replace('L', ''));
               const e = dt && globalByDate[dt]?.[sz];
               if (!e) return ` ${ctx.dataset.label}: — ฿`;
-              return ` ${ctx.dataset.label}: ${e.min}–${e.max} ฿  (กลาง ${e.price} ฿)`;
+              return ` ${ctx.dataset.label}: ${e.min}–${e.max} ฿`;
             },
             filter: item => !item.dataset.label.startsWith('__'),
           }
@@ -741,7 +673,6 @@ function renderTable(latestPrices) {
         <span style="font-size:13px;color:#ccc;margin:0 2px">–</span>
         <span class="td-price" style="color:var(--up)">${e.max}</span>
         <span style="font-size:10px;font-weight:500;color:#8A7A85"> ฿</span>
-        <div style="font-size:10px;color:#9b8fa0;font-family:'JetBrains Mono',monospace;margin-top:2px">กลาง ${e.price} ฿</div>
       </td>
       <td class="td-change ${changeCls}">${arrow} ${changeStr}</td>
       <td><span class="trend-badge ${changeCls}">${trend === 'up' ? '▲' : trend === 'down' ? '▼' : '·'} ${trendTH}</span></td>
@@ -763,15 +694,16 @@ async function loadPrices() {
   btn.querySelector('.ico').textContent = '⟳';
 
   try {
-    const res = await fetch(PRICE_API);
+    const res = await fetch('/api/shrimp-price-range');
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const json = await res.json();
-    const { byDate, dates, latestDate, latestPrices } = processData(json.data || []);
+    const { byDate, dates } = await res.json();
+    const latestDate = dates[dates.length - 1];
+    const latestPrices = byDate[latestDate] || {};
 
     // Update timestamp
     const dt = new Date(latestDate + 'T12:00:00');
     const dateStr = `${dt.getDate()}/${dt.getMonth()+1}/${dt.getFullYear()}`;
-    document.getElementById('heroTs').textContent = ` อัปเดตล่าสุด: ${dateStr} · ข้อมูลล่าสุด ${json.data.length} รายการ`;
+    document.getElementById('heroTs').textContent = ` อัปเดตล่าสุด: ${dateStr}`;
 
     // Store globally for range-tab re-renders
     globalByDate   = byDate;

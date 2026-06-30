@@ -20,8 +20,14 @@ const client = new OpenAI({
   },
 });
 
-app.set('trust proxy', 1); // Render.com reverse proxy
-app.use(cors());
+app.set('trust proxy', 1);
+const CORS_ORIGINS = ['https://oneaquaculture.com', 'https://www.oneaquaculture.com'];
+app.use(cors({
+  origin: (origin, cb) => {
+    if (!origin || CORS_ORIGINS.includes(origin) || /^http:\/\/localhost(:\d+)?$/.test(origin)) cb(null, true);
+    else cb(null, false);
+  }
+}));
 app.use(express.json());
 
 // ─── SERVER-SIDE RATE LIMIT: 10 diagnoses / IP / day ─────────────────────
@@ -47,10 +53,25 @@ function diagRateLimiter(req, res, next) {
   next();
 }
 
+// ─── /api/chat RATE LIMIT: 30 messages / IP / hour ───────────────────────────
+const chatRateMap = new Map();
+
+function chatRateLimiter(req, res, next) {
+  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.ip || 'unknown';
+  const hour = new Date().toISOString().slice(0, 13);
+  let e = chatRateMap.get(ip);
+  if (!e || e.hour !== hour) { e = { hour, count: 0 }; chatRateMap.set(ip, e); }
+  if (e.count >= 30) return res.status(429).json({ error: 'ถึงขีดจำกัด 30 ข้อความ/ชั่วโมงแล้ว กรุณาลองใหม่ในภายหลัง' });
+  e.count++;
+  next();
+}
+
 // Clean up entries older than today every hour (prevent memory leak)
 setInterval(() => {
   const today = new Date().toISOString().slice(0, 10);
+  const hour = new Date().toISOString().slice(0, 13);
   for (const [ip, e] of diagRateMap) { if (e.date !== today) diagRateMap.delete(ip); }
+  for (const [ip, e] of chatRateMap) { if (e.hour !== hour) chatRateMap.delete(ip); }
 }, 3600_000);
 
 // redirect *.html → clean URL (must be before static)
@@ -169,7 +190,7 @@ ${diseaseRef}
 });
 
 // ─── AI GENERAL CHAT ───────────────────────────────────────────────────────
-app.post('/api/chat', async (req, res) => {
+app.post('/api/chat', chatRateLimiter, async (req, res) => {
   const { message, history } = req.body;
   if (!message) return res.status(400).json({ error: 'กรุณาระบุข้อความ' });
 
@@ -288,6 +309,79 @@ app.post('/api/farm-chat', farmChatRateLimiter, async (req, res) => {
 // ─── GET COMPANY DATA (for frontend) ──────────────────────────────────────
 app.get('/api/company', (req, res) => {
   res.json(companyData);
+});
+
+// ─── SHRIMP PRICE RANGE (proxy + server-side obfuscation) ────────────────────
+const N8N_PRICE_URL = 'https://pricen8n-production.up.railway.app/api/prices?limit=100000&sortBy=date&oreder=asc';
+let priceRangeCache = null;
+let priceRangeCacheAt = 0;
+const PRICE_RANGE_TTL = 10 * 60 * 1000;
+
+function computePriceRange(records) {
+  const salt = process.env.PRICE_SALT || '';
+  const saltCode = salt.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+
+  const raw = {};
+  for (const r of records) {
+    const dt = r.date.slice(0, 10);
+    const sz = parseInt(r.size);
+    if (!raw[dt]) raw[dt] = {};
+    if (!raw[dt][sz]) raw[dt][sz] = { prices: [], trend: r.trend, change: r.change, latestTime: 0 };
+    raw[dt][sz].prices.push(r.price);
+    const t = new Date(r.createdAt).getTime();
+    if (t > raw[dt][sz].latestTime) {
+      raw[dt][sz].trend = r.trend;
+      raw[dt][sz].change = r.change;
+      raw[dt][sz].latestTime = t;
+    }
+  }
+
+  const byDate = {};
+  for (const dt of Object.keys(raw)) {
+    byDate[dt] = {};
+    for (const sz of Object.keys(raw[dt])) {
+      const { prices, trend, change } = raw[dt][sz];
+      const szInt = parseInt(sz);
+      const dateNum = parseInt(dt.replace(/-/g, ''), 10) % 100000;
+      const avg = Math.round(prices.reduce((a, b) => a + b, 0) / prices.length);
+
+      let lo, hi;
+      if (prices.length === 1) {
+        // Asymmetric spread using secret salt — real price is NOT the midpoint
+        const h1 = (szInt * 7919 + dateNum * 131 + saltCode * 17) % 9;
+        const h2 = (szInt * 1301 + dateNum * 97  + saltCode * 31) % 9;
+        lo = avg - (3 + h1);
+        hi = avg + (2 + h2);
+      } else {
+        lo = Math.min(...prices);
+        hi = Math.max(...prices);
+      }
+
+      byDate[dt][szInt] = { min: lo, max: hi, trend, change };
+    }
+  }
+
+  const dates = Object.keys(byDate).sort();
+  return { byDate, dates };
+}
+
+app.get('/api/shrimp-price-range', async (req, res) => {
+  if (priceRangeCache && Date.now() - priceRangeCacheAt < PRICE_RANGE_TTL) {
+    return res.json(priceRangeCache);
+  }
+  try {
+    const r = await fetch(N8N_PRICE_URL, { signal: AbortSignal.timeout(15000) });
+    if (!r.ok) throw new Error(`upstream ${r.status}`);
+    const json = await r.json();
+    const result = computePriceRange(json.data || []);
+    priceRangeCache = result;
+    priceRangeCacheAt = Date.now();
+    res.json(result);
+  } catch (err) {
+    console.error('shrimp-price-range error:', err.message);
+    if (priceRangeCache) return res.json(priceRangeCache);
+    res.status(503).json({ error: 'ไม่สามารถโหลดข้อมูลราคาได้' });
+  }
 });
 
 // ─── GET LATEST SHRIMP PRICE (for farm calculator) ────────────────────────
@@ -647,15 +741,16 @@ app.post('/api/save-case', (req, res) => {
   res.json({ ok: true, id: newCase.id });
 });
 
-const VET_PASS = process.env.VET_PASSWORD || 'vet1234';
+const VET_PASS = process.env.VET_PASSWORD || null;
+if (!VET_PASS) console.warn('WARNING: VET_PASSWORD env var not set — vet portal is disabled');
 
 app.get('/api/cases', (req, res) => {
-  if (req.query.pass !== VET_PASS) return res.status(401).json({ error: 'รหัสผ่านไม่ถูกต้อง' });
+  if (!VET_PASS || req.query.pass !== VET_PASS) return res.status(401).json({ error: 'รหัสผ่านไม่ถูกต้อง' });
   res.json(readCases());
 });
 
 app.patch('/api/cases/:id', (req, res) => {
-  if (req.query.pass !== VET_PASS) return res.status(401).json({ error: 'รหัสผ่านไม่ถูกต้อง' });
+  if (!VET_PASS || req.query.pass !== VET_PASS) return res.status(401).json({ error: 'รหัสผ่านไม่ถูกต้อง' });
   const cases = readCases();
   const idx = cases.findIndex(c => c.id === req.params.id);
   if (idx < 0) return res.status(404).json({ error: 'ไม่พบเคส' });
