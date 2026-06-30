@@ -23,7 +23,6 @@
 .hero-tag { display:inline-block; background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.25); border-radius:100px; padding:4px 14px; font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:12px; }
 .article-hero h1 { font-size:clamp(24px,4vw,36px); font-weight:800; margin-bottom:8px; }
 .article-hero .meta { font-size:13px; opacity:.75; display:flex; gap:16px; flex-wrap:wrap; }
-
 .article-wrap { max-width:780px; margin:0 auto; padding:40px 5% 80px; }
 .article-body h2 { font-size:20px; font-weight:700; color:#1a1a1a; margin:36px 0 12px; padding-bottom:8px; border-bottom:2px solid #F5EBF0; }
 .article-body h3 { font-size:16px; font-weight:700; color:#8B3060; margin:24px 0 8px; }
@@ -31,7 +30,6 @@
 .article-body ul, .article-body ol { padding-left:22px; margin:0 0 14px; }
 .article-body li { font-size:15px; color:#444; line-height:1.8; margin-bottom:4px; }
 .article-body strong { color:#1a1a1a; }
-
 .info-box { border-radius:14px; padding:18px 20px; margin:20px 0; }
 .info-box.danger { background:#fef2f2; border:1.5px solid #fecaca; }
 .info-box.warn   { background:#fffbeb; border:1.5px solid #fde68a; }
@@ -43,55 +41,33 @@
 .info-box.tip    .box-title { color:#166534; }
 .info-box.info   .box-title { color:#0369a1; }
 .info-box p, .info-box ul, .info-box li { font-size:14px; margin-bottom:6px; }
-
 .symptom-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin:16px 0; }
 .symptom-card { background:white; border:1px solid #E8E0E5; border-radius:12px; padding:14px 16px; }
 .symptom-card .sc-icon { font-size:24px; margin-bottom:8px; }
 .symptom-card .sc-title { font-size:13px; font-weight:700; color:#1a1a1a; margin-bottom:4px; }
 .symptom-card .sc-desc { font-size:12px; color:#666; line-height:1.5; }
-
 .breadcrumb { font-size:12px; color:#999; margin-bottom:28px; }
 .breadcrumb a { color:#8B3060; text-decoration:none; }
 .breadcrumb a:hover { text-decoration:underline; }
-
 .cta-box { background:linear-gradient(135deg,#F5EBF0,#EDD5E5); border:1.5px solid #D4A0C0; border-radius:18px; padding:24px 28px; margin-top:40px; display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
 .cta-box .cta-text h3 { font-size:16px; font-weight:700; color:#4D1232; margin-bottom:6px; }
 .cta-box .cta-text p { font-size:13px; color:#6B3050; margin:0; line-height:1.5; }
 .cta-box a { display:inline-block; background:#8B3060; color:white; border-radius:22px; padding:10px 22px; font-size:14px; font-weight:700; text-decoration:none; white-space:nowrap; }
 .cta-box a:hover { background:#6B2048; }
+/* Bilingual show/hide */
+html[lang="en"] .th-only { display:none }
+html[lang="th"] .en-only { display:none }
 </style>
 </head>
 <body>
-<nav>
-  <a href="/" class="nav-logo">
-    <div class="nav-logo-icon"><img src="/logo.jpg" alt="ONE logo"></div>
-    <div class="nav-logo-text"><strong>ONE AQUACULTURE</strong><span>บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด</span></div>
-  </a>
-  <ul class="nav-links">
-    <li><a href="/products">ผลิตภัณฑ์</a></li>
-    <li><a href="/shrimp-price">📈 ราคากุ้ง</a></li>
-    <li><a href="/farm-calculator">🧮 คิดเลขฟาร์ม</a></li>
-    <li><a href="/ai-diagnosis">🔬 ShrimpDx</a></li>
-    <li><a href="/news">ข่าวสาร</a></li>
-    <li><a href="/guides" class="active">📚 คู่มือ</a></li>
-    <li><a href="/about">เกี่ยวกับเรา</a></li>
-    <li><a href="/contact">ติดต่อ</a></li>
-  </ul>
-  <div class="lang-switcher">
-    <button class="lang-btn" data-lang="th" onclick="setLang('th')">TH</button>
-    <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
-  </div>
-  <a href="/ai-diagnosis" class="nav-cta">ปรึกษาผู้เชี่ยวชาญ</a>
-  <button class="nav-hamburger" aria-label="menu"><span></span><span></span><span></span></button>
-</nav>
 
 <div class="article-hero">
   <div class="article-hero-inner">
     <div class="hero-tag">📚 คู่มือโรค · Disease Guide</div>
-    <h1>โรค EMS — กุ้งตายด่วน<br>(Early Mortality Syndrome / AHPND)</h1>
+    <h1 data-i18n-html="ems.hero.h1">โรค EMS — กุ้งตายด่วน<br>(Early Mortality Syndrome / AHPND)</h1>
     <div class="meta">
-      <span>🦠 โรคร้ายแรง</span>
-      <span>⏱ ตายใน 30 วันแรก</span>
+      <span data-i18n="ems.meta.sev">🦠 โรคร้ายแรง</span>
+      <span data-i18n="ems.meta.time">⏱ ตายใน 30 วันแรก</span>
       <span>🧬 Vibrio parahaemolyticus</span>
     </div>
   </div>
@@ -99,125 +75,194 @@
 
 <div class="article-wrap">
   <div class="breadcrumb">
-    <a href="/">หน้าหลัก</a> › <a href="/guides">คู่มือ</a> › โรค EMS
+    <a href="/" data-i18n="art.breadcrumb.home">หน้าหลัก</a> › <a href="/guides" data-i18n="art.breadcrumb.guides">คู่มือ</a> › <span data-i18n="ems.breadcrumb">โรค EMS</span>
   </div>
 
   <div class="article-body">
 
-    <div class="info-box danger">
-      <div class="box-title">⚠️ ความรุนแรง: สูงมาก</div>
-      <p>EMS สามารถทำให้กุ้งตายมากกว่า 70% ภายใน 30 วันแรกหลังปล่อย หากไม่จัดการทันทีอาจสูญเสียทั้งรุ่น</p>
-    </div>
+    <!-- ══ THAI CONTENT ══ -->
+    <div class="th-only">
 
-    <h2>EMS คืออะไร?</h2>
-    <p>EMS (Early Mortality Syndrome) หรือในทางวิทยาศาสตร์เรียกว่า <strong>AHPND (Acute Hepatopancreatic Necrosis Disease)</strong> คือโรคที่ทำให้กุ้งตายเร็วผิดปกติภายใน 20–30 วันแรกหลังปล่อยลูกกุ้ง สาเหตุเกิดจากแบคทีเรีย <strong>Vibrio parahaemolyticus</strong> บางสายพันธุ์ที่มียีนสร้างสารพิษชื่อ <em>pir</em> ซึ่งทำลายตับและตับอ่อนของกุ้งโดยตรง</p>
-    <p>โรคนี้ถูกพบครั้งแรกในประเทศจีนปี 2552 และระบาดหนักในไทยช่วงปี 2555–2556 ทำให้ผลผลิตกุ้งของไทยลดลงกว่า 50% ในปีนั้น ปัจจุบันยังคงเป็นโรคที่เกษตรกรต้องระวังสูงสุด</p>
+      <div class="info-box danger">
+        <div class="box-title">⚠️ ความรุนแรง: สูงมาก</div>
+        <p>EMS สามารถทำให้กุ้งตายมากกว่า 70% ภายใน 30 วันแรกหลังปล่อย หากไม่จัดการทันทีอาจสูญเสียทั้งรุ่น</p>
+      </div>
 
-    <h2>อาการที่สังเกตได้</h2>
-    <div class="symptom-grid">
-      <div class="symptom-card">
-        <div class="sc-icon">🟡</div>
-        <div class="sc-title">ตับซีดหรือฝ่อ</div>
-        <div class="sc-desc">ตับและตับอ่อน (hepatopancreas) มีสีซีดขาว เหลือง หรือหดตัวเล็กลงผิดปกติ</div>
-      </div>
-      <div class="symptom-card">
-        <div class="sc-icon">💀</div>
-        <div class="sc-title">ตายก้นบ่อมาก</div>
-        <div class="sc-desc">กุ้งตายสะสมที่ก้นบ่อ พบมากช่วง DOC 5–30 วัน อัตราตายเพิ่มขึ้นเร็ว</div>
-      </div>
-      <div class="symptom-card">
-        <div class="sc-icon">🐚</div>
-        <div class="sc-title">กุ้งโตช้ามาก</div>
-        <div class="sc-desc">กุ้งที่รอดชีวิตมักมีขนาดเล็กกว่าปกติมาก น้ำหนักไม่ถึงครึ่งของมาตรฐาน</div>
-      </div>
-      <div class="symptom-card">
-        <div class="sc-icon">🔍</div>
-        <div class="sc-title">เส้นอาหารว่าง</div>
-        <div class="sc-desc">กุ้งหยุดกินอาหาร เส้นอาหารในลำตัวเปล่าหรือบางมาก</div>
-      </div>
-    </div>
+      <h2>EMS คืออะไร?</h2>
+      <p>EMS (Early Mortality Syndrome) หรือในทางวิทยาศาสตร์เรียกว่า <strong>AHPND (Acute Hepatopancreatic Necrosis Disease)</strong> คือโรคที่ทำให้กุ้งตายเร็วผิดปกติภายใน 20–30 วันแรกหลังปล่อยลูกกุ้ง สาเหตุเกิดจากแบคทีเรีย <strong>Vibrio parahaemolyticus</strong> บางสายพันธุ์ที่มียีนสร้างสารพิษชื่อ <em>pir</em> ซึ่งทำลายตับและตับอ่อนของกุ้งโดยตรง</p>
+      <p>โรคนี้ถูกพบครั้งแรกในประเทศจีนปี 2552 และระบาดหนักในไทยช่วงปี 2555–2556 ทำให้ผลผลิตกุ้งของไทยลดลงกว่า 50% ในปีนั้น ปัจจุบันยังคงเป็นโรคที่เกษตรกรต้องระวังสูงสุด</p>
 
-    <div class="info-box info">
-      <div class="box-title">🔬 จุดแยกจากโรคอื่น</div>
+      <h2>อาการที่สังเกตได้</h2>
+      <div class="symptom-grid">
+        <div class="symptom-card"><div class="sc-icon">🟡</div><div class="sc-title">ตับซีดหรือฝ่อ</div><div class="sc-desc">ตับและตับอ่อน (hepatopancreas) มีสีซีดขาว เหลือง หรือหดตัวเล็กลงผิดปกติ</div></div>
+        <div class="symptom-card"><div class="sc-icon">💀</div><div class="sc-title">ตายก้นบ่อมาก</div><div class="sc-desc">กุ้งตายสะสมที่ก้นบ่อ พบมากช่วง DOC 5–30 วัน อัตราตายเพิ่มขึ้นเร็ว</div></div>
+        <div class="symptom-card"><div class="sc-icon">🐚</div><div class="sc-title">กุ้งโตช้ามาก</div><div class="sc-desc">กุ้งที่รอดชีวิตมักมีขนาดเล็กกว่าปกติมาก น้ำหนักไม่ถึงครึ่งของมาตรฐาน</div></div>
+        <div class="symptom-card"><div class="sc-icon">🔍</div><div class="sc-title">เส้นอาหารว่าง</div><div class="sc-desc">กุ้งหยุดกินอาหาร เส้นอาหารในลำตัวเปล่าหรือบางมาก</div></div>
+      </div>
+
+      <div class="info-box info">
+        <div class="box-title">🔬 จุดแยกจากโรคอื่น</div>
+        <ul>
+          <li><strong>ต่างจาก WSSV:</strong> EMS ไม่มีจุดขาวใต้เปลือก และตายช้ากว่า (3–30 วัน vs 3–7 วันของ WSSV)</li>
+          <li><strong>ต่างจาก Vibriosis ทั่วไป:</strong> EMS ทำลายตับโดยตรง ตรวจพบสารพิษ PirAB ได้จากการทดสอบ PCR</li>
+          <li><strong>DOC สำคัญ:</strong> กุ้งตายมากก่อน DOC 35 ให้สงสัย EMS ก่อนเป็นอันดับแรก</li>
+        </ul>
+      </div>
+
+      <h2>สาเหตุและปัจจัยเสี่ยง</h2>
+      <p>เชื้อ Vibrio parahaemolyticus ที่ก่อ EMS มียีน <em>pirA</em> และ <em>pirB</em> บนพลาสมิด ซึ่งสร้างสารพิษโปรตีนทำลายเซลล์ตับอ่อน ปัจจัยที่เพิ่มความเสี่ยงได้แก่:</p>
       <ul>
-        <li><strong>ต่างจาก WSSV:</strong> EMS ไม่มีจุดขาวใต้เปลือก และตายช้ากว่า (3–30 วัน vs 3–7 วันของ WSSV)</li>
-        <li><strong>ต่างจาก Vibriosis ทั่วไป:</strong> EMS ทำลายตับโดยตรง ตรวจพบสารพิษ PirAB ได้จากการทดสอบ PCR</li>
-        <li><strong>DOC สำคัญ:</strong> กุ้งตายมากก่อน DOC 35 ให้สงสัย EMS ก่อนเป็นอันดับแรก</li>
+        <li>ความหนาแน่นลูกกุ้งสูงเกิน 150 ตัว/ม² โดยไม่มีระบบน้ำที่ดี</li>
+        <li>อุณหภูมิน้ำสูงเกิน 30°C เป็นระยะเวลานาน</li>
+        <li>ความเค็มต่ำกว่า 5 ppt หรือสูงเกิน 35 ppt</li>
+        <li>ปริมาณ Vibrio ในน้ำสูง (มักสัมพันธ์กับอินทรีย์วัตถุก้นบ่อสูง)</li>
+        <li>ลูกกุ้งคุณภาพต่ำหรือนำเชื้อมาจากโรงฟัก</li>
       </ul>
-    </div>
 
-    <h2>สาเหตุและปัจจัยเสี่ยง</h2>
-    <p>เชื้อ Vibrio parahaemolyticus ที่ก่อ EMS มียีน <em>pirA</em> และ <em>pirB</em> บนพลาสมิด ซึ่งสร้างสารพิษโปรตีนทำลายเซลล์ตับอ่อน ปัจจัยที่เพิ่มความเสี่ยงได้แก่:</p>
-    <ul>
-      <li>ความหนาแน่นลูกกุ้งสูงเกิน 150 ตัว/ม² โดยไม่มีระบบน้ำที่ดี</li>
-      <li>อุณหภูมิน้ำสูงเกิน 30°C เป็นระยะเวลานาน</li>
-      <li>ความเค็มต่ำกว่า 5 ppt หรือสูงเกิน 35 ppt</li>
-      <li>ปริมาณ Vibrio ในน้ำสูง (มักสัมพันธ์กับอินทรีย์วัตถุก้นบ่อสูง)</li>
-      <li>ลูกกุ้งคุณภาพต่ำหรือนำเชื้อมาจากโรงฟัก</li>
-    </ul>
+      <h2>วิธีป้องกัน (สำคัญที่สุด)</h2>
+      <div class="info-box tip">
+        <div class="box-title">✓ ไม่มียารักษา EMS — การป้องกันคือทางออกเดียว</div>
+        <p>เมื่อ EMS ระบาดในบ่อแล้ว อัตราการรอดต่ำมาก การป้องกันตั้งแต่เริ่มต้นจึงสำคัญกว่าการรักษา</p>
+      </div>
+      <h3>1. จัดการน้ำก่อนปล่อยกุ้ง</h3>
+      <ul>
+        <li>เตรียมบ่อให้แห้งและฆ่าเชื้อด้วยปูนขาวก่อนเติมน้ำ</li>
+        <li>ตรวจปริมาณ Vibrio ในน้ำให้ต่ำกว่า 10³ CFU/mL ก่อนปล่อยกุ้ง</li>
+        <li>ใช้โปรไบโอติก Bacillus สร้างสมดุลจุลินทรีย์ในบ่อตั้งแต่สัปดาห์แรก</li>
+      </ul>
+      <h3>2. คัดเลือกลูกกุ้ง</h3>
+      <ul>
+        <li>ซื้อลูกกุ้งจากโรงฟักที่ตรวจ PCR ยืนยันปลอด EMS/AHPND</li>
+        <li>ทดสอบลูกกุ้งด้วย stress test ก่อนปล่อย (กุ้งสุขภาพดีรอดได้ &gt;90%)</li>
+      </ul>
+      <h3>3. ติดตามทุกวันช่วง 30 วันแรก</h3>
+      <ul>
+        <li>ตรวจกุ้งตายก้นบ่อทุกเช้า — ถ้าพบมากผิดปกติให้ดำเนินการทันที</li>
+        <li>ตรวจสีและขนาดตับผ่านกล้องหรือตัดดูทุก 5–7 วัน</li>
+        <li>วัด DO, pH, ความเค็มทุกวัน และปรับให้อยู่ในช่วงมาตรฐาน</li>
+      </ul>
 
-    <h2>วิธีป้องกัน (สำคัญที่สุด)</h2>
-    <div class="info-box tip">
-      <div class="box-title">✓ ไม่มียารักษา EMS — การป้องกันคือทางออกเดียว</div>
-      <p>เมื่อ EMS ระบาดในบ่อแล้ว อัตราการรอดต่ำมาก การป้องกันตั้งแต่เริ่มต้นจึงสำคัญกว่าการรักษา</p>
-    </div>
+      <h2>เมื่อพบ EMS ในบ่อ — ทำอะไรทันที?</h2>
+      <div class="info-box warn">
+        <div class="box-title">⚡ ขั้นตอนฉุกเฉิน</div>
+        <ol>
+          <li><strong>หยุดให้อาหาร</strong> ทันที — อาหารที่เหลือเพิ่ม Vibrio</li>
+          <li><strong>เพิ่มออกซิเจน</strong> ให้สูงกว่า 5 mg/L — ช่วยกุ้งลด stress</li>
+          <li><strong>เปลี่ยนน้ำ 30–50%</strong> ด้วยน้ำคุณภาพดีที่ผ่านการฆ่าเชื้อแล้ว</li>
+          <li><strong>ใช้โปรไบโอติก</strong> เพื่อแย่ง niche กับ Vibrio ก่อนถ้ายังไม่รุนแรงมาก</li>
+          <li><strong>ประเมินจับกุ้งฉุกเฉิน</strong> ถ้าอัตราตาย &gt;5%/วัน ต่อเนื่อง 3 วัน</li>
+          <li><strong>ปรึกษาผู้เชี่ยวชาญ</strong> เพื่อยืนยันการวินิจฉัยและวางแผนรักษา</li>
+        </ol>
+      </div>
 
-    <h3>1. จัดการน้ำก่อนปล่อยกุ้ง</h3>
-    <ul>
-      <li>เตรียมบ่อให้แห้งและฆ่าเชื้อด้วยปูนขาวก่อนเติมน้ำ</li>
-      <li>ตรวจปริมาณ Vibrio ในน้ำให้ต่ำกว่า 10³ CFU/mL ก่อนปล่อยกุ้ง</li>
-      <li>ใช้โปรไบโอติก Bacillus สร้างสมดุลจุลินทรีย์ในบ่อตั้งแต่สัปดาห์แรก</li>
-    </ul>
+      <h2>ผลิตภัณฑ์ที่ช่วยได้</h2>
+      <p>ผลิตภัณฑ์โปรไบโอติกและสารปรับสภาพน้ำของ ONE AQUACULTURE ช่วยลดปริมาณ Vibrio ในน้ำและสร้างสมดุลจุลินทรีย์ เหมาะสำหรับใช้ป้องกันและควบคุมสภาพแวดล้อมหลังเกิดโรค:</p>
+      <ul>
+        <li><strong>สารบำบัดน้ำ</strong> — โปรไบโอติก Bacillus ลด Vibrio แย่ง niche ในน้ำและตะกอนก้นบ่อ</li>
+        <li><strong>สารปรับสภาพน้ำ</strong> — ปรับ pH อัลคาลินิตี้ ลด stress กุ้งและสิ่งแวดล้อมที่ Vibrio เจริญ</li>
+        <li><strong>วิตามิน / แร่ธาตุ</strong> — เสริมภูมิคุ้มกัน ช่วยกุ้งฟื้นตัวหลังได้รับ stress</li>
+      </ul>
 
-    <h3>2. คัดเลือกลูกกุ้ง</h3>
-    <ul>
-      <li>ซื้อลูกกุ้งจากโรงฟักที่ตรวจ PCR ยืนยันปลอด EMS/AHPND</li>
-      <li>ทดสอบลูกกุ้งด้วย stress test ก่อนปล่อย (กุ้งสุขภาพดีรอดได้ &gt;90%)</li>
-    </ul>
+    </div><!-- /.th-only -->
 
-    <h3>3. ติดตามทุกวันช่วง 30 วันแรก</h3>
-    <ul>
-      <li>ตรวจกุ้งตายก้นบ่อทุกเช้า — ถ้าพบมากผิดปกติให้ดำเนินการทันที</li>
-      <li>ตรวจสีและขนาดตับผ่านกล้องหรือตัดดูทุก 5–7 วัน</li>
-      <li>วัด DO, pH, ความเค็มทุกวัน และปรับให้อยู่ในช่วงมาตรฐาน</li>
-    </ul>
+    <!-- ══ ENGLISH CONTENT ══ -->
+    <div class="en-only">
 
-    <h2>เมื่อพบ EMS ในบ่อ — ทำอะไรทันที?</h2>
-    <div class="info-box warn">
-      <div class="box-title">⚡ ขั้นตอนฉุกเฉิน</div>
-      <ol>
-        <li><strong>หยุดให้อาหาร</strong> ทันที — อาหารที่เหลือเพิ่ม Vibrio</li>
-        <li><strong>เพิ่มออกซิเจน</strong> ให้สูงกว่า 5 mg/L — ช่วยกุ้งลด stress</li>
-        <li><strong>เปลี่ยนน้ำ 30–50%</strong> ด้วยน้ำคุณภาพดีที่ผ่านการฆ่าเชื้อแล้ว</li>
-        <li><strong>ใช้โปรไบโอติก</strong> เพื่อแย่ง niche กับ Vibrio ก่อนถ้ายังไม่รุนแรงมาก</li>
-        <li><strong>ประเมินจับกุ้งฉุกเฉิน</strong> ถ้าอัตราตาย &gt;5%/วัน ต่อเนื่อง 3 วัน</li>
-        <li><strong>ปรึกษาผู้เชี่ยวชาญ</strong> เพื่อยืนยันการวินิจฉัยและวางแผนรักษา</li>
-      </ol>
-    </div>
+      <div class="info-box danger">
+        <div class="box-title">⚠️ Severity: Extremely High</div>
+        <p>EMS can kill more than 70% of shrimp within the first 30 days after stocking. Without immediate action, an entire crop can be lost.</p>
+      </div>
 
-    <h2>ผลิตภัณฑ์ที่ช่วยได้</h2>
-    <p>ผลิตภัณฑ์โปรไบโอติกและสารปรับสภาพน้ำของ ONE AQUACULTURE ช่วยลดปริมาณ Vibrio ในน้ำและสร้างสมดุลจุลินทรีย์ เหมาะสำหรับใช้ป้องกันและควบคุมสภาพแวดล้อมหลังเกิดโรค:</p>
-    <ul>
-      <li><strong>สารบำบัดน้ำ</strong> — โปรไบโอติก Bacillus ลด Vibrio แย่ง niche ในน้ำและตะกอนก้นบ่อ</li>
-      <li><strong>สารปรับสภาพน้ำ</strong> — ปรับ pH อัลคาลินิตี้ ลด stress กุ้งและสิ่งแวดล้อมที่ Vibrio เจริญ</li>
-      <li><strong>วิตามิน / แร่ธาตุ</strong> — เสริมภูมิคุ้มกัน ช่วยกุ้งฟื้นตัวหลังได้รับ stress</li>
-    </ul>
+      <h2>What is EMS?</h2>
+      <p>EMS (Early Mortality Syndrome), scientifically known as <strong>AHPND (Acute Hepatopancreatic Necrosis Disease)</strong>, is a disease that causes abnormally rapid death in shrimp within 20–30 days after stocking. The cause is certain strains of <strong>Vibrio parahaemolyticus</strong> carrying a plasmid with <em>pir</em> genes (pirA, pirB) that produce binary toxins directly destroying the hepatopancreas.</p>
+      <p>The disease was first identified in China in 2009 and caused severe outbreaks in Thailand during 2012–2013, reducing Thai shrimp production by more than 50% that year. It remains the highest-priority disease concern for farmers today.</p>
+
+      <h2>Symptoms</h2>
+      <div class="symptom-grid">
+        <div class="symptom-card"><div class="sc-icon">🟡</div><div class="sc-title">Pale or Shrunken Hepatopancreas</div><div class="sc-desc">Hepatopancreas appears pale white, yellow, or abnormally small and shrunken</div></div>
+        <div class="symptom-card"><div class="sc-icon">💀</div><div class="sc-title">Mass Mortality on Pond Bottom</div><div class="sc-desc">Dead shrimp accumulate on pond bottom, most commonly during DOC 5–30; mortality rate increases rapidly</div></div>
+        <div class="symptom-card"><div class="sc-icon">🐚</div><div class="sc-title">Very Slow Growth</div><div class="sc-desc">Survivors are often much smaller than normal — below half the standard weight</div></div>
+        <div class="symptom-card"><div class="sc-icon">🔍</div><div class="sc-title">Empty Gut</div><div class="sc-desc">Shrimp stop feeding; gut appears empty or very thin</div></div>
+      </div>
+
+      <div class="info-box info">
+        <div class="box-title">🔬 Differential Diagnosis</div>
+        <ul>
+          <li><strong>vs. WSSV:</strong> EMS has no white spots under the shell; mortality is slower (3–30 days vs. 3–7 days for WSSV)</li>
+          <li><strong>vs. typical Vibriosis:</strong> EMS directly destroys the hepatopancreas; PirAB toxins can be confirmed by PCR testing</li>
+          <li><strong>DOC matters:</strong> Mass mortality before DOC 35 should raise immediate EMS suspicion</li>
+        </ul>
+      </div>
+
+      <h2>Causes and Risk Factors</h2>
+      <p>EMS-causing V. parahaemolyticus strains carry pirA and pirB genes on a plasmid, producing protein toxins that destroy hepatopancreatic tubular cells. Key risk factors include:</p>
+      <ul>
+        <li>Stocking density &gt;150 pcs/m² without adequate water management systems</li>
+        <li>Water temperature &gt;30°C for prolonged periods</li>
+        <li>Salinity below 5 ppt or above 35 ppt</li>
+        <li>High Vibrio count in pond water (often linked to high organic matter on the bottom)</li>
+        <li>Poor-quality PLs or seed carrying pathogen from the hatchery</li>
+      </ul>
+
+      <h2>Prevention (Most Important)</h2>
+      <div class="info-box tip">
+        <div class="box-title">✓ No cure for EMS — prevention is the only solution</div>
+        <p>Once EMS breaks out in a pond, survival rates are very low. Prevention from the start is far more effective than any response after outbreak.</p>
+      </div>
+      <h3>1. Water Management Before Stocking</h3>
+      <ul>
+        <li>Dry and disinfect the pond with lime before filling</li>
+        <li>Test water Vibrio count and ensure it is below 10³ CFU/mL before stocking</li>
+        <li>Use Bacillus probiotics to balance microbial community from the first week</li>
+      </ul>
+      <h3>2. PL Quality Selection</h3>
+      <ul>
+        <li>Source PLs only from hatcheries with PCR-confirmed EMS/AHPND-free certification</li>
+        <li>Conduct stress tests on PLs before stocking (healthy PLs should survive &gt;90%)</li>
+      </ul>
+      <h3>3. Daily Monitoring During the First 30 Days</h3>
+      <ul>
+        <li>Check for dead shrimp on pond bottom every morning — act immediately if abnormal</li>
+        <li>Inspect hepatopancreas color and size by microscopy or visual dissection every 5–7 days</li>
+        <li>Measure DO, pH, and salinity daily; keep all parameters within standard ranges</li>
+      </ul>
+
+      <h2>Emergency Response When EMS is Detected</h2>
+      <div class="info-box warn">
+        <div class="box-title">⚡ Emergency Steps</div>
+        <ol>
+          <li><strong>Stop feeding immediately</strong> — leftover feed increases Vibrio populations</li>
+          <li><strong>Increase dissolved oxygen</strong> above 5 mg/L — reduces shrimp stress</li>
+          <li><strong>Exchange 30–50% of pond water</strong> with quality-tested, disinfected water</li>
+          <li><strong>Apply probiotics</strong> to compete with Vibrio if the outbreak is not yet severe</li>
+          <li><strong>Assess emergency harvest</strong> if daily mortality exceeds 5% for 3 consecutive days</li>
+          <li><strong>Consult a specialist</strong> to confirm diagnosis and plan treatment</li>
+        </ol>
+      </div>
+
+      <h2>Products That Help</h2>
+      <p>ONE AQUACULTURE's probiotic and water treatment products reduce Vibrio in pond water and restore microbial balance — suitable for prevention and environmental control after disease onset:</p>
+      <ul>
+        <li><strong>Water Treatment Agents</strong> — Bacillus probiotics reduce Vibrio by competing for niche in water and bottom sediment</li>
+        <li><strong>Water Conditioners</strong> — adjust pH and alkalinity; reduce shrimp stress and conditions favorable to Vibrio growth</li>
+        <li><strong>Vitamins / Minerals</strong> — boost immunity and help shrimp recover after stress exposure</li>
+      </ul>
+
+    </div><!-- /.en-only -->
 
     <div class="cta-box">
       <div class="cta-text">
-        <h3>ไม่แน่ใจว่ากุ้งเป็น EMS หรือโรคอื่น?</h3>
-        <p>ใช้ AI วินิจฉัยเบื้องต้นฟรี — ถ่ายรูปกุ้งหรืออธิบายอาการ ได้ผลทันที</p>
+        <h3 data-i18n="ems.cta.title">ไม่แน่ใจว่ากุ้งเป็น EMS หรือโรคอื่น?</h3>
+        <p data-i18n="ems.cta.desc">ใช้ AI วินิจฉัยเบื้องต้นฟรี — ถ่ายรูปกุ้งหรืออธิบายอาการ ได้ผลทันที</p>
       </div>
-      <a href="/ai-diagnosis">🔬 วินิจฉัยด้วย AI</a>
+      <a href="/ai-diagnosis" data-i18n="art.cta.btn">🔬 วินิจฉัยด้วย AI</a>
     </div>
+
+    <p style="margin-top:32px;font-size:12px;color:#aaa;text-align:center" data-i18n="art.foot.note">เนื้อหาเพื่อการศึกษาและอ้างอิงเบื้องต้น ควรปรึกษาผู้เชี่ยวชาญก่อนตัดสินใจ</p>
 
   </div>
 </div>
 
-<footer style="background:#1a0a12;color:#c0a0b0;padding:32px 5%;text-align:center;font-size:13px;">
-  <p style="margin:0 0 6px">© 2568 บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด</p>
-  <p style="margin:0;opacity:.6;font-size:11px">เนื้อหาเพื่อการศึกษาและอ้างอิงเบื้องต้น ควรปรึกษาผู้เชี่ยวชาญก่อนตัดสินใจ</p>
-</footer>
 <script src="/js/i18n.js"></script>
 <script src="/js/main.js"></script>
 </body>

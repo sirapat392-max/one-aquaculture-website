@@ -176,112 +176,88 @@
 </style>
 </head>
 <body>
-<nav>
-  <a href="/" class="nav-logo">
-    <div class="nav-logo-icon"><img src="logo.jpg" alt="ONE logo"></div>
-    <div class="nav-logo-text">
-      <strong>ONE AQUACULTURE</strong>
-      <span>บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด</span>
-    </div>
-  </a>
-  <ul class="nav-links">
-    <li><a href="/products">ผลิตภัณฑ์</a></li>
-    <li><a href="/shrimp-price">📈 ราคากุ้ง</a></li>
-    <li><a href="/farm-calculator" class="active">🧮 คิดเลขฟาร์ม</a></li>
-    <li><a href="/ai-diagnosis">🔬 ShrimpDx</a></li>
-    <li><a href="/news">ข่าวสาร</a></li>
-    <li><a href="/about">เกี่ยวกับเรา</a></li>
-    <li><a href="/contact">ติดต่อ</a></li>
-  </ul>
-  <div class="lang-switcher">
-    <button class="lang-btn" data-lang="th" onclick="setLang('th')">TH</button>
-    <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
-  </div>
-  <a href="/ai-diagnosis" class="nav-cta">ปรึกษาผู้เชี่ยวชาญ</a>
-  <button class="nav-hamburger" aria-label="menu"><span></span><span></span><span></span></button>
-</nav>
 
 <div class="calc-hero">
   <div class="calc-hero-inner">
     <div class="hero-tag">🧮 Farm Calculator</div>
-    <h1>เครื่องคิดเลขฟาร์มกุ้ง</h1>
-    <p>FCR · ความหนาแน่น · ต้นทุนคุ้มทุน · อัตรารอด · %BW · Biomass · วางแผนจับ — ฟรี ไม่ต้องสมัครสมาชิก</p>
+    <h1 data-i18n="calc.hero.h1">เครื่องคิดเลขฟาร์มกุ้ง</h1>
+    <p data-i18n="calc.hero.p">FCR · ความหนาแน่น · ต้นทุนคุ้มทุน · อัตรารอด · %BW · Biomass · วางแผนจับ — ฟรี ไม่ต้องสมัครสมาชิก</p>
   </div>
 </div>
 
 <div class="calc-wrap">
 
   <!-- ── FCR ── -->
-  <div class="calc-section-label">FCR · อัตราแลกเนื้อ</div>
+  <div class="calc-section-label" data-i18n="calc.fcr.label">FCR · อัตราแลกเนื้อ</div>
   <div class="calc-card">
     <div class="calc-card-header">
       <div class="calc-icon">🍤</div>
       <div>
-        <h2>FCR Calculator — อัตราแลกเนื้อ</h2>
-        <p>FCR (Feed Conversion Ratio) บอกว่าต้องใช้อาหารกี่กิโลกรัมเพื่อให้กุ้งโตขึ้น 1 กิโลกรัม — ยิ่งต่ำยิ่งดี</p>
+        <h2 data-i18n="calc.fcr.h2">FCR Calculator — อัตราแลกเนื้อ</h2>
+        <p data-i18n="calc.fcr.desc">FCR (Feed Conversion Ratio) บอกว่าต้องใช้อาหารกี่กิโลกรัมเพื่อให้กุ้งโตขึ้น 1 กิโลกรัม — ยิ่งต่ำยิ่งดี</p>
       </div>
     </div>
     <div class="input-grid">
       <div class="input-group">
-        <label>อาหารที่ใช้ทั้งหมด <span class="unit">กก.</span></label>
+        <label><span data-i18n="calc.fcr.in.feed">อาหารที่ใช้ทั้งหมด</span> <span class="unit">กก.</span></label>
         <input class="calc-input" id="fcr-feed" type="number" min="0" step="0.1" placeholder="เช่น 5000" oninput="calcFCR()">
       </div>
       <div class="input-group">
-        <label>น้ำหนักเริ่มปล่อย <span class="unit">กก. (PL ทั้งหมด)</span></label>
+        <label><span data-i18n="calc.fcr.in.start">น้ำหนักเริ่มปล่อย</span> <span class="unit" data-i18n="calc.fcr.in.start.u">กก. (PL ทั้งหมด)</span></label>
         <input class="calc-input" id="fcr-start" type="number" min="0" step="0.1" placeholder="เช่น 15" oninput="calcFCR()">
       </div>
       <div class="input-group">
-        <label>น้ำหนักจับได้ <span class="unit">กก.</span></label>
+        <label><span data-i18n="calc.fcr.in.harvest">น้ำหนักจับได้</span> <span class="unit">กก.</span></label>
         <input class="calc-input" id="fcr-harvest" type="number" min="0" step="0.1" placeholder="เช่น 4200" oninput="calcFCR()">
       </div>
     </div>
     <div id="fcr-result" class="result-box neutral">
       <div class="result-main">
         <div class="result-value neutral" id="fcr-val">—</div>
-        <div class="result-label">FCR (kg อาหาร / kg เนื้อกุ้ง)</div>
+        <div class="result-label" data-i18n="calc.fcr.result">FCR (kg อาหาร / kg เนื้อกุ้ง)</div>
       </div>
       <span class="result-badge" id="fcr-badge" style="display:none"></span>
     </div>
     <p class="result-hint" id="fcr-hint"></p>
     <div class="tips-grid">
       <div class="tip-card">
-        <div class="tip-head">FCR ดีเยี่ยม · &lt; 1.2</div>
-        <p>อาหารมีคุณภาพสูง หรือกุ้งสุขภาพดีมาก อัตราการกินอาหารสม่ำเสมอ</p>
+        <div class="tip-head" data-i18n="calc.fcr.tip1.h">FCR ดีเยี่ยม · &lt; 1.2</div>
+        <p data-i18n="calc.fcr.tip1.b">อาหารมีคุณภาพสูง หรือกุ้งสุขภาพดีมาก อัตราการกินอาหารสม่ำเสมอ</p>
       </div>
       <div class="tip-card">
-        <div class="tip-head">FCR ปกติ · 1.2 – 1.6</div>
-        <p>มาตรฐานฟาร์มกุ้งขาวแวนนาไมทั่วไป ถือว่าบริหารจัดการได้ดี</p>
+        <div class="tip-head" data-i18n="calc.fcr.tip2.h">FCR ปกติ · 1.2 – 1.6</div>
+        <p data-i18n="calc.fcr.tip2.b">มาตรฐานฟาร์มกุ้งขาวแวนนาไมทั่วไป ถือว่าบริหารจัดการได้ดี</p>
       </div>
       <div class="tip-card">
-        <div class="tip-head">FCR สูง · &gt; 1.6</div>
-        <p>ควรตรวจสอบคุณภาพน้ำ อาหารเหลือตกตะกอน หรือกุ้งป่วย/เครียด</p>
+        <div class="tip-head" data-i18n="calc.fcr.tip3.h">FCR สูง · &gt; 1.6</div>
+        <p data-i18n="calc.fcr.tip3.b">ควรตรวจสอบคุณภาพน้ำ อาหารเหลือตกตะกอน หรือกุ้งป่วย/เครียด</p>
       </div>
     </div>
   </div>
 
   <!-- ── STOCKING DENSITY ── -->
-  <div class="calc-section-label">DENSITY · ความหนาแน่นลูกกุ้ง</div>
+  <div class="calc-section-label" data-i18n="calc.dens.label">DENSITY · ความหนาแน่นลูกกุ้ง</div>
   <div class="calc-card">
     <div class="calc-card-header">
       <div class="calc-icon">🦐</div>
       <div>
-        <h2>Stocking Density — ความหนาแน่นการปล่อยลูกกุ้ง</h2>
-        <p>คำนวณจำนวนลูกกุ้ง (PL) ที่เหมาะสมกับขนาดบ่อ หรือหาความหนาแน่นจากจำนวนที่ปล่อยจริง</p>
+        <h2 data-i18n="calc.dens.h2">Stocking Density — ความหนาแน่นการปล่อยลูกกุ้ง</h2>
+        <p data-i18n="calc.dens.desc">คำนวณจำนวนลูกกุ้ง (PL) ที่เหมาะสมกับขนาดบ่อ หรือหาความหนาแน่นจากจำนวนที่ปล่อยจริง</p>
       </div>
     </div>
     <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">
-      <button class="mode-btn active" id="btn-mode-a" onclick="setDensityMode('a')">คำนวณ PL จากพื้นที่</button>
-      <button class="mode-btn" id="btn-mode-b" onclick="setDensityMode('b')">คำนวณความหนาแน่นจาก PL</button>
+      <button class="mode-btn active" id="btn-mode-a" onclick="setDensityMode('a')" data-i18n="calc.dens.btn.a">คำนวณ PL จากพื้นที่</button>
+      <button class="mode-btn" id="btn-mode-b" onclick="setDensityMode('b')" data-i18n="calc.dens.btn.b">คำนวณความหนาแน่นจาก PL</button>
     </div>
 
     <div id="density-mode-a">
       <div class="input-grid">
         <div class="input-group">
-          <label>พื้นที่บ่อ <span class="unit">ไร่</span></label>
+          <label><span data-i18n="calc.dens.in.area">พื้นที่บ่อ</span> <span class="unit">ไร่</span></label>
           <input class="calc-input" id="dens-area" type="number" min="0" step="0.1" placeholder="เช่น 1.5" oninput="calcDensity()">
         </div>
         <div class="input-group">
-          <label>ความหนาแน่นที่ต้องการ <span class="unit">ตัว/ม²</span></label>
+          <label><span data-i18n="calc.dens.in.density">ความหนาแน่นที่ต้องการ</span> <span class="unit">ตัว/ม²</span></label>
           <input class="calc-input" id="dens-density" type="number" min="0" step="1" placeholder="เช่น 100" oninput="calcDensity()">
         </div>
       </div>
@@ -290,11 +266,11 @@
     <div id="density-mode-b" style="display:none">
       <div class="input-grid">
         <div class="input-group">
-          <label>พื้นที่บ่อ <span class="unit">ไร่</span></label>
+          <label><span data-i18n="calc.dens.in.area">พื้นที่บ่อ</span> <span class="unit">ไร่</span></label>
           <input class="calc-input" id="dens-area-b" type="number" min="0" step="0.1" placeholder="เช่น 1.5" oninput="calcDensity()">
         </div>
         <div class="input-group">
-          <label>จำนวน PL ที่ปล่อย <span class="unit">ตัว</span></label>
+          <label><span data-i18n="calc.dens.in.pl">จำนวน PL ที่ปล่อย</span> <span class="unit">ตัว</span></label>
           <input class="calc-input" id="dens-pl" type="number" min="0" step="1000" placeholder="เช่น 240000" oninput="calcDensity()">
         </div>
       </div>
@@ -303,126 +279,126 @@
     <div id="density-result" class="result-box neutral" style="margin-top:4px">
       <div class="result-main">
         <div class="result-value neutral" id="density-val">—</div>
-        <div class="result-label" id="density-unit-label">จำนวน PL ที่ต้องปล่อย (ตัว)</div>
+        <div class="result-label" id="density-unit-label" data-i18n="calc.dens.result.pl">จำนวน PL ที่ต้องปล่อย (ตัว)</div>
       </div>
       <span class="result-badge" id="density-badge" style="display:none"></span>
     </div>
     <p class="result-hint" id="density-hint"></p>
     <div class="tips-grid">
       <div class="tip-card">
-        <div class="tip-head">ความหนาแน่นต่ำ · &lt; 80 ตัว/ม²</div>
-        <p>เหมาะกับฟาร์มที่ไม่มีระบบเติมอากาศเต็มรูปแบบ ความเสี่ยงโรคต่ำ</p>
+        <div class="tip-head" data-i18n="calc.dens.tip1.h">ความหนาแน่นต่ำ · &lt; 80 ตัว/ม²</div>
+        <p data-i18n="calc.dens.tip1.b">เหมาะกับฟาร์มที่ไม่มีระบบเติมอากาศเต็มรูปแบบ ความเสี่ยงโรคต่ำ</p>
       </div>
       <div class="tip-card">
-        <div class="tip-head">ความหนาแน่นมาตรฐาน · 80–150 ตัว/ม²</div>
-        <p>กึ่ง-อินเทนซีฟ ต้องการระบบเติมอากาศและตรวจคุณภาพน้ำสม่ำเสมอ</p>
+        <div class="tip-head" data-i18n="calc.dens.tip2.h">ความหนาแน่นมาตรฐาน · 80–150 ตัว/ม²</div>
+        <p data-i18n="calc.dens.tip2.b">กึ่ง-อินเทนซีฟ ต้องการระบบเติมอากาศและตรวจคุณภาพน้ำสม่ำเสมอ</p>
       </div>
       <div class="tip-card">
-        <div class="tip-head">ความหนาแน่นสูง · &gt; 150 ตัว/ม²</div>
-        <p>อินเทนซีฟ ต้องการระบบควบคุมสูง คุ้มค่าเมื่อบริหารจัดการดีมาก</p>
+        <div class="tip-head" data-i18n="calc.dens.tip3.h">ความหนาแน่นสูง · &gt; 150 ตัว/ม²</div>
+        <p data-i18n="calc.dens.tip3.b">อินเทนซีฟ ต้องการระบบควบคุมสูง คุ้มค่าเมื่อบริหารจัดการดีมาก</p>
       </div>
     </div>
   </div>
 
   <!-- ── BREAK-EVEN ── -->
-  <div class="calc-section-label">BREAK-EVEN · ราคาคุ้มทุน</div>
+  <div class="calc-section-label" data-i18n="calc.be.label">BREAK-EVEN · ราคาคุ้มทุน</div>
   <div class="calc-card">
     <div class="calc-card-header">
       <div class="calc-icon">💰</div>
       <div>
-        <h2>Break-even Price — คำนวณราคาคุ้มทุนต่อรุ่น</h2>
-        <p>เปรียบเทียบต้นทุนจริงกับราคาปากบ่อวันนี้ — รู้ทันทีว่าขายได้กำไรหรือขาดทุน</p>
+        <h2 data-i18n="calc.be.h2">Break-even Price — คำนวณราคาคุ้มทุนต่อรุ่น</h2>
+        <p data-i18n="calc.be.desc">เปรียบเทียบต้นทุนจริงกับราคาปากบ่อวันนี้ — รู้ทันทีว่าขายได้กำไรหรือขาดทุน</p>
       </div>
     </div>
 
     <div class="live-price-row">
       <span class="live-dot"></span>
-      <span id="live-price-status">กำลังดึงราคาตลาดล่าสุด...</span>
+      <span id="live-price-status" data-i18n="calc.price.loading">กำลังดึงราคาตลาดล่าสุด...</span>
     </div>
 
-    <!-- ไซ์ selector — always visible -->
+    <!-- ไซส์ selector — always visible -->
     <div style="margin-bottom:18px">
       <div style="font-size:12px;font-weight:600;color:var(--mud);margin-bottom:8px">
-        ไซส์กุ้งที่จะขาย
+        <span data-i18n="calc.be.size.lbl">ไซส์กุ้งที่จะขาย</span>
         <span id="be-size-hint-auto" style="font-size:11px;color:var(--wine);margin-left:6px;font-weight:400"></span>
       </div>
       <select id="be-size-select" class="calc-input" onchange="onSizeSelectChange()" style="font-family:inherit;font-size:15px;font-weight:600;cursor:pointer">
-        <option value="">-- เลือกไซส์กุ้ง --</option>
-        <option value="10">L10 · กุ้งใหญ่มาก (100 ก./ตัว)</option>
-        <option value="20">L20 · กุ้งใหญ่ (50 ก./ตัว)</option>
-        <option value="30">L30 · 33 ก./ตัว</option>
-        <option value="40">L40 · 25 ก./ตัว</option>
-        <option value="50">L50 · 20 ก./ตัว</option>
-        <option value="60">L60 · 17 ก./ตัว</option>
-        <option value="70">L70 · 14 ก./ตัว</option>
-        <option value="80">L80 · 12.5 ก./ตัว</option>
-        <option value="100">L100 · 10 ก./ตัว</option>
-        <option value="120">L120 · 8 ก./ตัว</option>
+        <option value="" data-i18n="calc.be.size.sel">-- เลือกไซส์กุ้ง --</option>
+        <option value="10" data-i18n="calc.be.opt.l10">L10 · กุ้งใหญ่มาก (100 ก./ตัว)</option>
+        <option value="20" data-i18n="calc.be.opt.l20">L20 · กุ้งใหญ่ (50 ก./ตัว)</option>
+        <option value="30" data-i18n="calc.be.opt.l30">L30 · 33 ก./ตัว</option>
+        <option value="40" data-i18n="calc.be.opt.l40">L40 · 25 ก./ตัว</option>
+        <option value="50" data-i18n="calc.be.opt.l50">L50 · 20 ก./ตัว</option>
+        <option value="60" data-i18n="calc.be.opt.l60">L60 · 17 ก./ตัว</option>
+        <option value="70" data-i18n="calc.be.opt.l70">L70 · 14 ก./ตัว</option>
+        <option value="80" data-i18n="calc.be.opt.l80">L80 · 12.5 ก./ตัว</option>
+        <option value="100" data-i18n="calc.be.opt.l100">L100 · 10 ก./ตัว</option>
+        <option value="120" data-i18n="calc.be.opt.l120">L120 · 8 ก./ตัว</option>
       </select>
       <div id="be-size-live-price" style="margin-top:6px;font-size:12px;color:#888"></div>
     </div>
 
     <div style="margin-bottom:18px">
-      <div style="font-size:12px;font-weight:600;color:var(--mud);margin-bottom:10px;">ต้นทุนต่อรุ่น (บาท)</div>
+      <div style="font-size:12px;font-weight:600;color:var(--mud);margin-bottom:10px;" data-i18n="calc.be.cost.h">ต้นทุนต่อรุ่น (บาท)</div>
       <div class="input-grid">
         <div class="input-group">
-          <label>ค่าลูกกุ้ง PL <span class="unit">บาท</span></label>
+          <label><span data-i18n="calc.be.in.pl">ค่าลูกกุ้ง PL</span> <span class="unit">บาท</span></label>
           <input class="calc-input" id="be-pl" type="number" min="0" step="100" placeholder="เช่น 15000" oninput="calcBreakeven()">
         </div>
         <div class="input-group">
-          <label>ค่าอาหาร <span class="unit">บาท</span></label>
-          <input class="calc-input" id="be-feed" type="number" min="0" step="100" placeholder="เช่า 120000" oninput="calcBreakeven()">
+          <label><span data-i18n="calc.be.in.feed">ค่าอาหาร</span> <span class="unit">บาท</span></label>
+          <input class="calc-input" id="be-feed" type="number" min="0" step="100" placeholder="เช่น 120000" oninput="calcBreakeven()">
         </div>
         <div class="input-group">
-          <label>ค่าไฟฟ้า <span class="unit">บาท</span></label>
+          <label><span data-i18n="calc.be.in.elec">ค่าไฟฟ้า</span> <span class="unit">บาท</span></label>
           <input class="calc-input" id="be-elec" type="number" min="0" step="100" placeholder="เช่น 20000" oninput="calcBreakeven()">
         </div>
         <div class="input-group">
-          <label>ค่าเคมี/ยา <span class="unit">บาท</span></label>
+          <label><span data-i18n="calc.be.in.chem">ค่าเคมี/ยา</span> <span class="unit">บาท</span></label>
           <input class="calc-input" id="be-chem" type="number" min="0" step="100" placeholder="เช่น 8000" oninput="calcBreakeven()">
         </div>
         <div class="input-group">
-          <label>ค่าแรงงาน <span class="unit">บาท</span></label>
+          <label><span data-i18n="calc.be.in.labor">ค่าแรงงาน</span> <span class="unit">บาท</span></label>
           <input class="calc-input" id="be-labor" type="number" min="0" step="100" placeholder="เช่น 15000" oninput="calcBreakeven()">
         </div>
         <div class="input-group">
-          <label>ต้นทุนอื่นๆ <span class="unit">บาท</span></label>
+          <label><span data-i18n="calc.be.in.other">ต้นทุนอื่นๆ</span> <span class="unit">บาท</span></label>
           <input class="calc-input" id="be-other" type="number" min="0" step="100" placeholder="เช่น 5000" oninput="calcBreakeven()">
         </div>
       </div>
     </div>
 
     <div style="margin-bottom:20px">
-      <div style="font-size:12px;font-weight:600;color:var(--mud);margin-bottom:10px;">ผลผลิต</div>
+      <div style="font-size:12px;font-weight:600;color:var(--mud);margin-bottom:10px;" data-i18n="calc.be.prod.h">ผลผลิต</div>
       <div class="input-grid">
         <div class="input-group">
-          <label>น้ำหนักกุ้งที่จับได้ <span class="unit">กก.</span></label>
+          <label><span data-i18n="calc.be.in.harvest">น้ำหนักกุ้งที่จับได้</span> <span class="unit">กก.</span></label>
           <input class="calc-input" id="be-harvest" type="number" min="0" step="10" placeholder="เช่น 4000" oninput="calcBreakeven()">
         </div>
         <div class="input-group">
-          <label>ราคาปากบ่อจริง <span class="unit">บาท/กก. · โหลดจากไซส์ที่เลือก หรือกรอกเอง</span></label>
-          <input class="calc-input" id="be-market" type="number" min="0" step="1" placeholder="เลือกไซส์ด้านบน หรือกรอกเอง" oninput="calcBreakeven()">
+          <label><span data-i18n="calc.be.in.mkt.lbl">ราคาปากบ่อจริง</span> <span class="unit" data-i18n="calc.be.in.mkt.u">บาท/กก. · โหลดจากไซส์ที่เลือก หรือกรอกเอง</span></label>
+          <input class="calc-input" id="be-market" type="number" min="0" step="1" data-i18n-placeholder="calc.be.in.mkt.ph" placeholder="เลือกไซส์ด้านบน หรือกรอกเอง" oninput="calcBreakeven()">
         </div>
       </div>
     </div>
 
     <div class="compare-row" id="be-compare" style="display:none">
       <div class="compare-card cost">
-        <div class="lbl">ต้นทุน/กก.</div>
+        <div class="lbl" data-i18n="calc.be.cmp.cost">ต้นทุน/กก.</div>
         <div class="val" id="be-cost-val">—</div>
-        <div style="font-size:11px;color:#888;margin-top:4px">บาท/กิโลกรัม</div>
+        <div style="font-size:11px;color:#888;margin-top:4px" data-i18n="calc.be.unit.sub">บาท/กิโลกรัม</div>
       </div>
       <div class="compare-card price">
-        <div class="lbl">ราคาตลาด/กก.</div>
+        <div class="lbl" data-i18n="calc.be.cmp.price">ราคาตลาด/กก.</div>
         <div class="val" id="be-market-val">—</div>
-        <div style="font-size:11px;color:#888;margin-top:4px">บาท/กิโลกรัม</div>
+        <div style="font-size:11px;color:#888;margin-top:4px" data-i18n="calc.be.unit.sub">บาท/กิโลกรัม</div>
       </div>
     </div>
 
     <div id="be-result" class="result-box neutral">
       <div class="result-main">
         <div class="result-value neutral" id="be-val">—</div>
-        <div class="result-label" id="be-label">กำไร/ขาดทุน (บาท/กก.)</div>
+        <div class="result-label" id="be-label" data-i18n="calc.be.result.lbl">กำไร/ขาดทุน (บาท/กก.)</div>
       </div>
       <span class="result-badge" id="be-badge" style="display:none"></span>
     </div>
@@ -437,84 +413,84 @@
   </div>
 
   <!-- ── FEED RATE %BW ── -->
-  <div class="calc-section-label">FEED RATE · เปอร์เซ็นต์อาหาร</div>
+  <div class="calc-section-label" data-i18n="calc.fr.label">FEED RATE · เปอร์เซ็นต์อาหาร</div>
   <div class="calc-card">
     <div class="calc-card-header">
       <div class="calc-icon">🍽️</div>
       <div>
-        <h2>Feed Rate (%BW) — คำนวณปริมาณอาหารต่อวัน</h2>
-        <p>อาหารที่ให้ต่อวัน = Biomass รวม × %BW — ให้มากไปอาหารเหลือ เพิ่ม Vibrio; ให้น้อยไปกุ้งโตช้า</p>
+        <h2 data-i18n="calc.fr.h2">Feed Rate (%BW) — คำนวณปริมาณอาหารต่อวัน</h2>
+        <p data-i18n="calc.fr.desc">อาหารที่ให้ต่อวัน = Biomass รวม × %BW — ให้มากไปอาหารเหลือ เพิ่ม Vibrio; ให้น้อยไปกุ้งโตช้า</p>
       </div>
     </div>
     <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">
-      <button class="mode-btn active" id="btn-fr-a" onclick="setFeedMode('a')">คำนวณจาก PL</button>
-      <button class="mode-btn" id="btn-fr-c" onclick="setFeedMode('c')">คำนวณจาก Biomass</button>
-      <button class="mode-btn" id="btn-fr-b" onclick="setFeedMode('b')">คำนวณ %BW จากอาหารจริง</button>
+      <button class="mode-btn active" id="btn-fr-a" onclick="setFeedMode('a')" data-i18n="calc.fr.btn.a">คำนวณจาก PL</button>
+      <button class="mode-btn" id="btn-fr-c" onclick="setFeedMode('c')" data-i18n="calc.fr.btn.c">คำนวณจาก Biomass</button>
+      <button class="mode-btn" id="btn-fr-b" onclick="setFeedMode('b')" data-i18n="calc.fr.btn.b">คำนวณ %BW จากอาหารจริง</button>
     </div>
 
-    <!-- Mode A: คำนวณจาก PL+SR+น้ำหนักเฉลี่ย -->
+    <!-- Mode A -->
     <div id="fr-mode-a">
       <div class="input-grid">
         <div class="input-group">
-          <label>จำนวน PL ที่ปล่อย <span class="unit">ตัว</span></label>
+          <label><span data-i18n="calc.fr.in.pl">จำนวน PL ที่ปล่อย</span> <span class="unit">ตัว</span></label>
           <input class="calc-input" id="fr-pl" type="number" min="0" step="1000" placeholder="เช่น 200000" oninput="calcFeedRate()">
         </div>
         <div class="input-group">
-          <label>อัตรารอด <span class="unit">%</span></label>
+          <label><span data-i18n="calc.fr.in.sr">อัตรารอด</span> <span class="unit">%</span></label>
           <input class="calc-input" id="fr-sr" type="number" min="0" max="100" step="1" placeholder="เช่น 70" oninput="calcFeedRate()">
         </div>
         <div class="input-group">
-          <label>น้ำหนักเฉลี่ยปัจจุบัน
+          <label><span data-i18n="calc.fr.in.avg">น้ำหนักเฉลี่ยปัจจุบัน</span>
             <span class="unit-toggle-inline">
-              <button class="utbtn active" onclick="setWtUnit('fr-avg','g',this)">ก./ตัว</button>
-              <button class="utbtn" onclick="setWtUnit('fr-avg','k',this)">ตัว/กก.</button>
+              <button class="utbtn active" onclick="setWtUnit('fr-avg','g',this)" data-i18n="calc.unit.g">ก./ตัว</button>
+              <button class="utbtn" onclick="setWtUnit('fr-avg','k',this)" data-i18n="calc.unit.pcs">ตัว/กก.</button>
             </span>
           </label>
           <input class="calc-input" id="fr-avg" type="number" min="0" step="0.5" placeholder="เช่น 12" oninput="calcFeedRate()">
         </div>
         <div class="input-group">
-          <label>%BW ที่ต้องการ <span class="unit">%/วัน</span>
-            <button class="suggest-btn" onclick="suggestBw('fr-avg','fr-bw-a')">💡 แนะนำตามไซส์</button>
+          <label><span data-i18n="calc.fr.in.bwlbl">%BW ที่ต้องการ</span> <span class="unit">%/วัน</span>
+            <button class="suggest-btn" onclick="suggestBw('fr-avg','fr-bw-a')" data-i18n="calc.fr.suggest">💡 แนะนำตามไซส์</button>
           </label>
           <input class="calc-input" id="fr-bw-a" type="number" min="0" step="0.1" placeholder="เช่น 3.5" oninput="calcFeedRate()">
         </div>
       </div>
     </div>
 
-    <!-- Mode C: คำนวณจาก Biomass ที่รู้แล้ว -->
+    <!-- Mode C -->
     <div id="fr-mode-c" style="display:none">
       <div class="input-grid">
         <div class="input-group">
-          <label>Biomass รวม <span class="unit">กก.</span></label>
+          <label><span data-i18n="calc.fr.in.bm">Biomass รวม</span> <span class="unit" data-i18n="calc.fr.in.bm.sub">กก.</span></label>
           <input class="calc-input" id="fr-biomass" type="number" min="0" step="10" placeholder="เช่น 2000" oninput="calcFeedRate()">
         </div>
         <div class="input-group">
-          <label>น้ำหนักเฉลี่ย (เพื่อแนะนำ %BW)
+          <label><span data-i18n="calc.fr.in.avg">น้ำหนักเฉลี่ย</span>
             <span class="unit-toggle-inline">
-              <button class="utbtn active" onclick="setWtUnit('fr-avg-c','g',this)">ก./ตัว</button>
-              <button class="utbtn" onclick="setWtUnit('fr-avg-c','k',this)">ตัว/กก.</button>
+              <button class="utbtn active" onclick="setWtUnit('fr-avg-c','g',this)" data-i18n="calc.unit.g">ก./ตัว</button>
+              <button class="utbtn" onclick="setWtUnit('fr-avg-c','k',this)" data-i18n="calc.unit.pcs">ตัว/กก.</button>
             </span>
           </label>
-          <input class="calc-input" id="fr-avg-c" type="number" min="0" step="0.5" placeholder="ไม่บังคับ — ใช้กด 💡" oninput="">
+          <input class="calc-input" id="fr-avg-c" type="number" min="0" step="0.5" data-i18n-placeholder="calc.fr.in.bm.ph" placeholder="ไม่บังคับ — ใช้กด 💡" oninput="">
         </div>
         <div class="input-group">
-          <label>%BW ที่ต้องการ <span class="unit">%/วัน</span>
-            <button class="suggest-btn" onclick="suggestBw('fr-avg-c','fr-bw')">💡 แนะนำตามไซส์</button>
+          <label><span data-i18n="calc.fr.in.bwlbl">%BW ที่ต้องการ</span> <span class="unit">%/วัน</span>
+            <button class="suggest-btn" onclick="suggestBw('fr-avg-c','fr-bw')" data-i18n="calc.fr.suggest">💡 แนะนำตามไซส์</button>
           </label>
           <input class="calc-input" id="fr-bw" type="number" min="0" step="0.1" placeholder="เช่น 3.5" oninput="calcFeedRate()">
         </div>
       </div>
     </div>
 
-    <!-- Mode B: ย้อนหา %BW จากอาหารจริง -->
+    <!-- Mode B -->
     <div id="fr-mode-b" style="display:none">
       <div class="input-grid">
         <div class="input-group">
-          <label>Biomass รวม <span class="unit">กก.</span></label>
+          <label><span data-i18n="calc.fr.in.bm">Biomass รวม</span> <span class="unit">กก.</span></label>
           <input class="calc-input" id="fr-biomass-b" type="number" min="0" step="10" placeholder="เช่น 2000" oninput="calcFeedRate()">
         </div>
         <div class="input-group">
-          <label>อาหารที่ให้จริง/วัน <span class="unit">กก.</span></label>
+          <label><span data-i18n="calc.fr.in.actual">อาหารที่ให้จริง/วัน</span> <span class="unit">กก.</span></label>
           <input class="calc-input" id="fr-actual" type="number" min="0" step="1" placeholder="เช่น 80" oninput="calcFeedRate()">
         </div>
       </div>
@@ -522,49 +498,49 @@
     <div id="fr-result" class="result-box neutral">
       <div class="result-main">
         <div class="result-value neutral" id="fr-val">—</div>
-        <div class="result-label" id="fr-unit">อาหารที่ควรให้ต่อวัน (กก.)</div>
+        <div class="result-label" id="fr-unit" data-i18n="calc.fr.result.feed">อาหารที่ควรให้ต่อวัน (กก.)</div>
       </div>
       <span class="result-badge" id="fr-badge" style="display:none"></span>
     </div>
     <p class="result-hint" id="fr-hint"></p>
     <div class="tips-grid">
-      <div class="tip-card"><div class="tip-head">กุ้งเล็ก DOC 1–30</div><p>%BW สูง 8–15% — กุ้งเล็กกินอาหารเทียบสัดส่วนตัวมาก กระเพาะเล็ก ต้องให้บ่อย</p></div>
-      <div class="tip-card"><div class="tip-head">กุ้งกลาง DOC 30–60</div><p>%BW ลดลง 4–8% — กุ้งโตขึ้น Biomass เพิ่ม ปรับอาหารตามตะแกรงชั่งทุกอาทิตย์</p></div>
-      <div class="tip-card"><div class="tip-head">กุ้งใหญ่ DOC 60+</div><p>%BW 2–4% — กุ้งโตแล้ว อัตราการกินต่อน้ำหนักตัวลดลง แต่ปริมาณสูง</p></div>
+      <div class="tip-card"><div class="tip-head" data-i18n="calc.fr.tip1.h">กุ้งเล็ก DOC 1–30</div><p data-i18n="calc.fr.tip1.b">%BW สูง 8–15% — กุ้งเล็กกินอาหารเทียบสัดส่วนตัวมาก กระเพาะเล็ก ต้องให้บ่อย</p></div>
+      <div class="tip-card"><div class="tip-head" data-i18n="calc.fr.tip2.h">กุ้งกลาง DOC 30–60</div><p data-i18n="calc.fr.tip2.b">%BW ลดลง 4–8% — กุ้งโตขึ้น Biomass เพิ่ม ปรับอาหารตามตะแกรงชั่งทุกอาทิตย์</p></div>
+      <div class="tip-card"><div class="tip-head" data-i18n="calc.fr.tip3.h">กุ้งใหญ่ DOC 60+</div><p data-i18n="calc.fr.tip3.b">%BW 2–4% — กุ้งโตแล้ว อัตราการกินต่อน้ำหนักตัวลดลง แต่ปริมาณสูง</p></div>
     </div>
   </div>
 
   <!-- ── SURVIVAL RATE ── -->
-  <div class="calc-section-label">SURVIVAL · อัตรารอด</div>
+  <div class="calc-section-label" data-i18n="calc.sr.label">SURVIVAL · อัตรารอด</div>
   <div class="calc-card">
     <div class="calc-card-header">
       <div class="calc-icon">📊</div>
       <div>
-        <h2>Survival Rate — คำนวณอัตรารอดของกุ้ง</h2>
-        <p>คำนวณได้ 2 วิธี: จากผลจับหลังรุ่น หรือประมาณกลางรุ่นจากปริมาณอาหารที่กิน</p>
+        <h2 data-i18n="calc.sr.h2">Survival Rate — คำนวณอัตรารอดของกุ้ง</h2>
+        <p data-i18n="calc.sr.desc">คำนวณได้ 2 วิธี: จากผลจับหลังรุ่น หรือประมาณกลางรุ่นจากปริมาณอาหารที่กิน</p>
       </div>
     </div>
     <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">
-      <button class="mode-btn active" id="btn-sr-a" onclick="setSrMode('a')">จากผลจับ (หลังรุ่น)</button>
-      <button class="mode-btn" id="btn-sr-b" onclick="setSrMode('b')">จากอาหารที่กิน (กลางรุ่น)</button>
+      <button class="mode-btn active" id="btn-sr-a" onclick="setSrMode('a')" data-i18n="calc.sr.btn.a">จากผลจับ (หลังรุ่น)</button>
+      <button class="mode-btn" id="btn-sr-b" onclick="setSrMode('b')" data-i18n="calc.sr.btn.b">จากอาหารที่กิน (กลางรุ่น)</button>
     </div>
 
-    <!-- Mode A: จากผลจับ -->
+    <!-- Mode A -->
     <div id="sr-mode-a">
       <div class="input-grid">
         <div class="input-group">
-          <label>จำนวน PL ที่ปล่อย <span class="unit">ตัว</span></label>
+          <label><span data-i18n="calc.sr.in.pl">จำนวน PL ที่ปล่อย</span> <span class="unit">ตัว</span></label>
           <input class="calc-input" id="sr-pl" type="number" min="0" step="1000" placeholder="เช่น 200000" oninput="calcSurvival()">
         </div>
         <div class="input-group">
-          <label>น้ำหนักกุ้งที่จับได้ <span class="unit">กก.</span></label>
+          <label><span data-i18n="calc.sr.in.harvest">น้ำหนักกุ้งที่จับได้</span> <span class="unit">กก.</span></label>
           <input class="calc-input" id="sr-harvest" type="number" min="0" step="10" placeholder="เช่น 3500" oninput="calcSurvival()">
         </div>
         <div class="input-group">
-          <label>น้ำหนักเฉลี่ยต่อตัว
+          <label><span data-i18n="calc.sr.in.weight">น้ำหนักเฉลี่ยต่อตัว</span>
             <span class="unit-toggle-inline">
-              <button class="utbtn active" onclick="setWtUnit('sr-weight','g',this)">ก./ตัว</button>
-              <button class="utbtn" onclick="setWtUnit('sr-weight','k',this)">ตัว/กก.</button>
+              <button class="utbtn active" onclick="setWtUnit('sr-weight','g',this)" data-i18n="calc.unit.g">ก./ตัว</button>
+              <button class="utbtn" onclick="setWtUnit('sr-weight','k',this)" data-i18n="calc.unit.pcs">ตัว/กก.</button>
             </span>
           </label>
           <input class="calc-input" id="sr-weight" type="number" min="0" step="0.5" placeholder="เช่น 18" oninput="calcSurvival();guessSizeFromWeight()">
@@ -572,32 +548,32 @@
       </div>
     </div>
 
-    <!-- Mode B: จากอาหารที่กิน -->
+    <!-- Mode B -->
     <div id="sr-mode-b" style="display:none">
-      <div style="background:#FFF8F0;border:1.5px solid #fde68a;border-radius:10px;padding:10px 14px;font-size:12px;color:#92400e;margin-bottom:14px">
+      <div style="background:#FFF8F0;border:1.5px solid #fde68a;border-radius:10px;padding:10px 14px;font-size:12px;color:#92400e;margin-bottom:14px" data-i18n="calc.sr.mode.b.note">
         วิธีนี้ใช้ประมาณ SR กลางรุ่น: Biomass = อาหาร/วัน ÷ (%BW÷100) → จำนวนกุ้งรอด = Biomass × 1000 ÷ น้ำหนักเฉลี่ย
       </div>
       <div class="input-grid">
         <div class="input-group">
-          <label>จำนวน PL ที่ปล่อย <span class="unit">ตัว</span></label>
+          <label><span data-i18n="calc.sr.in.pl">จำนวน PL ที่ปล่อย</span> <span class="unit">ตัว</span></label>
           <input class="calc-input" id="sr-pl-b" type="number" min="0" step="1000" placeholder="เช่น 200000" oninput="calcSurvival()">
         </div>
         <div class="input-group">
-          <label>อาหารที่กิน/วัน <span class="unit">กก./วัน</span></label>
+          <label><span data-i18n="calc.sr.in.feed">อาหารที่กิน/วัน</span> <span class="unit">กก./วัน</span></label>
           <input class="calc-input" id="sr-feed" type="number" min="0" step="1" placeholder="เช่น 60" oninput="calcSurvival()">
         </div>
         <div class="input-group">
-          <label>น้ำหนักเฉลี่ยปัจจุบัน
+          <label><span data-i18n="calc.sr.in.wtb">น้ำหนักเฉลี่ยปัจจุบัน</span>
             <span class="unit-toggle-inline">
-              <button class="utbtn active" onclick="setWtUnit('sr-weight-b','g',this)">ก./ตัว</button>
-              <button class="utbtn" onclick="setWtUnit('sr-weight-b','k',this)">ตัว/กก.</button>
+              <button class="utbtn active" onclick="setWtUnit('sr-weight-b','g',this)" data-i18n="calc.unit.g">ก./ตัว</button>
+              <button class="utbtn" onclick="setWtUnit('sr-weight-b','k',this)" data-i18n="calc.unit.pcs">ตัว/กก.</button>
             </span>
           </label>
           <input class="calc-input" id="sr-weight-b" type="number" min="0" step="0.5" placeholder="เช่น 12" oninput="calcSurvival();guessSizeFromWeight()">
         </div>
         <div class="input-group">
-          <label>%BW ที่ใช้ <span class="unit">%/วัน</span>
-            <button class="suggest-btn" onclick="suggestBw('sr-weight-b','sr-bw')">💡 แนะนำตามไซส์</button>
+          <label><span data-i18n="calc.sr.in.bwlbl">%BW ที่ใช้</span> <span class="unit">%/วัน</span>
+            <button class="suggest-btn" onclick="suggestBw('sr-weight-b','sr-bw')" data-i18n="calc.fr.suggest">💡 แนะนำตามไซส์</button>
           </label>
           <input class="calc-input" id="sr-bw" type="number" min="0" step="0.1" placeholder="เช่น 3.5" oninput="calcSurvival()">
         </div>
@@ -607,7 +583,7 @@
     <div id="sr-result" class="result-box neutral">
       <div class="result-main">
         <div class="result-value neutral" id="sr-val">—</div>
-        <div class="result-label">อัตรารอด (%)</div>
+        <div class="result-label" data-i18n="calc.sr.result.lbl">อัตรารอด (%)</div>
       </div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
         <span class="result-badge" id="sr-badge" style="display:none"></span>
@@ -616,36 +592,36 @@
     </div>
     <p class="result-hint" id="sr-hint"></p>
     <div class="tips-grid">
-      <div class="tip-card"><div class="tip-head">อัตรารอดดี · &gt; 70%</div><p>สภาพแวดล้อมดี ลูกกุ้งคุณภาพสูง การจัดการโรคและน้ำมีประสิทธิภาพ</p></div>
-      <div class="tip-card"><div class="tip-head">อัตรารอดปานกลาง · 50–70%</div><p>มาตรฐานทั่วไปของฟาร์มกึ่งอินเทนซีฟ ยังมีช่องให้ปรับปรุงได้</p></div>
-      <div class="tip-card"><div class="tip-head">อัตรารอดต่ำ · &lt; 50%</div><p>ควรตรวจสอบคุณภาพน้ำ โรค และแหล่งลูกกุ้ง — มีความสูญเสียสูง</p></div>
+      <div class="tip-card"><div class="tip-head" data-i18n="calc.sr.tip1.h">อัตรารอดดี · &gt; 70%</div><p data-i18n="calc.sr.tip1.b">สภาพแวดล้อมดี ลูกกุ้งคุณภาพสูง การจัดการโรคและน้ำมีประสิทธิภาพ</p></div>
+      <div class="tip-card"><div class="tip-head" data-i18n="calc.sr.tip2.h">อัตรารอดปานกลาง · 50–70%</div><p data-i18n="calc.sr.tip2.b">มาตรฐานทั่วไปของฟาร์มกึ่งอินเทนซีฟ ยังมีช่องให้ปรับปรุงได้</p></div>
+      <div class="tip-card"><div class="tip-head" data-i18n="calc.sr.tip3.h">อัตรารอดต่ำ · &lt; 50%</div><p data-i18n="calc.sr.tip3.b">ควรตรวจสอบคุณภาพน้ำ โรค และแหล่งลูกกุ้ง — มีความสูญเสียสูง</p></div>
     </div>
   </div>
 
   <!-- ── BIOMASS ── -->
-  <div class="calc-section-label">BIOMASS · น้ำหนักรวมในบ่อ</div>
+  <div class="calc-section-label" data-i18n="calc.bm.label">BIOMASS · น้ำหนักรวมในบ่อ</div>
   <div class="calc-card">
     <div class="calc-card-header">
       <div class="calc-icon">⚖️</div>
       <div>
-        <h2>Biomass Estimator — ประมาณน้ำหนักกุ้งรวมในบ่อ</h2>
-        <p>คำนวณ Biomass เพื่อวางแผนอาหาร ออกซิเจน และกำหนดเวลาจับ</p>
+        <h2 data-i18n="calc.bm.h2">Biomass Estimator — ประมาณน้ำหนักกุ้งรวมในบ่อ</h2>
+        <p data-i18n="calc.bm.desc">คำนวณ Biomass เพื่อวางแผนอาหาร ออกซิเจน และกำหนดเวลาจับ</p>
       </div>
     </div>
     <div class="input-grid">
       <div class="input-group">
-        <label>จำนวน PL ที่ปล่อย <span class="unit">ตัว</span></label>
+        <label><span data-i18n="calc.bm.in.pl">จำนวน PL ที่ปล่อย</span> <span class="unit">ตัว</span></label>
         <input class="calc-input" id="bm-pl" type="number" min="0" step="1000" placeholder="เช่น 200000" oninput="calcBiomass()">
       </div>
       <div class="input-group">
-        <label>อัตรารอดโดยประมาณ <span class="unit">%</span></label>
+        <label><span data-i18n="calc.bm.in.sr">อัตรารอดโดยประมาณ</span> <span class="unit">%</span></label>
         <input class="calc-input" id="bm-sr" type="number" min="0" max="100" step="1" placeholder="เช่น 70" oninput="calcBiomass()">
       </div>
       <div class="input-group">
-        <label>น้ำหนักเฉลี่ยปัจจุบัน
+        <label><span data-i18n="calc.bm.in.avg">น้ำหนักเฉลี่ยปัจจุบัน</span>
           <span class="unit-toggle-inline">
-            <button class="utbtn active" onclick="setWtUnit('bm-avg','g',this)">ก./ตัว</button>
-            <button class="utbtn" onclick="setWtUnit('bm-avg','k',this)">ตัว/กก.</button>
+            <button class="utbtn active" onclick="setWtUnit('bm-avg','g',this)" data-i18n="calc.unit.g">ก./ตัว</button>
+            <button class="utbtn" onclick="setWtUnit('bm-avg','k',this)" data-i18n="calc.unit.pcs">ตัว/กก.</button>
           </span>
         </label>
         <input class="calc-input" id="bm-avg" type="number" min="0" step="0.5" placeholder="เช่น 12" oninput="calcBiomass()">
@@ -654,40 +630,40 @@
     <div id="bm-result" class="result-box neutral">
       <div class="result-main">
         <div class="result-value neutral" id="bm-val">—</div>
-        <div class="result-label">Biomass รวมในบ่อ (กก.)</div>
+        <div class="result-label" data-i18n="calc.bm.result.lbl">Biomass รวมในบ่อ (กก.)</div>
       </div>
     </div>
     <p class="result-hint" id="bm-hint"></p>
   </div>
 
   <!-- ── HARVEST PLANNING ── -->
-  <div class="calc-section-label">HARVEST · วางแผนจับกุ้ง</div>
+  <div class="calc-section-label" data-i18n="calc.hp.label">HARVEST · วางแผนจับกุ้ง</div>
   <div class="calc-card">
     <div class="calc-card-header">
       <div class="calc-icon">📅</div>
       <div>
-        <h2>Harvest Planning — คาดการณ์ขนาดกุ้งและวันจับ</h2>
-        <p>จาก growth rate ปัจจุบัน คำนวณว่ากุ้งจะถึงขนาดที่ต้องการเมื่อไหร่</p>
+        <h2 data-i18n="calc.hp.h2">Harvest Planning — คาดการณ์ขนาดกุ้งและวันจับ</h2>
+        <p data-i18n="calc.hp.desc">จาก growth rate ปัจจุบัน คำนวณว่ากุ้งจะถึงขนาดที่ต้องการเมื่อไหร่</p>
       </div>
     </div>
     <div class="input-grid">
       <div class="input-group">
-        <label>น้ำหนักปัจจุบัน <span class="unit">กรัม/ตัว</span></label>
+        <label><span data-i18n="calc.hp.in.current">น้ำหนักปัจจุบัน</span> <span class="unit">กรัม/ตัว</span></label>
         <input class="calc-input" id="hp-current" type="number" min="0" step="0.5" placeholder="เช่น 10" oninput="calcHarvest()">
       </div>
       <div class="input-group">
-        <label>Growth rate <span class="unit">กรัม/วัน</span></label>
+        <label>Growth rate <span class="unit" data-i18n="calc.unit.gday">กรัม/วัน</span></label>
         <input class="calc-input" id="hp-growth" type="number" min="0" step="0.05" placeholder="เช่น 0.2" oninput="calcHarvest()">
       </div>
       <div class="input-group">
-        <label>ขนาดที่ต้องการจับ <span class="unit">กรัม/ตัว</span></label>
+        <label><span data-i18n="calc.hp.in.target">ขนาดที่ต้องการจับ</span> <span class="unit">กรัม/ตัว</span></label>
         <input class="calc-input" id="hp-target" type="number" min="0" step="1" placeholder="เช่น 20" oninput="calcHarvest()">
       </div>
     </div>
     <div id="hp-result" class="result-box neutral">
       <div class="result-main">
         <div class="result-value neutral" id="hp-val">—</div>
-        <div class="result-label" id="hp-label">วันที่เหลือจนถึงขนาดเป้าหมาย</div>
+        <div class="result-label" id="hp-label" data-i18n="calc.hp.result.lbl">วันที่เหลือจนถึงขนาดเป้าหมาย</div>
       </div>
     </div>
     <p class="result-hint" id="hp-hint"></p>
@@ -695,10 +671,10 @@
       <table style="width:100%;border-collapse:collapse;font-size:13px;">
         <thead>
           <tr style="background:#F5EBF0;">
-            <th style="padding:8px 12px;text-align:left;font-weight:700;color:#4D1232;border-radius:8px 0 0 8px">อีก (วัน)</th>
-            <th style="padding:8px 12px;text-align:right;font-weight:700;color:#4D1232">น้ำหนัก (กรัม)</th>
-            <th style="padding:8px 12px;text-align:right;font-weight:700;color:#4D1232">ขนาด (ตัว/กก.)</th>
-            <th style="padding:8px 12px;text-align:right;font-weight:700;color:#4D1232;border-radius:0 8px 8px 0">หมายเหตุ</th>
+            <th style="padding:8px 12px;text-align:left;font-weight:700;color:#4D1232;border-radius:8px 0 0 8px" data-i18n="calc.hp.table.days">อีก (วัน)</th>
+            <th style="padding:8px 12px;text-align:right;font-weight:700;color:#4D1232" data-i18n="calc.hp.table.wt">น้ำหนัก (กรัม)</th>
+            <th style="padding:8px 12px;text-align:right;font-weight:700;color:#4D1232" data-i18n="calc.hp.table.sz">ขนาด (ตัว/กก.)</th>
+            <th style="padding:8px 12px;text-align:right;font-weight:700;color:#4D1232;border-radius:0 8px 8px 0" data-i18n="calc.hp.table.note">หมายเหตุ</th>
           </tr>
         </thead>
         <tbody id="hp-tbody"></tbody>
@@ -708,11 +684,6 @@
 
 </div>
 
-<!-- FOOTER -->
-<footer style="background:#1a0a12;color:#c0a0b0;padding:32px 5%;text-align:center;font-size:13px;">
-  <p style="margin:0 0 6px">© 2568 บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด</p>
-  <p style="margin:0;opacity:.6;font-size:11px">ผลการคำนวณเป็นค่าประมาณ ใช้เพื่ออ้างอิงเบื้องต้นเท่านั้น</p>
-</footer>
 
 <!-- ── FARM CHAT WIDGET ─────────────────────────────────────── -->
 <style>
@@ -811,9 +782,9 @@
 </style>
 
 <!-- Bubble button -->
-<button id="fc-bubble" onclick="toggleFarmChat()" title="ถามผู้ช่วยคำนวณ AI">
+<button id="fc-bubble" onclick="toggleFarmChat()" data-i18n-title="calc.chat.btn.title" title="ถามผู้ช่วยคำนวณ AI">
   🤖
-  <span id="fc-label">🧮 ถามผู้ช่วย AI</span>
+  <span id="fc-label" data-i18n="calc.chat.label">🧮 ถามผู้ช่วย AI</span>
   <span class="fc-badge" id="fc-badge"></span>
 </button>
 
@@ -822,22 +793,22 @@
   <div class="fc-header">
     <div class="fc-header-icon">🤖</div>
     <div class="fc-header-text">
-      <div class="fc-header-title">ผู้ช่วยคำนวณฟาร์ม AI</div>
-      <div class="fc-header-sub">ถามเรื่อง FCR · อัตรารอด · %BW · ต้นทุน</div>
+      <div class="fc-header-title" data-i18n="calc.chat.hdr.title">ผู้ช่วยคำนวณฟาร์ม AI</div>
+      <div class="fc-header-sub" data-i18n="calc.chat.hdr.sub">ถามเรื่อง FCR · อัตรารอด · %BW · ต้นทุน</div>
     </div>
     <button class="fc-close" onclick="toggleFarmChat()">✕</button>
   </div>
   <div id="fc-messages">
-    <div class="fc-msg bot">สวัสดีครับ! ถามเรื่องตัวเลขฟาร์มกุ้งได้เลย เช่น "FCR 1.8 ดีไหม" หรือ "PL 200,000 บ่อ 1 ไร่ ควรปล่อยไหม" ครับ 🦐</div>
+    <div class="fc-msg bot" data-i18n="calc.chat.welcome">สวัสดีครับ! ถามเรื่องตัวเลขฟาร์มกุ้งได้เลย เช่น "FCR 1.8 ดีไหม" หรือ "PL 200,000 บ่อ 1 ไร่ ควรปล่อยไหม" ครับ 🦐</div>
   </div>
   <div class="fc-suggestions" id="fc-suggs">
-    <button class="fc-sugg" onclick="fcAsk('FCR 1.5 ดีไหม')">FCR 1.5 ดีไหม?</button>
-    <button class="fc-sugg" onclick="fcAsk('อัตรารอด 55% ถือว่าเป็นยังไง')">SR 55% โอเคไหม?</button>
-    <button class="fc-sugg" onclick="fcAsk('%BW ควรใช้เท่าไหร่สำหรับกุ้ง 15 กรัม')">%BW กุ้ง 15ก.?</button>
-    <button class="fc-sugg" onclick="fcAsk('Biomass คืออะไร ใช้ทำอะไร')">Biomass คืออะไร?</button>
+    <button class="fc-sugg" onclick="fcAsk(t('calc.chat.sugg.fcr'))" data-i18n="calc.chat.sugg.fcr">FCR 1.5 ดีไหม?</button>
+    <button class="fc-sugg" onclick="fcAsk(t('calc.chat.sugg.sr'))" data-i18n="calc.chat.sugg.sr">SR 55% โอเคไหม?</button>
+    <button class="fc-sugg" onclick="fcAsk(t('calc.chat.sugg.bw'))" data-i18n="calc.chat.sugg.bw">%BW กุ้ง 15ก.?</button>
+    <button class="fc-sugg" onclick="fcAsk(t('calc.chat.sugg.bm'))" data-i18n="calc.chat.sugg.bm">Biomass คืออะไร?</button>
   </div>
   <div class="fc-input-row">
-    <textarea id="fc-input" placeholder="ถามเรื่องตัวเลขฟาร์มกุ้ง..." rows="1"
+    <textarea id="fc-input" data-i18n-placeholder="calc.chat.ph" placeholder="ถามเรื่องตัวเลขฟาร์มกุ้ง..." rows="1"
       oninput="fcAutoResize(this)" onkeydown="fcKeyDown(event)"></textarea>
     <button id="fc-send" onclick="fcSend()" title="ส่ง">➤</button>
   </div>
@@ -944,7 +915,7 @@ async function fcSend() {
 
     fcHistory.push({ role: 'assistant', content: botText });
   } catch (err) {
-    botDiv.textContent = 'เชื่อมต่อไม่ได้ กรุณาลองใหม่';
+    botDiv.textContent = t('calc.chat.error');
     botDiv.classList.remove('typing');
   } finally {
     fcStreaming = false;
@@ -1015,7 +986,7 @@ function suggestBw(weightFieldId, bwFieldId) {
   const wg = getWtG(weightFieldId);
   if (!wg) {
     const el = document.getElementById(bwFieldId);
-    el.placeholder = 'กรอกน้ำหนักก่อน';
+    el.placeholder = t('calc.suggest.enter');
     el.focus(); return;
   }
   const row = BW_TABLE.find(r => wg <= r.maxG) || BW_TABLE[BW_TABLE.length-1];
@@ -1045,16 +1016,23 @@ function calcFCR() {
   const fcr = (feed / gain).toFixed(2);
   val.textContent = fcr;
 
+  const isEn = getLang() === 'en';
   let cls, badgeText, hintText;
   if (fcr < 1.2) {
-    cls = 'good'; badgeText = '✓ ดีเยี่ยม';
-    hintText = `ใช้อาหาร ${feed.toLocaleString()} กก. ได้เนื้อกุ้ง ${gain.toLocaleString()} กก. — FCR ${fcr} ถือว่าดีเยี่ยม`;
+    cls = 'good'; badgeText = t('calc.fcr.badge.good');
+    hintText = isEn
+      ? `Used ${feed.toLocaleString()} kg feed → gained ${gain.toLocaleString()} kg shrimp — FCR ${fcr} is excellent`
+      : `ใช้อาหาร ${feed.toLocaleString()} กก. ได้เนื้อกุ้ง ${gain.toLocaleString()} กก. — FCR ${fcr} ถือว่าดีเยี่ยม`;
   } else if (fcr <= 1.6) {
-    cls = 'warn'; badgeText = '~ ปกติ';
-    hintText = `FCR ${fcr} อยู่ในช่วงมาตรฐาน — ถ้าอยากลดลงให้ตรวจการให้อาหารและคุณภาพน้ำ`;
+    cls = 'warn'; badgeText = t('calc.fcr.badge.warn');
+    hintText = isEn
+      ? `FCR ${fcr} is within standard range — to improve, check feeding method and water quality`
+      : `FCR ${fcr} อยู่ในช่วงมาตรฐาน — ถ้าอยากลดลงให้ตรวจการให้อาหารและคุณภาพน้ำ`;
   } else {
-    cls = 'bad'; badgeText = '! สูงเกินไป';
-    hintText = `FCR ${fcr} สูงกว่ามาตรฐาน — ควรตรวจสุขภาพกุ้ง คุณภาพน้ำ หรือเปลี่ยนวิธีให้อาหาร`;
+    cls = 'bad'; badgeText = t('calc.fcr.badge.bad');
+    hintText = isEn
+      ? `FCR ${fcr} is above standard — check shrimp health, water quality, or feeding method`
+      : `FCR ${fcr} สูงกว่ามาตรฐาน — ควรตรวจสุขภาพกุ้ง คุณภาพน้ำ หรือเปลี่ยนวิธีให้อาหาร`;
   }
   val.className = `result-value ${cls}`;
   box.className = `result-box ${cls}`;
@@ -1072,7 +1050,7 @@ function setDensityMode(m) {
   document.getElementById('density-mode-b').style.display = m === 'b' ? '' : 'none';
   document.getElementById('btn-mode-a').className = 'mode-btn' + (m==='a'?' active':'');
   document.getElementById('btn-mode-b').className = 'mode-btn' + (m==='b'?' active':'');
-  document.getElementById('density-unit-label').textContent = m === 'a' ? 'จำนวน PL ที่ต้องปล่อย (ตัว)' : 'ความหนาแน่น (ตัว/ม²)';
+  document.getElementById('density-unit-label').textContent = t(m === 'a' ? 'calc.dens.result.pl' : 'calc.dens.result.d');
   calcDensity();
 }
 
@@ -1090,7 +1068,7 @@ function calcDensity() {
     if (!area || !density) { reset(); return; }
     const m2 = area * RAI_TO_M2;
     result = Math.round(m2 * density);
-    val.textContent = result.toLocaleString() + ' ตัว';
+    val.textContent = result.toLocaleString() + (getLang()==='en' ? ' pcs' : ' ตัว');
   } else {
     area          = parseFloat(document.getElementById('dens-area-b').value) || 0;
     const plCount = parseFloat(document.getElementById('dens-pl').value)     || 0;
@@ -1098,20 +1076,20 @@ function calcDensity() {
     const m2 = area * RAI_TO_M2;
     density = (plCount / m2).toFixed(1);
     result  = density;
-    val.textContent = density + ' ตัว/ม²';
+    val.textContent = density + (getLang()==='en' ? ' pcs/m²' : ' ตัว/ม²');
   }
 
   const d = densityMode === 'a' ? density : parseFloat(result);
   let cls, badgeText, hintText;
   if (d < 80) {
-    cls = 'good'; badgeText = 'ความหนาแน่นต่ำ';
-    hintText = 'เหมาะกับระบบกึ่งปิด ความเสี่ยงต่ำ คุณภาพน้ำบริหารง่าย';
+    cls = 'good'; badgeText = t('calc.dens.badge.low');
+    hintText = t('calc.dens.hint.low');
   } else if (d <= 150) {
-    cls = 'warn'; badgeText = 'มาตรฐาน';
-    hintText = 'ระบบกึ่ง-อินเทนซีฟ ต้องการเติมออกซิเจนและตรวจน้ำสม่ำเสมอ';
+    cls = 'warn'; badgeText = t('calc.dens.badge.std');
+    hintText = t('calc.dens.hint.std');
   } else {
-    cls = 'bad'; badgeText = 'ความหนาแน่นสูง';
-    hintText = 'อินเทนซีฟ — ต้องการระบบควบคุมคุณภาพน้ำระดับสูง และติดตามสุขภาพกุ้งทุกวัน';
+    cls = 'bad'; badgeText = t('calc.dens.badge.high');
+    hintText = t('calc.dens.hint.high');
   }
   val.className = `result-value ${cls}`;
   box.className = `result-box ${cls}`;
@@ -1138,19 +1116,18 @@ async function fetchLivePrice() {
     if (!data.latest || !Object.keys(data.latest).length) throw new Error();
     livePriceMap = data.latest;
     const sizes  = Object.keys(livePriceMap).map(Number).sort((a,b) => a-b);
-    // Update select options with live prices
     const sel = document.getElementById('be-size-select');
     Array.from(sel.options).forEach(opt => {
       if (!opt.value) return;
       const sz = parseInt(opt.value);
       if (livePriceMap[sz]) {
         const gPerFish = (1000/sz).toFixed(1);
-        opt.textContent = `L${sz} · ${livePriceMap[sz]} บาท/กก.  (${gPerFish} ก./ตัว)`;
+        opt.textContent = `L${sz} · ${livePriceMap[sz]} ฿/kg  (${gPerFish}g)`;
       }
     });
-    document.getElementById('live-price-status').textContent = `ราคาตลาดล่าสุด ${sizes.map(s=>'L'+s+'='+livePriceMap[s]+'฿').join(' · ')}`;
+    document.getElementById('live-price-status').textContent = `${sizes.map(s=>'L'+s+'='+livePriceMap[s]+'฿').join(' · ')}`;
   } catch {
-    document.getElementById('live-price-status').textContent = 'ไม่สามารถโหลดราคาตลาดได้ — กรอกราคาเองได้เลย';
+    document.getElementById('live-price-status').textContent = t('calc.price.error');
   }
 }
 
@@ -1162,10 +1139,14 @@ function onSizeSelectChange() {
   const price = livePriceMap[sz];
   if (price) {
     document.getElementById('be-market').value = price;
-    priceBox.textContent = `ราคาตลาด L${sz} = ${price} บาท/กก.`;
+    priceBox.textContent = getLang()==='en'
+      ? `Market price L${sz} = ${price} THB/kg`
+      : `ราคาตลาด L${sz} = ${price} บาท/กก.`;
   } else {
-    priceBox.textContent = `L${sz} · ไม่มีข้อมูลราคาตลาด — กรอกราคาเองได้เลย`;
-    document.getElementById('be-market').placeholder = `กรอกราคา L${sz}...`;
+    priceBox.textContent = getLang()==='en'
+      ? `L${sz} · No market data — enter price manually`
+      : `L${sz} · ไม่มีข้อมูลราคาตลาด — กรอกราคาเองได้เลย`;
+    document.getElementById('be-market').placeholder = getLang()==='en' ? `Enter L${sz} price...` : `กรอกราคา L${sz}...`;
   }
   calcBreakeven();
 }
@@ -1174,7 +1155,9 @@ function guessSizeFromWeight() {
   const w = getWtG('sr-weight') || getWtG('sr-weight-b');
   if (!w) return;
   const estSize = Math.round(1000 / w);
-  document.getElementById('be-size-hint-auto').textContent = `(น้ำหนัก ${w}ก. ≈ L${estSize})`;
+  document.getElementById('be-size-hint-auto').textContent = getLang()==='en'
+    ? `(${w}g/pc ≈ L${estSize})`
+    : `(น้ำหนัก ${w}ก. ≈ L${estSize})`;
   // auto-select closest option in dropdown
   const sel = document.getElementById('be-size-select');
   let closest = null, minDiff = Infinity;
@@ -1221,11 +1204,13 @@ function calcBreakeven() {
   document.getElementById('be-cost-val').textContent = Number(costPerKg).toLocaleString('th-TH', {minimumFractionDigits:2}) + ' ฿';
 
   if (!market) {
-    val.textContent = costPerKg + ' ฿/กก.';
+    val.textContent = costPerKg + (getLang()==='en' ? ' ฿/kg' : ' ฿/กก.');
     val.className = 'result-value neutral';
     box.className = 'result-box neutral';
     badge.style.display = 'none';
-    hint.textContent = `ต้นทุนรวม ${totalCost.toLocaleString()} บาท — ต้องขายที่ ≥ ${costPerKg} บาท/กก. จึงคุ้มทุน`;
+    hint.textContent = getLang() === 'en'
+      ? `Total cost ${totalCost.toLocaleString()} THB — must sell at ≥ ${costPerKg} THB/kg to break even`
+      : `ต้นทุนรวม ${totalCost.toLocaleString()} บาท — ต้องขายที่ ≥ ${costPerKg} บาท/กก. จึงคุ้มทุน`;
     compare.style.display = 'none';
     totalBox.style.display = 'none';
     return;
@@ -1237,19 +1222,22 @@ function calcBreakeven() {
   document.getElementById('be-market-val').textContent = Number(market).toLocaleString('th-TH', {minimumFractionDigits:2}) + ' ฿';
   compare.style.display = 'grid';
 
+  const isEnBE2 = getLang() === 'en';
   let cls, badgeText, hintText;
   if (profit > 0) {
-    cls = 'good'; badgeText = `+${profit} ฿/กก. กำไร`;
-    hintText = `ต้นทุน ${costPerKg} ฿/กก. · ราคาตลาด ${market} ฿/กก.`;
+    cls = 'good';
+    badgeText = isEnBE2 ? `+${profit} ฿/kg profit` : `+${profit} ฿/กก. กำไร`;
+    hintText  = isEnBE2 ? `Cost ${costPerKg} ฿/kg · Market ${market} ฿/kg` : `ต้นทุน ${costPerKg} ฿/กก. · ราคาตลาด ${market} ฿/กก.`;
   } else if (profit == 0) {
-    cls = 'warn'; badgeText = 'คุ้มทุนพอดี';
-    hintText = 'ราคาตลาดเท่ากับต้นทุนพอดี — ลดต้นทุนหรือรอราคาขึ้น';
+    cls = 'warn'; badgeText = t('calc.be.badge.even');
+    hintText = t('calc.be.hint.even');
   } else {
-    cls = 'bad'; badgeText = `${profit} ฿/กก. ขาดทุน`;
-    hintText = `ต้องการราคา ≥ ${costPerKg} ฿/กก. จึงคุ้มทุน`;
+    cls = 'bad';
+    badgeText = isEnBE2 ? `${profit} ฿/kg loss` : `${profit} ฿/กก. ขาดทุน`;
+    hintText  = isEnBE2 ? `Need price ≥ ${costPerKg} ฿/kg to break even` : `ต้องการราคา ≥ ${costPerKg} ฿/กก. จึงคุ้มทุน`;
   }
 
-  val.textContent = (profit > 0 ? '+' : '') + profit + ' ฿/กก.';
+  val.textContent = (profit > 0 ? '+' : '') + profit + (isEnBE2 ? ' ฿/kg' : ' ฿/กก.');
   val.className = `result-value ${cls}`;
   box.className = `result-box ${cls}`;
   badge.className = `result-badge ${cls}`;
@@ -1261,19 +1249,22 @@ function calcBreakeven() {
   totalBox.style.display = 'block';
   totalBox.className = `be-total-wrap ${cls}`;
   if (profit > 0) {
-    totalVal.textContent = '+' + totalProfit.toLocaleString() + ' บาท';
+    totalVal.textContent = '+' + totalProfit.toLocaleString() + ' ฿';
     totalVal.style.color = 'var(--good)';
-    document.getElementById('be-total-label').textContent = 'กำไรรวมทั้งรุ่น';
+    document.getElementById('be-total-label').textContent = t('calc.be.total.profit');
   } else if (profit == 0) {
-    totalVal.textContent = '0 บาท';
+    totalVal.textContent = '0 ฿';
     totalVal.style.color = 'var(--warn)';
-    document.getElementById('be-total-label').textContent = 'กำไรรวมทั้งรุ่น';
+    document.getElementById('be-total-label').textContent = t('calc.be.total.profit');
   } else {
-    totalVal.textContent = totalProfit.toLocaleString() + ' บาท';
+    totalVal.textContent = totalProfit.toLocaleString() + ' ฿';
     totalVal.style.color = 'var(--bad)';
-    document.getElementById('be-total-label').textContent = 'ขาดทุนรวมทั้งรุ่น';
+    document.getElementById('be-total-label').textContent = t('calc.be.total.loss');
   }
-  totalSub.textContent = `ต้นทุนรวม ${totalCost.toLocaleString()} บาท · ผลผลิต ${harvest.toLocaleString()} กก.`;
+  const isEnBE = getLang() === 'en';
+  totalSub.textContent = isEnBE
+    ? `Total cost ${totalCost.toLocaleString()} THB · Production ${harvest.toLocaleString()} kg`
+    : `ต้นทุนรวม ${totalCost.toLocaleString()} บาท · ผลผลิต ${harvest.toLocaleString()} กก.`;
 }
 
 // ── SURVIVAL RATE ────────────────────────────────────────────────────────────
@@ -1304,7 +1295,9 @@ function calcSurvival() {
     count = Math.round((harvest * 1000) / weight);
     srPct = ((count / pl) * 100).toFixed(1);
     const size = Math.round(1000 / weight);
-    sizeTag.textContent = `L${size} · ${weight.toFixed(1)}ก./ตัว`;
+    sizeTag.textContent = getLang()==='en'
+      ? `L${size} · ${weight.toFixed(1)}g/pc`
+      : `L${size} · ${weight.toFixed(1)}ก./ตัว`;
     sizeTag.style.display = 'inline';
   } else {
     const pl   = parseFloat(document.getElementById('sr-pl-b').value) || 0;
@@ -1316,20 +1309,29 @@ function calcSurvival() {
     count = Math.round((biomass * 1000) / weight);
     srPct = ((count / pl) * 100).toFixed(1);
     const size = Math.round(1000 / weight);
-    sizeTag.textContent = `L${size} · Biomass ~${biomass.toFixed(0)}กก.`;
+    sizeTag.textContent = getLang()==='en'
+      ? `L${size} · Biomass ~${biomass.toFixed(0)} kg`
+      : `L${size} · Biomass ~${biomass.toFixed(0)}กก.`;
     sizeTag.style.display = 'inline';
   }
 
+  const isEnSR = getLang() === 'en';
   let cls, badgeText, hintText;
   if (srPct >= 70) {
-    cls = 'good'; badgeText = '✓ ดีมาก';
-    hintText = `กุ้งรอด ~${count.toLocaleString()} ตัว — อัตรารอด ${srPct}% ดีเยี่ยม`;
+    cls = 'good'; badgeText = t('calc.sr.badge.good');
+    hintText = isEnSR
+      ? `~${count.toLocaleString()} shrimp survived — SR ${srPct}% is excellent`
+      : `กุ้งรอด ~${count.toLocaleString()} ตัว — อัตรารอด ${srPct}% ดีเยี่ยม`;
   } else if (srPct >= 50) {
-    cls = 'warn'; badgeText = '~ ปานกลาง';
-    hintText = `กุ้งรอด ~${count.toLocaleString()} ตัว — อัตรารอด ${srPct}% อยู่ในช่วงมาตรฐาน`;
+    cls = 'warn'; badgeText = t('calc.sr.badge.warn');
+    hintText = isEnSR
+      ? `~${count.toLocaleString()} shrimp survived — SR ${srPct}% is within normal range`
+      : `กุ้งรอด ~${count.toLocaleString()} ตัว — อัตรารอด ${srPct}% อยู่ในช่วงมาตรฐาน`;
   } else {
-    cls = 'bad'; badgeText = '! ต่ำ';
-    hintText = `กุ้งรอด ~${count.toLocaleString()} ตัว — อัตรารอด ${srPct}% ต่ำ ควรตรวจสอบโรค/น้ำ`;
+    cls = 'bad'; badgeText = t('calc.sr.badge.bad');
+    hintText = isEnSR
+      ? `~${count.toLocaleString()} shrimp survived — SR ${srPct}% is low; check disease and water quality`
+      : `กุ้งรอด ~${count.toLocaleString()} ตัว — อัตรารอด ${srPct}% ต่ำ ควรตรวจสอบโรค/น้ำ`;
   }
   val.textContent = srPct + '%';
   val.className = `result-value ${cls}`;
@@ -1354,7 +1356,7 @@ function setFeedMode(m) {
     document.getElementById(`fr-mode-${x}`).style.display = m === x ? '' : 'none';
     document.getElementById(`btn-fr-${x}`).className = 'mode-btn' + (m===x?' active':'');
   });
-  document.getElementById('fr-unit').textContent = m === 'b' ? '%BW จริงที่กำลังใช้ (%/วัน)' : 'อาหารที่ควรให้ต่อวัน (กก.)';
+  document.getElementById('fr-unit').textContent = t(m === 'b' ? 'calc.fr.result.bw' : 'calc.fr.result.feed');
   calcFeedRate();
 }
 
@@ -1367,12 +1369,13 @@ function calcFeedRate() {
   let result, bw, biomass, hintText, cls, badgeText;
 
   function badgeFromBw(b) {
-    if (b > 15) return { cls:'bad',  text:'! %BW สูงมาก' };
-    if (b > 8)  return { cls:'warn', text:'ช่วงกุ้งเล็ก' };
-    if (b > 4)  return { cls:'warn', text:'ช่วงกุ้งกลาง' };
-    return          { cls:'good', text:'ช่วงกุ้งใหญ่' };
+    if (b > 15) return { cls:'bad',  text: t('calc.fr.badge.high') };
+    if (b > 8)  return { cls:'warn', text: t('calc.fr.badge.small') };
+    if (b > 4)  return { cls:'warn', text: t('calc.fr.badge.mid') };
+    return          { cls:'good', text: t('calc.fr.badge.large') };
   }
 
+  const isEnFR = getLang() === 'en';
   if (feedMode === 'a') {
     // คำนวณจาก PL + SR + น้ำหนักเฉลี่ย + %BW
     const pl  = parseFloat(document.getElementById('fr-pl').value)   || 0;
@@ -1385,8 +1388,10 @@ function calcFeedRate() {
     const perMeal = (result / 4).toFixed(2);
     const bd = badgeFromBw(bw);
     cls = bd.cls; badgeText = bd.text;
-    hintText = `Biomass ~${biomass.toFixed(0)} กก. (${pl.toLocaleString()}ตัว × SR${sr}% × ${avg}ก.) × %BW${bw}% = อาหาร ${result} กก./วัน (มื้อละ ~${perMeal} กก. ถ้า 4 มื้อ)`;
-    val.textContent = result + ' กก./วัน';
+    hintText = isEnFR
+      ? `Biomass ~${biomass.toFixed(0)} kg (${pl.toLocaleString()} pcs × SR ${sr}% × ${avg}g) × %BW ${bw}% = ${result} kg feed/day (~${perMeal} kg/meal × 4)`
+      : `Biomass ~${biomass.toFixed(0)} กก. (${pl.toLocaleString()}ตัว × SR${sr}% × ${avg}ก.) × %BW${bw}% = อาหาร ${result} กก./วัน (มื้อละ ~${perMeal} กก. ถ้า 4 มื้อ)`;
+    val.textContent = result + (isEnFR ? ' kg/day' : ' กก./วัน');
 
   } else if (feedMode === 'c') {
     // คำนวณจาก Biomass ที่รู้แล้ว
@@ -1397,8 +1402,10 @@ function calcFeedRate() {
     const perMeal = (result / 4).toFixed(2);
     const bd = badgeFromBw(bw);
     cls = bd.cls; badgeText = bd.text;
-    hintText = `Biomass ${biomass.toLocaleString()} กก. × %BW ${bw}% = อาหาร ${result} กก./วัน (มื้อละ ~${perMeal} กก. ถ้า 4 มื้อ)`;
-    val.textContent = result + ' กก./วัน';
+    hintText = isEnFR
+      ? `Biomass ${biomass.toLocaleString()} kg × %BW ${bw}% = ${result} kg feed/day (~${perMeal} kg/meal × 4)`
+      : `Biomass ${biomass.toLocaleString()} กก. × %BW ${bw}% = อาหาร ${result} กก./วัน (มื้อละ ~${perMeal} กก. ถ้า 4 มื้อ)`;
+    val.textContent = result + (isEnFR ? ' kg/day' : ' กก./วัน');
 
   } else {
     // Mode B: ย้อนหา %BW จากอาหารจริง
@@ -1408,8 +1415,10 @@ function calcFeedRate() {
     bw = ((actual / biomass) * 100).toFixed(2);
     const bd = badgeFromBw(parseFloat(bw));
     cls = bd.cls; badgeText = bd.text;
-    hintText = `อาหาร ${actual} กก. ÷ Biomass ${biomass.toLocaleString()} กก. = %BW ${bw}%/วัน`;
-    val.textContent = bw + '%/วัน';
+    hintText = isEnFR
+      ? `Feed ${actual} kg ÷ Biomass ${biomass.toLocaleString()} kg = %BW ${bw}%/day`
+      : `อาหาร ${actual} กก. ÷ Biomass ${biomass.toLocaleString()} กก. = %BW ${bw}%/วัน`;
+    val.textContent = bw + (isEnFR ? '%/day' : '%/วัน');
   }
 
   val.className = `result-value ${cls}`;
@@ -1440,10 +1449,12 @@ function calcBiomass() {
   }
   const survived = pl * (sr / 100);
   const biomass  = (survived * avg / 1000).toFixed(0);
-  val.textContent = Number(biomass).toLocaleString() + ' กก.';
+  val.textContent = Number(biomass).toLocaleString() + (getLang()==='en' ? ' kg' : ' กก.');
   val.className = 'result-value neutral';
   box.className = 'result-box neutral';
-  hint.textContent = `กุ้งรอด ~${Math.round(survived).toLocaleString()} ตัว × ${avg} กรัม/ตัว = Biomass ${Number(biomass).toLocaleString()} กก.`;
+  hint.textContent = getLang() === 'en'
+    ? `~${Math.round(survived).toLocaleString()} survivors × ${avg}g = Biomass ${Number(biomass).toLocaleString()} kg`
+    : `กุ้งรอด ~${Math.round(survived).toLocaleString()} ตัว × ${avg} กรัม/ตัว = Biomass ${Number(biomass).toLocaleString()} กก.`;
 }
 
 // ── HARVEST PLANNING ────────────────────────────────────────────────────────
@@ -1464,14 +1475,17 @@ function calcHarvest() {
     box.className = 'result-box neutral'; hint.textContent = ''; table.style.display = 'none'; return;
   }
   if (target <= current) {
-    val.textContent = 'ถึงขนาดแล้ว'; val.className = 'result-value good';
-    box.className = 'result-box good'; hint.textContent = 'กุ้งถึงขนาดเป้าหมายแล้ว พร้อมจับได้ทันที'; table.style.display = 'none'; return;
+    val.textContent = t('calc.hp.reached'); val.className = 'result-value good';
+    box.className = 'result-box good'; hint.textContent = t('calc.hp.reached.hint'); table.style.display = 'none'; return;
   }
   const daysNeeded = Math.ceil((target - current) / growth);
-  val.textContent = daysNeeded + ' วัน';
+  const isEnHP = getLang() === 'en';
+  val.textContent = daysNeeded + (isEnHP ? ' days' : ' วัน');
   val.className = 'result-value neutral';
   box.className = 'result-box neutral';
-  hint.textContent = `จาก ${current} กรัม → ${target} กรัม ที่ growth rate ${growth} กรัม/วัน`;
+  hint.textContent = isEnHP
+    ? `From ${current}g → ${target}g at growth rate ${growth}g/day`
+    : `จาก ${current} กรัม → ${target} กรัม ที่ growth rate ${growth} กรัม/วัน`;
 
   // build milestone table
   tbody.innerHTML = '';
@@ -1479,7 +1493,7 @@ function calcHarvest() {
     const w = (current + growth * d).toFixed(1);
     const size = w > 0 ? Math.round(1000 / w) : '—';
     const isTarget = d >= daysNeeded;
-    const note = isTarget && (d - daysNeeded) <= 7 ? '🎯 ใกล้เป้า' : (isTarget ? '✓ เกินเป้า' : '');
+    const note = isTarget && (d - daysNeeded) <= 7 ? t('calc.hp.note.near') : (isTarget ? t('calc.hp.note.past') : '');
     const bg = isTarget ? '#f0fdf4' : '';
     tbody.innerHTML += `<tr style="border-top:1px solid #f0e8ed;background:${bg}">
       <td style="padding:8px 12px;font-weight:600">${d}</td>

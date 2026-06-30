@@ -48,161 +48,205 @@
 .symptom-card .sc-desc{font-size:12px;color:#666;line-height:1.5;}
 .breadcrumb{font-size:12px;color:#999;margin-bottom:28px;}
 .breadcrumb a{color:#8B3060;text-decoration:none;}
+.breadcrumb a:hover{text-decoration:underline;}
 .cta-box{background:linear-gradient(135deg,#F5EBF0,#EDD5E5);border:1.5px solid #D4A0C0;border-radius:18px;padding:24px 28px;margin-top:40px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
 .cta-box .cta-text h3{font-size:16px;font-weight:700;color:#4D1232;margin-bottom:6px;}
 .cta-box .cta-text p{font-size:13px;color:#6B3050;margin:0;line-height:1.5;}
 .cta-box a{display:inline-block;background:#8B3060;color:white;border-radius:22px;padding:10px 22px;font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap;}
+.cta-box a:hover{background:#6B2048;}
+/* Bilingual show/hide */
+html[lang="en"] .th-only { display:none }
+html[lang="th"] .en-only { display:none }
 </style>
 </head>
 <body>
-<nav>
-  <a href="/" class="nav-logo">
-    <div class="nav-logo-icon"><img src="/logo.jpg" alt="ONE logo"></div>
-    <div class="nav-logo-text"><strong>ONE AQUACULTURE</strong><span>บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด</span></div>
-  </a>
-  <ul class="nav-links">
-    <li><a href="/products">ผลิตภัณฑ์</a></li>
-    <li><a href="/shrimp-price">📈 ราคากุ้ง</a></li>
-    <li><a href="/farm-calculator">🧮 คิดเลขฟาร์ม</a></li>
-    <li><a href="/ai-diagnosis">🔬 ShrimpDx</a></li>
-    <li><a href="/news">ข่าวสาร</a></li>
-    <li><a href="/guides" class="active">📚 คู่มือ</a></li>
-    <li><a href="/about">เกี่ยวกับเรา</a></li>
-    <li><a href="/contact">ติดต่อ</a></li>
-  </ul>
-  <div class="lang-switcher">
-    <button class="lang-btn" data-lang="th" onclick="setLang('th')">TH</button>
-    <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
-  </div>
-  <a href="/ai-diagnosis" class="nav-cta">ปรึกษาผู้เชี่ยวชาญ</a>
-  <button class="nav-hamburger" aria-label="menu"><span></span><span></span><span></span></button>
-</nav>
 
 <div class="article-hero">
   <div class="article-hero-inner">
     <div class="hero-tag">📚 คู่มือโรค · Disease Guide</div>
-    <h1>โรค WSSV — ไวรัสจุดขาว<br>(White Spot Syndrome Virus)</h1>
+    <h1 data-i18n-html="wssv.hero.h1">โรค WSSV — ไวรัสจุดขาว<br>(White Spot Syndrome Virus)</h1>
     <div class="meta">
-      <span>🦠 ไวรัส — ไม่มียารักษา</span>
-      <span>⏱ ตายใน 3–10 วัน</span>
-      <span>🔴 ระบาดรวดเร็วมาก</span>
+      <span data-i18n="wssv.meta.sev">🦠 ไวรัส — ไม่มียารักษา</span>
+      <span data-i18n="wssv.meta.time">⏱ ตายใน 3–10 วัน</span>
+      <span data-i18n="wssv.meta.rate">🔴 ระบาดรวดเร็วมาก</span>
     </div>
   </div>
 </div>
 
 <div class="article-wrap">
   <div class="breadcrumb">
-    <a href="/">หน้าหลัก</a> › <a href="/guides">คู่มือ</a> › โรค WSSV
+    <a href="/" data-i18n="art.breadcrumb.home">หน้าหลัก</a> › <a href="/guides" data-i18n="art.breadcrumb.guides">คู่มือ</a> › <span data-i18n="wssv.breadcrumb">โรค WSSV</span>
   </div>
 
   <div class="article-body">
 
-    <div class="info-box danger">
-      <div class="box-title">⚠️ ความรุนแรง: รุนแรงที่สุด — ไม่มียารักษา</div>
-      <p>WSSV คือไวรัสที่รุนแรงที่สุดในอุตสาหกรรมกุ้ง อัตราตายสูงถึง 100% ภายใน 3–10 วัน ติดต่อได้ทั้งผ่านน้ำ พาหะ และสัตว์น้ำอื่น <strong>ป้องกันเท่านั้น ไม่มีทางรักษา</strong></p>
-    </div>
+    <!-- ══ THAI CONTENT ══ -->
+    <div class="th-only">
 
-    <h2>WSSV คืออะไร?</h2>
-    <p>WSSV (White Spot Syndrome Virus) คือไวรัสกลุ่ม <em>Nimaviridae</em> ที่ทำให้เกิดจุดขาวใต้เปลือกกุ้ง พบครั้งแรกในไต้หวันปี 2535 และระบาดไปทั่วเอเชียอย่างรวดเร็ว ปัจจุบันพบในทุกประเทศที่เลี้ยงกุ้ง WSSV โจมตีเซลล์ทุกอวัยวะและระบบภูมิคุ้มกัน ทำให้กุ้งตายเร็วมาก</p>
-    <p>ในไทย WSSV เป็นโรคที่กฎหมายกำหนดให้ต้องรายงาน (Notifiable Disease) และเป็นสาเหตุหลักของการสูญเสียผลผลิตกุ้งมาหลายทศวรรษ</p>
+      <div class="info-box danger">
+        <div class="box-title">⚠️ ความรุนแรง: รุนแรงที่สุด — ไม่มียารักษา</div>
+        <p>WSSV คือไวรัสที่รุนแรงที่สุดในอุตสาหกรรมกุ้ง อัตราตายสูงถึง 100% ภายใน 3–10 วัน ติดต่อได้ทั้งผ่านน้ำ พาหะ และสัตว์น้ำอื่น <strong>ป้องกันเท่านั้น ไม่มีทางรักษา</strong></p>
+      </div>
 
-    <h2>อาการที่สังเกตได้</h2>
-    <div class="symptom-grid">
-      <div class="symptom-card">
-        <div class="sc-icon">⚪</div>
-        <div class="sc-title">จุดขาวใต้เปลือก</div>
-        <div class="sc-desc">จุดกลมสีขาวขนาด 0.5–2 มม. ใต้เปลือกหัว หาง และลำตัว — อาการเด่นที่สุด</div>
-      </div>
-      <div class="symptom-card">
-        <div class="sc-icon">🔴</div>
-        <div class="sc-title">ตัวแดงหรือชมพู</div>
-        <div class="sc-desc">ร่างกายเปลี่ยนเป็นสีแดงหรือชมพูผิดปกติ เนื่องจาก chromophore cells หดตัว</div>
-      </div>
-      <div class="symptom-card">
-        <div class="sc-icon">🌊</div>
-        <div class="sc-title">ลอยหัวขึ้นผิวน้ำ</div>
-        <div class="sc-desc">กุ้งว่ายน้ำเชื่องช้า ลอยขึ้นมาผิวน้ำหรือขอบบ่อ ก่อนตายภายไม่กี่ชั่วโมง</div>
-      </div>
-      <div class="symptom-card">
-        <div class="sc-icon">📉</div>
-        <div class="sc-title">ตายพุ่งสูงเร็ว</div>
-        <div class="sc-desc">จากปกติสู่ตาย 100% ภายใน 3–7 วัน อัตราตายเพิ่มเป็นทวีคูณทุกวัน</div>
-      </div>
-    </div>
+      <h2>WSSV คืออะไร?</h2>
+      <p>WSSV (White Spot Syndrome Virus) คือไวรัสกลุ่ม <em>Nimaviridae</em> ที่ทำให้เกิดจุดขาวใต้เปลือกกุ้ง พบครั้งแรกในไต้หวันปี 2535 และระบาดไปทั่วเอเชียอย่างรวดเร็ว ปัจจุบันพบในทุกประเทศที่เลี้ยงกุ้ง WSSV โจมตีเซลล์ทุกอวัยวะและระบบภูมิคุ้มกัน ทำให้กุ้งตายเร็วมาก</p>
+      <p>ในไทย WSSV เป็นโรคที่กฎหมายกำหนดให้ต้องรายงาน (Notifiable Disease) และเป็นสาเหตุหลักของการสูญเสียผลผลิตกุ้งมาหลายทศวรรษ</p>
 
-    <div class="info-box info">
-      <div class="box-title">🔬 จุดแยกจากโรคอื่น</div>
+      <h2>อาการที่สังเกตได้</h2>
+      <div class="symptom-grid">
+        <div class="symptom-card"><div class="sc-icon">⚪</div><div class="sc-title">จุดขาวใต้เปลือก</div><div class="sc-desc">จุดกลมสีขาวขนาด 0.5–2 มม. ใต้เปลือกหัว หาง และลำตัว — อาการเด่นที่สุด</div></div>
+        <div class="symptom-card"><div class="sc-icon">🔴</div><div class="sc-title">ตัวแดงหรือชมพู</div><div class="sc-desc">ร่างกายเปลี่ยนเป็นสีแดงหรือชมพูผิดปกติ เนื่องจาก chromophore cells หดตัว</div></div>
+        <div class="symptom-card"><div class="sc-icon">🌊</div><div class="sc-title">ลอยหัวขึ้นผิวน้ำ</div><div class="sc-desc">กุ้งว่ายน้ำเชื่องช้า ลอยขึ้นมาผิวน้ำหรือขอบบ่อ ก่อนตายภายไม่กี่ชั่วโมง</div></div>
+        <div class="symptom-card"><div class="sc-icon">📉</div><div class="sc-title">ตายพุ่งสูงเร็ว</div><div class="sc-desc">จากปกติสู่ตาย 100% ภายใน 3–7 วัน อัตราตายเพิ่มเป็นทวีคูณทุกวัน</div></div>
+      </div>
+
+      <div class="info-box info">
+        <div class="box-title">🔬 จุดแยกจากโรคอื่น</div>
+        <ul>
+          <li><strong>ต่างจาก EMS:</strong> WSSV มีจุดขาวใต้เปลือกชัดเจน ตายเร็วกว่ามาก (3–7 วัน vs 20–30 วัน) และเกิดได้ทุก DOC</li>
+          <li><strong>ต่างจาก YHD:</strong> WSSV มีจุดขาว YHD มีสีเหลืองที่หัว — ตรวจยืนยันด้วย PCR</li>
+          <li><strong>DOC:</strong> WSSV เกิดได้ทุกอายุ แต่มักรุนแรงใน DOC 40–100</li>
+        </ul>
+      </div>
+
+      <h2>การแพร่ระบาด — ต้องรู้เพื่อป้องกัน</h2>
+      <p>WSSV ติดต่อได้หลายทาง ทำให้ควบคุมยาก:</p>
       <ul>
-        <li><strong>ต่างจาก EMS:</strong> WSSV มีจุดขาวใต้เปลือกชัดเจน ตายเร็วกว่ามาก (3–7 วัน vs 20–30 วัน) และเกิดได้ทุก DOC</li>
-        <li><strong>ต่างจาก YHD:</strong> WSSV มีจุดขาว YHD มีสีเหลืองที่หัว — ตรวจยืนยันด้วย PCR</li>
-        <li><strong>DOC:</strong> WSSV เกิดได้ทุกอายุ แต่มักรุนแรงใน DOC 40–100</li>
+        <li><strong>ผ่านน้ำ:</strong> ไวรัสอยู่ในน้ำได้นาน 30+ วัน น้ำจากฟาร์มที่มีโรคระบาดไปสู่ฟาร์มข้างเคียง</li>
+        <li><strong>ผ่านพาหะ:</strong> ปู กั้ง กุ้งน้ำจืด นก และแมลงสามารถเป็นพาหะโดยไม่แสดงอาการ</li>
+        <li><strong>ผ่านอาหารสด:</strong> อาหารสัตว์น้ำที่ไม่ผ่านการฆ่าเชื้อ เช่น ปลาหมัก กุ้งสด</li>
+        <li><strong>จากลูกกุ้ง:</strong> ลูกกุ้งพาหะที่ตรวจไม่พบ (subclinical carrier)</li>
+        <li><strong>อุปกรณ์:</strong> ตาข่าย ถังน้ำ รองเท้า ที่ไม่ผ่านการฆ่าเชื้อ</li>
       </ul>
-    </div>
 
-    <h2>การแพร่ระบาด — ต้องรู้เพื่อป้องกัน</h2>
-    <p>WSSV ติดต่อได้หลายทาง ทำให้ควบคุมยาก:</p>
-    <ul>
-      <li><strong>ผ่านน้ำ:</strong> ไวรัสอยู่ในน้ำได้นาน 30+ วัน น้ำจากฟาร์มที่มีโรคระบาดไปสู่ฟาร์มข้างเคียง</li>
-      <li><strong>ผ่านพาหะ:</strong> ปู กั้ง กุ้งน้ำจืด นก และแมลงสามารถเป็นพาหะโดยไม่แสดงอาการ</li>
-      <li><strong>ผ่านอาหารสด:</strong> อาหารสัตว์น้ำที่ไม่ผ่านการฆ่าเชื้อ เช่น ปลาหมัก กุ้งสด</li>
-      <li><strong>จากลูกกุ้ง:</strong> ลูกกุ้งพาหะที่ตรวจไม่พบ (subclinical carrier)</li>
-      <li><strong>อุปกรณ์:</strong> ตาข่าย ถังน้ำ รองเท้า ที่ไม่ผ่านการฆ่าเชื้อ</li>
-    </ul>
+      <h2>วิธีป้องกัน WSSV</h2>
+      <h3>1. ระบบ Biosecurity เข้มงวด</h3>
+      <ul>
+        <li>คลุมบ่อด้วยตาข่ายกันนกทุกบ่อ — นกเป็นพาหะหลัก</li>
+        <li>ฆ่าเชื้ออุปกรณ์ทุกชิ้นก่อนนำเข้าฟาร์ม ด้วยคลอรีน 200 ppm หรือ iodine</li>
+        <li>ห้ามนำกุ้งสด ปลา ปู กั้งดิบๆ เข้าฟาร์ม</li>
+        <li>ควบคุมคนเข้า-ออก ล้างมือและเปลี่ยนรองเท้าก่อนเข้าบ่อ</li>
+      </ul>
+      <h3>2. คุณภาพลูกกุ้งและน้ำ</h3>
+      <ul>
+        <li>ซื้อลูกกุ้งที่ตรวจ PCR ยืนยันปลอด WSSV จากโรงฟักที่เชื่อถือได้</li>
+        <li>กรองน้ำที่นำเข้าบ่อผ่านผ้ากรองขนาด 0.2–1 micron และฆ่าเชื้อด้วย UV หรือคลอรีน</li>
+        <li>ไม่ใช้น้ำจากแหล่งที่มีรายงานการระบาดในพื้นที่</li>
+      </ul>
+      <h3>3. ติดตามสุขภาพกุ้งสม่ำเสมอ</h3>
+      <ul>
+        <li>ตรวจกุ้งสุ่มด้วย PCR ทุก 2–4 สัปดาห์ในฟาร์มที่มีความเสี่ยงสูง</li>
+        <li>สังเกตพฤติกรรมกุ้งทุกวัน — กุ้งที่เครียดหรือป่วยจะว่ายน้ำผิดปกติ</li>
+      </ul>
 
-    <h2>วิธีป้องกัน WSSV</h2>
+      <h2>เมื่อพบ WSSV ในบ่อ</h2>
+      <div class="info-box warn">
+        <div class="box-title">⚡ ไม่มีการรักษา — เน้นจำกัดการแพร่กระจาย</div>
+        <ol>
+          <li><strong>แยกบ่อที่พบโรคทันที</strong> หยุดการถ่ายเทน้ำระหว่างบ่อ</li>
+          <li><strong>จับกุ้งฉุกเฉิน</strong> ถ้าน้ำหนักถึงเกณฑ์ขาย แม้จะเล็กกว่ามาตรฐาน ยังดีกว่าสูญเสียทั้งหมด</li>
+          <li><strong>ถ้าไม่คุ้มจับ</strong> ปิดบ่อด้วยคลอรีน 30–50 ppm เพื่อฆ่าไวรัสก่อนระบายน้ำออก</li>
+          <li><strong>ฆ่าเชื้อบ่อ อุปกรณ์ ทางระบายน้ำ</strong> ทั้งหมดก่อนเริ่มรุ่นใหม่</li>
+          <li><strong>รายงานหน่วยงานปศุสัตว์</strong> ตามกฎหมาย (โรค WSSV เป็น Notifiable Disease)</li>
+          <li><strong>ไม่ระบายน้ำจากบ่อที่ติดโรค</strong> ออกสู่แหล่งน้ำสาธารณะโดยตรง</li>
+        </ol>
+      </div>
 
-    <h3>1. ระบบ Biosecurity เข้มงวด</h3>
-    <ul>
-      <li>คลุมบ่อด้วยตาข่ายกันนกทุกบ่อ — นกเป็นพาหะหลัก</li>
-      <li>ฆ่าเชื้ออุปกรณ์ทุกชิ้นก่อนนำเข้าฟาร์ม ด้วยคลอรีน 200 ppm หรือ iodine</li>
-      <li>ห้ามนำกุ้งสด ปลา ปู กั้งดิบๆ เข้าฟาร์ม</li>
-      <li>ควบคุมคนเข้า-ออก ล้างมือและเปลี่ยนรองเท้าก่อนเข้าบ่อ</li>
-    </ul>
+      <h2>ช่วงฤดูกาลเสี่ยง</h2>
+      <p>WSSV ระบาดหนักในช่วงอากาศเย็น อุณหภูมิน้ำต่ำกว่า 25°C เนื่องจากระบบภูมิคุ้มกันของกุ้งทำงานได้น้อยลง ในภาคใต้ของไทยมักพบการระบาดช่วงปลายปี (ตุลาคม–กุมภาพันธ์) และช่วงมรสุม</p>
 
-    <h3>2. คุณภาพลูกกุ้งและน้ำ</h3>
-    <ul>
-      <li>ซื้อลูกกุ้งที่ตรวจ PCR ยืนยันปลอด WSSV จากโรงฟักที่เชื่อถือได้</li>
-      <li>กรองน้ำที่นำเข้าบ่อผ่านผ้ากรองขนาด 0.2–1 micron และฆ่าเชื้อด้วย UV หรือคลอรีน</li>
-      <li>ไม่ใช้น้ำจากแหล่งที่มีรายงานการระบาดในพื้นที่</li>
-    </ul>
+    </div><!-- /.th-only -->
 
-    <h3>3. ติดตามสุขภาพกุ้งสม่ำเสมอ</h3>
-    <ul>
-      <li>ตรวจกุ้งสุ่มด้วย PCR ทุก 2–4 สัปดาห์ในฟาร์มที่มีความเสี่ยงสูง</li>
-      <li>สังเกตพฤติกรรมกุ้งทุกวัน — กุ้งที่เครียดหรือป่วยจะว่ายน้ำผิดปกติ</li>
-    </ul>
+    <!-- ══ ENGLISH CONTENT ══ -->
+    <div class="en-only">
 
-    <h2>เมื่อพบ WSSV ในบ่อ</h2>
-    <div class="info-box warn">
-      <div class="box-title">⚡ ไม่มีการรักษา — เน้นจำกัดการแพร่กระจาย</div>
-      <ol>
-        <li><strong>แยกบ่อที่พบโรคทันที</strong> หยุดการถ่ายเทน้ำระหว่างบ่อ</li>
-        <li><strong>จับกุ้งฉุกเฉิน</strong> ถ้าน้ำหนักถึงเกณฑ์ขาย แม้จะเล็กกว่ามาตรฐาน ยังดีกว่าสูญเสียทั้งหมด</li>
-        <li><strong>ถ้าไม่คุ้มจับ</strong> ปิดบ่อด้วยคลอรีน 30–50 ppm เพื่อฆ่าไวรัสก่อนระบายน้ำออก</li>
-        <li><strong>ฆ่าเชื้อบ่อ อุปกรณ์ ทางระบายน้ำ</strong> ทั้งหมดก่อนเริ่มรุ่นใหม่</li>
-        <li><strong>รายงานหน่วยงานปศุสัตว์</strong> ตามกฎหมาย (โรค WSSV เป็น Notifiable Disease)</li>
-        <li><strong>ไม่ระบายน้ำจากบ่อที่ติดโรค</strong> ออกสู่แหล่งน้ำสาธารณะโดยตรง</li>
-      </ol>
-    </div>
+      <div class="info-box danger">
+        <div class="box-title">⚠️ Severity: Highest — No Cure Available</div>
+        <p>WSSV is the most devastating virus in the shrimp farming industry. Mortality rates can reach 100% within 3–10 days. It spreads through water, vectors, and other aquatic animals. <strong>Prevention only — there is no treatment.</strong></p>
+      </div>
 
-    <h2>ช่วงฤดูกาลเสี่ยง</h2>
-    <p>WSSV ระบาดหนักในช่วงอากาศเย็น อุณหภูมิน้ำต่ำกว่า 25°C เนื่องจากระบบภูมิคุ้มกันของกุ้งทำงานได้น้อยลง ในภาคใต้ของไทยมักพบการระบาดช่วงปลายปี (ตุลาคม–กุมภาพันธ์) และช่วงมรสุม</p>
+      <h2>What is WSSV?</h2>
+      <p>WSSV (White Spot Syndrome Virus) is a virus of the family <em>Nimaviridae</em> that causes white spots under the shrimp's shell. First identified in Taiwan in 1992, it spread rapidly throughout Asia and is now present in every shrimp-farming country. WSSV attacks cells in all organs and impairs the immune system, leading to very rapid mortality.</p>
+      <p>In Thailand, WSSV is a legally notifiable disease and has been a leading cause of crop losses for decades.</p>
+
+      <h2>Symptoms</h2>
+      <div class="symptom-grid">
+        <div class="symptom-card"><div class="sc-icon">⚪</div><div class="sc-title">White Spots Under Shell</div><div class="sc-desc">Round white spots 0.5–2 mm in diameter under the carapace, tail, and body — the most distinctive sign</div></div>
+        <div class="symptom-card"><div class="sc-icon">🔴</div><div class="sc-title">Reddish or Pink Body</div><div class="sc-desc">Abnormal reddish or pink discoloration due to contraction of chromophore cells</div></div>
+        <div class="symptom-card"><div class="sc-icon">🌊</div><div class="sc-title">Surfacing / Pond Edge Crawling</div><div class="sc-desc">Shrimp swim sluggishly, surface, or congregate at pond edges — death follows within hours</div></div>
+        <div class="symptom-card"><div class="sc-icon">📉</div><div class="sc-title">Explosive Mortality</div><div class="sc-desc">From normal to 100% dead within 3–7 days; mortality doubles daily once outbreak starts</div></div>
+      </div>
+
+      <div class="info-box info">
+        <div class="box-title">🔬 Differential Diagnosis</div>
+        <ul>
+          <li><strong>vs. EMS:</strong> WSSV has visible white spots under the shell; mortality is much faster (3–7 days vs. 20–30 days for EMS); WSSV can occur at any DOC</li>
+          <li><strong>vs. YHD:</strong> WSSV produces white spots; YHD causes yellow head — confirm with PCR</li>
+          <li><strong>DOC:</strong> WSSV can occur at any age, but typically most severe between DOC 40–100</li>
+        </ul>
+      </div>
+
+      <h2>Transmission Routes — Know These to Prevent</h2>
+      <p>WSSV spreads through multiple pathways, making it very difficult to control:</p>
+      <ul>
+        <li><strong>Through water:</strong> Virus survives in water for 30+ days; water from infected farms spreads to neighboring farms</li>
+        <li><strong>Through vectors:</strong> Crabs, crayfish, freshwater shrimp, birds, and insects can be asymptomatic carriers</li>
+        <li><strong>Through raw feed:</strong> Uncooked aquatic feed such as trash fish and raw shrimp</li>
+        <li><strong>From PLs:</strong> Subclinical carrier PLs that test negative at low viral loads</li>
+        <li><strong>Equipment:</strong> Nets, buckets, and boots not properly disinfected between ponds</li>
+      </ul>
+
+      <h2>WSSV Prevention</h2>
+      <h3>1. Strict Biosecurity</h3>
+      <ul>
+        <li>Cover all ponds with bird-exclusion netting — birds are the primary vector</li>
+        <li>Disinfect all equipment entering the farm with 200 ppm chlorine or iodine solution</li>
+        <li>Never bring raw shrimp, fish, crabs, or crayfish into the farm</li>
+        <li>Control human access; require handwashing and boot change before entering pond areas</li>
+      </ul>
+      <h3>2. PL Quality and Water Quality</h3>
+      <ul>
+        <li>Source PLs only from hatcheries with PCR-confirmed WSSV-free certification</li>
+        <li>Filter all intake water through 0.2–1 micron mesh and disinfect with UV or chlorine</li>
+        <li>Do not use water from sources with reported outbreaks in the area</li>
+      </ul>
+      <h3>3. Regular Health Monitoring</h3>
+      <ul>
+        <li>PCR-test random shrimp samples every 2–4 weeks in high-risk farms</li>
+        <li>Observe shrimp behavior daily — sick or stressed shrimp will show abnormal swimming</li>
+      </ul>
+
+      <h2>When WSSV is Detected in Your Pond</h2>
+      <div class="info-box warn">
+        <div class="box-title">⚡ No Treatment — Focus on Containment</div>
+        <ol>
+          <li><strong>Isolate the affected pond immediately</strong> — stop all water exchange between ponds</li>
+          <li><strong>Emergency harvest</strong> if shrimp have reached marketable size — even undersized is better than total loss</li>
+          <li><strong>If not worth harvesting</strong>, treat pond water with chlorine 30–50 ppm to inactivate virus before draining</li>
+          <li><strong>Disinfect the pond, equipment, and drainage channels</strong> thoroughly before starting the next crop</li>
+          <li><strong>Report to livestock authorities</strong> as required by law (WSSV is a Notifiable Disease)</li>
+          <li><strong>Never discharge water from an infected pond</strong> directly into public waterways</li>
+        </ol>
+      </div>
+
+      <h2>High-Risk Season</h2>
+      <p>WSSV outbreaks are more severe in cool weather when water temperature drops below 25°C, as shrimp immune function is reduced. In southern Thailand, outbreaks are most common during the late year (October–February) and monsoon season.</p>
+
+    </div><!-- /.en-only -->
 
     <div class="cta-box">
       <div class="cta-text">
-        <h3>กุ้งมีจุดขาว — แต่ไม่แน่ใจว่า WSSV หรือไม่?</h3>
-        <p>ใช้ AI วินิจฉัยเบื้องต้นฟรี ถ่ายรูปหรืออธิบายอาการ รับผลทันที</p>
+        <h3 data-i18n="wssv.cta.title">กุ้งมีจุดขาว — แต่ไม่แน่ใจว่า WSSV หรือไม่?</h3>
+        <p data-i18n="wssv.cta.desc">ใช้ AI วินิจฉัยเบื้องต้นฟรี ถ่ายรูปหรืออธิบายอาการ รับผลทันที</p>
       </div>
-      <a href="/ai-diagnosis">🔬 วินิจฉัยด้วย AI</a>
+      <a href="/ai-diagnosis" data-i18n="art.cta.btn">🔬 วินิจฉัยด้วย AI</a>
     </div>
+
+    <p style="margin-top:32px;font-size:12px;color:#aaa;text-align:center" data-i18n="art.foot.note">เนื้อหาเพื่อการศึกษาและอ้างอิงเบื้องต้น ควรปรึกษาผู้เชี่ยวชาญก่อนตัดสินใจ</p>
 
   </div>
 </div>
 
-<footer style="background:#1a0a12;color:#c0a0b0;padding:32px 5%;text-align:center;font-size:13px;">
-  <p style="margin:0 0 6px">© 2568 บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด</p>
-  <p style="margin:0;opacity:.6;font-size:11px">เนื้อหาเพื่อการศึกษาและอ้างอิงเบื้องต้น ควรปรึกษาผู้เชี่ยวชาญก่อนตัดสินใจ</p>
-</footer>
 <script src="/js/i18n.js"></script>
 <script src="/js/main.js"></script>
 </body>

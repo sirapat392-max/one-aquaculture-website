@@ -1,6 +1,8 @@
 // ─── SHARED NAV & FOOTER INJECTION ────────────────────────────────────────
-// pathname without .html for active-link matching
-const currentPage = location.pathname.split('/').pop().replace(/\.html$/, '') || 'index';
+// pathname without .html for active-link matching; handles /guides/ems → 'guides'
+const _pathParts = location.pathname.replace(/\.html$/, '').split('/').filter(Boolean);
+const currentPage = _pathParts[_pathParts.length - 1] || 'index';
+const currentSection = _pathParts[0] || 'index';
 
 function langSwitcherHTML() {
   return `<div class="lang-switcher">
@@ -11,25 +13,28 @@ function langSwitcherHTML() {
 
 function navHTML() {
   const links = [
-    { href: '/',             id: 'index',       key: 'nav.home' },
-    { href: '/products',     id: 'products',    key: 'nav.products' },
-    { href: '/shrimp-price', id: 'shrimp-price',key: 'nav.price' },
-    { href: '/ai-diagnosis', id: 'ai-diagnosis',key: 'nav.diagnosis' },
-    { href: '/news',         id: 'news',        key: 'nav.news' },
-    { href: '/about',        id: 'about',       key: 'nav.about' },
-    { href: '/contact',      id: 'contact',     key: 'nav.contact' },
+    { href: '/',                id: 'index',           key: 'nav.home' },
+    { href: '/products',        id: 'products',        key: 'nav.products' },
+    { href: '/shrimp-price',    id: 'shrimp-price',    key: 'nav.price' },
+    { href: '/ai-diagnosis',    id: 'ai-diagnosis',    key: 'nav.diagnosis' },
+    { href: '/farm-calculator', id: 'farm-calculator', key: 'nav.farm' },
+    { href: '/guides',          id: 'guides',          key: 'nav.guides' },
+    { href: '/news',            id: 'news',            key: 'nav.news' },
+    { href: '/about',           id: 'about',           key: 'nav.about' },
+    { href: '/contact',         id: 'contact',         key: 'nav.contact' },
   ];
+  const isActive = (id) => currentPage === id || currentSection === id;
   return `
 <nav>
   <a href="/" class="nav-logo">
-    <div class="nav-logo-icon"><img src="logo.jpg" alt="ONE logo"></div>
+    <div class="nav-logo-icon"><img src="/logo.jpg" alt="ONE logo"></div>
     <div class="nav-logo-text">
       <strong>ONE AQUACULTURE</strong>
       <span>บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด</span>
     </div>
   </a>
   <ul class="nav-links" id="navLinks">
-    ${links.map(l => `<li><a href="${l.href}" class="${currentPage===l.id?'active':''}" data-i18n="${l.key}">${t(l.key)}</a></li>`).join('')}
+    ${links.map(l => `<li><a href="${l.href}" class="${isActive(l.id)?'active':''}" data-i18n="${l.key}">${t(l.key)}</a></li>`).join('')}
   </ul>
   ${langSwitcherHTML()}
   <a href="/ai-diagnosis" class="nav-cta" id="navCta" data-i18n="nav.cta">${t('nav.cta')}</a>
@@ -46,7 +51,7 @@ function footerHTML() {
     <div class="footer-grid">
       <div>
         <div class="footer-logo">
-          <div class="footer-logo-icon"><img src="logo.jpg" alt="ONE logo"></div>
+          <div class="footer-logo-icon"><img src="/logo.jpg" alt="ONE logo"></div>
           <div class="footer-logo-text"><strong>ONE AQUACULTURE PRODUCT</strong><span>บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด</span></div>
         </div>
         <p class="footer-desc" data-i18n="footer.desc">${t('footer.desc')}</p>
@@ -91,8 +96,12 @@ function footerHTML() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  document.body.insertAdjacentHTML('afterbegin', navHTML());
-  document.body.insertAdjacentHTML('beforeend', footerHTML());
+  if (!document.querySelector('nav')) {
+    document.body.insertAdjacentHTML('afterbegin', navHTML());
+  }
+  if (!document.querySelector('footer')) {
+    document.body.insertAdjacentHTML('beforeend', footerHTML());
+  }
 
   // apply any remaining data-i18n on page content
   if (typeof applyI18n === 'function') applyI18n();
