@@ -21,7 +21,6 @@ function navHTML() {
     { href: '/guides',          id: 'guides',          key: 'nav.guides' },
     { href: '/news',            id: 'news',            key: 'nav.news' },
     { href: '/about',           id: 'about',           key: 'nav.about' },
-    { href: '/team',            id: 'team',            key: 'nav.team' },
     { href: '/contact',         id: 'contact',         key: 'nav.contact' },
   ];
   const isActive = (id) => currentPage === id || currentSection === id;
