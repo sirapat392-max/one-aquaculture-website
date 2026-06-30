@@ -173,6 +173,24 @@
 .be-total-wrap.warn  { background: var(--warn-bg); border: 1.5px solid #fde68a; }
 .be-total-wrap.bad   { background: var(--bad-bg);  border: 1.5px solid #fecaca; }
 .be-total-wrap.neutral { background: #f8f5fc; border: 1.5px solid var(--line); }
+
+@media (max-width: 768px) {
+  .calc-hero { padding: 88px 5% 36px; }
+  .calc-wrap { padding: 28px 5% 60px; }
+  .calc-card { padding: 20px 18px 18px; }
+  .calc-card-header h2 { font-size: 16px; }
+  .result-value { font-size: 26px; }
+}
+@media (max-width: 480px) {
+  .calc-hero { padding: 88px 4% 28px; }
+  .calc-wrap { padding: 18px 4% 48px; }
+  .calc-card { padding: 16px 14px 14px; }
+  .calc-card-header { gap: 10px; margin-bottom: 16px; }
+  .calc-icon { width: 40px; height: 40px; font-size: 18px; }
+  .result-value { font-size: 22px; }
+  .result-box { padding: 14px 16px; }
+  .input-grid { gap: 10px; }
+}
 </style>
 </head>
 <body>

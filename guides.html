@@ -65,6 +65,20 @@
 
 .section-heading { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #8B3060; margin: 40px 0 18px; display: flex; align-items: center; gap: 10px; }
 .section-heading::after { content: ''; flex: 1; height: 1px; background: #E8E0E5; }
+
+@media (max-width: 768px) {
+  .guides-hero { padding: 90px 5% 36px; }
+  .guides-hero h1 { font-size: 24px; }
+  .guides-wrap { padding: 32px 5% 60px; }
+  .guide-grid { grid-template-columns: 1fr; }
+  .guide-card h2 { font-size: 15px; }
+}
+@media (max-width: 480px) {
+  .guides-hero { padding: 88px 4% 28px; }
+  .guides-wrap { padding: 20px 4% 48px; }
+  .guide-card-top { padding: 16px 16px 12px; }
+  .guide-card-footer { padding: 10px 16px; flex-direction: column; align-items: flex-start; gap: 8px; }
+}
 </style>
 </head>
 <body>
