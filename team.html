@@ -258,19 +258,28 @@
 <script type="module">
   import Thailand from 'https://esm.sh/@svg-maps/thailand';
 
-  const ZONES = {
-    'TH-24': 'beam',  // ฉะเชิงเทรา
-    'TH-11': 'beam',  // สมุทรปราการ
-    'TH-74': 'beam',  // สมุทรสาคร
-    'TH-73': 'beam',  // นครปฐม
-    'TH-84': 'ad',    // สุราษฎร์ธานี
-    'TH-80': 'first', // นครศรีธรรมราช
-    'TH-90': 'first', // สงขลา
-    'TH-94': 'first', // ปัตตานี
-    'TH-82': 'ice',   // พังงา
-    'TH-81': 'ice',   // กระบี่
-    'TH-92': 'ice',   // ตรัง
-    'TH-91': 'ice',   // สตูล
+  // Try ISO codes in multiple case formats
+  const ZONES_BY_ID = {
+    'TH-24': 'beam', 'th-24': 'beam',
+    'TH-11': 'beam', 'th-11': 'beam',
+    'TH-74': 'beam', 'th-74': 'beam',
+    'TH-73': 'beam', 'th-73': 'beam',
+    'TH-84': 'ad',   'th-84': 'ad',
+    'TH-80': 'first','th-80': 'first',
+    'TH-90': 'first','th-90': 'first',
+    'TH-94': 'first','th-94': 'first',
+    'TH-82': 'ice',  'th-82': 'ice',
+    'TH-81': 'ice',  'th-81': 'ice',
+    'TH-92': 'ice',  'th-92': 'ice',
+    'TH-91': 'ice',  'th-91': 'ice',
+  };
+  // Fallback: match by English province name
+  const ZONES_BY_NAME = {
+    'chachoengsao': 'beam', 'samut prakan': 'beam',
+    'samut sakhon': 'beam', 'nakhon pathom': 'beam',
+    'surat thani': 'ad',
+    'nakhon si thammarat': 'first', 'songkhla': 'first', 'pattani': 'first',
+    'phang nga': 'ice', 'krabi': 'ice', 'trang': 'ice', 'satun': 'ice',
   };
 
   const COLORS = {
@@ -284,7 +293,7 @@
   const container = document.getElementById('th-map');
 
   const paths = Thailand.locations.map(loc => {
-    const zone = ZONES[loc.id] || 'none';
+    const zone = ZONES_BY_ID[loc.id] || ZONES_BY_NAME[(loc.name || '').toLowerCase()] || 'none';
     const c = COLORS[zone];
     return `<path d="${loc.path}" fill="${c.base}" stroke="white" stroke-width="0.5"
       data-zone="${zone}" data-locid="${loc.id}" title="${loc.name}"
@@ -323,13 +332,18 @@
     });
   });
 
+  // Attach card listeners AFTER SVG is in DOM (module is already deferred so this is safe)
   document.querySelectorAll('.team-card[data-card]').forEach(card => {
     card.addEventListener('mouseenter', () => {
-      setZoneFill(card.dataset.card);
+      const zone = card.dataset.card;
+      setZoneFill(zone);
       clearCards();
       card.classList.add('highlighted');
     });
-    card.addEventListener('mouseleave', () => { setZoneFill(null); clearCards(); });
+    card.addEventListener('mouseleave', () => {
+      setZoneFill(null);
+      clearCards();
+    });
   });
 </script>
 
