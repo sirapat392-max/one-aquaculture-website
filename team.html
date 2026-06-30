@@ -28,7 +28,6 @@
   --c-ice:   #6d28d9; --c-ice-lt:  #ede9fe; --c-ice-md:  #c4b5fd;
 }
 
-/* ─── HERO ─── */
 .team-hero {
   background: linear-gradient(135deg,#4D1232 0%,#8B3060 60%,#B04880 100%);
   padding: 110px 5% 52px; color: white;
@@ -39,100 +38,106 @@
   letter-spacing: .12em; text-transform: uppercase; margin-bottom: 18px;
   color: rgba(255,255,255,.85);
 }
-.team-hero h1 { font-size: clamp(26px,4.5vw,42px); font-weight: 700; margin: 0 0 8px; }
-.team-hero p  { font-size: 15px; opacity: .8; margin: 0; }
+.team-hero h1 { font-size: clamp(24px,4vw,40px); font-weight: 700; margin: 0 0 6px; }
+.team-hero p  { font-size: 14px; opacity: .8; margin: 0; }
 
-/* ─── MAIN LAYOUT ─── */
 .team-wrap {
-  max-width: 980px; margin: 0 auto; padding: 48px 5% 80px;
-  display: flex; gap: 40px; align-items: flex-start;
+  max-width: 920px; margin: 0 auto; padding: 40px 5% 72px;
+  display: flex; gap: 36px; align-items: flex-start;
 }
-.map-col  { flex: 0 0 220px; position: sticky; top: 88px; }
-.cards-col{ flex: 1; display: flex; flex-direction: column; gap: 16px; }
+.map-col  { flex: 0 0 200px; position: sticky; top: 88px; }
+.cards-col{ flex: 1; display: flex; flex-direction: column; gap: 12px; }
 
 /* ─── MAP ─── */
 .map-title {
   font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
-  color: #8B3060; font-weight: 700; margin-bottom: 10px;
+  color: #8B3060; font-weight: 700; margin-bottom: 8px;
 }
 .map-svg { width: 100%; height: auto; display: block; }
-.map-svg .th-bg  { fill: #f0e8ef; stroke: #d8bfcf; stroke-width: .6; }
-.map-svg .z-beam { fill: var(--c-beam-lt);  stroke: var(--c-beam);  stroke-width: .8; cursor: pointer; transition: fill .2s; }
-.map-svg .z-ad   { fill: var(--c-ad-lt);    stroke: var(--c-ad);    stroke-width: .8; cursor: pointer; transition: fill .2s; }
-.map-svg .z-first{ fill: var(--c-first-lt); stroke: var(--c-first); stroke-width: .8; cursor: pointer; transition: fill .2s; }
-.map-svg .z-ice  { fill: var(--c-ice-lt);   stroke: var(--c-ice);   stroke-width: .8; cursor: pointer; transition: fill .2s; }
-.map-svg .z-beam.active  { fill: var(--c-beam-md); }
-.map-svg .z-ad.active    { fill: var(--c-ad-md); }
-.map-svg .z-first.active { fill: var(--c-first-md); }
-.map-svg .z-ice.active   { fill: var(--c-ice-md); }
+
+/* zone styles */
+.z-bg    { fill: #ede0ea; stroke: #c8adc0; stroke-width: .5; }
+.z-beam  { fill: var(--c-beam-lt);  stroke: var(--c-beam);  stroke-width: .8; cursor: pointer; transition: fill .2s; }
+.z-ad    { fill: var(--c-ad-lt);    stroke: var(--c-ad);    stroke-width: .8; cursor: pointer; transition: fill .2s; }
+.z-first { fill: var(--c-first-lt); stroke: var(--c-first); stroke-width: .8; cursor: pointer; transition: fill .2s; }
+.z-ice   { fill: var(--c-ice-lt);   stroke: var(--c-ice);   stroke-width: .8; cursor: pointer; transition: fill .2s; }
+
+.z-beam.active  { fill: var(--c-beam-md); }
+.z-ad.active    { fill: var(--c-ad-md); }
+.z-first.active { fill: var(--c-first-md); }
+.z-ice.active   { fill: var(--c-ice-md); }
 
 /* ─── CARDS ─── */
 .team-card {
-  background: #fff; border: 2px solid #f0e0ea; border-radius: 18px;
-  padding: 22px 24px;
+  background: #fff; border: 2px solid #f0e0ea; border-radius: 14px;
+  padding: 14px 16px;
   display: flex; flex-direction: column;
   transition: transform .25s cubic-bezier(.34,1.56,.64,1),
               box-shadow .25s ease, border-color .2s;
   cursor: pointer;
 }
 .team-card:hover {
-  transform: scale(1.06) translateY(-4px);
-  box-shadow: 0 16px 48px rgba(139,48,96,.18);
+  transform: scale(1.06) translateY(-3px);
+  box-shadow: 0 14px 42px rgba(139,48,96,.18);
 }
-.team-card.card-beam:hover  { border-color: var(--c-beam);  box-shadow: 0 16px 48px rgba(13,148,136,.22); }
-.team-card.card-ad:hover    { border-color: var(--c-ad);    box-shadow: 0 16px 48px rgba(217,119,6,.22); }
-.team-card.card-first:hover { border-color: var(--c-first); box-shadow: 0 16px 48px rgba(159,18,57,.22); }
-.team-card.card-ice:hover   { border-color: var(--c-ice);   box-shadow: 0 16px 48px rgba(109,40,217,.22); }
+.team-card.card-beam:hover  { border-color: var(--c-beam);  box-shadow: 0 14px 42px rgba(13,148,136,.22); }
+.team-card.card-ad:hover    { border-color: var(--c-ad);    box-shadow: 0 14px 42px rgba(217,119,6,.22); }
+.team-card.card-first:hover { border-color: var(--c-first); box-shadow: 0 14px 42px rgba(159,18,57,.22); }
+.team-card.card-ice:hover   { border-color: var(--c-ice);   box-shadow: 0 14px 42px rgba(109,40,217,.22); }
 
-.team-card.highlighted { border-width: 2px; }
 .team-card.highlighted.card-beam  { border-color: var(--c-beam);  background: #f0fdfa; }
 .team-card.highlighted.card-ad    { border-color: var(--c-ad);    background: #fffbeb; }
 .team-card.highlighted.card-first { border-color: var(--c-first); background: #fff1f2; }
 .team-card.highlighted.card-ice   { border-color: var(--c-ice);   background: #f5f3ff; }
 
-.card-top { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+.card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
 .card-avatar {
-  width: 52px; height: 52px; border-radius: 50%;
+  width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
-  font-size: 22px; font-weight: 700; color: white; flex-shrink: 0;
+  font-size: 16px; font-weight: 700; color: white;
 }
 .card-beam  .card-avatar { background: linear-gradient(135deg,#0d9488,#5eead4); }
 .card-ad    .card-avatar { background: linear-gradient(135deg,#d97706,#fcd34d); }
 .card-first .card-avatar { background: linear-gradient(135deg,#9f1239,#fb7185); }
 .card-ice   .card-avatar { background: linear-gradient(135deg,#6d28d9,#c4b5fd); }
 
-.card-name { font-size: 20px; font-weight: 700; color: #2d0f1e; margin: 0; }
-.card-role { font-size: 11px; color: #9c5e7a; margin: 0; letter-spacing: .04em; }
+.card-name { font-size: 16px; font-weight: 700; color: #2d0f1e; margin: 0; line-height: 1.2; }
+.card-role { font-size: 10px; color: #9c5e7a; margin: 0; letter-spacing: .03em; }
 
-.area-list { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.area-list { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; flex: 1; }
 .area-tag {
   background: #fdf2f8; color: #7c2d5e;
   border: 1px solid #f0d0e0; border-radius: 20px;
-  padding: 3px 10px; font-size: 11.5px; font-weight: 500;
+  padding: 2px 8px; font-size: 10.5px; font-weight: 500;
 }
 
-.area-list { flex: 1; }
-.card-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto; padding-top: 4px; }
+.card-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: auto; }
 .btn-phone {
-  display: inline-flex; align-items: center; gap: 6px;
+  display: inline-flex; align-items: center; gap: 5px;
   background: #4D1232; color: white; border-radius: 20px;
-  padding: 7px 16px; font-size: 12.5px; font-weight: 600;
+  padding: 5px 12px; font-size: 11.5px; font-weight: 600;
   text-decoration: none; transition: background .15s;
 }
 .btn-phone:hover { background: #8B3060; }
 .btn-line {
-  display: inline-flex; align-items: center; gap: 6px;
+  display: inline-flex; align-items: center; gap: 5px;
   background: #06C755; color: white; border-radius: 20px;
-  padding: 7px 16px; font-size: 12.5px; font-weight: 600;
+  padding: 5px 12px; font-size: 11.5px; font-weight: 600;
   text-decoration: none; transition: background .15s, transform .15s;
 }
 .btn-line:hover { background: #04a544; transform: translateY(-1px); }
-.btn-line svg { width: 16px; height: 16px; fill: white; flex-shrink: 0; }
+.btn-line svg { width: 14px; height: 14px; fill: white; flex-shrink: 0; }
 
-/* ─── MOBILE ─── */
-@media (max-width: 680px) {
-  .team-wrap { flex-direction: column; gap: 28px; padding: 32px 4% 60px; }
-  .map-col { position: static; flex: none; width: 100%; max-width: 240px; margin: 0 auto; }
+.legend { margin-top: 10px; display: flex; flex-direction: column; gap: 4px; }
+.legend-item { display: flex; align-items: center; gap: 5px; font-size: 10.5px; color: #555; }
+.legend-dot {
+  width: 11px; height: 11px; border-radius: 2px; flex-shrink: 0;
+  border-width: 1.5px; border-style: solid;
+}
+
+@media (max-width: 660px) {
+  .team-wrap { flex-direction: column; gap: 24px; padding: 28px 4% 56px; }
+  .map-col { position: static; flex: none; width: 100%; max-width: 220px; margin: 0 auto; }
   .team-card:hover { transform: scale(1.04) translateY(-2px); }
 }
 </style>
@@ -142,88 +147,106 @@
 <div class="team-hero">
   <div class="team-hero-badge">👥 Sales Team</div>
   <h1>ติดต่อทีมขาย</h1>
-  <p>เลือกพื้นที่ของคุณ — ทีมเซลล์พร้อมให้คำปรึกษาทันที</p>
+  <p>เลือกพื้นที่ของคุณ — ทีมเซลล์พร้อมให้คำแนะนำทันที</p>
 </div>
 
 <div class="team-wrap">
 
-  <!-- ──── MAP ──── -->
+  <!-- ── MAP ── -->
   <div class="map-col">
-    <div class="map-title">แผนที่พื้นที่รับผิดชอบ</div>
-    <svg class="map-svg" viewBox="0 0 200 440" xmlns="http://www.w3.org/2000/svg">
+    <div class="map-title">พื้นที่รับผิดชอบ</div>
 
-      <!-- Thailand main body (gray) -->
-      <path class="th-bg" d="
-        M 38,10 L 74,4 L 158,4 L 186,18 L 203,44 L 208,84
-        L 202,122 L 196,160 L 202,196 L 198,232 L 186,248
-        L 164,254 L 146,248 L 132,252 L 118,248 L 102,252
-        L 86,250 L 70,236 L 56,210 L 42,178 L 34,142
-        L 30,104 L 36,68 Z"/>
+    <!--
+      Thailand SVG — viewBox 0 0 180 430
+      path calibrated from real lat/lon:
+        x = (lon-97.5)/8 * 180
+        y = (21-lat)/15.5 * 430
+      Key latitudes: Bangkok 13.8°N≈y208, Chumphon 10.5°N≈y268, S.Thani 9°N≈y302
+    -->
+    <svg class="map-svg" viewBox="0 0 180 430" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- clipPath = exact Thailand outline so zones stay inside borders -->
+        <clipPath id="th-clip">
+          <path d="
+            M 30,26 L 50,9 L 75,4 L 100,9 L 124,24
+            L 140,48 L 148,78 L 145,110 L 152,138 L 148,162
+            L 138,182 L 122,198
+            L 118,222 L 114,248 L 110,274 L 107,298
+            L 104,320 L 101,342 L 98,362 L 96,380
+            L 94,396 L 92,410 L 91,420
+            L 86,422 L 84,410 L 82,394
+            L 80,378 L 78,360 L 75,340 L 73,318
+            L 71,296 L 69,272 L 68,248 L 67,224
+            L 64,202 L 58,188
+            L 44,172 L 34,148 L 26,118 L 25,84 L 28,52
+            Z"/>
+        </clipPath>
+      </defs>
 
-      <!-- Peninsula base (gray) -->
-      <path class="th-bg" d="
-        M 86,250 L 102,252 L 118,248 L 132,252 L 146,248
-        L 164,254 L 186,248
-        L 182,274 L 176,302 L 170,330
-        L 164,356 L 158,382 L 152,406
-        L 147,426 L 144,440
-        L 136,440 L 132,426 L 127,406
-        L 121,382 L 115,356 L 109,330
-        L 103,302 L 97,274 Z"/>
+      <!-- Gray base — full Thailand -->
+      <path class="z-bg" d="
+        M 30,26 L 50,9 L 75,4 L 100,9 L 124,24
+        L 140,48 L 148,78 L 145,110 L 152,138 L 148,162
+        L 138,182 L 122,198
+        L 118,222 L 114,248 L 110,274 L 107,298
+        L 104,320 L 101,342 L 98,362 L 96,380
+        L 94,396 L 92,410 L 91,420
+        L 86,422 L 84,410 L 82,394
+        L 80,378 L 78,360 L 75,340 L 73,318
+        L 71,296 L 69,272 L 68,248 L 67,224
+        L 64,202 L 58,188
+        L 44,172 L 34,148 L 26,118 L 25,84 L 28,52
+        Z"/>
 
-      <!-- Zone: บีม (Bangkok cluster, teal) -->
-      <path class="z-beam" data-zone="beam" d="
-        M 80,218 L 130,226 L 138,240 L 132,250
-        L 118,248 L 102,252 L 86,250 L 76,240 Z"/>
+      <!-- Zone: บีม — Bangkok cluster (Central, y=190–222) -->
+      <rect class="z-beam" data-zone="beam"
+        clip-path="url(#th-clip)"
+        x="25" y="188" width="135" height="36"/>
 
-      <!-- Zone: อัด (Surat Thani, full-width upper peninsula, amber) -->
-      <path class="z-ad" data-zone="ad" d="
-        M 97,252 L 186,248
-        L 182,274 L 176,302 L 170,330
-        L 109,330 L 103,302 Z"/>
+      <!-- Zone: อัด — Surat Thani (upper peninsula, y=222–320) -->
+      <rect class="z-ad" data-zone="ad"
+        clip-path="url(#th-clip)"
+        x="55" y="222" width="90" height="100"/>
 
-      <!-- Zone: เฟิร์ส (Gulf/east side, wine) -->
-      <path class="z-first" data-zone="first" d="
-        M 140,330 L 170,330
-        L 164,356 L 158,382 L 152,406
-        L 147,426 L 144,440
-        L 140,440 Z"/>
+      <!-- Zone: เฟิร์ส — Gulf/east side (y=320–422) -->
+      <polygon class="z-first" data-zone="first"
+        clip-path="url(#th-clip)"
+        points="79,320 115,320 92,422 86,422"/>
 
-      <!-- Zone: ไอซ์ (Andaman/west side, purple) -->
-      <path class="z-ice" data-zone="ice" d="
-        M 109,330 L 140,330 L 140,440
-        L 136,440 L 132,426 L 127,406
-        L 121,382 L 115,356 L 109,330 Z"/>
+      <!-- Zone: ไอซ์ — Andaman/west side (y=320–422) -->
+      <polygon class="z-ice" data-zone="ice"
+        clip-path="url(#th-clip)"
+        points="55,320 79,320 86,422 80,422"/>
 
-      <!-- Map labels -->
-      <text x="107" y="243" font-size="6.5" font-weight="700" fill="#0f766e" text-anchor="middle">บีม</text>
-      <text x="138" y="295" font-size="6.5" font-weight="700" fill="#92400e" text-anchor="middle">อัด</text>
-      <text x="152" y="375" font-size="6"   font-weight="700" fill="#881337" text-anchor="middle">เฟิร์ส</text>
-      <text x="124" y="390" font-size="6"   font-weight="700" fill="#5b21b6" text-anchor="middle">ไอซ์</text>
-
-      <!-- Sea label -->
-      <text x="30"  y="370" font-size="5.5" fill="#94a3b8" text-anchor="middle" transform="rotate(-70,30,370)">อันดามัน</text>
-      <text x="185" y="350" font-size="5.5" fill="#94a3b8" text-anchor="middle" transform="rotate(70,185,350)">อ่าวไทย</text>
+      <!-- Zone labels -->
+      <text x="92"  y="212" text-anchor="middle" font-size="6.5" font-weight="700" fill="#047857">บีม</text>
+      <text x="89"  y="278" text-anchor="middle" font-size="6.5" font-weight="700" fill="#92400e">อัด</text>
+      <text x="96"  y="375" text-anchor="middle" font-size="6"   font-weight="700" fill="#881337">เฟิร์ส</text>
+      <text x="71"  y="368" text-anchor="middle" font-size="6"   font-weight="700" fill="#4c1d95">ไอซ์</text>
     </svg>
 
     <!-- Legend -->
-    <div style="margin-top:12px;display:flex;flex-direction:column;gap:5px;">
-      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:#444;">
-        <span style="width:12px;height:12px;border-radius:3px;background:var(--c-beam-lt);border:1.5px solid var(--c-beam);flex-shrink:0;"></span> บีม · ภาคกลาง
+    <div class="legend">
+      <div class="legend-item">
+        <span class="legend-dot" style="background:var(--c-beam-lt);border-color:var(--c-beam)"></span>
+        บีม · ภาคกลาง
       </div>
-      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:#444;">
-        <span style="width:12px;height:12px;border-radius:3px;background:var(--c-ad-lt);border:1.5px solid var(--c-ad);flex-shrink:0;"></span> อัด · ภาคใต้ตอนบน
+      <div class="legend-item">
+        <span class="legend-dot" style="background:var(--c-ad-lt);border-color:var(--c-ad)"></span>
+        อัด · ภาคใต้ตอนบน
       </div>
-      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:#444;">
-        <span style="width:12px;height:12px;border-radius:3px;background:var(--c-first-lt);border:1.5px solid var(--c-first);flex-shrink:0;"></span> เฟิร์ส · ใต้ตะวันออก
+      <div class="legend-item">
+        <span class="legend-dot" style="background:var(--c-first-lt);border-color:var(--c-first)"></span>
+        เฟิร์ส · ใต้ตะวันออก
       </div>
-      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:#444;">
-        <span style="width:12px;height:12px;border-radius:3px;background:var(--c-ice-lt);border:1.5px solid var(--c-ice);flex-shrink:0;"></span> ไอซ์ · ใต้ตะวันตก
+      <div class="legend-item">
+        <span class="legend-dot" style="background:var(--c-ice-lt);border-color:var(--c-ice)"></span>
+        ไอซ์ · ใต้ตะวันตก
       </div>
     </div>
   </div>
 
-  <!-- ──── CARDS ──── -->
+  <!-- ── CARDS ── -->
   <div class="cards-col">
 
     <!-- บีม -->
@@ -232,7 +255,7 @@
         <div class="card-avatar">บ</div>
         <div>
           <div class="card-name">บีม</div>
-          <div class="card-role">เซลล์ประจำพื้นที่ · ภาคกลาง</div>
+          <div class="card-role">เซลล์ · ภาคกลาง</div>
         </div>
       </div>
       <div class="area-list">
@@ -244,7 +267,7 @@
       <div class="card-actions">
         <a href="tel:xxx-xxx-xxxx" class="btn-phone">📞 xxx-xxx-xxxx</a>
         <a href="https://line.me/ti/p/nsWdszsMMj" target="_blank" rel="noopener" class="btn-line">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.365 9.89c.50 0 .906.41.906.91s-.406.91-.906.91H17.59v1.05h1.775c.50 0 .906.41.906.91s-.406.91-.906.91H16.68a.91.91 0 01-.906-.91V8.98c0-.5.406-.91.906-.91h2.685zm-5.47 3.78a.91.91 0 01-.906.91.917.917 0 01-.735-.373L10.66 11.7v1.879a.91.91 0 01-.906.91.91.91 0 01-.906-.91V8.98c0-.5.406-.91.906-.91.282 0 .532.128.697.328l1.595 2.508V8.98c0-.5.406-.91.906-.91s.906.41.906.91v4.69zM8.1 13.67a.91.91 0 01-.906.91.91.91 0 01-.906-.91V8.98c0-.5.406-.91.906-.91s.906.41.906.91v4.69zM5.37 13.67a.91.91 0 01-.906.91H1.78a.91.91 0 01-.906-.91V8.98c0-.5.406-.91.906-.91s.906.41.906.91v3.78h1.775c.5 0 .906.41.906.91zM24 10.32c0-4.895-4.91-8.88-10.944-8.88C6.91 1.44 2 5.425 2 10.32c0 4.39 3.894 8.072 9.156 8.767.357.077.842.235.965.54.11.276.072.708.035.99l-.156.937c-.048.276-.22 1.08.943.59 1.163-.49 6.272-3.693 8.558-6.325C23.308 13.843 24 12.14 24 10.32z"/></svg>
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.365 9.89c.5 0 .906.41.906.91s-.406.91-.906.91H17.59v1.05h1.775c.5 0 .906.41.906.91s-.406.91-.906.91H16.68a.91.91 0 01-.906-.91V8.98c0-.5.406-.91.906-.91h2.685zm-5.47 3.78a.91.91 0 01-.906.91.917.917 0 01-.735-.373L10.66 11.7v1.879a.91.91 0 01-.906.91.91.91 0 01-.906-.91V8.98c0-.5.406-.91.906-.91.282 0 .532.128.697.328l1.595 2.508V8.98c0-.5.406-.91.906-.91s.906.41.906.91v4.69zM8.1 13.67a.91.91 0 01-.906.91.91.91 0 01-.906-.91V8.98c0-.5.406-.91.906-.91s.906.41.906.91v4.69zM5.37 13.67a.91.91 0 01-.906.91H1.78a.91.91 0 01-.906-.91V8.98c0-.5.406-.91.906-.91s.906.41.906.91v3.78h1.775c.5 0 .906.41.906.91zM24 10.32c0-4.895-4.91-8.88-10.944-8.88C6.91 1.44 2 5.425 2 10.32c0 4.39 3.894 8.072 9.156 8.767.357.077.842.235.965.54.11.276.072.708.035.99l-.156.937c-.048.276-.22 1.08.943.59 1.163-.49 6.272-3.693 8.558-6.325C23.308 13.843 24 12.14 24 10.32z"/></svg>
           แอดไลน์
         </a>
       </div>
@@ -256,7 +279,7 @@
         <div class="card-avatar">ด</div>
         <div>
           <div class="card-name">อัด</div>
-          <div class="card-role">เซลล์ประจำพื้นที่ · ภาคใต้ตอนบน</div>
+          <div class="card-role">เซลล์ · ภาคใต้ตอนบน</div>
         </div>
       </div>
       <div class="area-list">
@@ -273,7 +296,7 @@
         <div class="card-avatar">ฟ</div>
         <div>
           <div class="card-name">เฟิร์ส</div>
-          <div class="card-role">เซลล์ประจำพื้นที่ · ใต้ฝั่งอ่าวไทย</div>
+          <div class="card-role">เซลล์ · ใต้ฝั่งอ่าวไทย</div>
         </div>
       </div>
       <div class="area-list">
@@ -292,7 +315,7 @@
         <div class="card-avatar">อ</div>
         <div>
           <div class="card-name">ไอซ์</div>
-          <div class="card-role">เซลล์ประจำพื้นที่ · ใต้ฝั่งอันดามัน</div>
+          <div class="card-role">เซลล์ · ใต้ฝั่งอันดามัน</div>
         </div>
       </div>
       <div class="area-list">
@@ -306,11 +329,10 @@
       </div>
     </div>
 
-  </div>
-</div>
+  </div><!-- /cards-col -->
+</div><!-- /team-wrap -->
 
 <script>
-  // Map zone ↔ Card interaction
   const zones = document.querySelectorAll('.map-svg [data-zone]');
   const cards = document.querySelectorAll('.team-card[data-card]');
 
@@ -321,10 +343,9 @@
 
   zones.forEach(zone => {
     zone.addEventListener('mouseenter', () => {
-      const id = zone.dataset.zone;
       clearAll();
       zone.classList.add('active');
-      const card = document.getElementById('card-' + id);
+      const card = document.getElementById('card-' + zone.dataset.zone);
       if (card) card.classList.add('highlighted');
     });
     zone.addEventListener('mouseleave', clearAll);
@@ -336,10 +357,9 @@
 
   cards.forEach(card => {
     card.addEventListener('mouseenter', () => {
-      const id = card.dataset.card;
       clearAll();
       card.classList.add('highlighted');
-      const zone = document.querySelector(`.map-svg [data-zone="${id}"]`);
+      const zone = document.querySelector(`.map-svg [data-zone="${card.dataset.card}"]`);
       if (zone) zone.classList.add('active');
     });
     card.addEventListener('mouseleave', clearAll);
