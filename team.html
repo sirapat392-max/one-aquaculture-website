@@ -29,9 +29,14 @@
 }
 
 .team-hero {
-  background: linear-gradient(135deg,#4D1232 0%,#8B3060 60%,#B04880 100%);
+  position: relative; overflow: hidden;
   padding: 110px 5% 52px; color: white;
 }
+.team-hero-photo { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+.team-hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; animation: kenBurns 22s ease-in-out infinite alternate; will-change: transform; }
+@keyframes kenBurns { 0% { transform: scale(1.0) translate(0%,0%); } 100% { transform: scale(1.10) translate(-2%,-1.5%); } }
+.team-hero::after { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(135deg, rgba(77,18,50,0.85), rgba(139,48,96,0.68)); pointer-events: none; }
+.team-hero-inner { position: relative; z-index: 2; }
 .team-hero-badge {
   display: inline-block; border: 1px solid rgba(255,255,255,.4);
   border-radius: 20px; padding: 5px 16px; font-size: 11px;
@@ -126,11 +131,13 @@
 }
 
 @media (max-width: 760px) {
+  .team-hero { padding: 88px 5% 36px; }
   .team-wrap { flex-direction: column; gap: 24px; padding: 28px 4% 56px; }
   .map-col { position: static; flex: none; width: 100%; max-width: 420px; margin: 0 auto; }
   .team-card:hover { transform: scale(1.04) translateY(-2px); }
 }
 @media (max-width: 480px) {
+  .team-hero { padding: 88px 4% 28px; }
   .map-body { flex-direction: column; }
   .legend { flex-direction: row; flex-wrap: wrap; gap: 6px; padding-top: 8px; }
   .legend-item { white-space: normal; }
@@ -140,9 +147,12 @@
 <body>
 
 <div class="team-hero">
-  <div class="team-hero-badge">👥 Sales Team</div>
-  <h1>ติดต่อทีมขายประเทศไทย</h1>
-  <p>เลือกพื้นที่ของคุณ — ทีมเซลล์พร้อมให้คำแนะนำทันที</p>
+  <div class="team-hero-photo"><img src="/images/team-farm-aerators.jpg" alt="ฟาร์มกุ้ง ONE AQUACULTURE" fetchpriority="high"></div>
+  <div class="team-hero-inner">
+    <div class="team-hero-badge">👥 Sales Team</div>
+    <h1>ติดต่อทีมขายประเทศไทย</h1>
+    <p>เลือกพื้นที่ของคุณ — ทีมเซลล์พร้อมให้คำแนะนำทันที</p>
+  </div>
 </div>
 
 <div class="team-wrap">

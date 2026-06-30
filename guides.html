@@ -25,10 +25,14 @@
 <link rel="stylesheet" href="/css/main.css">
 <style>
 .guides-hero {
-  background: linear-gradient(135deg, #4D1232 0%, #8B3060 60%, #B04880 100%);
+  position: relative; overflow: hidden;
   padding: 100px 5% 48px; color: white;
 }
-.guides-hero-inner { max-width: 900px; margin: 0 auto; }
+.guides-hero-photo { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+.guides-hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 35%; animation: kenBurns 22s ease-in-out infinite alternate; will-change: transform; }
+@keyframes kenBurns { 0% { transform: scale(1.0) translate(0%,0%); } 100% { transform: scale(1.10) translate(-2%,-1.5%); } }
+.guides-hero::after { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(135deg, rgba(77,18,50,0.86), rgba(139,48,96,0.70)); pointer-events: none; }
+.guides-hero-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 2; }
 .hero-tag { display: inline-block; background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25); border-radius: 100px; padding: 4px 14px; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px; }
 .guides-hero h1 { font-size: clamp(26px,4vw,38px); font-weight: 800; margin-bottom: 8px; }
 .guides-hero p { font-size: 15px; opacity: .85; }
@@ -84,6 +88,7 @@
 <body>
 
 <div class="guides-hero">
+  <div class="guides-hero-photo"><img src="/images/guides-farm-worker.jpg" alt="ทีมงานในฟาร์มกุ้ง" fetchpriority="high"></div>
   <div class="guides-hero-inner">
     <div class="hero-tag">📚 Knowledge Base</div>
     <h1 data-i18n="guides.hero.h1">คู่มือโรคกุ้งและการเลี้ยง</h1>

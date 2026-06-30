@@ -179,6 +179,17 @@
 .table-scroll { overflow-x: auto; }
 @media (max-width: 640px) {
   .price-table th:nth-child(5), .price-table td:nth-child(5) { display: none; }
+  .price-hero { padding: 88px 5% 36px; }
+  .price-wrap { padding: 0 4% 48px; }
+}
+@media (max-width: 480px) {
+  .price-hero { padding: 88px 4% 28px; }
+  .price-hero h1 { font-size: 22px; }
+  .summary-grid { grid-template-columns: repeat(2, 1fr); }
+  .sz-card { padding: 12px 8px 10px; }
+  .sz-price { font-size: 20px; }
+  .price-table th, .price-table td { padding: 8px 10px; }
+  .chart-card { padding: 14px; }
 }
 
 /* ── RANGE DISPLAY (price cards) ── */

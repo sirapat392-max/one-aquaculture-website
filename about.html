@@ -50,6 +50,34 @@ body { padding-top: 68px; }
 .story-section h2 { font-size: 28px; font-weight: 700; color: var(--wine-dark); margin-bottom: 20px; }
 .story-section p { font-size: 15px; color: var(--text-mid); line-height: 1.9; margin-bottom: 20px; }
 .highlight-box { background: var(--wine-pale); border-left: 4px solid var(--wine); border-radius: 0 12px 12px 0; padding: 20px 24px; margin: 32px 0; font-size: 15px; color: var(--wine-dark); line-height: 1.8; font-style: italic; }
+.story-photo-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 28px 0; }
+.story-photo-wrap {
+  position: relative; border-radius: 12px; overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.14);
+}
+.story-photo-wrap img {
+  width: 100%; height: 220px; object-fit: cover; display: block;
+  transition: transform 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.story-photo-wrap:hover img { transform: scale(1.07); }
+.story-photo-caption {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(77,18,50,0.80) 0%, rgba(77,18,50,0.10) 50%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  display: flex; align-items: flex-end;
+  padding: 14px 16px;
+  pointer-events: none;
+}
+.story-photo-wrap:hover .story-photo-caption { opacity: 1; }
+.story-photo-caption span {
+  color: white; font-size: 13px; font-weight: 600; letter-spacing: 0.5px;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+@media (max-width: 560px) {
+  .story-photo-pair { grid-template-columns: 1fr; }
+  .story-photo-wrap img { height: 200px; }
+}
 
 /* VALUES */
 .values-section { background: var(--gray-light); padding: 72px 5%; }
@@ -135,6 +163,16 @@ body { padding-top: 68px; }
   <h2 class="reveal" data-i18n="about.story.title">จากฟาร์มกุ้งไทย สู่เทคโนโลยีการเพาะเลี้ยงแห่งอนาคต</h2>
   <p class="reveal" data-i18n-html="about.story.p1">บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด ก่อตั้งขึ้นในปี พ.ศ. 2564 จากความเชื่อว่า การเพาะเลี้ยงกุ้งไทยจะพัฒนาได้ไกลยิ่งขึ้น เมื่อความเชี่ยวชาญของเกษตรกรไทย ถูกนำมาผสานกับเทคโนโลยี คอมพิวเตอร์ Big data และ AI เพื่อช่วยให้การเลี้ยงแม่นยำขึ้น ลดความเสี่ยง และตัดสินใจได้ดีขึ้นในทุกช่วงของการผลิต</p>
   <p class="reveal" data-i18n-html="about.story.p2">เราไม่ได้มองเทคโนโลยีเป็นสิ่งที่จะมาแทนที่ประสบการณ์ของคนทำฟาร์ม แต่เป็นเครื่องมือที่จะช่วยต่อยอดความรู้จากหน้างานจริงให้แข็งแรงยิ่งขึ้น ทุกผลิตภัณฑ์ ทุกคำแนะนำ และทุกระบบที่เราพัฒนา จึงเกิดจากการลงพื้นที่ ฟังเสียงเกษตรกร เข้าใจปัญหาในบ่อเลี้ยงจริง และนำกลับมาปรับปรุงด้วยความรู้ด้านวิทยาศาสตร์ ข้อมูล และเทคโนโลยีสมัยใหม่</p>
+  <div class="story-photo-pair reveal">
+    <div class="story-photo-wrap">
+      <img src="/images/about-farm-pond.jpg" alt="บ่อกุ้งเชิงพาณิชย์" loading="lazy">
+      <div class="story-photo-caption"><span>บ่อกุ้งเชิงพาณิชย์</span></div>
+    </div>
+    <div class="story-photo-wrap">
+      <img src="/images/about-team-field.jpg" alt="ทีมงาน ONE AQUACULTURE ลงพื้นที่ฟาร์ม" loading="lazy">
+      <div class="story-photo-caption"><span>ทีมงานลงพื้นที่จริง</span></div>
+    </div>
+  </div>
   <p class="reveal" data-i18n-html="about.story.p3">ปัจจุบันเราให้บริการฟาร์มเชิงพาณิชย์มากกว่า <strong>100 ฟาร์ม</strong> ครอบคลุมพื้นที่ภาคใต้ฝั่งอ่าวไทย ภาคใต้ฝั่งอันดามัน และภาคกลาง พร้อมทีมงานที่ลงพื้นที่จริง ติดตามผล และให้คำปรึกษาอย่างต่อเนื่อง</p>
   <div class="highlight-box reveal" data-i18n="about.story.quote">
     "เราไม่ใช่แค่ผู้ขาย — เราคือคู่คิดที่นำเทคโนโลยีมาทำงานร่วมกับหัวใจและความเชี่ยวชาญของเกษตรกรไทย ตั้งแต่วันเตรียมบ่อจนถึงวันเก็บเกี่ยว"

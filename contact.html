@@ -29,7 +29,12 @@
 <style>
 body { padding-top: 68px; }
 
-.contact-hero { background: linear-gradient(135deg, var(--wine-deeper), var(--wine)); padding: 80px 5% 60px; }
+.contact-hero { position: relative; overflow: hidden; padding: 80px 5% 60px; }
+.contact-hero-photo { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+.contact-hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; animation: kenBurns 22s ease-in-out infinite alternate; will-change: transform; }
+@keyframes kenBurns { 0% { transform: scale(1.0) translate(0%,0%); } 100% { transform: scale(1.10) translate(-2%,-1.5%); } }
+.contact-hero::after { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(135deg, rgba(77,18,50,0.86), rgba(139,48,96,0.72)); pointer-events: none; }
+.contact-hero-inner { position: relative; z-index: 2; }
 .contact-hero h1 { color: white; font-size: clamp(28px,5vw,46px); font-weight: 800; margin-bottom: 10px; }
 .contact-hero p { color: rgba(255,255,255,0.75); font-size: 16px; max-width: 500px; line-height: 1.7; }
 
@@ -89,9 +94,12 @@ body { padding-top: 68px; }
 <body>
 
 <div class="contact-hero">
-  <div class="page-tag" data-i18n="con.page.tag">ติดต่อเรา · Contact</div>
-  <h1 data-i18n="con.hero.title">พูดคุยกับเรา</h1>
-  <p data-i18n="con.hero.desc">มีคำถามเกี่ยวกับผลิตภัณฑ์ ต้องการใบเสนอราคา หรืออยากปรึกษาผู้เชี่ยวชาญ ติดต่อเราได้เลย</p>
+  <div class="contact-hero-photo"><img src="/images/contact-farm-wide.jpg" alt="ฟาร์มกุ้ง ONE AQUACULTURE" fetchpriority="high"></div>
+  <div class="contact-hero-inner">
+    <div class="page-tag" data-i18n="con.page.tag">ติดต่อเรา · Contact</div>
+    <h1 data-i18n="con.hero.title">พูดคุยกับเรา</h1>
+    <p data-i18n="con.hero.desc">มีคำถามเกี่ยวกับผลิตภัณฑ์ ต้องการใบเสนอราคา หรืออยากปรึกษาผู้เชี่ยวชาญ ติดต่อเราได้เลย</p>
+  </div>
 </div>
 
 <div class="contact-body">
