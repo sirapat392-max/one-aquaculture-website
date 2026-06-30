@@ -235,6 +235,70 @@
     </div>
   </div>
 
+  <!-- ── FCR ระหว่างเลี้ยง ── -->
+  <div class="calc-section-label">FCR LIVE · อัตราแลกเนื้อระหว่างเลี้ยง</div>
+  <div class="calc-card">
+    <div class="calc-card-header">
+      <div class="calc-icon">📊</div>
+      <div>
+        <h2>FCR ระหว่างเลี้ยง — ติดตามรายรุ่น</h2>
+        <p>คำนวณ FCR ณ ปัจจุบัน โดยประมาณ Biomass จากข้อมูลบ่อ — ใช้ตรวจสอบว่าอาหารเกิน/ขาด หรือกุ้งโตตามเป้า</p>
+      </div>
+    </div>
+    <div class="input-grid">
+      <div class="input-group">
+        <label>อาหารสะสม (กก.) <span class="unit">รวมทุกมื้อถึงวันนี้</span></label>
+        <input class="calc-input" id="flive-feed" type="number" min="0" step="1" placeholder="เช่น 3500" oninput="calcFCRLive()">
+      </div>
+      <div class="input-group">
+        <label>ไซส์ปัจจุบัน <span class="unit">ตัว/กก.</span></label>
+        <input class="calc-input" id="flive-sz" type="number" min="1" step="1" placeholder="เช่น 60" oninput="calcFCRLive()">
+      </div>
+      <div class="input-group">
+        <label>ปล่อยลูกกุ้ง <span class="unit">ตัว</span></label>
+        <input class="calc-input" id="flive-cnt" type="number" min="0" step="1000" placeholder="เช่น 200000" oninput="calcFCRLive()">
+      </div>
+      <div class="input-group">
+        <label>อัตรารอดประมาณ <span class="unit">%</span></label>
+        <input class="calc-input" id="flive-sr" type="number" min="0" max="100" step="1" placeholder="เช่น 80" oninput="calcFCRLive()">
+      </div>
+    </div>
+    <div id="flive-result" class="result-box neutral" style="display:none">
+      <div class="result-main">
+        <div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap;">
+          <div>
+            <div class="result-value neutral" id="flive-fcr-val">—</div>
+            <div class="result-label">FCR ระหว่างเลี้ยง</div>
+          </div>
+          <div>
+            <div class="result-value" id="flive-bm-val" style="font-size:22px;color:#4D1232;">—</div>
+            <div class="result-label">Biomass ประมาณ (กก.)</div>
+          </div>
+          <div>
+            <div class="result-value" id="flive-cnt-alive-val" style="font-size:22px;color:#4D1232;">—</div>
+            <div class="result-label">กุ้งรอดประมาณ (ตัว)</div>
+          </div>
+        </div>
+      </div>
+      <span class="result-badge" id="flive-badge" style="display:none"></span>
+    </div>
+    <p class="result-hint" id="flive-hint"></p>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <div class="tip-head">FCR ดี · &lt; 1.3</div>
+        <p>กุ้งกินอาหารดี โตตามเป้า ไม่มีอาหารเหลือ</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-head">FCR สูงเกิน · &gt; 1.6</div>
+        <p>อาหารเหลือ / กุ้ง stress / FCR เสียไปกับกุ้งตาย ควรลดอาหารและตรวจ DO</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-head">FCR ต่ำเกิน · &lt; 0.9</div>
+        <p>อาจให้อาหารน้อยไป หรือ SR สูงกว่าที่ประมาณ — ลองชั่งกุ้งยืนยัน</p>
+      </div>
+    </div>
+  </div>
+
   <!-- ── STOCKING DENSITY ── -->
   <div class="calc-section-label" data-i18n="calc.dens.label">DENSITY · ความหนาแน่นลูกกุ้ง</div>
   <div class="calc-card">
@@ -1036,6 +1100,60 @@ function calcFCR() {
   }
   val.className = `result-value ${cls}`;
   box.className = `result-box ${cls}`;
+  badge.className = `result-badge ${cls}`;
+  badge.textContent = badgeText;
+  badge.style.display = 'inline-flex';
+  hint.textContent = hintText;
+}
+
+// ── FCR LIVE (ระหว่างเลี้ยง) ──────────────────────────────────────────────────
+function calcFCRLive() {
+  const feed = parseFloat(document.getElementById('flive-feed').value) || 0;
+  const sz   = parseFloat(document.getElementById('flive-sz').value)   || 0;
+  const cnt  = parseFloat(document.getElementById('flive-cnt').value)  || 0;
+  const sr   = parseFloat(document.getElementById('flive-sr').value)   || 0;
+  const res  = document.getElementById('flive-result');
+  const hint = document.getElementById('flive-hint');
+  const badge= document.getElementById('flive-badge');
+
+  if (!feed || !sz || !cnt || !sr) {
+    res.style.display = 'none'; hint.textContent = ''; badge.style.display = 'none';
+    return;
+  }
+
+  const alive = Math.round(cnt * sr / 100);
+  const biomass = Math.round(alive / sz);
+  const plWeight = cnt * 0.00005; // PL ≈ 0.05g = 0.00005 kg
+  const gain = biomass - plWeight;
+  const fcr = gain > 0 ? (feed / gain) : 0;
+
+  document.getElementById('flive-bm-val').textContent = biomass.toLocaleString();
+  document.getElementById('flive-cnt-alive-val').textContent = alive.toLocaleString();
+  const fcrEl = document.getElementById('flive-fcr-val');
+
+  res.style.display = '';
+
+  let cls, badgeText, hintText;
+  if (fcr <= 0 || gain <= 0) {
+    fcrEl.textContent = '—'; fcrEl.className = 'result-value neutral';
+    res.className = 'result-box neutral'; badge.style.display = 'none';
+    hint.textContent = 'ข้อมูลยังไม่พอคำนวณ'; return;
+  }
+
+  const fcrStr = fcr.toFixed(2);
+  fcrEl.textContent = fcrStr;
+  if (fcr < 1.3) {
+    cls = 'good'; badgeText = 'FCR ดี';
+    hintText = `Biomass ≈ ${biomass.toLocaleString()} กก. | กุ้งรอด ≈ ${alive.toLocaleString()} ตัว | FCR ${fcrStr} — อาหารสมดุล โตตามเป้า`;
+  } else if (fcr <= 1.6) {
+    cls = 'warn'; badgeText = 'FCR ปกติ';
+    hintText = `Biomass ≈ ${biomass.toLocaleString()} กก. | FCR ${fcrStr} — มาตรฐาน ตรวจสอบ feeding tray ว่าอาหารเหลือหรือไม่`;
+  } else {
+    cls = 'bad'; badgeText = 'FCR สูง';
+    hintText = `Biomass ≈ ${biomass.toLocaleString()} กก. | FCR ${fcrStr} — สูงกว่ามาตรฐาน ตรวจ DO, อาหารเหลือ, สุขภาพกุ้ง`;
+  }
+  fcrEl.className = `result-value ${cls}`;
+  res.className = `result-box ${cls}`;
   badge.className = `result-badge ${cls}`;
   badge.textContent = badgeText;
   badge.style.display = 'inline-flex';

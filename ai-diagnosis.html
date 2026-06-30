@@ -518,6 +518,16 @@ select {
       </div>
 
       <div class="field" style="margin-top:9px;">
+        <label>🧬 สายกุ้ง / สายพันธุ์ <span class="hint">(ช่วย AI แยกความเสี่ยง)</span></label>
+        <div class="chips" id="cs-strain">
+          <span class="chip">สายโตไว / Fast-grow</span>
+          <span class="chip">สายมาตรฐาน</span>
+          <span class="chip">SPF / SPR</span>
+          <span class="chip">ไม่ทราบ</span>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:9px;">
         <label>🗺️ บ่อข้างๆ เป็นไหม</label>
         <div class="chips" id="cs-nbr">
           <span class="chip">ไม่เป็น</span>
@@ -828,6 +838,7 @@ function collectData() {
   const scale = getChips('cs-scale');
   const treatments = getChips('cs-treat');
   const species = getChips('cs-species');
+  const strain = getChips('cs-strain');
   const neighbor = getChips('cs-nbr');
   const waterColor = [...document.querySelectorAll('.cs.sel')].map(c=>c.dataset.lbl);
 
@@ -840,9 +851,11 @@ function collectData() {
     getVal('doc') && `DOC: ${getVal('doc')} วัน`,
     getVal('rai') && `บ่อ: ${getVal('rai')} ไร่`,
     getVal('cnt') && `ปล่อย: ${parseInt(getVal('cnt')).toLocaleString()} ตัว`,
+    getVal('sz') && `ไซส์ปัจจุบัน: ${getVal('sz')} ตัว/กก.`,
     getVal('mort') && `ตายแล้ว: ${getVal('mort')}%`,
     getVal('density') && `หนาแน่น: ${getVal('density')} ตัว/ตร.ม.`,
     species.length && `ชนิดกุ้ง: ${species.join(', ')}`,
+    strain.length && `สายกุ้ง: ${strain.join(', ')}`,
     neighbor.length && `บ่อข้างๆ: ${neighbor.join(', ')}`,
     getVal('wph') && `pH: ${getVal('wph')}`,
     getVal('wdo') && `DO: ${getVal('wdo')}`,
