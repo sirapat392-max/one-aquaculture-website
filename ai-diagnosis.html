@@ -359,9 +359,9 @@ select {
 <div class="page-hero">
   <div class="hero-inner">
     <div class="page-tag">🔬 AI · ShrimpDx</div>
-    <h1>วิเคราะห์โรคกุ้ง AI</h1>
-    <p>กรอกอาการ ข้อมูลบ่อ และค่าน้ำ — AI วินิจฉัยและให้คำแนะนำทันที</p>
-    <div class="version-pill">ONE AI · Gemini 2.5 Flash · Vision · เพื่อเกษตรกรกุ้งไทย</div>
+    <h1 data-i18n="dx.hero.h1">วิเคราะห์โรคกุ้ง AI</h1>
+    <p data-i18n="dx.hero.p">กรอกอาการ ข้อมูลบ่อ และค่าน้ำ — AI วินิจฉัยและให้คำแนะนำทันที</p>
+    <div class="version-pill" data-i18n="dx.hero.pill">ONE AI · Gemini 2.5 Flash · Vision · เพื่อเกษตรกรกุ้งไทย</div>
   </div>
 </div>
 
@@ -369,12 +369,12 @@ select {
 
   <div class="nudge warn">
     <span></span>
-    <div>ผลวิเคราะห์นี้ใช้เป็น<b>แนวทางเบื้องต้นเท่านั้น</b> กรณีรุนแรงหรือไม่แน่ใจ ควรปรึกษาสัตวแพทย์</div>
+    <div data-i18n-html="dx.nudge">ผลวิเคราะห์นี้ใช้เป็น<b>แนวทางเบื้องต้นเท่านั้น</b> กรณีรุนแรงหรือไม่แน่ใจ ควรปรึกษาสัตวแพทย์</div>
   </div>
 
   <div class="hist-panel" id="histPanel" style="display:none">
     <button class="hist-toggle" onclick="toggleHist()">
-      <span>📋 ประวัติการวิเคราะห์</span>
+      <span data-i18n="dx.hist.title">📋 ประวัติการวิเคราะห์</span>
       <span class="hist-count" id="histCount">0</span>
       <span class="hist-arrow" id="histArrow">▼</span>
     </button>
@@ -389,89 +389,89 @@ select {
     <div class="group">
       <div class="group-head">
         <div class="num">1</div>
-        <h2>เกิดอะไรขึ้นที่บ่อ</h2>
+        <h2 data-i18n="dx.s1.h2">เกิดอะไรขึ้นที่บ่อ</h2>
       </div>
 
       <div class="field">
-        <label>อาการที่เห็น <span class="hint">(แตะได้หลายอัน)</span></label>
+        <label><span data-i18n="dx.symp.label">อาการที่เห็น</span> <span class="hint" data-i18n="dx.symp.hint">(แตะได้หลายอัน)</span></label>
         <div class="chips" id="cs-symp">
-          <span class="chip">กุ้งตายลอย</span>
-          <span class="chip">ตัวแดง</span>
-          <span class="chip">ลอยขอบบ่อ</span>
-          <span class="chip">ไม่กินอาหาร</span>
-          <span class="chip">กินอาหารลด</span>
-          <span class="chip">ตับซีด/วาย</span>
-          <span class="chip">ตับเหลือง</span>
-          <span class="chip">ขี้ขาวลอย</span>
-          <span class="chip">เปลือกนิ่ม</span>
-          <span class="chip">น้ำเปลี่ยนสี</span>
-          <span class="chip">โตช้า</span>
-          <span class="chip">ไซส์ไม่เท่ากัน</span>
-          <span class="chip">จุดขาวบนเปลือก</span>
-          <span class="chip">เหงือกดำ/น้ำตาล</span>
-          <span class="chip">ลำไส้ว่าง</span>
-          <span class="chip">กระเพาะว่าง</span>
-          <span class="chip">ตัวบิดงอ</span>
-          <span class="chip">ไม่ลอกคราบ</span>
+          <span class="chip" data-i18n="dx.chip.dead">กุ้งตายลอย</span>
+          <span class="chip" data-i18n="dx.chip.red">ตัวแดง</span>
+          <span class="chip" data-i18n="dx.chip.float">ลอยขอบบ่อ</span>
+          <span class="chip" data-i18n="dx.chip.nofeed">ไม่กินอาหาร</span>
+          <span class="chip" data-i18n="dx.chip.lessfeed">กินอาหารลด</span>
+          <span class="chip" data-i18n="dx.chip.liver">ตับซีด/วาย</span>
+          <span class="chip" data-i18n="dx.chip.yliver">ตับเหลือง</span>
+          <span class="chip" data-i18n="dx.chip.wtool">ขี้ขาวลอย</span>
+          <span class="chip" data-i18n="dx.chip.softshell">เปลือกนิ่ม</span>
+          <span class="chip" data-i18n="dx.chip.waterclr">น้ำเปลี่ยนสี</span>
+          <span class="chip" data-i18n="dx.chip.slowgrow">โตช้า</span>
+          <span class="chip" data-i18n="dx.chip.uneven">ไซส์ไม่เท่ากัน</span>
+          <span class="chip" data-i18n="dx.chip.wspot">จุดขาวบนเปลือก</span>
+          <span class="chip" data-i18n="dx.chip.blackgill">เหงือกดำ/น้ำตาล</span>
+          <span class="chip" data-i18n="dx.chip.emptygut">ลำไส้ว่าง</span>
+          <span class="chip" data-i18n="dx.chip.emptystom">กระเพาะว่าง</span>
+          <span class="chip" data-i18n="dx.chip.twist">ตัวบิดงอ</span>
+          <span class="chip" data-i18n="dx.chip.nomolt">ไม่ลอกคราบ</span>
         </div>
       </div>
 
       <div class="field">
-        <label>⏱ เริ่มเห็นอาการเมื่อไหร่</label>
+        <label data-i18n="dx.time.label">⏱ เริ่มเห็นอาการเมื่อไหร่</label>
         <div class="chips time" id="cs-time">
-          <span class="chip">วันนี้</span>
-          <span class="chip">เมื่อวาน</span>
-          <span class="chip">2–3 วัน</span>
-          <span class="chip">สัปดาห์นี้</span>
-          <span class="chip">เกิน 1 สัปดาห์</span>
-          <span class="chip">ค่อยๆ เป็น</span>
+          <span class="chip" data-i18n="dx.chip.t.today">วันนี้</span>
+          <span class="chip" data-i18n="dx.chip.t.yesterday">เมื่อวาน</span>
+          <span class="chip" data-i18n="dx.chip.t.2days">2–3 วัน</span>
+          <span class="chip" data-i18n="dx.chip.t.week">สัปดาห์นี้</span>
+          <span class="chip" data-i18n="dx.chip.t.over1wk">เกิน 1 สัปดาห์</span>
+          <span class="chip" data-i18n="dx.chip.t.gradual">ค่อยๆ เป็น</span>
         </div>
       </div>
 
       <div class="field">
-        <label>⚡ ระดับความรุนแรงเบื้องต้น</label>
+        <label data-i18n="dx.scale.label">⚡ ระดับความรุนแรงเบื้องต้น</label>
         <div class="chips scale" id="cs-scale">
-          <span class="chip">&lt; 5%</span>
-          <span class="chip">5–20%</span>
-          <span class="chip">20–50%</span>
-          <span class="chip">เกิน 50%</span>
-          <span class="chip">ทั้งบ่อ</span>
+          <span class="chip" data-i18n="dx.chip.s.lt5">&lt; 5%</span>
+          <span class="chip" data-i18n="dx.chip.s.5to20">5–20%</span>
+          <span class="chip" data-i18n="dx.chip.s.20to50">20–50%</span>
+          <span class="chip" data-i18n="dx.chip.s.gt50">เกิน 50%</span>
+          <span class="chip" data-i18n="dx.chip.s.allpond">ทั้งบ่อ</span>
         </div>
       </div>
 
       <div class="field">
-        <label>เล่าเพิ่ม <span class="hint">(อธิบายสิ่งที่สังเกตพบ)</span></label>
-        <textarea id="extraDesc" placeholder="เช่น: กุ้งขาว 38 วัน ตับซีด ขี้ขาวลอย กินอาหารน้อยลง 30% บ่อข้างๆ ก็เป็น..."></textarea>
+        <label><span data-i18n="dx.extra.label">เล่าเพิ่ม</span> <span class="hint" data-i18n="dx.extra.hint">(อธิบายสิ่งที่สังเกตพบ)</span></label>
+        <textarea id="extraDesc" data-i18n-placeholder="dx.extra.ph" placeholder="เช่น: กุ้งขาว 38 วัน ตับซีด ขี้ขาวลอย กินอาหารน้อยลง 30% บ่อข้างๆ ก็เป็น..."></textarea>
       </div>
 
       <div class="field">
-        <label>🩺 เคยลองรักษาอะไรไปแล้ว <span class="hint">(ไม่บังคับ)</span></label>
+        <label><span data-i18n="dx.treat.label">🩺 เคยลองรักษาอะไรไปแล้ว</span> <span class="hint" data-i18n="dx.treat.hint">(ไม่บังคับ)</span></label>
         <div class="chips" id="cs-treat">
-          <span class="chip">ลดอาหาร</span>
-          <span class="chip">เพิ่มออกซิเจน</span>
-          <span class="chip">ถ่ายน้ำ</span>
-          <span class="chip">เพิ่มเกลือ</span>
-          <span class="chip">ปูนขาว</span>
-          <span class="chip">โพรไบโอติก</span>
-          <span class="chip">วิตามิน C</span>
-          <span class="chip">ยังไม่ได้ทำอะไร</span>
+          <span class="chip" data-i18n="dx.chip.tr.lessfeed">ลดอาหาร</span>
+          <span class="chip" data-i18n="dx.chip.tr.oxygen">เพิ่มออกซิเจน</span>
+          <span class="chip" data-i18n="dx.chip.tr.water">ถ่ายน้ำ</span>
+          <span class="chip" data-i18n="dx.chip.tr.salt">เพิ่มเกลือ</span>
+          <span class="chip" data-i18n="dx.chip.tr.lime">ปูนขาว</span>
+          <span class="chip" data-i18n="dx.chip.tr.probiotic">โพรไบโอติก</span>
+          <span class="chip" data-i18n="dx.chip.tr.vitc">วิตามิน C</span>
+          <span class="chip" data-i18n="dx.chip.tr.nothing">ยังไม่ได้ทำอะไร</span>
         </div>
       </div>
 
       <div class="field">
-        <label>📸 แนบรูปกุ้ง <span class="hint">(ไม่บังคับ — ช่วย AI เห็นภาพจริง)</span></label>
+        <label><span data-i18n="dx.img.label">📸 แนบรูปกุ้ง</span> <span class="hint" data-i18n="dx.img.hint">(ไม่บังคับ — ช่วย AI เห็นภาพจริง)</span></label>
         <div class="img-upload-area" id="imgArea">
           <input type="file" id="imgInput" accept="image/*" onchange="handleImgUpload(event)">
           <div id="imgPlaceholder">
             <div class="img-upload-ico">📷</div>
-            <div class="img-upload-txt">แตะเพื่อเลือกรูป หรือลากวางที่นี่</div>
-            <div class="img-upload-hint">รูปตับ เหงือก ลำตัว เปลือก · JPG/PNG ไม่เกิน 5MB</div>
+            <div class="img-upload-txt" data-i18n="dx.img.txt">แตะเพื่อเลือกรูป หรือลากวางที่นี่</div>
+            <div class="img-upload-hint" data-i18n="dx.img.hint2">รูปตับ เหงือก ลำตัว เปลือก · JPG/PNG ไม่เกิน 5MB</div>
           </div>
         </div>
         <div id="imgPreviewWrap" class="img-preview-wrap" style="display:none">
           <img id="imgPreview" class="img-preview" alt="preview">
           <button type="button" class="img-remove-btn" onclick="removeImg()">×</button>
-          <div><span class="img-badge">📸 มีรูปแนบ — AI จะใช้ประกอบการวินิจฉัย</span></div>
+          <div><span class="img-badge" data-i18n="dx.img.badge">📸 มีรูปแนบ — AI จะใช้ประกอบการวินิจฉัย</span></div>
         </div>
       </div>
     </div>
@@ -480,65 +480,65 @@ select {
     <div class="group">
       <div class="group-head">
         <div class="num">2</div>
-        <h2>ข้อมูลบ่อ</h2>
-        <span class="who-tag opt">ช่วย AI แม่นขึ้น</span>
+        <h2 data-i18n="dx.s2.h2">ข้อมูลบ่อ</h2>
+        <span class="who-tag opt" data-i18n="dx.s2.opt">ช่วย AI แม่นขึ้น</span>
       </div>
 
       <div class="water-grid">
         <div class="water-cell">
-          <label>DOC (วัน)</label>
+          <label data-i18n="dx.pond.doc">DOC (วัน)</label>
           <input type="number" id="doc" placeholder="35" oninput="calcDensity()">
         </div>
         <div class="water-cell">
-          <label>ขนาดบ่อ (ไร่)</label>
+          <label data-i18n="dx.pond.rai">ขนาดบ่อ (ไร่)</label>
           <input type="number" step="0.1" id="rai" placeholder="2" oninput="calcDensity()">
         </div>
         <div class="water-cell">
-          <label>ปล่อย (ตัว)</label>
+          <label data-i18n="dx.pond.cnt">ปล่อย (ตัว)</label>
           <input type="number" id="cnt" placeholder="200000" oninput="calcDensity()">
         </div>
         <div class="water-cell">
-          <label>ไซส์ (ตัว/กก)</label>
+          <label data-i18n="dx.pond.sz">ไซส์ (ตัว/กก)</label>
           <input type="number" id="sz" placeholder="70">
         </div>
         <div class="water-cell">
-          <label>% ตายแล้ว</label>
+          <label data-i18n="dx.pond.mort">% ตายแล้ว</label>
           <input type="text" id="mort" placeholder="10" oninput="calcDensity()">
         </div>
         <div class="water-cell">
-          <label>หนาแน่น <span style="color:var(--wine);font-size:9px;">auto</span></label>
+          <label><span data-i18n="dx.pond.density">หนาแน่น</span> <span style="color:var(--wine);font-size:9px;">auto</span></label>
           <input type="number" id="density" placeholder="—" style="background:#f5ebf0;color:var(--wine);font-weight:700;" readonly>
         </div>
       </div>
       <div id="densityHint" class="density-hint" style="display:none;"></div>
 
       <div class="field" style="margin-top:12px;">
-        <label>ชนิดกุ้ง</label>
+        <label data-i18n="dx.species.label">ชนิดกุ้ง</label>
         <div class="chips" id="cs-species">
-          <span class="chip">กุ้งขาวแวนนาไม</span>
-          <span class="chip">กุ้งกุลาดำ</span>
-          <span class="chip">กุ้งก้ามกราม</span>
-          <span class="chip">อื่นๆ</span>
+          <span class="chip" data-i18n="dx.chip.sp.van">กุ้งขาวแวนนาไม</span>
+          <span class="chip" data-i18n="dx.chip.sp.mon">กุ้งกุลาดำ</span>
+          <span class="chip" data-i18n="dx.chip.sp.fresh">กุ้งก้ามกราม</span>
+          <span class="chip" data-i18n="dx.chip.sp.other">อื่นๆ</span>
         </div>
       </div>
 
       <div class="field" style="margin-top:9px;">
-        <label>🧬 สายกุ้ง / สายพันธุ์ <span class="hint">(ช่วย AI แยกความเสี่ยง)</span></label>
+        <label><span data-i18n="dx.strain.label">🧬 สายกุ้ง / สายพันธุ์</span> <span class="hint" data-i18n="dx.strain.hint">(ช่วย AI แยกความเสี่ยง)</span></label>
         <div class="chips" id="cs-strain">
-          <span class="chip">สายโตไว / Fast-grow</span>
-          <span class="chip">สายมาตรฐาน</span>
-          <span class="chip">SPF / SPR</span>
-          <span class="chip">ไม่ทราบ</span>
+          <span class="chip" data-i18n="dx.chip.st.fast">สายโตไว / Fast-grow</span>
+          <span class="chip" data-i18n="dx.chip.st.std">สายมาตรฐาน</span>
+          <span class="chip" data-i18n="dx.chip.st.spf">SPF / SPR</span>
+          <span class="chip" data-i18n="dx.chip.st.unk">ไม่ทราบ</span>
         </div>
       </div>
 
       <div class="field" style="margin-top:9px;">
-        <label>🗺️ บ่อข้างๆ เป็นไหม</label>
+        <label data-i18n="dx.nbr.label">🗺️ บ่อข้างๆ เป็นไหม</label>
         <div class="chips" id="cs-nbr">
-          <span class="chip">ไม่เป็น</span>
-          <span class="chip">บ่อใกล้ๆ เป็น</span>
-          <span class="chip">ทั้งฟาร์มเป็น</span>
-          <span class="chip">ไม่รู้</span>
+          <span class="chip" data-i18n="dx.chip.nb.no">ไม่เป็น</span>
+          <span class="chip" data-i18n="dx.chip.nb.near">บ่อใกล้ๆ เป็น</span>
+          <span class="chip" data-i18n="dx.chip.nb.all">ทั้งฟาร์มเป็น</span>
+          <span class="chip" data-i18n="dx.chip.nb.unk">ไม่รู้</span>
         </div>
       </div>
     </div>
@@ -547,49 +547,49 @@ select {
     <div class="group">
       <div class="group-head">
         <div class="num">3</div>
-        <h2>ค่าน้ำ</h2>
-        <span class="who-tag opt">มีก็กรอก</span>
+        <h2 data-i18n="dx.s3.h2">ค่าน้ำ</h2>
+        <span class="who-tag opt" data-i18n="dx.s3.opt">มีก็กรอก</span>
       </div>
 
       <div class="water-grid">
         <div class="water-cell"><label>pH</label><input type="number" step="0.1" id="wph" placeholder="8.0"><span class="wf" id="f-ph"></span></div>
         <div class="water-cell"><label>DO mg/L</label><input type="number" step="0.1" id="wdo" placeholder="5.0"><span class="wf" id="f-do"></span></div>
-        <div class="water-cell"><label>เค็ม ppt</label><input type="number" step="0.1" id="wsal" placeholder="15"></div>
-        <div class="water-cell"><label>อุณหภูมิ °C</label><input type="number" step="0.1" id="wtemp" placeholder="30"><span class="wf" id="f-temp"></span></div>
+        <div class="water-cell"><label data-i18n="dx.water.sal">เค็ม ppt</label><input type="number" step="0.1" id="wsal" placeholder="15"></div>
+        <div class="water-cell"><label data-i18n="dx.water.temp">อุณหภูมิ °C</label><input type="number" step="0.1" id="wtemp" placeholder="30"><span class="wf" id="f-temp"></span></div>
         <div class="water-cell"><label>NH₃ mg/L</label><input type="number" step="0.01" id="wnh3" placeholder="0.00"><span class="wf" id="f-nh3"></span></div>
         <div class="water-cell"><label>NO₂ mg/L</label><input type="number" step="0.01" id="wno2" placeholder="0.00"><span class="wf" id="f-no2"></span></div>
       </div>
-      <div class="flag-legend"><span><i class="ok"></i> ปกติ</span><span><i class="warn"></i> ระวัง</span><span><i class="bad"></i> ผิดปกติ</span></div>
+      <div class="flag-legend"><span><i class="ok"></i> <span data-i18n="dx.water.normal">ปกติ</span></span><span><i class="warn"></i> <span data-i18n="dx.water.warn2">ระวัง</span></span><span><i class="bad"></i> <span data-i18n="dx.water.bad">ผิดปกติ</span></span></div>
 
       <button type="button" class="adv-toggle" id="advToggle" onclick="toggleAdv()">
-        <span id="advToggleTxt">⊕ ค่าน้ำเพิ่มเติม / สังเกตด้วยตา</span>
+        <span id="advToggleTxt" data-i18n="dx.adv.show">⊕ ค่าน้ำเพิ่มเติม / สังเกตด้วยตา</span>
         <span class="arr">▾</span>
       </button>
       <div class="adv-body" id="advBody">
         <div class="water-grid" style="margin-top:7px;">
-          <div class="water-cell"><label>Alkalinity</label><input type="number" id="walk" placeholder="140"></div>
+          <div class="water-cell"><label data-i18n="dx.water.alk">Alkalinity</label><input type="number" id="walk" placeholder="140"></div>
           <div class="water-cell"><label>H₂S</label><input type="number" step="0.001" id="wh2s" placeholder="0.000"></div>
-          <div class="water-cell"><label>ความใส cm</label><input type="number" id="wtrans" placeholder="35"></div>
+          <div class="water-cell"><label data-i18n="dx.water.trans">ความใส cm</label><input type="number" id="wtrans" placeholder="35"></div>
         </div>
         <div class="field" style="margin-top:12px;">
-          <label>🎨 สีน้ำ <span class="hint">(แตะเลือก)</span></label>
+          <label><span data-i18n="dx.wcolor.label">🎨 สีน้ำ</span> <span class="hint" data-i18n="dx.wcolor.hint">(แตะเลือก)</span></label>
           <div class="water-color-grid">
-            <div class="cs cs-gl" data-lbl="เขียวอ่อน" onclick="this.classList.toggle('sel')">เขียวอ่อน</div>
-            <div class="cs cs-gd" data-lbl="เขียวเข้ม" onclick="this.classList.toggle('sel')">เขียวเข้ม</div>
-            <div class="cs cs-yb" data-lbl="เหลือง" onclick="this.classList.toggle('sel')">เหลือง</div>
-            <div class="cs cs-br" data-lbl="น้ำตาล" onclick="this.classList.toggle('sel')">น้ำตาล</div>
-            <div class="cs cs-rd" data-lbl="แดง" onclick="this.classList.toggle('sel')">แดง</div>
-            <div class="cs cs-bk" data-lbl="ดำ-เทา" onclick="this.classList.toggle('sel')">ดำ-เทา</div>
-            <div class="cs cs-cl" data-lbl="ใส" onclick="this.classList.toggle('sel')">ใส</div>
-            <div class="cs cs-ml" data-lbl="ขุ่นขาว" onclick="this.classList.toggle('sel')">ขุ่นขาว</div>
+            <div class="cs cs-gl" data-lbl="เขียวอ่อน" onclick="this.classList.toggle('sel')" data-i18n="dx.wc.lightgreen">เขียวอ่อน</div>
+            <div class="cs cs-gd" data-lbl="เขียวเข้ม" onclick="this.classList.toggle('sel')" data-i18n="dx.wc.darkgreen">เขียวเข้ม</div>
+            <div class="cs cs-yb" data-lbl="เหลือง" onclick="this.classList.toggle('sel')" data-i18n="dx.wc.yellow">เหลือง</div>
+            <div class="cs cs-br" data-lbl="น้ำตาล" onclick="this.classList.toggle('sel')" data-i18n="dx.wc.brown">น้ำตาล</div>
+            <div class="cs cs-rd" data-lbl="แดง" onclick="this.classList.toggle('sel')" data-i18n="dx.wc.red">แดง</div>
+            <div class="cs cs-bk" data-lbl="ดำ-เทา" onclick="this.classList.toggle('sel')" data-i18n="dx.wc.black">ดำ-เทา</div>
+            <div class="cs cs-cl" data-lbl="ใส" onclick="this.classList.toggle('sel')" data-i18n="dx.wc.clear">ใส</div>
+            <div class="cs cs-ml" data-lbl="ขุ่นขาว" onclick="this.classList.toggle('sel')" data-i18n="dx.wc.milky">ขุ่นขาว</div>
           </div>
         </div>
         <div class="field">
-          <label>pH swing เช้า → บ่าย</label>
+          <label data-i18n="dx.swing.label">pH swing เช้า → บ่าย</label>
           <div class="swing-row">
-            <input type="number" step="0.1" id="phAM" placeholder="เช้า">
+            <input type="number" step="0.1" id="phAM" data-i18n-placeholder="dx.swing.am" placeholder="เช้า">
             <div class="swing-arrow">→</div>
-            <input type="number" step="0.1" id="phPM" placeholder="บ่าย">
+            <input type="number" step="0.1" id="phPM" data-i18n-placeholder="dx.swing.pm" placeholder="บ่าย">
           </div>
         </div>
       </div>
@@ -599,17 +599,17 @@ select {
     <div class="group collapsible closed">
       <div class="group-head" onclick="toggleCollapse(this)">
         <div class="num" style="background:var(--wine-light);font-size:13px;">+</div>
-        <h2>รายละเอียดเพิ่มเติม</h2>
-        <span class="who-tag opt">ช่วย AI แม่นขึ้น</span>
+        <h2 data-i18n="dx.s4.h2">รายละเอียดเพิ่มเติม</h2>
+        <span class="who-tag opt" data-i18n="dx.s4.opt">ช่วย AI แม่นขึ้น</span>
       </div>
       <div class="group-body">
         <div class="water-grid" style="grid-template-columns:1fr 1fr;">
-          <div class="water-cell"><label>Hatchery</label><input type="text" id="hatchery" placeholder="ชื่อโรงฟัก"></div>
-          <div class="water-cell"><label>อาหารยี่ห้อ</label><input type="text" id="feed" placeholder="ยี่ห้ออาหาร"></div>
+          <div class="water-cell"><label data-i18n="dx.hatchery">Hatchery</label><input type="text" id="hatchery" placeholder="ชื่อโรงฟัก"></div>
+          <div class="water-cell"><label data-i18n="dx.feed.lbl">อาหารยี่ห้อ</label><input type="text" id="feed" placeholder="ยี่ห้ออาหาร"></div>
         </div>
         <div class="water-grid" style="grid-template-columns:1fr 1fr;margin-top:7px;">
           <div class="water-cell">
-            <label>แหล่งน้ำ</label>
+            <label data-i18n="dx.watersrc">แหล่งน้ำ</label>
             <select id="watersrc">
               <option value="">-</option>
               <option>น้ำทะเลตรง</option>
@@ -619,7 +619,7 @@ select {
             </select>
           </div>
           <div class="water-cell">
-            <label>พื้นบ่อ</label>
+            <label data-i18n="dx.pondtype">พื้นบ่อ</label>
             <select id="pondtype">
               <option value="">-</option>
               <option>PE</option>
@@ -630,8 +630,8 @@ select {
           </div>
         </div>
         <div class="water-grid" style="grid-template-columns:1fr 1fr;margin-top:7px;">
-          <div class="water-cell"><label>ถ่ายน้ำล่าสุด</label><input type="text" id="lastchange" placeholder="3 วันที่แล้ว"></div>
-          <div class="water-cell"><label>จังหวัด</label><input type="text" id="province" placeholder="เช่น สงขลา"></div>
+          <div class="water-cell"><label data-i18n="dx.lastchange">ถ่ายน้ำล่าสุด</label><input type="text" id="lastchange" placeholder="3 วันที่แล้ว"></div>
+          <div class="water-cell"><label data-i18n="dx.province">จังหวัด</label><input type="text" id="province" placeholder="เช่น สงขลา"></div>
         </div>
       </div>
     </div>
@@ -640,15 +640,15 @@ select {
     <div class="group collapsible closed" id="groupWeather">
       <div class="group-head" onclick="toggleCollapse(this)">
         <div class="num" style="background:#1565C0;font-size:13px;">☁️</div>
-        <h2>ตำแหน่ง &amp; สภาพอากาศ</h2>
-        <span class="who-tag opt">ช่วย AI เข้าใจบริบท</span>
+        <h2 data-i18n="dx.weather.h2">ตำแหน่ง &amp; สภาพอากาศ</h2>
+        <span class="who-tag opt" data-i18n="dx.weather.opt">ช่วย AI เข้าใจบริบท</span>
       </div>
       <div class="group-body">
 
         <!-- GPS -->
         <div class="field">
           <button type="button" id="gpsBtn" onclick="getGPS()" style="width:100%;border:1.5px dashed var(--line);background:var(--sand);border-radius:10px;padding:11px;font-family:inherit;font-size:13.5px;font-weight:600;color:var(--mud);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s;">
-            📍 กดเพื่อระบุพิกัดบ่อเลี้ยง (GPS)
+            <span data-i18n="dx.gps.btn">📍 กดเพื่อระบุพิกัดบ่อเลี้ยง (GPS)</span>
           </button>
           <div id="gpsResult" style="margin-top:8px;font-size:11.5px;color:var(--mud);font-family:'JetBrains Mono',monospace;display:none;background:var(--wine-pale);border-radius:8px;padding:8px 11px;"></div>
           <input type="hidden" id="gpsLat">
@@ -687,7 +687,7 @@ select {
 
         <!-- Weather strip -->
         <div class="field">
-          <label id="weatherLabel" style="display:none;">🌤️ สภาพอากาศ 14 วัน <span class="hint" id="weatherCoordHint"></span></label>
+          <label id="weatherLabel" style="display:none;"><span data-i18n="dx.weather.lbl">🌤️ สภาพอากาศ 14 วัน</span> <span class="hint" id="weatherCoordHint"></span></label>
           <div id="weatherStrip" style="display:none;"></div>
           <div id="weatherInsight" style="display:none;margin-top:8px;padding:9px 12px;background:var(--warn-soft);border:1px solid var(--warn-border);border-radius:9px;font-size:12px;color:#7a4a1f;line-height:1.6;"></div>
           <button type="button" id="weatherBtn" style="display:none;margin-top:8px;width:100%;border:1.5px dashed var(--line);background:var(--sand);border-radius:9px;padding:8px;font-family:inherit;font-size:12px;color:var(--mud);cursor:pointer;" onclick="fetchWeather()">
@@ -700,8 +700,8 @@ select {
 
   </form>
   <div class="action-row" style="padding:0 16px 12px;">
-    <button class="btn-clear" type="button" onclick="clearForm()">↺ ล้าง</button>
-    <button class="btn-submit" type="button" id="submitBtn" onclick="runDiagnosis()">
+    <button class="btn-clear" type="button" onclick="clearForm()" data-i18n="dx.btn.clear">↺ ล้าง</button>
+    <button class="btn-submit" type="button" id="submitBtn" onclick="runDiagnosis()" data-i18n="dx.btn.submit">
       🔬 วิเคราะห์ด้วย AI
     </button>
   </div>
@@ -715,7 +715,7 @@ select {
     <div class="group" id="groupAI">
       <div class="group-head">
         <div class="num ai">✦</div>
-        <h2>AI วินิจฉัย</h2>
+        <h2 data-i18n="dx.ai.h2">AI วินิจฉัย</h2>
         <div style="margin-left:auto;display:flex;align-items:center;gap:5px;background:var(--ai-light);border-radius:100px;padding:3px 9px;font-size:10px;font-weight:700;color:var(--ai-deep);font-family:'JetBrains Mono',monospace;">
           <span style="width:6px;height:6px;background:var(--coral);border-radius:50%;animation:aipulse 2s infinite;display:inline-block;"></span>ONE AI
         </div>
@@ -725,7 +725,7 @@ select {
         <div class="ai-card">
           <div class="ai-empty">
             <span class="ico">🔬</span>
-            <p>กรอกอาการที่พบแล้วกด<br><b>"วิเคราะห์ด้วย AI"</b> ด้านบน</p>
+            <p data-i18n-html="dx.ai.empty">กรอกอาการที่พบแล้วกด<br><b>"วิเคราะห์ด้วย AI"</b> ด้านบน</p>
           </div>
         </div>
       </div>
@@ -736,17 +736,17 @@ select {
     <div class="chat-section" id="chatSection">
       <div class="chat-head">
         <div class="chat-avatar">✦</div>
-        <h3>ถามต่อได้เลย</h3>
-        <span style="font-size:11px;color:var(--mud);">AI ตอบทันที</span>
+        <h3 data-i18n="dx.chat.h3">ถามต่อได้เลย</h3>
+        <span style="font-size:11px;color:var(--mud);" data-i18n="dx.chat.live">AI ตอบทันที</span>
       </div>
       <div class="chat-msgs" id="chatMsgs">
         <div class="bubble-row">
           <div class="chat-avatar">✦</div>
-          <div class="bubble ai">สวัสดีครับ! หลังวิเคราะห์แล้ว ถามได้เลยนะครับ เช่น "ต้องใช้ผลิตภัณฑ์อะไร" หรือ "วิธีป้องกันระยะยาว"</div>
+          <div class="bubble ai" data-i18n="dx.chat.welcome">สวัสดีครับ! หลังวิเคราะห์แล้ว ถามได้เลยนะครับ เช่น "ต้องใช้ผลิตภัณฑ์อะไร" หรือ "วิธีป้องกันระยะยาว"</div>
         </div>
       </div>
       <div class="chat-input-row">
-        <textarea class="chat-txt" id="chatTxt" placeholder="ถามเพิ่มเติม... เช่น วิธีใช้ผลิตภัณฑ์ ONE, ปริมาณที่ใช้..." rows="1" onkeydown="chatKey(event)" oninput="autoResize(this)"></textarea>
+        <textarea class="chat-txt" id="chatTxt" data-i18n-placeholder="dx.chat.ph" placeholder="ถามเพิ่มเติม... เช่น วิธีใช้ผลิตภัณฑ์ ONE, ปริมาณที่ใช้..." rows="1" onkeydown="chatKey(event)" oninput="autoResize(this)"></textarea>
         <button class="chat-send" type="button" onclick="sendChat()"></button>
       </div>
     </div>
@@ -827,7 +827,7 @@ function toggleAdv() {
   advOpen = !advOpen;
   document.getElementById('advBody').classList.toggle('open', advOpen);
   document.querySelector('.adv-toggle .arr').style.transform = advOpen ? 'rotate(180deg)' : '';
-  document.getElementById('advToggleTxt').textContent = advOpen ? '⊖ ซ่อนค่าน้ำเพิ่มเติม' : '⊕ ค่าน้ำเพิ่มเติม / สังเกตด้วยตา';
+  document.getElementById('advToggleTxt').textContent = advOpen ? t('dx.adv.hide') : t('dx.adv.show');
 }
 
 // ── COLLAPSIBLE ──────────────────────────────────────────────────────────────
@@ -1077,7 +1077,7 @@ async function runDiagnosis() {
   }
 
   const btn = document.getElementById('submitBtn');
-  btn.disabled = true; btn.innerHTML = '⏳ กำลังวิเคราะห์...';
+  btn.disabled = true; btn.innerHTML = t('dx.btn.analyzing');
 
   document.getElementById('aiResult').innerHTML = `
   <div class="ai-card">
@@ -1121,7 +1121,7 @@ async function runDiagnosis() {
       role: 'assistant',
       content: `AI ได้วิเคราะห์แล้ว: ${full.substring(0,300)}...`
     });
-    addBubble('ai', ' วิเคราะห์เสร็จแล้ว! ถามเพิ่มเติมได้เลยครับ เช่น วิธีใช้ผลิตภัณฑ์ ขนาดที่ใช้ หรือวิธีป้องกันระยะยาว');
+    addBubble('ai', t('dx.chat.done'));
   } catch(e) {
     document.getElementById('aiResult').innerHTML = `
     <div class="ai-card">
@@ -1129,7 +1129,7 @@ async function runDiagnosis() {
     </div>`;
   }
   btn.disabled = false;
-  btn.innerHTML = ' วิเคราะห์ด้วย AI';
+  btn.innerHTML = t('dx.btn.submit');
 }
 
 // ── CHAT ──────────────────────────────────────────────────────────────────────
