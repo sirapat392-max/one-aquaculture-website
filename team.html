@@ -45,7 +45,7 @@
   max-width: 920px; margin: 0 auto; padding: 40px 5% 72px;
   display: flex; gap: 36px; align-items: flex-start;
 }
-.map-col  { flex: 0 0 200px; position: sticky; top: 88px; }
+.map-col  { flex: 0 0 280px; position: sticky; top: 88px; }
 .cards-col{ flex: 1; display: flex; flex-direction: column; gap: 12px; }
 
 /* ─── MAP ─── */
@@ -125,7 +125,7 @@
 
 @media (max-width: 660px) {
   .team-wrap { flex-direction: column; gap: 24px; padding: 28px 4% 56px; }
-  .map-col { position: static; flex: none; width: 100%; max-width: 220px; margin: 0 auto; }
+  .map-col { position: static; flex: none; width: 100%; max-width: 280px; margin: 0 auto; }
   .team-card:hover { transform: scale(1.04) translateY(-2px); }
 }
 </style>
@@ -273,13 +273,16 @@
     'TH-92': 'ice',  'th-92': 'ice',
     'TH-91': 'ice',  'th-91': 'ice',
   };
-  // Fallback: match by English province name
+  // Fallback: match by English province name (multiple spelling variants)
   const ZONES_BY_NAME = {
-    'chachoengsao': 'beam', 'samut prakan': 'beam',
-    'samut sakhon': 'beam', 'nakhon pathom': 'beam',
-    'surat thani': 'ad',
-    'nakhon si thammarat': 'first', 'songkhla': 'first', 'pattani': 'first',
-    'phang nga': 'ice', 'krabi': 'ice', 'trang': 'ice', 'satun': 'ice',
+    'chachoengsao': 'beam', 'samut prakan': 'beam', 'samut prakarn': 'beam',
+    'samut sakhon': 'beam', 'samutsakhon': 'beam',
+    'nakhon pathom': 'beam', 'nakhonpathom': 'beam',
+    'surat thani': 'ad', 'suratthani': 'ad', 'surat': 'ad',
+    'nakhon si thammarat': 'first', 'nakhon si thamarat': 'first',
+    'songkhla': 'first', 'pattani': 'first', 'patani': 'first',
+    'phang nga': 'ice', 'phangnga': 'ice', 'phang-nga': 'ice',
+    'krabi': 'ice', 'trang': 'ice', 'satun': 'ice',
   };
 
   const COLORS = {
@@ -291,6 +294,9 @@
   };
 
   const container = document.getElementById('th-map');
+
+  // Debug: log province IDs and names so we can verify matching
+  console.log('Thailand provinces:', Thailand.locations.map(l => `${l.id} | ${l.name}`).join('\n'));
 
   const paths = Thailand.locations.map(loc => {
     const zone = ZONES_BY_ID[loc.id] || ZONES_BY_NAME[(loc.name || '').toLowerCase()] || 'none';
