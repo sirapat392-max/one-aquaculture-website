@@ -55,18 +55,6 @@
 }
 .map-svg { width: 100%; height: auto; display: block; }
 
-/* zone styles */
-.z-bg    { fill: #ede0ea; stroke: #c8adc0; stroke-width: .5; }
-.z-beam  { fill: var(--c-beam-lt);  stroke: var(--c-beam);  stroke-width: .8; cursor: pointer; transition: fill .2s; }
-.z-ad    { fill: var(--c-ad-lt);    stroke: var(--c-ad);    stroke-width: .8; cursor: pointer; transition: fill .2s; }
-.z-first { fill: var(--c-first-lt); stroke: var(--c-first); stroke-width: .8; cursor: pointer; transition: fill .2s; }
-.z-ice   { fill: var(--c-ice-lt);   stroke: var(--c-ice);   stroke-width: .8; cursor: pointer; transition: fill .2s; }
-
-.z-beam.active  { fill: var(--c-beam-md); }
-.z-ad.active    { fill: var(--c-ad-md); }
-.z-first.active { fill: var(--c-first-md); }
-.z-ice.active   { fill: var(--c-ice-md); }
-
 /* ─── CARDS ─── */
 .team-card {
   background: #fff; border: 2px solid #f0e0ea; border-radius: 14px;
@@ -156,70 +144,9 @@
   <div class="map-col">
     <div class="map-title">พื้นที่รับผิดชอบ</div>
 
-    <!--
-      Thailand SVG — calibrated from actual map image
-      viewBox 0 0 180 430
-      NE plateau extends far right; peninsula shifts west going south
-    -->
-    <svg class="map-svg" viewBox="0 0 180 430" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <clipPath id="th-clip">
-          <!-- Thailand outline traced from actual map proportions -->
-          <path d="
-            M 5,46
-            L 16,28 L 40,20 L 64,13 L 88,12 L 112,20 L 136,30
-            L 144,57 L 152,82 L 150,96 L 164,123 L 173,152 L 176,163
-            L 168,183 L 152,197 L 130,200 L 108,200 L 90,204 L 73,200
-            L 65,206 L 58,218 L 62,242 L 71,254
-            L 90,301 L 90,321 L 83,358 L 91,375 L 95,415
-            L 85,425 L 78,425
-            L 65,418 L 52,400 L 40,378 L 30,350 L 23,332 L 17,314
-            L 14,298 L 22,258 L 32,240
-            L 24,230 L 18,212 L 15,200 L 8,178 L 8,128 L 10,90 L 8,68
-            Z"/>
-        </clipPath>
-      </defs>
-
-      <!-- Gray base -->
-      <path class="z-bg" d="
-        M 5,46
-        L 16,28 L 40,20 L 64,13 L 88,12 L 112,20 L 136,30
-        L 144,57 L 152,82 L 150,96 L 164,123 L 173,152 L 176,163
-        L 168,183 L 152,197 L 130,200 L 108,200 L 90,204 L 73,200
-        L 65,206 L 58,218 L 62,242 L 71,254
-        L 90,301 L 90,321 L 83,358 L 91,375 L 95,415
-        L 85,425 L 78,425
-        L 65,418 L 52,400 L 40,378 L 30,350 L 23,332 L 17,314
-        L 14,298 L 22,258 L 32,240
-        L 24,230 L 18,212 L 15,200 L 8,178 L 8,128 L 10,90 L 8,68
-        Z"/>
-
-      <!-- Zone: บีม — Bangkok cluster (y=190–255) -->
-      <rect class="z-beam" data-zone="beam"
-        clip-path="url(#th-clip)"
-        x="0" y="190" width="180" height="66"/>
-
-      <!-- Zone: อัด — Surat Thani upper peninsula (y=255–358) -->
-      <rect class="z-ad" data-zone="ad"
-        clip-path="url(#th-clip)"
-        x="0" y="255" width="180" height="105"/>
-
-      <!-- Zone: เฟิร์ส — Gulf/east lower peninsula (y=358–426) -->
-      <polygon class="z-first" data-zone="first"
-        clip-path="url(#th-clip)"
-        points="57,358 180,358 180,426 80,426"/>
-
-      <!-- Zone: ไอซ์ — Andaman/west lower peninsula (y=358–426) -->
-      <polygon class="z-ice" data-zone="ice"
-        clip-path="url(#th-clip)"
-        points="0,358 57,358 80,426 0,426"/>
-
-      <!-- Labels -->
-      <text x="68"  y="232" text-anchor="middle" font-size="6.5" font-weight="700" fill="#047857">บีม</text>
-      <text x="52"  y="308" text-anchor="middle" font-size="6.5" font-weight="700" fill="#92400e">อัด</text>
-      <text x="84"  y="395" text-anchor="middle" font-size="6"   font-weight="700" fill="#881337">เฟิร์ส</text>
-      <text x="27"  y="390" text-anchor="middle" font-size="6"   font-weight="700" fill="#4c1d95">ไอซ์</text>
-    </svg>
+    <div id="th-map" style="width:100%">
+      <div style="text-align:center;color:#9c5e7a;font-size:11px;padding:28px 0">⟳ กำลังโหลดแผนที่...</div>
+    </div>
 
     <!-- Legend -->
     <div class="legend">
@@ -328,37 +255,81 @@
   </div><!-- /cards-col -->
 </div><!-- /team-wrap -->
 
-<script>
-  const zones = document.querySelectorAll('.map-svg [data-zone]');
-  const cards = document.querySelectorAll('.team-card[data-card]');
+<script type="module">
+  import Thailand from 'https://esm.sh/@svg-maps/thailand';
 
-  function clearAll() {
-    zones.forEach(z => z.classList.remove('active'));
-    cards.forEach(c => c.classList.remove('highlighted'));
+  const ZONES = {
+    'TH-24': 'beam',  // ฉะเชิงเทรา
+    'TH-11': 'beam',  // สมุทรปราการ
+    'TH-74': 'beam',  // สมุทรสาคร
+    'TH-73': 'beam',  // นครปฐม
+    'TH-84': 'ad',    // สุราษฎร์ธานี
+    'TH-80': 'first', // นครศรีธรรมราช
+    'TH-90': 'first', // สงขลา
+    'TH-94': 'first', // ปัตตานี
+    'TH-82': 'ice',   // พังงา
+    'TH-81': 'ice',   // กระบี่
+    'TH-92': 'ice',   // ตรัง
+    'TH-91': 'ice',   // สตูล
+  };
+
+  const COLORS = {
+    beam:  { base: '#ccfbf1', hover: '#5eead4', stroke: '#0d9488' },
+    ad:    { base: '#fef3c7', hover: '#fcd34d', stroke: '#d97706' },
+    first: { base: '#ffe4e6', hover: '#fda4af', stroke: '#9f1239' },
+    ice:   { base: '#ede9fe', hover: '#c4b5fd', stroke: '#6d28d9' },
+    none:  { base: '#ede0ea', hover: '#ede0ea', stroke: '#c8adc0' },
+  };
+
+  const container = document.getElementById('th-map');
+
+  const paths = Thailand.locations.map(loc => {
+    const zone = ZONES[loc.id] || 'none';
+    const c = COLORS[zone];
+    return `<path d="${loc.path}" fill="${c.base}" stroke="white" stroke-width="0.5"
+      data-zone="${zone}" data-locid="${loc.id}" title="${loc.name}"
+      style="cursor:${zone !== 'none' ? 'pointer' : 'default'};transition:fill .2s"/>`;
+  }).join('');
+
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', Thailand.viewBox);
+  svg.setAttribute('class', 'map-svg');
+  svg.innerHTML = paths;
+  container.innerHTML = '';
+  container.appendChild(svg);
+
+  function setZoneFill(activeZone) {
+    svg.querySelectorAll('[data-zone]').forEach(p => {
+      const z = p.dataset.zone;
+      const c = COLORS[z] || COLORS.none;
+      p.setAttribute('fill', (z === activeZone && z !== 'none') ? c.hover : c.base);
+    });
   }
 
-  zones.forEach(zone => {
-    zone.addEventListener('mouseenter', () => {
-      clearAll();
-      zone.classList.add('active');
-      const card = document.getElementById('card-' + zone.dataset.zone);
-      if (card) card.classList.add('highlighted');
+  function clearCards() {
+    document.querySelectorAll('.team-card').forEach(c => c.classList.remove('highlighted'));
+  }
+
+  svg.querySelectorAll('[data-zone]:not([data-zone="none"])').forEach(path => {
+    path.addEventListener('mouseenter', () => {
+      const zone = path.dataset.zone;
+      setZoneFill(zone);
+      clearCards();
+      document.getElementById('card-' + zone)?.classList.add('highlighted');
     });
-    zone.addEventListener('mouseleave', clearAll);
-    zone.addEventListener('click', () => {
-      const card = document.getElementById('card-' + zone.dataset.zone);
-      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    path.addEventListener('mouseleave', () => { setZoneFill(null); clearCards(); });
+    path.addEventListener('click', () => {
+      document.getElementById('card-' + path.dataset.zone)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
   });
 
-  cards.forEach(card => {
+  document.querySelectorAll('.team-card[data-card]').forEach(card => {
     card.addEventListener('mouseenter', () => {
-      clearAll();
+      setZoneFill(card.dataset.card);
+      clearCards();
       card.classList.add('highlighted');
-      const zone = document.querySelector(`.map-svg [data-zone="${card.dataset.card}"]`);
-      if (zone) zone.classList.add('active');
     });
-    card.addEventListener('mouseleave', clearAll);
+    card.addEventListener('mouseleave', () => { setZoneFill(null); clearCards(); });
   });
 </script>
 
