@@ -9,6 +9,7 @@
       'nav.diagnosis':'🔬 ShrimpDx',
       'nav.news':     'ข่าวสาร',
       'nav.about':    'เกี่ยวกับเรา',
+      'nav.team':     'ทีมงาน',
       'nav.contact':  'ติดต่อ',
       'nav.cta':      'ปรึกษาผู้เชี่ยวชาญ',
       // FOOTER
@@ -538,6 +539,7 @@
       'nav.diagnosis':'🔬 ShrimpDx',
       'nav.news':     'News',
       'nav.about':    'About',
+      'nav.team':     'Team',
       'nav.contact':  'Contact',
       'nav.cta':      'Consult an Expert',
       // FOOTER
