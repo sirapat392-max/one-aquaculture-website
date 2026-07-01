@@ -357,21 +357,33 @@ function computePriceRange(records) {
   return { byDate, dates };
 }
 
+async function refreshPriceCache() {
+  const r = await fetch(N8N_PRICE_URL, { signal: AbortSignal.timeout(15000) });
+  if (!r.ok) throw new Error(`upstream ${r.status}`);
+  const json = await r.json();
+  priceRangeCache = computePriceRange(json.data || []);
+  priceRangeCacheAt = Date.now();
+}
+
+// Pre-warm on startup so first visitor never waits
+refreshPriceCache().catch(err => console.error('Price cache pre-warm failed:', err.message));
+
 app.get('/api/shrimp-price-range', async (req, res) => {
-  if (priceRangeCache && Date.now() - priceRangeCacheAt < PRICE_RANGE_TTL) {
-    return res.json(priceRangeCache);
+  const stale = priceRangeCache && Date.now() - priceRangeCacheAt >= PRICE_RANGE_TTL;
+
+  // Always serve cache immediately if available (stale-while-revalidate)
+  if (priceRangeCache) {
+    res.json(priceRangeCache);
+    if (stale) refreshPriceCache().catch(err => console.error('Price cache refresh error:', err.message));
+    return;
   }
+
+  // No cache yet (server just started and pre-warm still running) — must wait
   try {
-    const r = await fetch(N8N_PRICE_URL, { signal: AbortSignal.timeout(15000) });
-    if (!r.ok) throw new Error(`upstream ${r.status}`);
-    const json = await r.json();
-    const result = computePriceRange(json.data || []);
-    priceRangeCache = result;
-    priceRangeCacheAt = Date.now();
-    res.json(result);
+    await refreshPriceCache();
+    res.json(priceRangeCache);
   } catch (err) {
     console.error('shrimp-price-range error:', err.message);
-    if (priceRangeCache) return res.json(priceRangeCache);
     res.status(503).json({ error: 'ไม่สามารถโหลดข้อมูลราคาได้' });
   }
 });
