@@ -328,14 +328,20 @@ function computePriceRange(records) {
     }
   }
 
+  // First pass: build byDate with avg stored for change calculation
   const byDate = {};
-  for (const dt of Object.keys(raw)) {
+  const avgByDate = {}; // avg per date/size for change calc
+  const sortedDts = Object.keys(raw).sort();
+
+  for (const dt of sortedDts) {
     byDate[dt] = {};
+    avgByDate[dt] = {};
     for (const sz of Object.keys(raw[dt])) {
-      const { prices, trend, change } = raw[dt][sz];
+      const { prices } = raw[dt][sz];
       const szInt = parseInt(sz);
       const dateNum = parseInt(dt.replace(/-/g, ''), 10) % 100000;
       const avg = Math.round(prices.reduce((a, b) => a + b, 0) / prices.length);
+      avgByDate[dt][szInt] = avg;
 
       let lo = Math.min(...prices);
       let hi = Math.max(...prices);
@@ -348,7 +354,21 @@ function computePriceRange(records) {
         hi = avg + (2 + h2);
       }
 
-      byDate[dt][szInt] = { min: lo, max: hi, trend, change };
+      byDate[dt][szInt] = { min: lo, max: hi, trend: 'stable', change: 0 };
+    }
+  }
+
+  // Second pass: compute change vs previous date
+  for (let i = 1; i < sortedDts.length; i++) {
+    const dt   = sortedDts[i];
+    const prev = sortedDts[i - 1];
+    for (const szInt of Object.keys(byDate[dt]).map(Number)) {
+      const todayAvg = avgByDate[dt][szInt];
+      const prevAvg  = avgByDate[prev]?.[szInt];
+      if (prevAvg == null) continue;
+      const diff = todayAvg - prevAvg;
+      byDate[dt][szInt].change = diff;
+      byDate[dt][szInt].trend  = diff > 0 ? 'up' : diff < 0 ? 'down' : 'stable';
     }
   }
 
