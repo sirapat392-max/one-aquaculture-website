@@ -703,43 +703,50 @@ function renderTable(latestPrices) {
 }
 
 // ── MAIN LOAD ────────────────────────────────────────────────────────────────
+const LS_KEY = 'shrimpPriceCache_v1';
+const LS_TTL = 30 * 60 * 1000; // 30 min browser cache
+
+function applyPriceData({ byDate, dates }) {
+  const latestDate = dates[dates.length - 1];
+  const latestPrices = byDate[latestDate] || {};
+  const dt = new Date(latestDate + 'T12:00:00');
+  const dateStr = `${dt.getDate()}/${dt.getMonth()+1}/${dt.getFullYear()}`;
+  document.getElementById('heroTs').textContent = ` อัปเดตล่าสุด: ${dateStr}`;
+  globalByDate   = byDate;
+  globalDates    = dates;
+  globalAllSizes = Object.keys(latestPrices).map(Number).sort((a,b)=>a-b);
+  selectedBarDate = latestDate;
+  selectedLineSizes = [60, 80, 100, 120].filter(s => globalAllSizes.includes(s));
+  if (!selectedLineSizes.length) selectedLineSizes = globalAllSizes.slice(0, 4);
+  renderSummaryCards(latestPrices);
+  populateDateSelect(dates);
+  renderBarChart(latestPrices);
+  renderSizeChips(globalAllSizes);
+  renderLineChart(byDate, dates, selectedDays);
+  renderTable(latestPrices);
+  if (typeof applyI18n === 'function') applyI18n();
+}
+
 async function loadPrices() {
   const btn = document.getElementById('refreshBtn');
   btn.classList.add('loading');
   btn.querySelector('.ico').textContent = '⟳';
 
+  // Show cached data instantly if available
+  try {
+    const cached = JSON.parse(localStorage.getItem(LS_KEY) || 'null');
+    if (cached && Date.now() - cached.at < LS_TTL) {
+      applyPriceData(cached);
+    }
+  } catch(e) {}
+
   try {
     const res = await fetch('/api/shrimp-price-range');
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const { byDate, dates } = await res.json();
-    const latestDate = dates[dates.length - 1];
-    const latestPrices = byDate[latestDate] || {};
-
-    // Update timestamp
-    const dt = new Date(latestDate + 'T12:00:00');
-    const dateStr = `${dt.getDate()}/${dt.getMonth()+1}/${dt.getFullYear()}`;
-    document.getElementById('heroTs').textContent = ` อัปเดตล่าสุด: ${dateStr}`;
-
-    // Store globally for range-tab re-renders
-    globalByDate   = byDate;
-    globalDates    = dates;
-    globalAllSizes = Object.keys(latestPrices).map(Number).sort((a,b)=>a-b);
-    selectedBarDate = latestDate;
-
-    // Seed default selection with sizes actually present
-    selectedLineSizes = [60, 80, 100, 120].filter(s => globalAllSizes.includes(s));
-    if (!selectedLineSizes.length) selectedLineSizes = globalAllSizes.slice(0, 4);
-
-    // Render all sections
-    renderSummaryCards(latestPrices);
-    populateDateSelect(dates);
-    renderBarChart(latestPrices);
-    renderSizeChips(globalAllSizes);
-    renderLineChart(byDate, dates, selectedDays);
-    renderTable(latestPrices);
-
-    // Apply language translations
-    if (typeof applyI18n === 'function') applyI18n();
+    // Save to localStorage for next visit
+    try { localStorage.setItem(LS_KEY, JSON.stringify({ byDate, dates, at: Date.now() })); } catch(e) {}
+    applyPriceData({ byDate, dates });
 
   } catch(err) {
     document.getElementById('summaryGrid').innerHTML = `

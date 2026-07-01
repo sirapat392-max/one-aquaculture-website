@@ -337,16 +337,15 @@ function computePriceRange(records) {
       const dateNum = parseInt(dt.replace(/-/g, ''), 10) % 100000;
       const avg = Math.round(prices.reduce((a, b) => a + b, 0) / prices.length);
 
-      let lo, hi;
-      if (prices.length === 1) {
-        // Asymmetric spread using secret salt — real price is NOT the midpoint
+      let lo = Math.min(...prices);
+      let hi = Math.max(...prices);
+
+      // If all entries have the same price, apply asymmetric spread
+      if (lo === hi) {
         const h1 = (szInt * 7919 + dateNum * 131 + saltCode * 17) % 9;
         const h2 = (szInt * 1301 + dateNum * 97  + saltCode * 31) % 9;
         lo = avg - (3 + h1);
         hi = avg + (2 + h2);
-      } else {
-        lo = Math.min(...prices);
-        hi = Math.max(...prices);
       }
 
       byDate[dt][szInt] = { min: lo, max: hi, trend, change };
