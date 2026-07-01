@@ -95,14 +95,11 @@
 
 .card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
 .card-avatar {
-  width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px; font-weight: 700; color: white;
+  width: 64px; height: 64px; border-radius: 50%; flex-shrink: 0;
+  object-fit: cover; display: block;
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
-.card-beam  .card-avatar { background: linear-gradient(135deg,#0d9488,#5eead4); }
-.card-ad    .card-avatar { background: linear-gradient(135deg,#d97706,#fcd34d); }
-.card-first .card-avatar { background: linear-gradient(135deg,#9f1239,#fb7185); }
-.card-ice   .card-avatar { background: linear-gradient(135deg,#6d28d9,#c4b5fd); }
 
 .card-name { font-size: 16px; font-weight: 700; color: #2d0f1e; margin: 0; line-height: 1.2; }
 .card-role { font-size: 10px; color: #9c5e7a; margin: 0; letter-spacing: .03em; }
@@ -202,7 +199,7 @@
     <!-- บีม -->
     <div class="team-card card-beam" data-card="beam" id="card-beam">
       <div class="card-top">
-        <div class="card-avatar">บ</div>
+        <img src="/images/team-beam.jpg" alt="บีม ONE" class="card-avatar">
         <div>
           <div class="card-name">บีม ONE</div>
           <div class="card-role">เซลล์ · ภาคกลาง</div>
@@ -226,7 +223,7 @@
     <!-- อัด -->
     <div class="team-card card-ad" data-card="ad" id="card-ad">
       <div class="card-top">
-        <div class="card-avatar">ด</div>
+        <img src="/images/team-ad.jpg" alt="อัด ONE" class="card-avatar">
         <div>
           <div class="card-name">อัด ONE</div>
           <div class="card-role">เซลล์ · ภาคใต้ตอนบน</div>
@@ -247,7 +244,7 @@
     <!-- เฟิร์ส -->
     <div class="team-card card-first" data-card="first" id="card-first">
       <div class="card-top">
-        <div class="card-avatar">ฟ</div>
+        <img src="/images/team-first.jpg" alt="เฟิร์ส ONE" class="card-avatar">
         <div>
           <div class="card-name">เฟิร์ส ONE</div>
           <div class="card-role">เซลล์ · ใต้ฝั่งอ่าวไทย</div>
@@ -270,7 +267,7 @@
     <!-- ไอซ์ -->
     <div class="team-card card-ice" data-card="ice" id="card-ice">
       <div class="card-top">
-        <div class="card-avatar">อ</div>
+        <img src="/images/team-ice.jpg" alt="ไอซ์ ONE" class="card-avatar">
         <div>
           <div class="card-name">ไอซ์ ONE</div>
           <div class="card-role">เซลล์ · ใต้ฝั่งอันดามัน</div>
