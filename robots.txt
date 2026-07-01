@@ -4,4 +4,4 @@ Allow: /
 Disallow: /vet-review
 Disallow: /api/
 
-Sitemap: https://one-aquaculture.onrender.com/sitemap.xml
+Sitemap: https://oneaquaculture.com/sitemap.xml
