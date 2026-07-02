@@ -13,27 +13,39 @@ const client = new OpenAI({
 });
 
 const RSS_SOURCES = [
-  // ── English · International / Global ────────────────────────────────────
+  // ── Global · Shrimp & Aquaculture ───────────────────────────────────────
   { url: 'https://hatcheryinternational.com/feed/',                    name: 'Hatchery International',       lang: 'en' },
   { url: 'https://www.aquaculturealliance.org/advocate/feed/',         name: 'GAA Advocate',                 lang: 'en' },
   { url: 'https://www.undercurrentnews.com/feed/',                     name: 'Undercurrent News',            lang: 'en' },
   { url: 'https://www.aquaculturenorthamerica.com/feed/',              name: 'Aquaculture North America',    lang: 'en' },
   { url: 'https://thefishsite.com/feed',                               name: 'The Fish Site',                lang: 'en' },
   { url: 'https://www.seafoodsource.com/rss/news',                     name: 'Seafood Source',               lang: 'en' },
-  { url: 'https://www.fishfarmermagazine.com/feed/',                   name: 'Fish Farmer Magazine',         lang: 'en' },
   { url: 'https://aquaculturehub.org/feed/',                           name: 'Aquaculture Hub',              lang: 'en' },
   { url: 'https://enaca.org/?feed=rss2',                               name: 'NACA (Asia-Pacific)',          lang: 'en' },
   { url: 'https://www.aquahoy.com/rss.xml',                            name: 'AquaHoy (Global)',             lang: 'en' },
   { url: 'https://globefish.org/rss.xml',                              name: 'FAO Globefish',                lang: 'en' },
   { url: 'https://www.intrafish.com/rss',                              name: 'IntraFish',                    lang: 'en' },
-  { url: 'https://www.seafish.org/feed/',                              name: 'Seafish UK',                   lang: 'en' },
-  { url: 'https://www.worldfishing.net/feed/',                         name: 'World Fishing & Aquaculture',  lang: 'en' },
   { url: 'https://www.globalseafood.org/feed/',                        name: 'Global Seafood Alliance',      lang: 'en' },
-  { url: 'https://advocate.gaalliance.org/feed/',                      name: 'GAA Advocate (alt)',           lang: 'en' },
-  { url: 'https://www.fishingwire.com/feed/',                          name: 'FishingWire (Global)',          lang: 'en' },
   { url: 'https://www.nationalfisherman.com/feed/',                    name: 'National Fisherman (US)',       lang: 'en' },
-  { url: 'https://www.aquaculturemagazine.com/feed/',                  name: 'Aquaculture Magazine',          lang: 'en' },
-  { url: 'https://shrimpnews.com/FreeReportsFolder/NewsFolder/RSSFeed.xml', name: 'ShrimpNews.com',          lang: 'en' },
+  { url: 'https://www.aquaculturemagazine.com/feed/',                  name: 'Aquaculture Magazine',         lang: 'en' },
+  { url: 'https://www.worldfishing.net/feed/',                         name: 'World Fishing & Aquaculture',  lang: 'en' },
+
+  // ── Global · Import/Export & Trade ──────────────────────────────────────
+  { url: 'https://www.seafoodwatch.org/rss/news',                      name: 'Seafood Watch (Trade)',        lang: 'en' },
+  { url: 'https://www.foodnavigator.com/rss/topic/seafood',            name: 'Food Navigator Seafood',      lang: 'en' },
+  { url: 'https://www.just-food.com/rss/',                             name: 'Just Food (Trade)',            lang: 'en' },
+  { url: 'https://www.intrafish.com/rss/shrimp',                       name: 'IntraFish Shrimp',            lang: 'en' },
+  { url: 'https://www.seafoodtradeintell.com/feed/',                   name: 'Seafood Trade Intelligence',  lang: 'en' },
+  { url: 'https://www.fishupdate.com/feed/',                           name: 'Fish Update (Trade)',          lang: 'en' },
+  { url: 'https://www.fis.com/fis/worldnews/rss.asp',                 name: 'FIS World News',               lang: 'en' },
+  { url: 'https://ec.europa.eu/fisheries/rss/news_en.rss',            name: 'EU Fisheries Policy',         lang: 'en' },
+  { url: 'https://www.usda.gov/rss/latest-releases.xml',              name: 'USDA (US Shrimp Trade)',      lang: 'en' },
+  { url: 'https://www.noaa.gov/rss.xml',                              name: 'NOAA Fisheries',               lang: 'en' },
+  { url: 'https://www.fas.usda.gov/data/rss.xml',                     name: 'USDA FAS Trade Data',         lang: 'en' },
+  { url: 'https://nfi.org/feed/',                                      name: 'NFI (US Seafood Importers)',  lang: 'en' },
+  { url: 'https://www.eumofa.eu/rss',                                  name: 'EUMOFA (EU Market)',          lang: 'en' },
+  { url: 'https://www.fao.org/fishery/rss/en',                        name: 'FAO Fishery',                  lang: 'en' },
+  { url: 'https://www.seafoodlegacy.com/feed/',                        name: 'Seafood Legacy (JP Trade)',   lang: 'en' },
 
   // ── Thai · ภาษาไทย ───────────────────────────────────────────────────────
   { url: 'https://www.bangkokpost.com/rss/data/agriculture.xml',       name: 'Bangkok Post Agriculture',    lang: 'en' },
@@ -166,6 +178,76 @@ const RSS_SOURCES = [
   { url: 'https://www.sria.com.au/feed/',                             name: 'SRIA (Shrimp R&D AU)',          lang: 'en' },
   { url: 'https://www.agrifutures.com.au/feed/',                      name: 'AgriFutures Australia',         lang: 'en' },
   { url: 'https://www.fishingworld.com.au/feed/',                     name: 'Fishing World AU',              lang: 'en' },
+  { url: 'https://www.abc.net.au/news/rural/rss.xml',                name: 'ABC Rural Australia',           lang: 'en' },
+
+  // ── Global · Confirmed Additional ────────────────────────────────────────
+  { url: 'https://www.intrafish.com/feed',                           name: 'IntraFish (main)',               lang: 'en' },
+  { url: 'https://www.intrafish.com/rss_aquaculture',               name: 'IntraFish Aquaculture',          lang: 'en' },
+  { url: 'https://www.undercurrentnews.com/feeds/',                  name: 'Undercurrent News Feed',        lang: 'en' },
+  { url: 'https://aquaculturemag.com/feed',                          name: 'Aquaculture Magazine',          lang: 'en' },
+  { url: 'https://www.globalseafood.org/advocate/feed',              name: 'Global Seafood Alliance',       lang: 'en' },
+  { url: 'https://weareaquaculture.com/feed/',                       name: 'WeAreAquaculture',              lang: 'en' },
+  { url: 'https://news.mongabay.com/category/seafood/feed/',         name: 'Mongabay Seafood',              lang: 'en' },
+  { url: 'https://www.asc-aqua.org/feed/',                           name: 'ASC Aquaculture',               lang: 'en' },
+  { url: 'https://www.aquafeed.com/feed',                            name: 'Aquafeed.com',                  lang: 'en' },
+  { url: 'https://shrimpalliance.com/feed/',                         name: 'Southern Shrimp Alliance (US)', lang: 'en' },
+  { url: 'https://www.aboutseafood.com/feed/',                       name: 'NFI Seafood (US)',              lang: 'en' },
+  { url: 'https://worldfishcenter.org/feed',                         name: 'WorldFish Center',              lang: 'en' },
+  { url: 'https://www.frontiersin.org/journals/aquaculture/rss',    name: 'Frontiers Aquaculture',         lang: 'en' },
+  { url: 'https://onlinelibrary.wiley.com/feed/17535131/most-recent', name: 'Reviews in Aquaculture',      lang: 'en' },
+
+  // ── Thailand · Additional ─────────────────────────────────────────────────
+  { url: 'https://www.bangkokpost.com/rss/data/business.xml',        name: 'Bangkok Post Business',        lang: 'en' },
+  { url: 'https://www.nationthailand.com/rss',                       name: 'Nation Thailand',              lang: 'en' },
+
+  // ── Vietnam · Additional ──────────────────────────────────────────────────
+  { url: 'https://vietfishmagazine.com/feed',                        name: 'Vietfish Magazine',             lang: 'vi' },
+  { url: 'https://nongnghiep.vn/main-rss.html',                     name: 'Nong Nghiep VN (main)',         lang: 'vi' },
+
+  // ── Ecuador · Additional ──────────────────────────────────────────────────
+  { url: 'https://www.cna-ecuador.com/category/noticias-general/feed/', name: 'CNA Ecuador Official',     lang: 'es' },
+  { url: 'https://www.agrolatam.com/feed/',                          name: 'Agrolatam Ecuador',            lang: 'es' },
+
+  // ── Brazil · Additional ───────────────────────────────────────────────────
+  { url: 'https://panoramadaaquicultura.com.br/feed/',               name: 'Panorama da Aquicultura (BR)', lang: 'pt' },
+  { url: 'https://aquaculturebrasil.com.br/feed/',                   name: 'AquacultureBrasil',            lang: 'pt' },
+  { url: 'https://abccam.com.br/feed/',                              name: 'ABCC Camarão Brasil',           lang: 'pt' },
+  { url: 'https://brasil.mongabay.com/feed/',                        name: 'Mongabay Brasil',              lang: 'pt' },
+
+  // ── Philippines · Additional ──────────────────────────────────────────────
+  { url: 'https://www.seafdec.org.ph/feed/',                         name: 'SEAFDEC AQD Philippines',      lang: 'en' },
+  { url: 'https://business.inquirer.net/feed',                       name: 'Inquirer Business (PH)',       lang: 'en' },
+  { url: 'https://www.bworldonline.com/feed/',                       name: 'BusinessWorld Philippines',    lang: 'en' },
+  { url: 'https://mb.com.ph/category/agriculture/feed/',             name: 'Manila Bulletin Agri',         lang: 'en' },
+
+  // ── Myanmar · Additional ──────────────────────────────────────────────────
+  { url: 'https://www.irrawaddy.com/feed',                           name: 'The Irrawaddy Myanmar',        lang: 'en' },
+  { url: 'https://www.frontiermyanmar.net/en/feed',                  name: 'Frontier Myanmar',             lang: 'en' },
+
+  // ── Japan · Additional ────────────────────────────────────────────────────
+  { url: 'https://www.maff.go.jp/j/press/index.rss',                name: 'MAFF Japan Ministry',          lang: 'ja' },
+  { url: 'https://www3.nhk.or.jp/nhkworld/en/news/rss/economy.xml', name: 'NHK World Economy',            lang: 'en' },
+  { url: 'https://www.japantimes.co.jp/feed/',                       name: 'Japan Times',                  lang: 'en' },
+
+  // ── Korea · Additional ────────────────────────────────────────────────────
+  { url: 'https://en.yna.co.kr/RSS/economy.xml',                    name: 'Yonhap Economy Korea',         lang: 'en' },
+  { url: 'https://www.koreaherald.com/rss/economy.xml',             name: 'Korea Herald Economy',          lang: 'en' },
+  { url: 'https://koreajoongangdaily.joins.com/feed/',               name: 'Korea JoongAng Daily',         lang: 'en' },
+
+  // ── Bangladesh · Additional ───────────────────────────────────────────────
+  { url: 'https://www.thedailystar.net/rss.xml',                    name: 'Daily Star Bangladesh',         lang: 'en' },
+  { url: 'https://www.tbsnews.net/rss.xml',                         name: 'TBS News Bangladesh',           lang: 'en' },
+  { url: 'https://www.prothomalo.com/feed',                          name: 'Prothom Alo Bangladesh',       lang: 'bn' },
+
+  // ── Malaysia · Additional ─────────────────────────────────────────────────
+  { url: 'https://www.nst.com.my/news/feed',                         name: 'New Straits Times Malaysia',   lang: 'en' },
+  { url: 'https://www.bernama.com/en/rss/',                          name: 'Bernama Malaysia',             lang: 'en' },
+
+  // ── India · Additional ────────────────────────────────────────────────────
+  { url: 'https://india.mongabay.com/feed/',                         name: 'Mongabay India',               lang: 'en' },
+
+  // ── Indonesia · Additional ────────────────────────────────────────────────
+  { url: 'https://www.mongabay.co.id/feed/',                         name: 'Mongabay Indonesia',           lang: 'id' },
 ];
 
 const AQUA_KEYWORDS = [
@@ -173,12 +255,15 @@ const AQUA_KEYWORDS = [
   'shrimp','prawn','vannamei','penaeus','litopenaeus','monodon','kuruma prawn',
   'ems','wssv','white spot syndrome','ehp','ahpnd','vibrio','wfs','ihhnv','yhd',
   'necrotizing hepatopancreatitis','running mortality syndrome','acute hepatopancreatic',
-  'shrimp farm','shrimp pond','shrimp hatchery','shrimp feed','shrimp export',
+  'shrimp farm','shrimp pond','shrimp hatchery','shrimp feed',
+  'shrimp export','shrimp import','shrimp trade','shrimp tariff','shrimp quota',
   'shrimp price','shrimp production','shrimp disease','shrimp harvest','shrimp mortality',
+  'shrimp market','shrimp supply','shrimp demand','shrimp ban','shrimp duty',
   'postlarva','nauplii','broodstock','shrimp breeding','shrimp pathogen',
   // Thai
   'กุ้ง','โรคกุ้ง','ฟาร์มกุ้ง','บ่อกุ้ง','กุ้งขาว','กุ้งกุลาดำ',
   'ตัวอ่อนกุ้ง','กุ้งแวนนาไม','ลูกกุ้ง','พันธุ์กุ้ง',
+  'ส่งออกกุ้ง','นำเข้ากุ้ง','ราคากุ้ง','ตลาดกุ้ง','กุ้งส่งออก','ภาษีกุ้ง',
   // Vietnamese
   'tôm','dịch bệnh tôm','nuôi tôm','tôm thẻ','tôm sú','tôm giống',
   'bệnh tôm','ao tôm','xuất khẩu tôm','giá tôm',
@@ -246,45 +331,44 @@ function catLabel(cat) {
 
 function guessCategory(title, summary) {
   const t = `${title} ${summary}`.toLowerCase();
-  if (/disease|virus|bacteria|pathogen|wssv|ehp|ems|outbreak/.test(t)) return 'disease';
-  if (/regulation|law|ban|standard|certification|fda|eu|import restriction/.test(t)) return 'regulation';
-  if (/research|study|trial|technology|genome|crispr|vaccine/.test(t)) return 'research';
+  if (/disease|virus|bacteria|pathogen|wssv|ehp|ems|outbreak|mortality|ระบาด|โรค/.test(t)) return 'disease';
+  if (/import|export|tariff|quota|\bprice\b|ราคา|ส่งออก|นำเข้า|xuất khẩu|ekspor|exportac/.test(t)) return 'trade';
+  if (/regulation|law|ban|standard|certification|fda|restriction|กฎหมาย/.test(t)) return 'regulation';
+  if (/research|study|trial|technology|genome|vaccine|วิจัย|nghiên cứu/.test(t)) return 'research';
   return 'industry';
 }
 
-async function updateNews() {
-  console.log('📡 กำลังดึง RSS จาก', RSS_SOURCES.length, 'แหล่ง...');
 
+async function updateNews() {
+  const dataPath = path.join(__dirname, 'news-data.json');
+  const today = new Date().toISOString().slice(0, 10);
+
+  // 1. Fetch all RSS feeds
+  console.log(`📡 ดึง RSS จาก ${RSS_SOURCES.length} แหล่ง...`);
   const feedResults = await Promise.allSettled(
-    RSS_SOURCES.map(async ({ url, name }) => {
+    RSS_SOURCES.map(async ({ url, name, lang }) => {
       const r = await fetch(url, {
-        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; OneAquacultureNewsBot/1.0)' },
-        signal: AbortSignal.timeout(15000),
+        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; OneAquacultureBot/2.0; +https://oneaquaculture.com)' },
+        signal: AbortSignal.timeout(12000),
       });
-      if (!r.ok) throw new Error(`${name}: HTTP ${r.status}`);
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
       const items = parseRSS(await r.text(), name);
-      console.log(`  ✓ ${name}: ${items.length} items`);
-      return items;
+      return items.slice(0, 5).map(it => ({ ...it, lang: lang || 'en' }));
     })
   );
 
-  let items = [];
-  feedResults.forEach((r, i) => {
-    if (r.status === 'fulfilled') {
-      // Limit 3 articles per source so no single feed dominates
-      items.push(...r.value.slice(0, 3).map(it => ({ ...it, lang: RSS_SOURCES[i].lang || 'en' })));
-    } else {
-      console.warn(`  ✗ ${RSS_SOURCES[i].name}:`, r.reason.message);
-    }
+  let ok = 0, fail = 0, items = [];
+  feedResults.forEach((r) => {
+    if (r.status === 'fulfilled') { ok++; items.push(...r.value); }
+    else fail++;
   });
+  console.log(`  ✓ ${ok} แหล่งตอบ  ✗ ${fail} แหล่ง timeout/error  → ${items.length} items รวม`);
 
-  // Load existing articles to merge (dedup by URL)
+  // 2. Load existing shrimp articles (dedup + purge non-shrimp)
   let existingArticles = [];
-  const dataPath = path.join(__dirname, 'news-data.json');
   if (fs.existsSync(dataPath)) {
     try {
       const existing = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
-      // Keep only shrimp articles when loading existing data (purge old fish articles)
       existingArticles = (existing.articles || []).filter(a => {
         if (a.isSample) return false;
         const text = `${a.title || ''} ${a.titleTH || ''} ${a.summary || ''}`;
@@ -293,17 +377,18 @@ async function updateNews() {
     } catch {}
   }
   const existingUrls = new Set(existingArticles.map(a => a.url).filter(Boolean));
+  console.log(`  📂 บทความเดิม: ${existingArticles.length}`);
 
+  // 3. Filter: shrimp keyword match + not already stored
   const relevant = items.filter(it =>
-    it.url &&
+    it.url && it.title &&
     !existingUrls.has(it.url) &&
     AQUA_KEYWORDS.some(kw => `${it.title} ${it.summary}`.toLowerCase().includes(kw.toLowerCase()))
   );
   relevant.sort((a, b) => new Date(b.pubDate || 0) - new Date(a.pubDate || 0));
 
-  // Balance languages — no single language > 40% of batch
-  const MAX_BATCH = 20;
-  const MAX_PER_LANG = Math.ceil(MAX_BATCH * 0.4);
+  // Balance: no single language > 40% of batch
+  const MAX_BATCH = 30, MAX_PER_LANG = Math.ceil(MAX_BATCH * 0.4);
   const langCount = {};
   const top = [];
   for (const it of relevant) {
@@ -312,77 +397,78 @@ async function updateNews() {
     if (langCount[l] <= MAX_PER_LANG) top.push(it);
     if (top.length >= MAX_BATCH) break;
   }
-  console.log(`\n📰 บทความใหม่: ${relevant.length} → ประมวลผล ${top.length} (balance: ${JSON.stringify(langCount)})`);
+  console.log(`\n🦐 ใหม่: ${relevant.length}  → batch ${top.length}  lang: ${JSON.stringify(langCount)}`);
+
+  const cutoff90 = new Date(Date.now() - 90 * 864e5).toISOString().slice(0, 10);
+  const saveMerged = (newArts) => {
+    const merged = [...newArts, ...existingArticles]
+      .filter(a => (a.date || '9999') >= cutoff90)
+      .slice(0, 300);
+    fs.writeFileSync(dataPath, JSON.stringify({ articles: merged, lastUpdated: new Date().toISOString(), translated: true }, null, 2));
+    return merged.length;
+  };
 
   if (!top.length) {
-    console.error('❌ ไม่พบบทความที่เกี่ยวข้อง');
-    process.exit(1);
+    // No new articles — update timestamp so startup doesn't re-run immediately
+    console.log('⚠️  ไม่มีบทความใหม่ — อัปเดต timestamp เท่านั้น');
+    saveMerged([]);
+    return;
   }
 
-  // Save English fallback first
-  const fallback = top.map(it => {
-    const cat = guessCategory(it.title, it.summary);
-    return { title: it.title, titleTH: it.title, source: it.source, url: it.url,
-      date: it.pubDate ? new Date(it.pubDate).toISOString().slice(0, 10) : '',
-      category: cat, categoryLabel: catLabel(cat), summary: it.summary };
-  });
-
-  // Translate with Claude
-  console.log('\n🤖 กำลังแปลด้วย Claude Haiku...');
-  const listed = top.map((it, i) =>
-    `[${i}] title: ${it.title}\nsource: ${it.source}\ndate: ${it.pubDate}\nexcerpt: ${it.summary}`
-  ).join('\n---\n');
-
-  const msg = await client.chat.completions.create({
-    model: 'google/gemini-2.5-flash-lite',
-    max_tokens: 5000,
-    messages: [{ role: 'user', content: `You are a shrimp aquaculture news analyst. Below are ${top.length} articles in MIXED LANGUAGES (Thai, English, Vietnamese, Spanish, Indonesian, Chinese, Japanese, Korean, Malay, Bengali, Filipino). Return ONLY a valid JSON array, no markdown.
-
-Schema: { "idx": N, "titleTH": "ชื่อภาษาไทย", "category": "industry|regulation|research|disease", "summary": "สรุป 2 ประโยคภาษาไทย", "country": "ชื่อประเทศที่เกิดเหตุการณ์ เช่น ไทย, เวียดนาม, อินโดนีเซีย, เอกวาดอร์ (ถ้าไม่ชัดเจนใส่ null)" }
-
-Rules:
-- Translate title and summary to Thai regardless of source language
-- category: disease = โรค/pathogen/virus/outbreak/ระบาด/dịch bệnh/penyakit/enfermedad/病; regulation = law/ban/กฎ/luật; research = study/งานวิจัย/nghiên cứu; else industry
-- country: detect which country the EVENT happened in (NOT the source country). Use Thai names:
-  ไทย (Thailand/Thai/ประเทศไทย), เวียดนาม (Vietnam/Việt Nam), อินโดนีเซีย (Indonesia/Indonesian),
-  เอกวาดอร์ (Ecuador/camaroneros), อินเดีย (India/Indian/Andhra/รொయ్యలు/इंडिया/भारत/இந்தியா),
-  จีน (China/Chinese/中国/中國), บังกลาเทศ (Bangladesh/বাংলাদেশ), ฟิลิปปินส์ (Philippines/Pilipinas/hipon),
-  มาเลเซีย (Malaysia/Malaysian/Perikanan Malaysia), เมียนมา (Myanmar/Burma/မြန်မာ),
-  ญี่ปุ่น (Japan/Japanese/エビ/日本), เกาหลี (Korea/Korean/새우/한국),
-  ออสเตรเลีย (Australia/Australian/FRDC/prawn Australia), บราซิล (Brazil/Brasil/camarão)
-  → ใส่ null ถ้าเป็นข่าวระดับโลกหรือไม่ชัดเจน
-
-Articles:\n${listed}` }]
-  });
-
-  const raw = msg.choices[0].message.content.trim();
-  const parsed = JSON.parse(raw.slice(raw.indexOf('['), raw.lastIndexOf(']') + 1));
-  const byIdx = Object.fromEntries(parsed.map(p => [p.idx, p]));
-
-  const today = new Date().toISOString().slice(0, 10);
-  const newArticles = top.map((it, i) => {
-    const ai = byIdx[i] || {};
-    const cat = ['industry','regulation','research','disease'].includes(ai.category) ? ai.category : guessCategory(it.title, it.summary);
+  const buildArticle = (it, ai = {}) => {
+    const cat = ['industry','regulation','research','disease','trade'].includes(ai.category)
+      ? ai.category : guessCategory(it.title, it.summary);
     return {
-      title: it.title, titleTH: ai.titleTH || it.title, source: it.source, url: it.url,
-      lang: it.lang || 'en',
+      title: it.title, titleTH: ai.titleTH || it.title,
+      source: it.source, url: it.url, lang: it.lang || 'en',
       date: it.pubDate ? new Date(it.pubDate).toISOString().slice(0, 10) : today,
-      firstSeen: today, // for decay model — when WE first saw this article
-      category: cat, categoryLabel: catLabel(cat), summary: ai.summary || it.summary,
+      firstSeen: today,
+      category: cat, categoryLabel: catLabel(cat),
+      summary: ai.summary || it.summary || '',
       country: ai.country || null,
     };
-  });
+  };
 
-  // Merge new + existing, keep newest 200 articles max, drop articles older than 90 days
-  const cutoff90 = new Date(Date.now() - 90 * 864e5).toISOString().slice(0, 10);
-  const merged = [...newArticles, ...existingArticles]
-    .filter(a => (a.date || '9999') >= cutoff90)
-    .slice(0, 200);
+  // 4. Save English fallback immediately (page never shows empty)
+  const total0 = saveMerged(top.map(it => buildArticle(it)));
+  console.log(`💾 fallback บันทึกแล้ว (${top.length} ใหม่ รวม ${total0}) — กำลัง AI แปล...`);
 
-  const payload = { articles: merged, lastUpdated: new Date().toISOString(), translated: true };
-  fs.writeFileSync(dataPath, JSON.stringify(payload, null, 2));
-  console.log(`\n✅ บันทึก ${newArticles.length} บทความใหม่ + ${existingArticles.length} เก่า = ${merged.length} รวม`);
-  newArticles.slice(0, 5).forEach((a, i) => console.log(`  ${i+1}. [${a.date}][${a.country||'?'}] ${a.titleTH.slice(0, 60)}`));
+  // 5. AI translate + country extract (best-effort — fallback already saved)
+  try {
+    const listed = top.map((it, i) =>
+      `[${i}] title: ${it.title}\nsource: ${it.source}\ndate: ${it.pubDate||''}\nexcerpt: ${(it.summary||'').slice(0,200)}`
+    ).join('\n---\n');
+
+    const msg = await client.chat.completions.create({
+      model: 'google/gemini-2.5-flash-lite',
+      max_tokens: 6000,
+      messages: [{ role: 'user', content:
+`Shrimp aquaculture news analyst. ${top.length} articles in MIXED LANGUAGES.
+Return ONLY valid JSON array, no markdown.
+
+Schema: {"idx":N,"titleTH":"Thai title","category":"industry|regulation|research|disease|trade","summary":"2-sentence Thai summary","country":"Thai name or null"}
+
+category: disease=โรค/pathogen/virus/outbreak; regulation=law/ban/standard/certification; trade=import/export/tariff/quota/price/price index; research=study/vaccine/technology; else industry
+country (event location, NOT source): ไทย เวียดนาม อินโดนีเซีย เอกวาดอร์ อินเดีย จีน บังกลาเทศ ฟิลิปปินส์ มาเลเซีย เมียนมา ญี่ปุ่น เกาหลี ออสเตรเลีย บราซิล เม็กซิโก สหรัฐอเมริกา สหภาพยุโรป — null if global
+
+Articles:
+${listed}` }]
+    });
+
+    const raw = msg.choices[0].message.content.trim();
+    const parsed = JSON.parse(raw.slice(raw.indexOf('['), raw.lastIndexOf(']') + 1));
+    const byIdx = Object.fromEntries(parsed.map(p => [p.idx, p]));
+    const newArticles = top.map((it, i) => buildArticle(it, byIdx[i] || {}));
+    const total = saveMerged(newArticles);
+    console.log(`\n✅ เสร็จ — ${newArticles.length} ใหม่  รวม ${total} บทความ`);
+    newArticles.slice(0, 5).forEach((a, i) =>
+      console.log(`  ${i+1}. [${a.country||'?'}][${a.category}] ${a.titleTH.slice(0,60)}`));
+  } catch (aiErr) {
+    console.warn(`⚠️  AI error (${aiErr.message.slice(0,60)}) — ใช้ English fallback แทน`);
+  }
 }
 
-updateNews().catch(err => { console.error('❌ Error:', err.message); process.exit(1); });
+updateNews().catch(err => {
+  console.error('❌ Fatal:', err.message);
+  process.exit(1);
+});

@@ -444,8 +444,11 @@ app.get('/api/shrimp-price', (req, res) => {
 // Shrimp-only keywords for API-level filtering
 const SHRIMP_KW = [
   'shrimp','prawn','vannamei','penaeus','monodon','กุ้ง','tôm','udang','camarón',
-  'エビ','새우','চিংড়ি','รొయ్యలు','இறால்','झींगा','hipon','ปุ้งกี๋','กุ้งขาว','กุ้งกุลา',
+  'エビ','새우','চিংড়ি','రొయ్యలు','இறால்','झींगा','hipon','กุ้งขาว','กุ้งกุลา',
   'ems','wssv','ehp','ahpnd','wfs','ihhnv','yhd','white spot','vibrio',
+  'shrimp export','shrimp import','shrimp tariff','shrimp trade','shrimp price',
+  'shrimp market','shrimp ban','camarão','虾','ส่งออกกุ้ง','ราคากุ้ง',
+  'xuất khẩu tôm','giá tôm','ekspor udang','harga udang',
 ];
 
 function isShrimpArticle(a) {
