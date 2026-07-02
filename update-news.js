@@ -13,29 +13,83 @@ const client = new OpenAI({
 });
 
 const RSS_SOURCES = [
-  // ── English (International) ──────────────────────────────────────────────
-  { url: 'https://hatcheryinternational.com/feed/',              name: 'Hatchery International',      lang: 'en' },
-  { url: 'https://www.aquaculturealliance.org/advocate/feed/',   name: 'GAA Advocate',                lang: 'en' },
-  { url: 'https://www.undercurrentnews.com/feed/',               name: 'Undercurrent News',           lang: 'en' },
-  { url: 'https://www.aquaculturenorthamerica.com/feed/',        name: 'Aquaculture North America',   lang: 'en' },
-  { url: 'https://www.fishfarmermagazine.com/feed/',             name: 'Fish Farmer Magazine',        lang: 'en' },
-  { url: 'https://thefishsite.com/feed',                         name: 'The Fish Site',               lang: 'en' },
-  { url: 'https://www.seafoodsource.com/rss/news',               name: 'Seafood Source',              lang: 'en' },
-  // ── Thai (ภาษาไทย) ──────────────────────────────────────────────────────
-  { url: 'https://www.matichon.co.th/category/agriculture/feed/', name: 'มติชน เกษตร',              lang: 'th' },
-  { url: 'https://www.kasetorganic.com/feed/',                   name: 'เกษตรออร์แกนิก',             lang: 'th' },
-  { url: 'https://www.naewna.com/economy/agriculture/feed',      name: 'แนวหน้า เกษตร',              lang: 'th' },
-  // ── Vietnamese (Tiếng Việt) ──────────────────────────────────────────────
-  { url: 'https://thuysanvietnam.com.vn/feed/',                  name: 'Thủy Sản Việt Nam',          lang: 'vi' },
-  { url: 'https://tepbac.com/feeds/news/moi.xml',                name: 'Tép Bạc Aquaculture VN',     lang: 'vi' },
-  // ── Spanish (Ecuador / Latin America) ───────────────────────────────────
-  { url: 'https://www.acuicultura.ws/feed/',                     name: 'Acuicultura (ES)',            lang: 'es' },
-  { url: 'https://cna.gov.ec/feed/',                             name: 'CNA Ecuador',                 lang: 'es' },
-  // ── Indonesian (Bahasa Indonesia) ────────────────────────────────────────
-  { url: 'https://kkp.go.id/djpb/artikel/rss',                  name: 'KKP Indonesia (Gov)',         lang: 'id' },
-  { url: 'https://www.trobos.com/rss/aquaculture',               name: 'TROBOS Aqua Indonesia',      lang: 'id' },
-  // ── Chinese (中文) ────────────────────────────────────────────────────────
-  { url: 'https://www.shuichan.cc/rss.xml',                      name: '水产前沿 (CN)',               lang: 'zh' },
+  // ── English · International Organizations ────────────────────────────────
+  { url: 'https://hatcheryinternational.com/feed/',                    name: 'Hatchery International',       lang: 'en' },
+  { url: 'https://www.aquaculturealliance.org/advocate/feed/',         name: 'GAA Advocate',                 lang: 'en' },
+  { url: 'https://www.undercurrentnews.com/feed/',                     name: 'Undercurrent News',            lang: 'en' },
+  { url: 'https://www.aquaculturenorthamerica.com/feed/',              name: 'Aquaculture North America',    lang: 'en' },
+  { url: 'https://thefishsite.com/feed',                               name: 'The Fish Site',                lang: 'en' },
+  { url: 'https://www.seafoodsource.com/rss/news',                     name: 'Seafood Source',               lang: 'en' },
+  { url: 'https://www.fishfarmermagazine.com/feed/',                   name: 'Fish Farmer Magazine',         lang: 'en' },
+  { url: 'https://aquaculturehub.org/feed/',                           name: 'Aquaculture Hub',              lang: 'en' },
+  { url: 'https://enaca.org/?feed=rss2',                               name: 'NACA (Asia-Pacific)',          lang: 'en' },
+  { url: 'https://www.aquahoy.com/rss.xml',                            name: 'AquaHoy (Global)',             lang: 'en' },
+  { url: 'https://globefish.org/rss.xml',                              name: 'FAO Globefish',               lang: 'en' },
+  { url: 'https://www.intrafish.com/rss',                              name: 'IntraFish',                    lang: 'en' },
+  { url: 'https://www.seafish.org/feed/',                              name: 'Seafish UK',                   lang: 'en' },
+
+  // ── Thai · ภาษาไทย ───────────────────────────────────────────────────────
+  { url: 'https://www.bangkokpost.com/rss/data/agriculture.xml',       name: 'Bangkok Post Agriculture',    lang: 'en' },
+  { url: 'https://www.matichon.co.th/category/agriculture/feed/',      name: 'มติชน เกษตร',                 lang: 'th' },
+  { url: 'https://www.naewna.com/economy/agriculture/feed',            name: 'แนวหน้า เกษตร',               lang: 'th' },
+  { url: 'https://www.thansettakij.com/category/agriculture/feed',     name: 'ฐานเศรษฐกิจ เกษตร',          lang: 'th' },
+  { url: 'https://www.kasetorganic.com/feed/',                         name: 'เกษตรออร์แกนิก',              lang: 'th' },
+  { url: 'https://kasetthai.com/feed/',                                name: 'เกษตรไทย',                    lang: 'th' },
+  { url: 'https://mgronline.com/qol/rss',                              name: 'MGR Online เกษตร',            lang: 'th' },
+  { url: 'https://www.siamrath.co.th/feed/',                           name: 'สยามรัฐ',                     lang: 'th' },
+
+  // ── Vietnamese · Tiếng Việt ───────────────────────────────────────────────
+  { url: 'https://thuysanvietnam.com.vn/feed/',                        name: 'Thủy Sản Việt Nam',           lang: 'vi' },
+  { url: 'https://tepbac.com/feeds/news/moi.xml',                      name: 'Tép Bạc (กุ้ง VN)',          lang: 'vi' },
+  { url: 'https://vasep.com.vn/tin-tuc/rss',                           name: 'VASEP (สมาคมส่งออก VN)',      lang: 'vi' },
+  { url: 'https://vietfish.org/feed/',                                  name: 'VietFish',                    lang: 'vi' },
+  { url: 'https://contom.vn/feed/',                                    name: 'Con Tôm (เฉพาะกุ้ง VN)',     lang: 'vi' },
+  { url: 'https://aquaculture.vn/feed/',                               name: 'Aquaculture VN',              lang: 'vi' },
+  // ราชการเวียดนาม
+  { url: 'https://tongcucthuysan.gov.vn/rss',                          name: 'กรมประมง VN (Gov)',           lang: 'vi' },
+  { url: 'https://mard.gov.vn/Pages/rss.aspx',                        name: 'กระทรวงเกษตร VN (Gov)',       lang: 'vi' },
+  // สื่อท้องถิ่นเวียดนาม
+  { url: 'https://nongnghiep.vn/rss/thuysan.rss',                     name: 'Nông Nghiệp VN (เกษตร VN)',  lang: 'vi' },
+  { url: 'https://nongnghiep.vn/rss/chan-nuoi-thuy-san.rss',          name: 'Nông Nghiệp · ประมง VN',     lang: 'vi' },
+  { url: 'https://danviet.vn/rss/nong-nghiep.rss',                    name: 'Dân Việt เกษตร',             lang: 'vi' },
+  { url: 'https://baomoi.com/c/nuoi-trong-thuy-san.epi',              name: 'Báo Mới ประมง',              lang: 'vi' },
+  { url: 'https://www.bienphong.com.vn/rss/kinh-te.rss',              name: 'Biên Phòng เศรษฐกิจ',        lang: 'vi' },
+
+  // ── Spanish · Ecuador / Latin America ────────────────────────────────────
+  { url: 'https://www.acuicultura.ws/feed/',                           name: 'Acuicultura.ws (ES)',          lang: 'es' },
+  { url: 'https://cna.gov.ec/feed/',                                   name: 'CNA Ecuador (Gov)',            lang: 'es' },
+  { url: 'https://www.camaroneros.net/feed/',                          name: 'Camaroneros (EC)',             lang: 'es' },
+  { url: 'https://infopesca.org/feed/',                                name: 'Infopesca (LA)',               lang: 'es' },
+  { url: 'https://www.panorama-acuicola.com/feed/',                    name: 'Panorama Acuícola (MX)',       lang: 'es' },
+
+  // ── Indonesian · Bahasa Indonesia ────────────────────────────────────────
+  { url: 'https://kkp.go.id/djpb/artikel/rss',                        name: 'KKP DJPB Indonesia (Gov)',    lang: 'id' },
+  { url: 'https://kkp.go.id/bpbl/artikel/rss',                        name: 'KKP BPBL Indonesia (Gov)',    lang: 'id' },
+  { url: 'https://www.trobos.com/rss/aquaculture',                     name: 'TROBOS Aqua (ID)',            lang: 'id' },
+  { url: 'https://mediaakuakultur.com/feed/',                          name: 'Media Akuakultur (ID)',        lang: 'id' },
+  { url: 'https://www.hobinatang.com/feed/',                           name: 'Hobi Natang (ID)',             lang: 'id' },
+
+  // ── Indian · English (India local) ───────────────────────────────────────
+  { url: 'https://www.mpeda.gov.in/rss.xml',                          name: 'MPEDA India (Gov)',            lang: 'en' },
+  { url: 'https://www.seafoodexporters.in/feed/',                      name: 'Seafood Exporters India',     lang: 'en' },
+  { url: 'https://aquacultureindia.com/feed/',                         name: 'Aquaculture India',           lang: 'en' },
+
+  // ── Chinese · 中文 ────────────────────────────────────────────────────────
+  { url: 'https://www.shuichan.cc/rss.xml',                           name: '水产前沿 (CN)',                lang: 'zh' },
+  { url: 'https://www.fishfirst.cn/rss.xml',                          name: '鱼虾蟹 (CN)',                  lang: 'zh' },
+  { url: 'https://www.chinaaquaculture.com/rss/',                     name: 'China Aquaculture',            lang: 'zh' },
+
+  // ── Bangladesh · English ──────────────────────────────────────────────────
+  { url: 'https://www.aquabangla.com/feed/',                          name: 'Aqua Bangladesh',             lang: 'en' },
+  { url: 'https://fisheries.gov.bd/rss',                              name: 'DoF Bangladesh (Gov)',         lang: 'en' },
+
+  // ── Philippines · English ─────────────────────────────────────────────────
+  { url: 'https://bfar.da.gov.ph/rss',                                name: 'BFAR Philippines (Gov)',      lang: 'en' },
+  { url: 'https://www.philaquaculture.org/feed/',                     name: 'PhilAquaculture',             lang: 'en' },
+
+  // ── Malaysia · English ────────────────────────────────────────────────────
+  { url: 'https://www.dof.gov.my/rss',                                name: 'DOF Malaysia (Gov)',           lang: 'en' },
+  { url: 'https://aquaculturemalaysia.com/feed/',                     name: 'Aquaculture Malaysia',        lang: 'en' },
 ];
 
 const AQUA_KEYWORDS = [
