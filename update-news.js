@@ -409,12 +409,16 @@ async function updateNews() {
   const existingUrls = new Set(existingArticles.map(a => a.url).filter(Boolean));
   console.log(`  📂 บทความเดิม: ${existingArticles.length}`);
 
-  // 3. Filter: shrimp keyword match + not already stored
-  const relevant = items.filter(it =>
-    it.url && it.title &&
-    !existingUrls.has(it.url) &&
-    AQUA_KEYWORDS.some(kw => `${it.title} ${it.summary}`.toLowerCase().includes(kw.toLowerCase()))
-  );
+  // 3. Filter: shrimp keyword match + not already stored + dedup within batch by URL
+  const seenUrls = new Set();
+  const relevant = items.filter(it => {
+    if (!it.url || !it.title) return false;
+    if (existingUrls.has(it.url)) return false;
+    if (seenUrls.has(it.url)) return false;  // dedup across feeds in same batch
+    if (!AQUA_KEYWORDS.some(kw => `${it.title} ${it.summary}`.toLowerCase().includes(kw.toLowerCase()))) return false;
+    seenUrls.add(it.url);
+    return true;
+  });
   relevant.sort((a, b) => new Date(b.pubDate || 0) - new Date(a.pubDate || 0));
 
   // Balance: no single language > 40% of batch
