@@ -930,7 +930,8 @@ app.get('/api/disease-map', (req, res) => {
 
     // Build per-country data
     const countries = DISEASE_COUNTRIES.map(country => {
-      const matched = [];
+      const matchedReal = [];   // real articles only — used for risk scoring
+      const matchedAll  = [];   // real + sample — used for disease-type tags
       const diseasesFound = new Set();
 
       for (const article of allDiseaseArticles) {
@@ -946,16 +947,17 @@ app.get('/api/disease-map', (req, res) => {
 
         DISEASE_KW.filter(kw => textLower.includes(kw.toLowerCase()))
           .forEach(kw => diseasesFound.add(kw));
-        matched.push(article);
+        matchedAll.push(article);
+        if (!article.isSample) matchedReal.push(article);
       }
 
-      // Decay model: risk level depends on most recent article age
-      const dates = matched.map(a => a.date).filter(Boolean).sort();
-      const latestDate = dates[dates.length - 1] || null;
+      // Decay model uses REAL articles only (sample articles have fixed old dates and would decay)
+      const realDates = matchedReal.map(a => a.date).filter(Boolean).sort();
+      const latestDate = realDates[realDates.length - 1] || null;
       const daysSinceLatest = latestDate
         ? Math.floor((Date.now() - new Date(latestDate)) / 864e5)
-        : 999;
-      const recent30 = matched.filter(a => (a.date || '9999') >= cutoff);
+        : null;
+      const recent30 = matchedReal.filter(a => (a.date || '9999') >= cutoff);
       const count = recent30.length;
       // Peak risk from article count, then decay over time
       let riskLevel;
@@ -963,6 +965,8 @@ app.get('/api/disease-map', (req, res) => {
       else if (count >= 1 && daysSinceLatest <= 14)  riskLevel = 'medium';
       else if (count >= 1 && daysSinceLatest <= 30)  riskLevel = 'low';
       else                                             riskLevel = 'none';
+
+      const matched = matchedAll; // keep for article card display below
 
       return {
         id: country.id,
