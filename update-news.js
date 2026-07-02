@@ -13,15 +13,48 @@ const client = new OpenAI({
 });
 
 const RSS_SOURCES = [
-  { url: 'https://hatcheryinternational.com/feed/',              name: 'Hatchery International' },
-  { url: 'https://www.aquaculturealliance.org/advocate/feed/',   name: 'GAA Advocate' },
-  { url: 'https://www.undercurrentnews.com/feed/',               name: 'Undercurrent News' },
-  { url: 'https://www.aquaculturenorthamerica.com/feed/',        name: 'Aquaculture North America' },
+  // ── English (International) ──────────────────────────────────────────────
+  { url: 'https://hatcheryinternational.com/feed/',              name: 'Hatchery International',      lang: 'en' },
+  { url: 'https://www.aquaculturealliance.org/advocate/feed/',   name: 'GAA Advocate',                lang: 'en' },
+  { url: 'https://www.undercurrentnews.com/feed/',               name: 'Undercurrent News',           lang: 'en' },
+  { url: 'https://www.aquaculturenorthamerica.com/feed/',        name: 'Aquaculture North America',   lang: 'en' },
+  { url: 'https://www.fishfarmermagazine.com/feed/',             name: 'Fish Farmer Magazine',        lang: 'en' },
+  { url: 'https://thefishsite.com/feed',                         name: 'The Fish Site',               lang: 'en' },
+  { url: 'https://www.seafoodsource.com/rss/news',               name: 'Seafood Source',              lang: 'en' },
+  // ── Thai (ภาษาไทย) ──────────────────────────────────────────────────────
+  { url: 'https://www.matichon.co.th/category/agriculture/feed/', name: 'มติชน เกษตร',              lang: 'th' },
+  { url: 'https://www.kasetorganic.com/feed/',                   name: 'เกษตรออร์แกนิก',             lang: 'th' },
+  { url: 'https://www.naewna.com/economy/agriculture/feed',      name: 'แนวหน้า เกษตร',              lang: 'th' },
+  // ── Vietnamese (Tiếng Việt) ──────────────────────────────────────────────
+  { url: 'https://thuysanvietnam.com.vn/feed/',                  name: 'Thủy Sản Việt Nam',          lang: 'vi' },
+  { url: 'https://tepbac.com/feeds/news/moi.xml',                name: 'Tép Bạc Aquaculture VN',     lang: 'vi' },
+  // ── Spanish (Ecuador / Latin America) ───────────────────────────────────
+  { url: 'https://www.acuicultura.ws/feed/',                     name: 'Acuicultura (ES)',            lang: 'es' },
+  { url: 'https://cna.gov.ec/feed/',                             name: 'CNA Ecuador',                 lang: 'es' },
+  // ── Indonesian (Bahasa Indonesia) ────────────────────────────────────────
+  { url: 'https://kkp.go.id/djpb/artikel/rss',                  name: 'KKP Indonesia (Gov)',         lang: 'id' },
+  { url: 'https://www.trobos.com/rss/aquaculture',               name: 'TROBOS Aqua Indonesia',      lang: 'id' },
+  // ── Chinese (中文) ────────────────────────────────────────────────────────
+  { url: 'https://www.shuichan.cc/rss.xml',                      name: '水产前沿 (CN)',               lang: 'zh' },
 ];
 
-const AQUA_KEYWORDS = ['shrimp','prawn','vannamei','aquaculture','fish','ems','wssv',
+const AQUA_KEYWORDS = [
+  // English
+  'shrimp','prawn','vannamei','aquaculture','fish','ems','wssv',
   'white spot','seafood','fishery','hatchery','pathogen','feed','disease','marine',
-  'tilapia','salmon','water quality','farming','harvest','export','import'];
+  'tilapia','salmon','water quality','farming','harvest','export','import',
+  'ehp','ahpnd','vibrio','wfs','ihhnv','yhd',
+  // Thai
+  'กุ้ง','ปลา','สัตว์น้ำ','เพาะเลี้ยง','โรค','ระบาด','ฟาร์ม','ประมง',
+  // Vietnamese
+  'tôm','nuôi trồng','thủy sản','dịch bệnh','cá',
+  // Spanish
+  'camarón','acuicultura','enfermedad','cultivo','pescado',
+  // Indonesian
+  'udang','budidaya','penyakit','ikan','tambak',
+  // Chinese
+  '虾','水产','养殖','疾病','病害','对虾',
+];
 
 function parseRSS(xml, sourceName) {
   const items = [];
@@ -108,11 +141,14 @@ async function updateNews() {
   const msg = await client.chat.completions.create({
     model: 'google/gemini-2.5-flash-lite',
     max_tokens: 5000,
-    messages: [{ role: 'user', content: `Below are ${top.length} real aquaculture news articles. Return ONLY a valid JSON array, no markdown.
+    messages: [{ role: 'user', content: `You are an aquaculture news analyst. Below are ${top.length} news articles in MIXED LANGUAGES (Thai, English, Vietnamese, Spanish, Indonesian, Chinese). Return ONLY a valid JSON array, no markdown.
 
-Schema: { "idx": N, "titleTH": "ชื่อภาษาไทย", "category": "industry|regulation|research|disease", "summary": "สรุป 2 ประโยคภาษาไทย" }
+Schema: { "idx": N, "titleTH": "ชื่อภาษาไทย", "category": "industry|regulation|research|disease", "summary": "สรุป 2 ประโยคภาษาไทย", "country": "ชื่อประเทศที่เกิดเหตุการณ์ เช่น ไทย, เวียดนาม, อินโดนีเซีย, เอกวาดอร์ (ถ้าไม่ชัดเจนใส่ null)" }
 
-Category: disease=disease/pathogen/virus; regulation=law/ban/standard; research=study/trial/technology; else industry.
+Rules:
+- Translate title and summary to Thai regardless of source language
+- category: disease = โรค/pathogen/virus/outbreak/ระบาด/dịch bệnh/penyakit/enfermedad/病; regulation = law/ban/กฎ/luật; research = study/งานวิจัย/nghiên cứu; else industry
+- country: detect from content — Thai provinces/ไทย = "ไทย", Vietnam/เวียดนาม/Việt Nam = "เวียดนาม", Indonesia/อินโดนีเซีย = "อินโดนีเซีย", Ecuador/เอกวาดอร์ = "เอกวาดอร์", India/อินเดีย = "อินเดีย", China/จีน/中国 = "จีน", Bangladesh/บังกลาเทศ = "บังกลาเทศ"
 
 Articles:\n${listed}` }]
   });
@@ -125,8 +161,10 @@ Articles:\n${listed}` }]
     const ai = byIdx[i] || {};
     const cat = ['industry','regulation','research','disease'].includes(ai.category) ? ai.category : guessCategory(it.title, it.summary);
     return { title: it.title, titleTH: ai.titleTH || it.title, source: it.source, url: it.url,
+      lang: it.lang || 'en',
       date: it.pubDate ? new Date(it.pubDate).toISOString().slice(0, 10) : '',
-      category: cat, categoryLabel: catLabel(cat), summary: ai.summary || it.summary };
+      category: cat, categoryLabel: catLabel(cat), summary: ai.summary || it.summary,
+      country: ai.country || null };
   });
 
   const payload = { articles, lastUpdated: new Date().toISOString(), translated: true };

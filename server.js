@@ -922,8 +922,12 @@ app.get('/api/disease-map', (req, res) => {
         const text = `${article.title} ${article.titleTH || ''} ${article.summary || ''}`;
         const textLower = text.toLowerCase();
 
-        const countryMatch = country.keywords.some(kw => textLower.includes(kw.toLowerCase()));
-        if (!countryMatch) continue;
+        // Match by AI-extracted country field OR keyword scan
+        const aiCountryMatch = article.country && country.keywords.some(kw =>
+          article.country.toLowerCase().includes(kw.toLowerCase())
+        );
+        const keywordMatch = country.keywords.some(kw => textLower.includes(kw.toLowerCase()));
+        if (!aiCountryMatch && !keywordMatch) continue;
 
         DISEASE_KW.filter(kw => textLower.includes(kw.toLowerCase()))
           .forEach(kw => diseasesFound.add(kw));
