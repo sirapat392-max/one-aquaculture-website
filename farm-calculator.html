@@ -27,7 +27,8 @@
 <meta name="twitter:image" content="https://oneaquaculture.com/logo.jpg">
 <link rel="canonical" href="https://oneaquaculture.com/farm-calculator">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Noto+Sans+Thai:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Noto+Sans+Thai:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Noto+Sans+Thai:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="css/main.css">
 <style>
 :root {
@@ -409,7 +410,7 @@
         <span data-i18n="calc.be.size.lbl">ไซส์กุ้งที่จะขาย</span>
         <span id="be-size-hint-auto" style="font-size:11px;color:var(--wine);margin-left:6px;font-weight:400"></span>
       </div>
-      <select id="be-size-select" class="calc-input" onchange="onSizeSelectChange()" style="font-family:inherit;font-size:15px;font-weight:600;cursor:pointer">
+      <select id="be-size-select" class="calc-input" aria-label="ขนาดกุ้ง" onchange="onSizeSelectChange()" style="font-family:inherit;font-size:15px;font-weight:600;cursor:pointer">
         <option value="" data-i18n="calc.be.size.sel">-- เลือกไซส์กุ้ง --</option>
         <option value="10" data-i18n="calc.be.opt.l10">L10 · กุ้งใหญ่มาก (100 ก./ตัว)</option>
         <option value="20" data-i18n="calc.be.opt.l20">L20 · กุ้งใหญ่ (50 ก./ตัว)</option>

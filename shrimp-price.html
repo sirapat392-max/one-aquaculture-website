@@ -28,7 +28,8 @@
 <meta name="twitter:image" content="https://oneaquaculture.com/logo.jpg">
 <link rel="canonical" href="https://oneaquaculture.com/shrimp-price">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Noto+Sans+Thai:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Noto+Sans+Thai:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Noto+Sans+Thai:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="css/main.css">
 <style>
 :root {
@@ -247,7 +248,7 @@
         </div>
         <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
           <label for="barDateSelect" style="font-size:11px;font-weight:600;color:#8A7A85;" data-i18n="price.chart.date.label">เลือกวันที่:</label>
-          <select id="barDateSelect" onchange="onBarDateChange()" style="font-size:11px;padding:4px 8px;border-radius:8px;border:1.5px solid #E8E0E5;color:#1C1020;font-family:inherit;cursor:pointer;background:white;"></select>
+          <select id="barDateSelect" aria-label="เลือกวันที่" onchange="onBarDateChange()" style="font-size:11px;padding:4px 8px;border-radius:8px;border:1.5px solid #E8E0E5;color:#1C1020;font-family:inherit;cursor:pointer;background:white;"></select>
         </div>
       </div>
       <div class="chart-box" style="height:240px;">
@@ -282,7 +283,7 @@
         <h3 data-i18n="price.table.title">ราคาทุกขนาด</h3>
         <div style="display:flex;align-items:center;gap:6px;">
           <label for="tableDateSelect" style="font-size:11px;font-weight:600;color:#8A7A85;" data-i18n="price.chart.date.label">เลือกวันที่:</label>
-          <select id="tableDateSelect" onchange="onTableDateChange()" style="font-size:11px;padding:4px 8px;border-radius:8px;border:1.5px solid #E8E0E5;color:#1C1020;font-family:inherit;cursor:pointer;background:white;"></select>
+          <select id="tableDateSelect" aria-label="เลือกวันที่" onchange="onTableDateChange()" style="font-size:11px;padding:4px 8px;border-radius:8px;border:1.5px solid #E8E0E5;color:#1C1020;font-family:inherit;cursor:pointer;background:white;"></select>
         </div>
       </div>
       <div class="table-scroll">

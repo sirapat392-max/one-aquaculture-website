@@ -28,7 +28,8 @@
 <meta name="twitter:image" content="https://oneaquaculture.com/logo.jpg">
 <link rel="canonical" href="https://oneaquaculture.com/ai-diagnosis">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Noto+Sans+Thai:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Noto+Sans+Thai:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Noto+Sans+Thai:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="css/main.css">
 <style>
 :root {
@@ -618,7 +619,7 @@ select {
         <div class="water-grid" style="grid-template-columns:1fr 1fr;margin-top:7px;">
           <div class="water-cell">
             <label data-i18n="dx.watersrc">แหล่งน้ำ</label>
-            <select id="watersrc">
+            <select id="watersrc" aria-label="แหล่งน้ำ">
               <option value="">-</option>
               <option>น้ำทะเลตรง</option>
               <option>น้ำผ่านบ่อพัก</option>
@@ -628,7 +629,7 @@ select {
           </div>
           <div class="water-cell">
             <label data-i18n="dx.pondtype">พื้นบ่อ</label>
-            <select id="pondtype">
+            <select id="pondtype" aria-label="ประเภทบ่อ">
               <option value="">-</option>
               <option>PE</option>
               <option>ดิน</option>
@@ -666,7 +667,7 @@ select {
         <!-- Province (จังหวัดชายฝั่ง) -->
         <div class="field">
           <label>จังหวัด</label>
-          <select id="weatherProvince" onchange="syncProvince()">
+          <select id="weatherProvince" aria-label="จังหวัด" onchange="syncProvince()">
             <option value="">-- เลือกจังหวัด --</option>
             <optgroup label="ภาคใต้ (อ่าวไทย)">
               <option>สุราษฎร์ธานี</option><option>นครศรีธรรมราช</option>
