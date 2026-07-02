@@ -18,10 +18,10 @@ const RSS_SOURCES = [
   { url: 'https://www.aquaculturealliance.org/advocate/feed/',         name: 'GAA Advocate',                 lang: 'en' },
   { url: 'https://www.undercurrentnews.com/feed/',                     name: 'Undercurrent News',            lang: 'en' },
   { url: 'https://www.aquaculturenorthamerica.com/feed/',              name: 'Aquaculture North America',    lang: 'en' },
-  { url: 'https://thefishsite.com/feed',                               name: 'The Fish Site',                lang: 'en' },
+  { url: 'https://www.aquafeed.com/feed',                              name: 'Aquafeed.com News',            lang: 'en' },
   { url: 'https://www.seafoodsource.com/rss/news',                     name: 'Seafood Source',               lang: 'en' },
   { url: 'https://aquaculturehub.org/feed/',                           name: 'Aquaculture Hub',              lang: 'en' },
-  { url: 'https://enaca.org/?feed=rss2',                               name: 'NACA (Asia-Pacific)',          lang: 'en' },
+  { url: 'https://enaca.org/rss/',                                     name: 'NACA (Asia-Pacific)',          lang: 'en' },
   { url: 'https://www.aquahoy.com/rss.xml',                            name: 'AquaHoy (Global)',             lang: 'en' },
   { url: 'https://globefish.org/rss.xml',                              name: 'FAO Globefish',                lang: 'en' },
   { url: 'https://www.intrafish.com/rss',                              name: 'IntraFish',                    lang: 'en' },
@@ -48,7 +48,7 @@ const RSS_SOURCES = [
   { url: 'https://www.seafoodlegacy.com/feed/',                        name: 'Seafood Legacy (JP Trade)',   lang: 'en' },
 
   // ── Thai · ภาษาไทย ───────────────────────────────────────────────────────
-  { url: 'https://www.bangkokpost.com/rss/data/agriculture.xml',       name: 'Bangkok Post Agriculture',    lang: 'en' },
+  { url: 'https://www.nationthailand.com/rss/news',                   name: 'Nation Thailand News',         lang: 'en' },
   { url: 'https://www.matichon.co.th/category/agriculture/feed/',      name: 'มติชน เกษตร',                 lang: 'th' },
   { url: 'https://www.naewna.com/economy/agriculture/feed',            name: 'แนวหน้า เกษตร',               lang: 'th' },
   { url: 'https://www.thansettakij.com/category/agriculture/feed',     name: 'ฐานเศรษฐกิจ เกษตร',          lang: 'th' },
@@ -304,8 +304,14 @@ const AQUA_KEYWORDS = [
 ];
 
 function parseRSS(xml, sourceName) {
+  // Reject HTML pages masquerading as RSS
+  const trimmed = xml.trimStart();
+  if (trimmed.startsWith('<!DOCTYPE') || trimmed.startsWith('<html') || trimmed.startsWith('<!doctype')) return [];
+  if (!trimmed.includes('<item>') && !trimmed.includes('<entry>')) return [];
+
   const items = [];
-  const rx = /<item>([\s\S]*?)<\/item>/gi;
+  // Support both RSS <item> and Atom <entry>
+  const rx = /(<item>[\s\S]*?<\/item>|<entry>[\s\S]*?<\/entry>)/gi;
   let m;
   while ((m = rx.exec(xml)) !== null) {
     const block = m[1];
@@ -313,12 +319,14 @@ function parseRSS(xml, sourceName) {
       const r = block.match(new RegExp(`<${tag}[\\s][^>]*>(?:<!\\[CDATA\\[)?([\\s\\S]*?)(?:\\]\\]>)?<\\/${tag}>|<${tag}>(?:<!\\[CDATA\\[)?([\\s\\S]*?)(?:\\]\\]>)?<\\/${tag}>`, 'i'));
       return r ? (r[1] || r[2] || '').replace(/<[^>]+>/g, '').trim() : '';
     };
-    const linkM = block.match(/<link>([^<]+)<\/link>/i);
+    // RSS uses <link>, Atom uses <link href="..."/>
+    const linkM = block.match(/<link[^>]+href=["']([^"']+)["']/i)
+      || block.match(/<link>([^<]+)<\/link>/i);
     const title = get('title');
     if (title) items.push({
       title, url: linkM ? linkM[1].trim() : '',
-      summary: get('description').slice(0, 300),
-      pubDate: get('pubDate') || get('dc:date') || '',
+      summary: (get('description') || get('summary') || get('content')).slice(0, 300),
+      pubDate: get('pubDate') || get('published') || get('updated') || get('dc:date') || '',
       source: sourceName,
     });
   }
@@ -326,7 +334,7 @@ function parseRSS(xml, sourceName) {
 }
 
 function catLabel(cat) {
-  return { industry:'🌏 อุตสาหกรรม', regulation:'📋 กฎระเบียบ', research:'🔬 งานวิจัย', disease:'🦠 โรคสัตว์น้ำ' }[cat] || '🌏 อุตสาหกรรม';
+  return { industry:'🌏 อุตสาหกรรม', regulation:'📋 กฎระเบียบ', research:'🔬 งานวิจัย', disease:'🦠 โรคสัตว์น้ำ', trade:'📦 นำเข้า/ส่งออก' }[cat] || '🌏 อุตสาหกรรม';
 }
 
 function guessCategory(title, summary) {
