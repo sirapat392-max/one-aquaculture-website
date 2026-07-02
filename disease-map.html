@@ -19,19 +19,19 @@
 <meta name="apple-mobile-web-app-title" content="ONE Aqua">
 <link rel="apple-touch-icon" href="/icons/icon-192.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>แผนที่โรคระบาดกุ้ง รายภูมิภาค · ONE AQUACULTURE PRODUCT</title>
-<meta name="description" content="ติดตามสถานการณ์โรคระบาดกุ้งแต่ละภูมิภาค EHP WSSV White Feces Vibrio อัปเดตจากข่าวสารล่าสุดในวงการเพาะเลี้ยงสัตว์น้ำ">
-<meta name="keywords" content="โรคกุ้ง, EHP, WSSV, ขี้ขาว, ตายด่วน, Vibrio, แผนที่โรค, disease map, shrimp disease outbreak, ระบาดกุ้ง">
+<title>แผนที่โรคกุ้งโลก · Global Shrimp Disease Map · ONE AQUACULTURE PRODUCT</title>
+<meta name="description" content="ติดตามสถานการณ์โรคกุ้งรายประเทศทั่วโลก EHP WSSV EMS AHPND Vibrio อัปเดตจากข่าวสารล่าสุดทั่วโลก">
+<meta name="keywords" content="โรคกุ้ง, EHP, WSSV, EMS, Vibrio, แผนที่โรคกุ้ง, global shrimp disease map, disease outbreak, shrimp farming">
 <meta property="og:type" content="website">
-<meta property="og:title" content="แผนที่โรคระบาดกุ้ง รายภูมิภาค · ONE AQUACULTURE PRODUCT">
-<meta property="og:description" content="ติดตามสถานการณ์โรคระบาดกุ้งแต่ละภูมิภาค EHP WSSV White Feces Vibrio อัปเดตจากข่าวสารล่าสุด">
+<meta property="og:title" content="แผนที่โรคกุ้งโลก · Global Shrimp Disease Map · ONE AQUACULTURE PRODUCT">
+<meta property="og:description" content="ติดตามสถานการณ์โรคกุ้งรายประเทศทั่วโลก อัปเดตจากข่าวสารล่าสุด">
 <meta property="og:image" content="https://oneaquaculture.com/logo.jpg">
 <meta property="og:url" content="https://oneaquaculture.com/disease-map">
 <meta property="og:site_name" content="ONE AQUACULTURE PRODUCT">
 <meta property="og:locale" content="th_TH">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="แผนที่โรคระบาดกุ้ง · ONE AQUACULTURE PRODUCT">
-<meta name="twitter:description" content="ติดตามสถานการณ์โรคระบาดกุ้งแต่ละภูมิภาค อัปเดตจากข่าวสารล่าสุด">
+<meta name="twitter:title" content="แผนที่โรคกุ้งโลก · ONE AQUACULTURE PRODUCT">
+<meta name="twitter:description" content="ติดตามสถานการณ์โรคกุ้งรายประเทศทั่วโลก อัปเดตจากข่าวสารล่าสุด">
 <meta name="twitter:image" content="https://oneaquaculture.com/logo.jpg">
 <link rel="canonical" href="https://oneaquaculture.com/disease-map">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -67,6 +67,32 @@ body { padding-top: 68px; }
 .update-bar .refresh-btn:hover { background: var(--wine); color: white; }
 .update-bar .refresh-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
+/* ─── STATS BAR ──────────────────────────────────────────────────────── */
+.stats-bar {
+  background: white;
+  border-bottom: 1px solid var(--gray-mid);
+  padding: 20px 5%;
+  display: flex;
+  gap: 0;
+}
+.stat-box {
+  flex: 1;
+  text-align: center;
+  padding: 8px 16px;
+  border-right: 1px solid var(--gray-mid);
+}
+.stat-box:last-child { border-right: none; }
+.stat-box .stat-big {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--wine);
+  line-height: 1.1;
+  margin-bottom: 4px;
+  font-family: 'Inter', sans-serif;
+}
+.stat-box .stat-label-th { font-size: 12px; font-weight: 600; color: var(--text-dark); }
+.stat-box .stat-label-en { font-size: 10px; color: var(--text-soft); margin-top: 1px; }
+
 /* ─── LEGEND ──────────────────────────────────────────────────────────── */
 .legend-bar {
   background: white;
@@ -85,59 +111,93 @@ body { padding-top: 68px; }
 .legend-dot.low    { background: #16a34a; }
 .legend-dot.none   { background: #9ca3af; }
 
-/* ─── REGION CARDS ───────────────────────────────────────────────────── */
-.map-container { max-width: 1200px; margin: 0 auto; padding: 40px 5%; }
+/* ─── SAMPLE DATA NOTICE ─────────────────────────────────────────────── */
+.sample-notice {
+  background: #FFFBEB;
+  border: 1px solid #F59E0B;
+  border-radius: 10px;
+  padding: 10px 16px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 12px;
+  color: #92400E;
+  line-height: 1.5;
+}
+.sample-notice .icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
 
-.region-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 20px;
-  margin-bottom: 56px;
+/* ─── MAP CONTAINER ──────────────────────────────────────────────────── */
+.map-container { max-width: 1280px; margin: 0 auto; padding: 40px 5%; }
+
+/* ─── GEO ROWS ───────────────────────────────────────────────────────── */
+.geo-section { margin-bottom: 40px; }
+.geo-row-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--gray-mid);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.region-card {
+.country-grid {
+  display: grid;
+  gap: 14px;
+}
+.country-grid.grid-3  { grid-template-columns: repeat(3, 1fr); }
+.country-grid.grid-7  { grid-template-columns: repeat(7, 1fr); }
+.country-grid.grid-4  { grid-template-columns: repeat(4, 1fr); }
+
+/* ─── COUNTRY CARDS ──────────────────────────────────────────────────── */
+.country-card {
   background: white;
-  border-radius: 16px;
+  border-radius: 14px;
   border: 2px solid var(--gray-mid);
   box-shadow: var(--shadow);
-  padding: 24px;
+  padding: 16px;
   transition: all .3s;
   cursor: default;
   position: relative;
   overflow: hidden;
 }
-.region-card::before {
+.country-card::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
-  height: 4px;
+  height: 3px;
   background: #9ca3af;
   transition: background .3s;
 }
-.region-card.risk-high   { border-color: rgba(220,38,38,.25); }
-.region-card.risk-high::before   { background: #dc2626; }
-.region-card.risk-medium { border-color: rgba(245,158,11,.25); }
-.region-card.risk-medium::before { background: #f59e0b; }
-.region-card.risk-low    { border-color: rgba(22,163,74,.25); }
-.region-card.risk-low::before    { background: #16a34a; }
-.region-card.risk-none   { border-color: var(--gray-mid); }
-.region-card.risk-none::before   { background: #9ca3af; }
-.region-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+.country-card.risk-high   { border-color: rgba(220,38,38,.25); }
+.country-card.risk-high::before   { background: #dc2626; }
+.country-card.risk-medium { border-color: rgba(245,158,11,.25); }
+.country-card.risk-medium::before { background: #f59e0b; }
+.country-card.risk-low    { border-color: rgba(22,163,74,.25); }
+.country-card.risk-low::before    { background: #16a34a; }
+.country-card.risk-none   { border-color: var(--gray-mid); }
+.country-card.risk-none::before   { background: #9ca3af; }
+.country-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
 
-.region-card-header {
+.card-top {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 }
-.region-icon { font-size: 28px; line-height: 1; }
+.country-flag { font-size: 26px; line-height: 1; }
 .risk-badge {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 4px 10px;
+  gap: 4px;
+  padding: 3px 8px;
   border-radius: 20px;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   white-space: nowrap;
 }
@@ -146,62 +206,60 @@ body { padding-top: 68px; }
 .risk-badge.low    { background: #F0FDF4; color: #14532D; }
 .risk-badge.none   { background: #F9FAFB; color: #6B7280; }
 
-.region-name-th { font-size: 18px; font-weight: 700; color: var(--text-dark); margin-bottom: 2px; }
-.region-name-en { font-size: 12px; color: var(--text-soft); font-weight: 500; margin-bottom: 16px; }
+.country-name-th { font-size: 15px; font-weight: 700; color: var(--text-dark); line-height: 1.2; }
+.country-name-en { font-size: 11px; color: var(--text-soft); font-weight: 500; margin-bottom: 10px; }
 
-.region-stats {
+.count-row {
   display: flex;
-  gap: 16px;
-  margin-bottom: 14px;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: 8px;
 }
-.stat-item { text-align: center; }
-.stat-num { font-size: 22px; font-weight: 800; color: var(--wine); line-height: 1; }
-.stat-num.zero { color: #9ca3af; }
-.stat-label { font-size: 10px; color: var(--text-soft); font-weight: 500; margin-top: 2px; }
+.count-num { font-size: 20px; font-weight: 800; color: var(--wine); line-height: 1; }
+.count-num.zero { color: #9ca3af; }
+.count-unit { font-size: 10px; color: var(--text-soft); font-weight: 500; }
 
-.disease-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; min-height: 22px; }
+.disease-tags { display: flex; flex-wrap: wrap; gap: 4px; min-height: 20px; margin-bottom: 8px; }
 .disease-tag {
   background: #FFE4E6; color: #9F1239;
-  padding: 3px 10px; border-radius: 12px;
-  font-size: 11px; font-weight: 700;
+  padding: 2px 7px; border-radius: 10px;
+  font-size: 10px; font-weight: 700;
 }
-.disease-tag.no-tag { color: var(--text-soft); font-size: 11px; font-style: italic; align-self: center; }
+.no-disease-tag { font-size: 10px; color: #9ca3af; font-style: italic; }
 
-.province-list { font-size: 11px; color: var(--text-soft); line-height: 1.6; }
-.province-list strong { color: var(--text-mid); font-size: 11px; font-weight: 600; }
-
-.region-articles { margin-top: 14px; border-top: 1px solid var(--gray-mid); padding-top: 12px; }
-.region-articles a {
+.card-articles { border-top: 1px solid var(--gray-mid); padding-top: 8px; margin-top: 4px; }
+.card-article-link {
   display: block;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--wine);
   text-decoration: none;
-  line-height: 1.5;
-  margin-bottom: 6px;
+  line-height: 1.4;
+  margin-bottom: 4px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.region-articles a:hover { text-decoration: underline; }
+.card-article-link:hover { text-decoration: underline; }
+.card-article-sample {
+  font-size: 10px;
+  color: #92400E;
+  background: #FFFBEB;
+  padding: 1px 5px;
+  border-radius: 6px;
+  margin-left: 4px;
+}
 
 /* ─── LOADING SKELETON ───────────────────────────────────────────────── */
 .skeleton-card {
   background: white;
-  border-radius: 16px;
+  border-radius: 14px;
   border: 2px solid var(--gray-mid);
   box-shadow: var(--shadow);
-  padding: 24px;
+  padding: 16px;
   animation: shimmer 1.5s infinite;
 }
-@keyframes shimmer {
-  0%,100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-.skel-line {
-  background: var(--gray-mid);
-  border-radius: 6px;
-  margin-bottom: 10px;
-}
+@keyframes shimmer { 0%,100%{opacity:1}50%{opacity:0.5} }
+.skel-line { background: var(--gray-mid); border-radius: 6px; margin-bottom: 8px; }
 
 /* ─── NEWS SECTION ───────────────────────────────────────────────────── */
 .section-title {
@@ -215,52 +273,60 @@ body { padding-top: 68px; }
   align-items: center;
   gap: 10px;
 }
-
-.news-list { display: flex; flex-direction: column; gap: 14px; }
-
+.news-list { display: flex; flex-direction: column; gap: 12px; }
 .news-item {
   background: white;
   border-radius: 12px;
   border: 1px solid var(--gray-mid);
-  padding: 16px 20px;
+  padding: 14px 18px;
   display: flex;
   align-items: flex-start;
-  gap: 14px;
+  gap: 12px;
   transition: all .2s;
   text-decoration: none;
 }
 .news-item:hover { border-color: var(--wine); box-shadow: var(--shadow); transform: translateX(3px); }
-.news-item-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+.news-item-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
 .news-item-body { flex: 1; min-width: 0; }
 .news-item-title {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-dark);
   line-height: 1.5;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 .news-item-summary {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-soft);
   line-height: 1.6;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  margin-bottom: 8px;
+  margin-bottom: 7px;
 }
-.news-item-meta { display: flex; align-items: center; gap: 10px; }
+.news-item-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .news-item-cat {
   background: #FFE4E6; color: #9F1239;
-  padding: 2px 8px; border-radius: 10px;
+  padding: 2px 7px; border-radius: 10px;
   font-size: 10px; font-weight: 700;
+}
+.news-item-country-badge {
+  background: var(--wine-pale); color: var(--wine-dark);
+  padding: 2px 7px; border-radius: 10px;
+  font-size: 10px; font-weight: 600;
 }
 .news-item-date { font-size: 11px; color: var(--text-soft); }
 .news-item-src  { font-size: 11px; color: var(--text-soft); font-weight: 600; }
+.news-item-sample-tag {
+  font-size: 10px; color: #92400E;
+  background: #FFFBEB; padding: 2px 7px;
+  border-radius: 10px; font-weight: 600;
+}
 
 .empty-state {
   text-align: center;
@@ -281,18 +347,29 @@ body { padding-top: 68px; }
 }
 
 /* ─── RESPONSIVE ─────────────────────────────────────────────────────── */
-@media (max-width: 768px) {
-  .region-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
-  .map-container { padding: 28px 5%; }
-  .page-header { padding: 48px 5% 32px; }
-  .legend-bar { gap: 12px; padding: 10px 5%; }
-  .update-bar { flex-wrap: wrap; gap: 6px; }
-  .update-bar .refresh-btn { margin-left: 0; }
+@media (max-width: 1100px) {
+  .country-grid.grid-7 { grid-template-columns: repeat(4, 1fr); }
 }
-@media (max-width: 480px) {
-  .region-grid { grid-template-columns: 1fr; }
-  .region-card { padding: 18px; }
-  .region-stats { gap: 10px; }
+@media (max-width: 768px) {
+  .stats-bar { gap: 0; flex-wrap: wrap; }
+  .stat-box { min-width: 33%; }
+  .country-grid.grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .country-grid.grid-7 { grid-template-columns: repeat(3, 1fr); }
+  .country-grid.grid-4 { grid-template-columns: repeat(4, 1fr); }
+  .map-container { padding: 28px 4%; }
+  .page-header { padding: 48px 4% 32px; }
+  .legend-bar { gap: 10px; }
+}
+@media (max-width: 540px) {
+  .country-grid.grid-3,
+  .country-grid.grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .country-grid.grid-7 { grid-template-columns: repeat(2, 1fr); }
+  .stat-box .stat-big { font-size: 22px; }
+}
+@media (max-width: 380px) {
+  .country-grid.grid-3,
+  .country-grid.grid-4,
+  .country-grid.grid-7 { grid-template-columns: 1fr 1fr; }
 }
 </style>
 </head>
@@ -304,34 +381,86 @@ body { padding-top: 68px; }
   <button class="refresh-btn" id="refreshBtn" onclick="loadMap(true)" data-i18n="dmap.refresh">🔄 รีเฟรชข้อมูล</button>
 </div>
 
+<!-- Stats Bar -->
+<div class="stats-bar" id="statsBar" style="display:none">
+  <div class="stat-box">
+    <div class="stat-big" id="statsAlerts">—</div>
+    <div class="stat-label-th" data-i18n="dmap.stats.alerts">ประเทศที่ตรวจพบโรค</div>
+    <div class="stat-label-en">Countries with alerts</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-big" id="statsArticles">—</div>
+    <div class="stat-label-th" data-i18n="dmap.stats.articles">บทความโรค (30 วัน)</div>
+    <div class="stat-label-en">Disease articles (30d)</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-big" id="statsTop" style="font-size:20px">—</div>
+    <div class="stat-label-th" data-i18n="dmap.stats.top">โรคที่พบบ่อยสุด</div>
+    <div class="stat-label-en">Top disease</div>
+  </div>
+</div>
+
 <div class="page-header">
-  <div class="page-tag" data-i18n="dmap.page.tag">แผนที่โรคระบาด · Disease Map</div>
-  <h1 data-i18n-html="dmap.header.title">แผนที่โรคระบาดกุ้ง<br>รายภูมิภาค</h1>
-  <p data-i18n="dmap.header.desc">ติดตามสถานการณ์โรคระบาดกุ้งแต่ละภูมิภาค EHP · WSSV · WFS · Vibrio อัปเดตจากข่าวสารล่าสุด</p>
+  <div class="page-tag" data-i18n="dmap.page.tag">แผนที่โรคกุ้งโลก · Global Disease Map</div>
+  <h1 data-i18n-html="dmap.header.title">แผนที่โรคระบาดกุ้ง<br>ทั่วโลก</h1>
+  <p data-i18n="dmap.header.desc">ติดตามสถานการณ์โรคกุ้งรายประเทศ อัปเดตจากข่าวสารล่าสุดทั่วโลก</p>
 </div>
 
 <div class="legend-bar">
-  <span class="legend-label">ระดับความเสี่ยง:</span>
+  <span class="legend-label">ระดับความเสี่ยง / Risk Level:</span>
   <div class="legend-item"><div class="legend-dot high"></div><span data-i18n="dmap.risk.high">🔴 ความเสี่ยงสูง</span></div>
   <div class="legend-item"><div class="legend-dot medium"></div><span data-i18n="dmap.risk.medium">🟡 ปานกลาง</span></div>
-  <div class="legend-item"><div class="legend-dot low"></div><span data-i18n="dmap.risk.low">🟢 ต่ำ</span></div>
   <div class="legend-item"><div class="legend-dot none"></div><span data-i18n="dmap.risk.none">⚫ ไม่มีข้อมูล</span></div>
+  <span style="margin-left:auto;font-size:11px;color:var(--text-soft)">≥3 บทความ/30 วัน = สูง · 1-2 = ปานกลาง</span>
 </div>
 
 <div class="map-container">
-  <!-- Region cards -->
-  <div class="region-grid" id="regionGrid">
-    <!-- skeleton cards while loading -->
-    <div class="skeleton-card"><div class="skel-line" style="height:20px;width:60%"></div><div class="skel-line" style="height:14px;width:80%;margin-top:20px"></div><div class="skel-line" style="height:14px;width:50%"></div></div>
-    <div class="skeleton-card"><div class="skel-line" style="height:20px;width:60%"></div><div class="skel-line" style="height:14px;width:80%;margin-top:20px"></div><div class="skel-line" style="height:14px;width:50%"></div></div>
-    <div class="skeleton-card"><div class="skel-line" style="height:20px;width:60%"></div><div class="skel-line" style="height:14px;width:80%;margin-top:20px"></div><div class="skel-line" style="height:14px;width:50%"></div></div>
-    <div class="skeleton-card"><div class="skel-line" style="height:20px;width:60%"></div><div class="skel-line" style="height:14px;width:80%;margin-top:20px"></div><div class="skel-line" style="height:14px;width:50%"></div></div>
+
+  <!-- Sample data notice (hidden until loaded) -->
+  <div class="sample-notice" id="sampleNotice" style="display:none">
+    <span class="icon">💡</span>
+    <span data-i18n="dmap.sample.note">ข้อมูลตัวอย่างอ้างอิงจากสถานการณ์ที่มีการบันทึกจริง แสดงเมื่อข่าวสารล่าสุดยังมีน้อย</span>
+  </div>
+
+  <!-- Americas row -->
+  <div class="geo-section">
+    <div class="geo-row-label" data-i18n="dmap.row.americas">🌎 ทวีปอเมริกา</div>
+    <div class="country-grid grid-3" id="gridAmericas">
+      <div class="skeleton-card"><div class="skel-line" style="height:26px;width:40%;margin-bottom:12px"></div><div class="skel-line" style="height:14px;width:70%"></div><div class="skel-line" style="height:14px;width:50%"></div></div>
+      <div class="skeleton-card"><div class="skel-line" style="height:26px;width:40%;margin-bottom:12px"></div><div class="skel-line" style="height:14px;width:70%"></div><div class="skel-line" style="height:14px;width:50%"></div></div>
+      <div class="skeleton-card"><div class="skel-line" style="height:26px;width:40%;margin-bottom:12px"></div><div class="skel-line" style="height:14px;width:70%"></div><div class="skel-line" style="height:14px;width:50%"></div></div>
+    </div>
+  </div>
+
+  <!-- South/SE Asia row -->
+  <div class="geo-section">
+    <div class="geo-row-label" data-i18n="dmap.row.sea">🌏 เอเชียใต้ & เอเชียตะวันออกเฉียงใต้</div>
+    <div class="country-grid grid-7" id="gridSea">
+      <div class="skeleton-card"><div class="skel-line" style="height:26px;width:40%;margin-bottom:12px"></div><div class="skel-line" style="height:14px;width:80%"></div></div>
+      <div class="skeleton-card"><div class="skel-line" style="height:26px;width:40%;margin-bottom:12px"></div><div class="skel-line" style="height:14px;width:80%"></div></div>
+      <div class="skeleton-card"><div class="skel-line" style="height:26px;width:40%;margin-bottom:12px"></div><div class="skel-line" style="height:14px;width:80%"></div></div>
+      <div class="skeleton-card"><div class="skel-line" style="height:26px;width:40%;margin-bottom:12px"></div><div class="skel-line" style="height:14px;width:80%"></div></div>
+      <div class="skeleton-card"><div class="skel-line" style="height:26px;width:40%;margin-bottom:12px"></div><div class="skel-line" style="height:14px;width:80%"></div></div>
+      <div class="skeleton-card"><div class="skel-line" style="height:26px;width:40%;margin-bottom:12px"></div><div class="skel-line" style="height:14px;width:80%"></div></div>
+      <div class="skeleton-card"><div class="skel-line" style="height:26px;width:40%;margin-bottom:12px"></div><div class="skel-line" style="height:14px;width:80%"></div></div>
+    </div>
+  </div>
+
+  <!-- East Asia / Pacific row -->
+  <div class="geo-section">
+    <div class="geo-row-label" data-i18n="dmap.row.east">🌏 เอเชียตะวันออก & แปซิฟิก</div>
+    <div class="country-grid grid-4" id="gridEast">
+      <div class="skeleton-card"><div class="skel-line" style="height:26px;width:40%;margin-bottom:12px"></div><div class="skel-line" style="height:14px;width:70%"></div></div>
+      <div class="skeleton-card"><div class="skel-line" style="height:26px;width:40%;margin-bottom:12px"></div><div class="skel-line" style="height:14px;width:70%"></div></div>
+      <div class="skeleton-card"><div class="skel-line" style="height:26px;width:40%;margin-bottom:12px"></div><div class="skel-line" style="height:14px;width:70%"></div></div>
+      <div class="skeleton-card"><div class="skel-line" style="height:26px;width:40%;margin-bottom:12px"></div><div class="skel-line" style="height:14px;width:70%"></div></div>
+    </div>
   </div>
 
   <!-- Disease news list -->
   <div class="section-title">
     <span>🦠</span>
-    <span data-i18n="dmap.news.title">ข่าวโรคสัตว์น้ำล่าสุด</span>
+    <span data-i18n="dmap.news.title">ข่าวโรคกุ้งล่าสุด</span>
   </div>
   <div id="newsList" class="news-list">
     <!-- populated by JS -->
@@ -353,48 +482,70 @@ const RISK_LABELS = {
 function fmtDate(dateStr) {
   if (!dateStr) return '';
   const d = new Date(dateStr);
+  if (isNaN(d)) return '';
   const locale = getLang() === 'th' ? 'th-TH' : getLang() === 'vi' ? 'vi-VN' : getLang() === 'zh' ? 'zh-CN' : 'en-US';
   return d.toLocaleDateString(locale, { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
-function renderRegionCard(region) {
-  const riskCls = region.riskLevel;
+// Detect which countries are mentioned in an article (for the news feed badge)
+const COUNTRY_MAP = [
+  { id: 'thailand',    name: 'ไทย 🇹🇭',       nameEn: 'Thailand 🇹🇭',     kw: ['thailand','thai','ไทย'] },
+  { id: 'vietnam',     name: 'เวียดนาม 🇻🇳',   nameEn: 'Vietnam 🇻🇳',      kw: ['vietnam','viet','เวียดนาม'] },
+  { id: 'india',       name: 'อินเดีย 🇮🇳',    nameEn: 'India 🇮🇳',        kw: ['india','indian','อินเดีย'] },
+  { id: 'indonesia',   name: 'อินโดนีเซีย 🇮🇩',nameEn: 'Indonesia 🇮🇩',    kw: ['indonesia','อินโดนีเซีย'] },
+  { id: 'ecuador',     name: 'เอกวาดอร์ 🇪🇨',  nameEn: 'Ecuador 🇪🇨',      kw: ['ecuador','เอกวาดอร์'] },
+  { id: 'china',       name: 'จีน 🇨🇳',         nameEn: 'China 🇨🇳',        kw: ['china','chinese','จีน'] },
+  { id: 'bangladesh',  name: 'บังกลาเทศ 🇧🇩',   nameEn: 'Bangladesh 🇧🇩',   kw: ['bangladesh','บังกลาเทศ'] },
+  { id: 'myanmar',     name: 'เมียนมา 🇲🇲',     nameEn: 'Myanmar 🇲🇲',      kw: ['myanmar','burma','เมียนมา'] },
+  { id: 'philippines', name: 'ฟิลิปปินส์ 🇵🇭', nameEn: 'Philippines 🇵🇭',  kw: ['philippines','ฟิลิปปินส์'] },
+  { id: 'malaysia',    name: 'มาเลเซีย 🇲🇾',   nameEn: 'Malaysia 🇲🇾',     kw: ['malaysia','มาเลเซีย'] },
+  { id: 'brazil',      name: 'บราซิล 🇧🇷',      nameEn: 'Brazil 🇧🇷',       kw: ['brazil','บราซิล'] },
+  { id: 'usa',         name: 'สหรัฐ 🇺🇸',       nameEn: 'USA 🇺🇸',          kw: ['usa','united states','สหรัฐ'] },
+  { id: 'japan',       name: 'ญี่ปุ่น 🇯🇵',      nameEn: 'Japan 🇯🇵',        kw: ['japan','ญี่ปุ่น'] },
+  { id: 'south_korea', name: 'เกาหลีใต้ 🇰🇷',  nameEn: 'South Korea 🇰🇷',  kw: ['korea','เกาหลี'] },
+  { id: 'australia',   name: 'ออสเตรเลีย 🇦🇺', nameEn: 'Australia 🇦🇺',    kw: ['australia','ออสเตรเลีย'] },
+];
+
+function detectCountry(article) {
+  const text = `${article.title || ''} ${article.titleTH || ''} ${article.summary || ''}`.toLowerCase();
+  const found = COUNTRY_MAP.find(c => c.kw.some(k => text.includes(k)));
+  if (!found) return null;
+  return getLang() === 'th' ? found.name : found.nameEn;
+}
+
+function renderCountryCard(country) {
+  const riskCls = country.riskLevel || 'none';
   const riskLabel = RISK_LABELS[riskCls]?.() || RISK_LABELS.none();
-  const countColor = region.diseaseCount > 0 ? '' : ' zero';
-  const provinceStr = region.provinces.join(' · ');
+  const countColor = country.diseaseCount > 0 ? '' : ' zero';
 
-  const diseaseTags = region.diseases.length > 0
-    ? region.diseases.map(d => `<span class="disease-tag">${d}</span>`).join('')
-    : `<span class="disease-tag no-tag">—</span>`;
+  const diseaseTags = (country.diseases || []).length > 0
+    ? country.diseases.map(d => `<span class="disease-tag">${d}</span>`).join('')
+    : `<span class="no-disease-tag">—</span>`;
 
-  const articleLinks = region.articles.length > 0
-    ? `<div class="region-articles">
-        ${region.articles.map(a => `<a href="${a.url}" target="_blank" rel="noopener" title="${a.title}">↗ ${a.title}</a>`).join('')}
-       </div>`
-    : '';
+  let articleLinks = '';
+  if ((country.articles || []).length > 0) {
+    articleLinks = `<div class="card-articles">
+      ${country.articles.map(a =>
+        `<a class="card-article-link" href="${a.url}" target="_blank" rel="noopener" title="${a.title}">
+          ↗ ${a.title}${a.isSample ? '<span class="card-article-sample">ตัวอย่าง</span>' : ''}
+        </a>`
+      ).join('')}
+    </div>`;
+  }
 
   return `
-    <div class="region-card risk-${riskCls}">
-      <div class="region-card-header">
-        <span class="region-icon">${region.icon || '🌊'}</span>
+    <div class="country-card risk-${riskCls}">
+      <div class="card-top">
+        <span class="country-flag">${country.flag || '🌊'}</span>
         <span class="risk-badge ${riskCls}">${riskLabel}</span>
       </div>
-      <div class="region-name-th">${region.name}</div>
-      <div class="region-name-en">${region.nameEn}</div>
-      <div class="region-stats">
-        <div class="stat-item">
-          <div class="stat-num${countColor}">${region.diseaseCount}</div>
-          <div class="stat-label">${t('dmap.reports')}</div>
-        </div>
-        ${region.latestDate ? `<div class="stat-item">
-          <div class="stat-num" style="font-size:13px;font-weight:700">${fmtDate(region.latestDate)}</div>
-          <div class="stat-label">ล่าสุด</div>
-        </div>` : ''}
+      <div class="country-name-th">${country.name}</div>
+      <div class="country-name-en">${country.nameEn}</div>
+      <div class="count-row">
+        <span class="count-num${countColor}">${country.diseaseCount}</span>
+        <span class="count-unit">${t('dmap.reports')}/30d</span>
       </div>
       <div class="disease-tags">${diseaseTags}</div>
-      <div class="province-list">
-        <strong>${t('dmap.provinces')}:</strong> ${provinceStr}
-      </div>
       ${articleLinks}
     </div>`;
 }
@@ -402,16 +553,21 @@ function renderRegionCard(region) {
 function renderNewsItem(article) {
   const title = article.titleTH || article.title;
   const d = fmtDate(article.date);
+  const countryBadge = detectCountry(article);
+  const isSample = article.isSample;
+
   return `
-    <a class="news-item" href="${article.url}" target="_blank" rel="noopener">
+    <a class="news-item" href="${article.url || '#'}" target="_blank" rel="noopener">
       <div class="news-item-icon">🦠</div>
       <div class="news-item-body">
         <div class="news-item-title">${title}</div>
         ${article.summary ? `<div class="news-item-summary">${article.summary}</div>` : ''}
         <div class="news-item-meta">
           <span class="news-item-cat">🦠 โรคสัตว์น้ำ</span>
+          ${countryBadge ? `<span class="news-item-country-badge">${countryBadge}</span>` : ''}
           ${d ? `<span class="news-item-date">${d}</span>` : ''}
           <span class="news-item-src">${article.source || ''}</span>
+          ${isSample ? `<span class="news-item-sample-tag">ตัวอย่าง</span>` : ''}
         </div>
       </div>
     </a>`;
@@ -420,8 +576,8 @@ function renderNewsItem(article) {
 async function loadMap(forceRefresh = false) {
   const refreshBtn = document.getElementById('refreshBtn');
   const statusText = document.getElementById('statusText');
-  refreshBtn.disabled = true;
-  statusText.textContent = t('dmap.loading');
+  if (refreshBtn) refreshBtn.disabled = true;
+  if (statusText) statusText.textContent = t('dmap.loading');
 
   try {
     const url = forceRefresh ? '/api/disease-map?_=' + Date.now() : '/api/disease-map';
@@ -429,18 +585,42 @@ async function loadMap(forceRefresh = false) {
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
     const data = await resp.json();
 
-    // Render region cards
-    const grid = document.getElementById('regionGrid');
-    if (data.regions && data.regions.length) {
-      grid.innerHTML = data.regions.map(renderRegionCard).join('');
-    } else {
-      grid.innerHTML = '';
+    // Populate stats bar
+    if (data.stats) {
+      document.getElementById('statsAlerts').textContent = data.stats.countriesWithAlerts ?? '—';
+      document.getElementById('statsArticles').textContent = data.stats.totalDiseaseArticles ?? '—';
+      document.getElementById('statsTop').textContent = data.stats.topDisease || '—';
+      document.getElementById('statsBar').style.display = '';
     }
+
+    // Show sample notice if using representative data
+    if (data.usingSampleData) {
+      document.getElementById('sampleNotice').style.display = '';
+    }
+
+    // Split countries by row and render
+    const countries = data.countries || [];
+    const americas = countries.filter(c => c.row === 'americas');
+    const sea = countries.filter(c => c.row === 'sea');
+    const east = countries.filter(c => c.row === 'east');
+
+    document.getElementById('gridAmericas').innerHTML = americas.length
+      ? americas.map(renderCountryCard).join('')
+      : '<div style="color:var(--text-soft);font-size:13px;padding:20px">ไม่มีข้อมูล</div>';
+
+    document.getElementById('gridSea').innerHTML = sea.length
+      ? sea.map(renderCountryCard).join('')
+      : '<div style="color:var(--text-soft);font-size:13px;padding:20px">ไม่มีข้อมูล</div>';
+
+    document.getElementById('gridEast').innerHTML = east.length
+      ? east.map(renderCountryCard).join('')
+      : '<div style="color:var(--text-soft);font-size:13px;padding:20px">ไม่มีข้อมูล</div>';
 
     // Render news list
     const newsList = document.getElementById('newsList');
-    if (data.articles && data.articles.length > 0) {
-      newsList.innerHTML = data.articles.map(renderNewsItem).join('');
+    const articles = data.articles || [];
+    if (articles.length > 0) {
+      newsList.innerHTML = articles.map(renderNewsItem).join('');
     } else {
       newsList.innerHTML = `
         <div class="empty-state">
@@ -453,22 +633,22 @@ async function loadMap(forceRefresh = false) {
     // Last updated
     if (data.lastUpdated) {
       const d = new Date(data.lastUpdated);
-      const locale = getLang() === 'th' ? 'th-TH' : 'en-US';
+      const locale = getLang() === 'th' ? 'th-TH' : getLang() === 'en' ? 'en-US' : getLang() === 'vi' ? 'vi-VN' : 'zh-CN';
       document.getElementById('lastUpdatedBar').textContent =
         `${t('dmap.lastupdated')} ${d.toLocaleDateString(locale, { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}`;
     }
 
-    statusText.textContent = '';
+    if (statusText) statusText.textContent = '';
     applyI18n();
   } catch (err) {
     console.error('Disease map load error:', err);
-    statusText.textContent = '❌ โหลดไม่สำเร็จ';
-    document.getElementById('regionGrid').innerHTML = `
-      <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-soft);">
-        ไม่สามารถโหลดข้อมูลได้ กรุณาลองใหม่
-      </div>`;
+    if (statusText) statusText.textContent = '❌ โหลดไม่สำเร็จ';
+    ['gridAmericas','gridSea','gridEast'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = `<div style="color:var(--text-soft);font-size:13px;padding:20px">ไม่สามารถโหลดข้อมูลได้</div>`;
+    });
   } finally {
-    refreshBtn.disabled = false;
+    if (refreshBtn) refreshBtn.disabled = false;
   }
 }
 
