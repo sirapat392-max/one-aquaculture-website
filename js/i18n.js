@@ -5,8 +5,8 @@
       // NAV
       'nav.home':     'หน้าแรก',
       'nav.products': 'ผลิตภัณฑ์',
-      'nav.price':    '📈 ราคากุ้ง',
-      'nav.diagnosis':'🔬 ShrimpDx',
+      'nav.price':    'ราคากุ้ง',
+      'nav.diagnosis':'ShrimpDx',
       'nav.news':     'ข่าวสาร',
       'nav.about':    'เกี่ยวกับเรา',
       'nav.team':     'ทีมงาน',
@@ -306,8 +306,8 @@
       'idx.foot.p3.4':  'ติดต่อเรา',
       'idx.foot.copy':  '© 2569 บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด · One Aquaculture Product Co., Ltd. All rights reserved.',
       // NAV NEW
-      'nav.farm':   '🧮 คิดเลขฟาร์ม',
-      'nav.guides': '📚 คู่มือ',
+      'nav.farm':   'คิดเลขฟาร์ม',
+      'nav.guides': 'คู่มือ',
       // FARM CALCULATOR
       'calc.hero.h1': 'เครื่องคิดเลขฟาร์มกุ้ง',
       'calc.hero.p':  'FCR · ความหนาแน่น · ต้นทุนคุ้มทุน · อัตรารอด · %BW · Biomass · วางแผนจับ — ฟรี ไม่ต้องสมัครสมาชิก',
@@ -664,7 +664,7 @@
       'dx.chat.welcome': 'สวัสดีครับ! หลังวิเคราะห์แล้ว ถามได้เลยนะครับ เช่น "ต้องใช้ผลิตภัณฑ์อะไร" หรือ "วิธีป้องกันระยะยาว"',
       'dx.chat.ph':      'ถามเพิ่มเติม... เช่น วิธีใช้ผลิตภัณฑ์ ONE, ปริมาณที่ใช้...',
       // NAV DISEASE MAP
-      'nav.disease_map': '🗺 แผนที่โรค',
+      'nav.disease_map': 'แผนที่โรค',
       // DISEASE MAP PAGE
       'dmap.page.tag':     'แผนที่โรคระบาด · Disease Map',
       'dmap.header.title': 'แผนที่โรคระบาดกุ้ง<br>รายภูมิภาค',
@@ -686,8 +686,8 @@
       // NAV
       'nav.home':     'Home',
       'nav.products': 'Products',
-      'nav.price':    '📈 Shrimp Price',
-      'nav.diagnosis':'🔬 ShrimpDx',
+      'nav.price':    'Shrimp Price',
+      'nav.diagnosis':'ShrimpDx',
       'nav.news':     'News',
       'nav.about':    'About',
       'nav.team':     'Team',
@@ -987,8 +987,8 @@
       'price.chip.all':        'All',
       'price.disclaimer':      'Prices are for reference only and may vary by region and time · Data from southern Thailand farmer Line groups',
       // NAV NEW
-      'nav.farm':   '🧮 Farm Calculator',
-      'nav.guides': '📚 Guides',
+      'nav.farm':   'Farm Calculator',
+      'nav.guides': 'Guides',
       // FARM CALCULATOR
       'calc.hero.h1': 'Shrimp Farm Calculators',
       'calc.hero.p':  'FCR · Stocking Density · Break-even · Survival Rate · %BW · Biomass · Harvest Planning — Free, no signup',
@@ -1345,7 +1345,7 @@
       'dx.chat.welcome': 'Hello! After the analysis, feel free to ask — e.g., "What products should I use?" or "Long-term prevention methods?"',
       'dx.chat.ph':      'Ask more... e.g., how to use ONE products, dosage, prevention...',
       // NAV DISEASE MAP
-      'nav.disease_map': '🗺 Disease Map',
+      'nav.disease_map': 'Disease Map',
       // DISEASE MAP PAGE
       'dmap.page.tag':     'Disease Outbreak Map',
       'dmap.header.title': 'Shrimp Disease<br>Outbreak Map',
@@ -1367,16 +1367,16 @@
       // NAV
       'nav.home':     'Trang chủ',
       'nav.products': 'Sản phẩm',
-      'nav.price':    '📈 Giá tôm',
-      'nav.diagnosis':'🔬 ShrimpDx',
+      'nav.price':    'Giá tôm',
+      'nav.diagnosis':'ShrimpDx',
       'nav.news':     'Tin tức',
       'nav.about':    'Về chúng tôi',
       'nav.team':     'Đội ngũ',
       'nav.contact':  'Liên hệ',
       'nav.cta':      'Tư vấn chuyên gia',
       'nav.why':      'Tại sao chọn ONE',
-      'nav.farm':     '🧮 Máy tính trại',
-      'nav.guides':   '📚 Hướng dẫn',
+      'nav.farm':     'Máy tính trại',
+      'nav.guides':   'Hướng dẫn',
       // FOOTER
       'footer.desc':    'Sản phẩm thú y thủy sản chất lượng cao, thử nghiệm thực địa tại trang trại thực. Được tin tưởng bởi hơn 100 trang trại thương mại khắp miền Nam Thái Lan.',
       'footer.follow':  'Theo dõi trên Facebook',
@@ -2024,7 +2024,7 @@
       'dx.chat.welcome': 'Xin chào! Sau khi phân tích xong, bạn có thể hỏi bất cứ điều gì — vd: "Cần dùng sản phẩm gì?" hoặc "Cách phòng bệnh lâu dài?"',
       'dx.chat.ph':      'Hỏi thêm... vd: cách dùng sản phẩm ONE, liều lượng, phòng bệnh...',
       // NAV DISEASE MAP
-      'nav.disease_map': '🗺 Bản đồ Dịch',
+      'nav.disease_map': 'Bản đồ Dịch',
       // DISEASE MAP PAGE
       'dmap.page.tag':     'Bản đồ Dịch bệnh · Disease Map',
       'dmap.header.title': 'Bản đồ Dịch bệnh Tôm<br>theo Vùng',
@@ -2046,16 +2046,16 @@
       // NAV
       'nav.home':     '首页',
       'nav.products': '产品',
-      'nav.price':    '📈 虾价',
-      'nav.diagnosis':'🔬 ShrimpDx',
+      'nav.price':    '虾价',
+      'nav.diagnosis':'ShrimpDx',
       'nav.news':     '新闻',
       'nav.about':    '关于我们',
       'nav.team':     '团队',
       'nav.contact':  '联系',
       'nav.cta':      '咨询专家',
       'nav.why':      '为什么选择ONE',
-      'nav.farm':     '🧮 养殖计算器',
-      'nav.guides':   '📚 指南',
+      'nav.farm':     '养殖计算器',
+      'nav.guides':   '指南',
       // FOOTER
       'footer.desc':    '高品质水产兽药产品，经实地农场测试验证。受泰国100多家商业农场信赖。',
       'footer.follow':  '在Facebook上关注我们',
@@ -2703,7 +2703,7 @@
       'dx.chat.welcome': '您好！分析完成后，请随时提问 — 例如"需要用什么产品？"或"如何长期预防？"',
       'dx.chat.ph':      '继续提问... 例如：如何使用ONE产品、用量、预防措施...',
       // NAV DISEASE MAP
-      'nav.disease_map': '🗺 疫情地图',
+      'nav.disease_map': '疫情地图',
       // DISEASE MAP PAGE
       'dmap.page.tag':     '疫情地图 · Disease Map',
       'dmap.header.title': '泰国虾病<br>疫情地图',
