@@ -162,16 +162,29 @@ async function updateNews() {
 
   let items = [];
   feedResults.forEach((r, i) => {
-    if (r.status === 'fulfilled') items.push(...r.value);
+    if (r.status === 'fulfilled') items.push(...r.value.map(it => ({ ...it, lang: RSS_SOURCES[i].lang || 'en' })));
     else console.warn(`  ✗ ${RSS_SOURCES[i].name}:`, r.reason.message);
   });
 
+  // Load existing articles to merge (dedup by URL)
+  let existingArticles = [];
+  const dataPath = path.join(__dirname, 'news-data.json');
+  if (fs.existsSync(dataPath)) {
+    try {
+      const existing = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+      existingArticles = (existing.articles || []).filter(a => !a.isSample);
+    } catch {}
+  }
+  const existingUrls = new Set(existingArticles.map(a => a.url).filter(Boolean));
+
   const relevant = items.filter(it =>
+    it.url &&
+    !existingUrls.has(it.url) &&  // dedup — skip already-stored articles
     AQUA_KEYWORDS.some(kw => `${it.title} ${it.summary}`.toLowerCase().includes(kw))
   );
   relevant.sort((a, b) => new Date(b.pubDate || 0) - new Date(a.pubDate || 0));
-  const top = relevant.slice(0, 12);
-  console.log(`\n📰 บทความที่เกี่ยวข้อง: ${relevant.length} → ใช้ ${top.length} บทความ`);
+  const top = relevant.slice(0, 20); // process up to 20 new articles per run
+  console.log(`\n📰 บทความใหม่: ${relevant.length} → ประมวลผล ${top.length} บทความ`);
 
   if (!top.length) {
     console.error('❌ ไม่พบบทความที่เกี่ยวข้อง');
@@ -211,20 +224,30 @@ Articles:\n${listed}` }]
   const parsed = JSON.parse(raw.slice(raw.indexOf('['), raw.lastIndexOf(']') + 1));
   const byIdx = Object.fromEntries(parsed.map(p => [p.idx, p]));
 
-  const articles = top.map((it, i) => {
+  const today = new Date().toISOString().slice(0, 10);
+  const newArticles = top.map((it, i) => {
     const ai = byIdx[i] || {};
     const cat = ['industry','regulation','research','disease'].includes(ai.category) ? ai.category : guessCategory(it.title, it.summary);
-    return { title: it.title, titleTH: ai.titleTH || it.title, source: it.source, url: it.url,
+    return {
+      title: it.title, titleTH: ai.titleTH || it.title, source: it.source, url: it.url,
       lang: it.lang || 'en',
-      date: it.pubDate ? new Date(it.pubDate).toISOString().slice(0, 10) : '',
+      date: it.pubDate ? new Date(it.pubDate).toISOString().slice(0, 10) : today,
+      firstSeen: today, // for decay model — when WE first saw this article
       category: cat, categoryLabel: catLabel(cat), summary: ai.summary || it.summary,
-      country: ai.country || null };
+      country: ai.country || null,
+    };
   });
 
-  const payload = { articles, lastUpdated: new Date().toISOString(), translated: true };
-  fs.writeFileSync(path.join(__dirname, 'news-data.json'), JSON.stringify(payload, null, 2));
-  console.log(`\n✅ บันทึก ${articles.length} บทความลง news-data.json`);
-  articles.slice(0, 5).forEach((a, i) => console.log(`  ${i+1}. [${a.date}] ${a.titleTH.slice(0, 60)}`));
+  // Merge new + existing, keep newest 200 articles max, drop articles older than 90 days
+  const cutoff90 = new Date(Date.now() - 90 * 864e5).toISOString().slice(0, 10);
+  const merged = [...newArticles, ...existingArticles]
+    .filter(a => (a.date || '9999') >= cutoff90)
+    .slice(0, 200);
+
+  const payload = { articles: merged, lastUpdated: new Date().toISOString(), translated: true };
+  fs.writeFileSync(dataPath, JSON.stringify(payload, null, 2));
+  console.log(`\n✅ บันทึก ${newArticles.length} บทความใหม่ + ${existingArticles.length} เก่า = ${merged.length} รวม`);
+  newArticles.slice(0, 5).forEach((a, i) => console.log(`  ${i+1}. [${a.date}][${a.country||'?'}] ${a.titleTH.slice(0, 60)}`));
 }
 
 updateNews().catch(err => { console.error('❌ Error:', err.message); process.exit(1); });

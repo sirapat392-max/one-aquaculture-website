@@ -218,6 +218,7 @@ body { padding-top: 68px; }
 .count-num { font-size: 20px; font-weight: 800; color: var(--wine); line-height: 1; }
 .count-num.zero { color: #9ca3af; }
 .count-unit { font-size: 10px; color: var(--text-soft); font-weight: 500; }
+.days-ago { font-size: 10px; color: var(--text-soft); margin-left: auto; }
 
 .disease-tags { display: flex; flex-wrap: wrap; gap: 4px; min-height: 20px; margin-bottom: 8px; }
 .disease-tag {
@@ -229,17 +230,22 @@ body { padding-top: 68px; }
 
 .card-articles { border-top: 1px solid var(--gray-mid); padding-top: 8px; margin-top: 4px; }
 .card-article-link {
-  display: block;
-  font-size: 11px;
-  color: var(--wine);
-  text-decoration: none;
-  line-height: 1.4;
-  margin-bottom: 4px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 6px;
+  padding: 6px 8px; border-radius: 8px; margin-bottom: 4px;
+  background: rgba(139,48,96,0.05); border: 1px solid rgba(139,48,96,0.1);
+  text-decoration: none; transition: background .15s;
 }
-.card-article-link:hover { text-decoration: underline; }
+.card-article-link:hover { background: rgba(139,48,96,0.12); }
+.card-article-title { font-size: 11px; color: var(--text-dark); line-height: 1.4; flex: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.card-article-src { font-size: 10px; font-weight: 700; color: var(--wine); white-space: nowrap; flex-shrink: 0; }
+.news-item-readmore {
+  display: inline-flex; align-items: center; gap: 3px;
+  background: var(--wine-dark); color: white;
+  padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700;
+  text-decoration: none; margin-left: auto; flex-shrink: 0;
+  transition: background .15s;
+}
+.news-item-readmore:hover { background: var(--wine); }
 .card-article-sample {
   font-size: 10px;
   color: #92400E;
@@ -523,11 +529,13 @@ function renderCountryCard(country) {
     : `<span class="no-disease-tag">—</span>`;
 
   let articleLinks = '';
-  if ((country.articles || []).length > 0) {
+  const realArticles = (country.articles || []).filter(a => !a.isSample && a.url);
+  if (realArticles.length > 0) {
     articleLinks = `<div class="card-articles">
-      ${country.articles.map(a =>
-        `<a class="card-article-link" href="${a.url}" target="_blank" rel="noopener" title="${a.title}">
-          ↗ ${a.title}${a.isSample ? '<span class="card-article-sample">ตัวอย่าง</span>' : ''}
+      ${realArticles.map(a =>
+        `<a class="card-article-link" href="${a.url}" target="_blank" rel="noopener">
+          <span class="card-article-title">${a.title}</span>
+          <span class="card-article-src">↗ อ่านต้นฉบับ</span>
         </a>`
       ).join('')}
     </div>`;
@@ -544,6 +552,9 @@ function renderCountryCard(country) {
       <div class="count-row">
         <span class="count-num${countColor}">${country.diseaseCount}</span>
         <span class="count-unit">${t('dmap.reports')}/30d</span>
+        ${country.daysSinceLatest != null
+          ? `<span class="days-ago">${country.daysSinceLatest === 0 ? 'วันนี้' : country.daysSinceLatest + ' วันที่แล้ว'}</span>`
+          : ''}
       </div>
       <div class="disease-tags">${diseaseTags}</div>
       ${articleLinks}
@@ -554,23 +565,24 @@ function renderNewsItem(article) {
   const title = article.titleTH || article.title;
   const d = fmtDate(article.date);
   const countryBadge = detectCountry(article);
-  const isSample = article.isSample;
+  const hasRealUrl = article.url && !article.isSample;
 
   return `
-    <a class="news-item" href="${article.url || '#'}" target="_blank" rel="noopener">
+    <div class="news-item">
       <div class="news-item-icon">🦠</div>
       <div class="news-item-body">
         <div class="news-item-title">${title}</div>
         ${article.summary ? `<div class="news-item-summary">${article.summary}</div>` : ''}
         <div class="news-item-meta">
-          <span class="news-item-cat">🦠 โรคสัตว์น้ำ</span>
           ${countryBadge ? `<span class="news-item-country-badge">${countryBadge}</span>` : ''}
           ${d ? `<span class="news-item-date">${d}</span>` : ''}
           <span class="news-item-src">${article.source || ''}</span>
-          ${isSample ? `<span class="news-item-sample-tag">ตัวอย่าง</span>` : ''}
+          ${hasRealUrl
+            ? `<a class="news-item-readmore" href="${article.url}" target="_blank" rel="noopener">↗ อ่านต้นฉบับ</a>`
+            : ''}
         </div>
       </div>
-    </a>`;
+    </div>`;
 }
 
 async function loadMap(forceRefresh = false) {

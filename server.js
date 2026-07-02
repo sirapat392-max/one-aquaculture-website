@@ -66,7 +66,7 @@ function chatRateLimiter(req, res, next) {
   next();
 }
 
-// Clean up entries older than today every hour (prevent memory leak)
+// Clean up rate-limit maps every hour
 setInterval(() => {
   const today = new Date().toISOString().slice(0, 10);
   const hour = new Date().toISOString().slice(0, 13);
@@ -74,6 +74,21 @@ setInterval(() => {
   for (const [ip, e] of chatRateMap) { if (e.hour !== hour) chatRateMap.delete(ip); }
   for (const [ip, e] of newsRefreshRateMap) { if (e.hour !== hour) newsRefreshRateMap.delete(ip); }
 }, 3600_000);
+
+// Auto-update news daily at 06:00 UTC (13:00 Thailand time)
+function scheduleDaily(hour, fn) {
+  const now = new Date();
+  const next = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), hour, 0, 0));
+  if (next <= now) next.setUTCDate(next.getUTCDate() + 1);
+  const delay = next - now;
+  setTimeout(() => { fn(); setInterval(fn, 864e5); }, delay);
+}
+scheduleDaily(23, () => {  // 23:00 UTC = 06:00 Thailand
+  console.log('[AUTO] Running daily news update...');
+  require('child_process').spawn('node', ['update-news.js'], {
+    cwd: __dirname, stdio: 'inherit', detached: false,
+  });
+});
 
 // redirect *.html → clean URL (must be before static)
 app.use((req, res, next) => {
@@ -934,19 +949,28 @@ app.get('/api/disease-map', (req, res) => {
         matched.push(article);
       }
 
-      // Risk based on recent (30-day) article count
-      const recent = matched.filter(a => (a.date || '9999') >= cutoff);
-      const count = recent.length;
-      const riskLevel = count >= 3 ? 'high' : count >= 1 ? 'medium' : 'none';
-
+      // Decay model: risk level depends on most recent article age
       const dates = matched.map(a => a.date).filter(Boolean).sort();
       const latestDate = dates[dates.length - 1] || null;
+      const daysSinceLatest = latestDate
+        ? Math.floor((Date.now() - new Date(latestDate)) / 864e5)
+        : 999;
+      const recent30 = matched.filter(a => (a.date || '9999') >= cutoff);
+      const count = recent30.length;
+      // Peak risk from article count, then decay over time
+      let riskLevel;
+      if (count >= 3 && daysSinceLatest <= 7)        riskLevel = 'high';
+      else if (count >= 1 && daysSinceLatest <= 14)  riskLevel = 'medium';
+      else if (count >= 1 && daysSinceLatest <= 30)  riskLevel = 'low';
+      else                                             riskLevel = 'none';
 
       return {
         id: country.id,
         name: country.name,
         nameEn: country.nameEn,
         flag: country.flag,
+        daysSinceLatest: latestDate ? daysSinceLatest : null,
+        latestDate,
         row: country.row,
         riskLevel,
         diseaseCount: count,
@@ -954,7 +978,8 @@ app.get('/api/disease-map', (req, res) => {
         latestDate,
         articles: matched.slice(0, 3).map(a => ({
           title: a.titleTH || a.title,
-          url: a.url,
+          // Only expose URL if it's a real article (not sample placeholder)
+          url: a.isSample ? null : a.url,
           date: a.date,
           isSample: a.isSample || false,
         })),
@@ -972,7 +997,8 @@ app.get('/api/disease-map', (req, res) => {
 
     res.json({
       countries,
-      articles: allDiseaseArticles,
+      // Only expose real articles (with real URLs) in the news feed
+    articles: allDiseaseArticles.filter(a => !a.isSample && a.url),
       lastUpdated: newsData.lastUpdated,
       usingSampleData,
       stats: { countriesWithAlerts, totalDiseaseArticles, topDisease },
