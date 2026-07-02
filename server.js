@@ -993,7 +993,7 @@ app.get('/api/disease-map', (req, res) => {
 
     // Global stats
     const countriesWithAlerts = countries.filter(c => c.riskLevel !== 'none').length;
-    const totalDiseaseArticles = allDiseaseArticles.filter(a => (a.date || '9999') >= cutoff).length;
+    const totalDiseaseArticles = realDiseaseArticles.filter(a => (a.date || '9999') >= cutoff).length;
     const diseaseCounts = {};
     for (const c of countries) {
       for (const d of c.diseases) diseaseCounts[d] = (diseaseCounts[d] || 0) + 1;
