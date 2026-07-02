@@ -766,10 +766,13 @@ app.get('/api/disease-map', (req, res) => {
         const keywordMatch = country.keywords.some(kw => textLower.includes(kw.toLowerCase()));
         if (!aiCountryMatch && !keywordMatch) continue;
 
-        DISEASE_KW.filter(kw => textLower.includes(kw.toLowerCase()))
-          .forEach(kw => diseasesFound.add(kw));
         matchedAll.push(article);
-        if (!article.isSample) matchedReal.push(article);
+        if (!article.isSample) {
+          matchedReal.push(article);
+          // Disease tags only from real articles
+          DISEASE_KW.filter(kw => textLower.includes(kw.toLowerCase()))
+            .forEach(kw => diseasesFound.add(kw));
+        }
       }
 
       // Decay model uses REAL articles only (sample articles have fixed old dates and would decay)
