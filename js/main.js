@@ -29,7 +29,7 @@ function navHTML() {
   return `
 <nav>
   <a href="/" class="nav-logo">
-    <div class="nav-logo-icon"><img src="/logo.jpg" alt="ONE logo"></div>
+    <div class="nav-logo-icon"><img src="/logo.jpg" alt="ONE logo" width="42" height="42" loading="eager"></div>
     <div class="nav-logo-text">
       <strong>ONE AQUACULTURE</strong>
       <span>บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด</span>
@@ -53,7 +53,7 @@ function footerHTML() {
     <div class="footer-grid">
       <div>
         <div class="footer-logo">
-          <div class="footer-logo-icon"><img src="/logo.jpg" alt="ONE logo"></div>
+          <div class="footer-logo-icon"><img src="/logo.jpg" alt="ONE logo" width="36" height="36" loading="lazy"></div>
           <div class="footer-logo-text"><strong>ONE AQUACULTURE PRODUCT</strong><span>บริษัท วัน อควาคัลเจอร์ โปรดัคท์ จำกัด</span></div>
         </div>
         <p class="footer-desc" data-i18n="footer.desc">${t('footer.desc')}</p>
