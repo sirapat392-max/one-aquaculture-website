@@ -372,6 +372,17 @@ select {
 </head>
 <body>
 
+<div id="offlineBanner" style="display:none;background:#fef3c7;border-bottom:2px solid #f59e0b;padding:12px 5%;display:none;align-items:center;gap:12px;font-size:13px;color:#92400e;">
+  <span>⚠️</span>
+  <span><strong>ไม่มีอินเทอร์เน็ต</strong> — ฟีเจอร์วินิจฉัย AI ต้องการการเชื่อมต่อ</span>
+  <a href="/guides" style="margin-left:auto;background:#92400e;color:white;padding:6px 14px;border-radius:16px;text-decoration:none;font-weight:600;white-space:nowrap;">📖 ดูคู่มือโรคแทน</a>
+</div>
+<script>
+if (!navigator.onLine) document.getElementById('offlineBanner').style.display = 'flex';
+window.addEventListener('online',  () => document.getElementById('offlineBanner').style.display = 'none');
+window.addEventListener('offline', () => document.getElementById('offlineBanner').style.display = 'flex');
+</script>
+
 <!-- HERO -->
 <div class="page-hero">
   <div class="hero-inner">

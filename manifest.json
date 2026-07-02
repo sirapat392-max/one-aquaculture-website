@@ -22,9 +22,9 @@
       "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
     },
     {
-      "name": "วินิจฉัยโรค AI",
-      "short_name": "AI วินิจฉัย",
-      "url": "/ai-diagnosis",
+      "name": "คู่มือโรคกุ้ง",
+      "short_name": "คู่มือโรค",
+      "url": "/guides",
       "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
     },
     {

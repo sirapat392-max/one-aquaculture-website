@@ -663,6 +663,23 @@
       'dx.chat.live':    'AI ตอบทันที',
       'dx.chat.welcome': 'สวัสดีครับ! หลังวิเคราะห์แล้ว ถามได้เลยนะครับ เช่น "ต้องใช้ผลิตภัณฑ์อะไร" หรือ "วิธีป้องกันระยะยาว"',
       'dx.chat.ph':      'ถามเพิ่มเติม... เช่น วิธีใช้ผลิตภัณฑ์ ONE, ปริมาณที่ใช้...',
+      // NAV DISEASE MAP
+      'nav.disease_map': '🗺 แผนที่โรค',
+      // DISEASE MAP PAGE
+      'dmap.page.tag':     'แผนที่โรคระบาด · Disease Map',
+      'dmap.header.title': 'แผนที่โรคระบาดกุ้ง<br>รายภูมิภาค',
+      'dmap.header.desc':  'ติดตามสถานการณ์โรคระบาดกุ้งแต่ละภูมิภาค EHP · WSSV · WFS · Vibrio อัปเดตจากข่าวสารล่าสุด',
+      'dmap.risk.high':    '🔴 ความเสี่ยงสูง',
+      'dmap.risk.medium':  '🟡 ความเสี่ยงปานกลาง',
+      'dmap.risk.low':     '🟢 ความเสี่ยงต่ำ',
+      'dmap.risk.none':    '⚫ ไม่มีข้อมูล',
+      'dmap.refresh':      '🔄 รีเฟรชข้อมูล',
+      'dmap.reports':      'รายงาน',
+      'dmap.lastupdated':  'อัปเดตล่าสุด:',
+      'dmap.news.title':   'ข่าวโรคสัตว์น้ำล่าสุด',
+      'dmap.news.empty':   'ยังไม่มีข่าวโรคระบาดในระบบ',
+      'dmap.loading':      'กำลังโหลดข้อมูล...',
+      'dmap.provinces':    'จังหวัดที่ครอบคลุม',
     },
 
     en: {
