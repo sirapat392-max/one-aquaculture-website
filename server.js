@@ -925,8 +925,8 @@ app.get('/api/disease-map', (req, res) => {
       ? [...realDiseaseArticles, ...SAMPLE_ARTICLES]
       : realDiseaseArticles;
 
-    // 30-day cutoff for risk calculation
-    const cutoff = new Date(Date.now() - 30 * 24 * 3600_000).toISOString().slice(0, 10);
+    // 45-day cutoff for risk calculation (matches decay window)
+    const cutoff = new Date(Date.now() - 45 * 24 * 3600_000).toISOString().slice(0, 10);
 
     // Build per-country data
     const countries = DISEASE_COUNTRIES.map(country => {
@@ -959,11 +959,11 @@ app.get('/api/disease-map', (req, res) => {
         : null;
       const recent30 = matchedReal.filter(a => (a.date || '9999') >= cutoff);
       const count = recent30.length;
-      // Peak risk from article count, then decay over time
+      // Decay: HIGH→MEDIUM after 7d, MEDIUM→LOW after 21d, LOW→NONE after 45d
       let riskLevel;
       if (count >= 3 && daysSinceLatest <= 7)        riskLevel = 'high';
-      else if (count >= 1 && daysSinceLatest <= 14)  riskLevel = 'medium';
-      else if (count >= 1 && daysSinceLatest <= 30)  riskLevel = 'low';
+      else if (count >= 1 && daysSinceLatest <= 21)  riskLevel = 'medium';
+      else if (count >= 1 && daysSinceLatest <= 45)  riskLevel = 'low';
       else                                             riskLevel = 'none';
 
       const matched = matchedAll; // keep for article card display below

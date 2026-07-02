@@ -396,8 +396,8 @@ body { padding-top: 68px; }
   </div>
   <div class="stat-box">
     <div class="stat-big" id="statsArticles">—</div>
-    <div class="stat-label-th" data-i18n="dmap.stats.articles">บทความโรค (30 วัน)</div>
-    <div class="stat-label-en">Disease articles (30d)</div>
+    <div class="stat-label-th" data-i18n="dmap.stats.articles">บทความโรค (45 วัน)</div>
+    <div class="stat-label-en">Disease articles (45d)</div>
   </div>
   <div class="stat-box">
     <div class="stat-big" id="statsTop" style="font-size:20px">—</div>
@@ -551,7 +551,7 @@ function renderCountryCard(country) {
       <div class="country-name-en">${country.nameEn}</div>
       <div class="count-row">
         <span class="count-num${countColor}">${country.diseaseCount}</span>
-        <span class="count-unit">${t('dmap.reports')}/30d</span>
+        <span class="count-unit">${t('dmap.reports')}/45d</span>
         ${country.daysSinceLatest != null
           ? `<span class="days-ago">${country.daysSinceLatest === 0 ? 'วันนี้' : country.daysSinceLatest + ' วันที่แล้ว'}</span>`
           : ''}

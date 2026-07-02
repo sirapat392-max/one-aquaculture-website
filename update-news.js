@@ -93,21 +93,21 @@ const RSS_SOURCES = [
 ];
 
 const AQUA_KEYWORDS = [
-  // English
-  'shrimp','prawn','vannamei','aquaculture','fish','ems','wssv',
-  'white spot','seafood','fishery','hatchery','pathogen','feed','disease','marine',
-  'tilapia','salmon','water quality','farming','harvest','export','import',
-  'ehp','ahpnd','vibrio','wfs','ihhnv','yhd',
+  // English — shrimp-specific only
+  'shrimp','prawn','vannamei','penaeus','litopenaeus','monodon',
+  'ems','wssv','white spot','ehp','ahpnd','vibrio','wfs','ihhnv','yhd',
+  'shrimp farm','shrimp pond','shrimp hatchery','shrimp feed','shrimp export',
+  'shrimp price','shrimp production','shrimp disease','shrimp harvest',
   // Thai
-  'กุ้ง','ปลา','สัตว์น้ำ','เพาะเลี้ยง','โรค','ระบาด','ฟาร์ม','ประมง',
+  'กุ้ง','โรคกุ้ง','ฟาร์มกุ้ง','บ่อกุ้ง','กุ้งขาว','กุ้งกุลาดำ',
   // Vietnamese
-  'tôm','nuôi trồng','thủy sản','dịch bệnh','cá',
+  'tôm','dịch bệnh tôm','nuôi tôm','tôm thẻ','tôm sú',
   // Spanish
-  'camarón','acuicultura','enfermedad','cultivo','pescado',
+  'camarón','langostino','cultivo de camarón','enfermedad del camarón',
   // Indonesian
-  'udang','budidaya','penyakit','ikan','tambak',
-  // Chinese
-  '虾','水产','养殖','疾病','病害','对虾',
+  'udang','tambak udang','udang vaname','penyakit udang','budidaya udang',
+  // Chinese — shrimp-specific
+  '虾','对虾','白虾','虾病','养虾','虾产量',
 ];
 
 function parseRSS(xml, sourceName) {
@@ -208,7 +208,7 @@ async function updateNews() {
   const msg = await client.chat.completions.create({
     model: 'google/gemini-2.5-flash-lite',
     max_tokens: 5000,
-    messages: [{ role: 'user', content: `You are an aquaculture news analyst. Below are ${top.length} news articles in MIXED LANGUAGES (Thai, English, Vietnamese, Spanish, Indonesian, Chinese). Return ONLY a valid JSON array, no markdown.
+    messages: [{ role: 'user', content: `You are a shrimp aquaculture news analyst focused ONLY on shrimp farming. Below are ${top.length} news articles in MIXED LANGUAGES (Thai, English, Vietnamese, Spanish, Indonesian, Chinese). Return ONLY a valid JSON array, no markdown.
 
 Schema: { "idx": N, "titleTH": "ชื่อภาษาไทย", "category": "industry|regulation|research|disease", "summary": "สรุป 2 ประโยคภาษาไทย", "country": "ชื่อประเทศที่เกิดเหตุการณ์ เช่น ไทย, เวียดนาม, อินโดนีเซีย, เอกวาดอร์ (ถ้าไม่ชัดเจนใส่ null)" }
 
