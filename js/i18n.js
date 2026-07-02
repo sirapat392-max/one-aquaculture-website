@@ -1344,6 +1344,23 @@
       'dx.chat.live':    'AI responds instantly',
       'dx.chat.welcome': 'Hello! After the analysis, feel free to ask — e.g., "What products should I use?" or "Long-term prevention methods?"',
       'dx.chat.ph':      'Ask more... e.g., how to use ONE products, dosage, prevention...',
+      // NAV DISEASE MAP
+      'nav.disease_map': '🗺 Disease Map',
+      // DISEASE MAP PAGE
+      'dmap.page.tag':     'Disease Outbreak Map',
+      'dmap.header.title': 'Shrimp Disease<br>Outbreak Map',
+      'dmap.header.desc':  'Track shrimp disease outbreaks by region — EHP · WSSV · WFS · Vibrio — updated from latest news.',
+      'dmap.risk.high':    '🔴 High Risk',
+      'dmap.risk.medium':  '🟡 Medium Risk',
+      'dmap.risk.low':     '🟢 Low Risk',
+      'dmap.risk.none':    '⚫ No Data',
+      'dmap.refresh':      '🔄 Refresh Data',
+      'dmap.reports':      'reports',
+      'dmap.lastupdated':  'Last updated:',
+      'dmap.news.title':   'Latest Disease News',
+      'dmap.news.empty':   'No disease news in the system yet.',
+      'dmap.loading':      'Loading data...',
+      'dmap.provinces':    'Provinces covered',
     },
 
     vi: {
@@ -2006,6 +2023,23 @@
       'dx.chat.live':    'AI trả lời ngay',
       'dx.chat.welcome': 'Xin chào! Sau khi phân tích xong, bạn có thể hỏi bất cứ điều gì — vd: "Cần dùng sản phẩm gì?" hoặc "Cách phòng bệnh lâu dài?"',
       'dx.chat.ph':      'Hỏi thêm... vd: cách dùng sản phẩm ONE, liều lượng, phòng bệnh...',
+      // NAV DISEASE MAP
+      'nav.disease_map': '🗺 Bản đồ Dịch',
+      // DISEASE MAP PAGE
+      'dmap.page.tag':     'Bản đồ Dịch bệnh · Disease Map',
+      'dmap.header.title': 'Bản đồ Dịch bệnh Tôm<br>theo Vùng',
+      'dmap.header.desc':  'Theo dõi dịch bệnh tôm theo vùng — EHP · WSSV · WFS · Vibrio — cập nhật từ tin tức mới nhất.',
+      'dmap.risk.high':    '🔴 Nguy cơ Cao',
+      'dmap.risk.medium':  '🟡 Nguy cơ Trung bình',
+      'dmap.risk.low':     '🟢 Nguy cơ Thấp',
+      'dmap.risk.none':    '⚫ Không có dữ liệu',
+      'dmap.refresh':      '🔄 Làm mới dữ liệu',
+      'dmap.reports':      'báo cáo',
+      'dmap.lastupdated':  'Cập nhật lần cuối:',
+      'dmap.news.title':   'Tin tức Dịch bệnh Mới nhất',
+      'dmap.news.empty':   'Chưa có tin tức dịch bệnh trong hệ thống.',
+      'dmap.loading':      'Đang tải dữ liệu...',
+      'dmap.provinces':    'Tỉnh được bao gồm',
     },
 
     zh: {
@@ -2668,6 +2702,23 @@
       'dx.chat.live':    'AI即时回答',
       'dx.chat.welcome': '您好！分析完成后，请随时提问 — 例如"需要用什么产品？"或"如何长期预防？"',
       'dx.chat.ph':      '继续提问... 例如：如何使用ONE产品、用量、预防措施...',
+      // NAV DISEASE MAP
+      'nav.disease_map': '🗺 疫情地图',
+      // DISEASE MAP PAGE
+      'dmap.page.tag':     '疫情地图 · Disease Map',
+      'dmap.header.title': '泰国虾病<br>疫情地图',
+      'dmap.header.desc':  '按地区追踪虾病疫情 — EHP · WSSV · WFS · Vibrio — 根据最新新闻更新。',
+      'dmap.risk.high':    '🔴 高风险',
+      'dmap.risk.medium':  '🟡 中等风险',
+      'dmap.risk.low':     '🟢 低风险',
+      'dmap.risk.none':    '⚫ 暂无数据',
+      'dmap.refresh':      '🔄 刷新数据',
+      'dmap.reports':      '条报告',
+      'dmap.lastupdated':  '最后更新：',
+      'dmap.news.title':   '最新疫情新闻',
+      'dmap.news.empty':   '系统中暂无疫情新闻。',
+      'dmap.loading':      '正在加载数据...',
+      'dmap.provinces':    '覆盖省份',
     },
   };
 

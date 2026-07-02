@@ -22,6 +22,7 @@ function navHTML() {
     { href: '/farm-calculator', id: 'farm-calculator', key: 'nav.farm' },
     { href: '/guides',          id: 'guides',          key: 'nav.guides' },
     { href: '/news',            id: 'news',            key: 'nav.news' },
+    { href: '/disease-map',    id: 'disease-map',    key: 'nav.disease_map' },
     { href: '/about',           id: 'about',           key: 'nav.about' },
     { href: '/contact',         id: 'contact',         key: 'nav.contact' },
   ];

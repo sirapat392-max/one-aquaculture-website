@@ -795,6 +795,110 @@ app.patch('/api/cases/:id', (req, res) => {
   res.json({ ok: true });
 });
 
+// ─── DISEASE OUTBREAK MAP API ─────────────────────────────────────────────
+const DISEASE_REGIONS = [
+  {
+    id: 'south_gulf',
+    name: 'ภาคใต้อ่าวไทย',
+    nameEn: 'South Gulf',
+    icon: '🌊',
+    provinces: ['ชุมพร','สุราษฎร์ธานี','นครศรีธรรมราช','สงขลา','ปัตตานี','ยะลา','นราธิวาส','สตูล'],
+    provincesEn: ['chumphon','surat thani','nakhon si thammarat','songkhla','pattani','yala','narathiwat','satun'],
+  },
+  {
+    id: 'south_andaman',
+    name: 'ภาคใต้อันดามัน',
+    nameEn: 'South Andaman',
+    icon: '🏝️',
+    provinces: ['ระนอง','พังงา','ภูเก็ต','กระบี่','ตรัง'],
+    provincesEn: ['ranong','phang nga','phuket','krabi','trang'],
+  },
+  {
+    id: 'east',
+    name: 'ภาคตะวันออก',
+    nameEn: 'Eastern Thailand',
+    icon: '🌅',
+    provinces: ['ชลบุรี','ระยอง','จันทบุรี','ตราด'],
+    provincesEn: ['chonburi','rayong','chanthaburi','trat'],
+  },
+  {
+    id: 'central',
+    name: 'ภาคกลาง',
+    nameEn: 'Central Thailand',
+    icon: '🏙️',
+    provinces: ['กรุงเทพ','สมุทรปราการ','สมุทรสาคร','ฉะเชิงเทรา','สมุทรสงคราม','เพชรบุรี','ประจวบคีรีขันธ์','นนทบุรี','ปทุมธานี'],
+    provincesEn: ['bangkok','samut prakan','samut sakhon','chachoengsao','samut songkhram','phetchaburi','prachuap','nonthaburi','pathum thani'],
+  },
+];
+
+const DISEASE_KEYWORDS = ['EHP','WSSV','White Spot','White Feces','WFS','Vibrio','EMS','AHPND','IHHNV','YHD','ไวรัสตัวแดง','ตายด่วน','ขี้ขาว','โรคกุ้ง','ระบาด','เชื้อโรค','โรคตาย','กุ้งป่วย','Early Mortality','hepatopancreatic','microsporidian'];
+
+app.get('/api/disease-map', (req, res) => {
+  try {
+    const newsFile = path.join(__dirname, 'news-data.json');
+    const newsData = fs.existsSync(newsFile)
+      ? JSON.parse(fs.readFileSync(newsFile, 'utf-8'))
+      : { articles: [], lastUpdated: null };
+
+    const diseaseArticles = (newsData.articles || []).filter(a => a.category === 'disease');
+
+    const regions = DISEASE_REGIONS.map(region => {
+      const matchedArticles = [];
+      const diseasesFound = new Set();
+
+      for (const article of diseaseArticles) {
+        const text = `${article.title} ${article.titleTH || ''} ${article.summary || ''}`;
+        const textLower = text.toLowerCase();
+
+        const provinceMatch =
+          region.provinces.some(p => text.includes(p)) ||
+          region.provincesEn.some(p => textLower.includes(p));
+
+        const matchedKw = DISEASE_KEYWORDS.filter(kw => textLower.includes(kw.toLowerCase()));
+
+        if (provinceMatch && matchedKw.length > 0) {
+          matchedArticles.push(article);
+          matchedKw.forEach(kw => diseasesFound.add(kw));
+        } else if (provinceMatch) {
+          matchedArticles.push(article);
+        }
+      }
+
+      const count = matchedArticles.length;
+      const riskLevel = count >= 3 ? 'high' : count >= 1 ? 'medium' : 'none';
+
+      const dates = matchedArticles.map(a => a.date).filter(Boolean).sort();
+      const latestDate = dates[dates.length - 1] || null;
+
+      return {
+        id: region.id,
+        name: region.name,
+        nameEn: region.nameEn,
+        icon: region.icon,
+        provinces: region.provinces,
+        riskLevel,
+        diseaseCount: count,
+        diseases: [...diseasesFound],
+        latestDate,
+        articles: matchedArticles.slice(0, 5).map(a => ({
+          title: a.titleTH || a.title,
+          url: a.url,
+          date: a.date,
+        })),
+      };
+    });
+
+    res.json({
+      regions,
+      articles: diseaseArticles,
+      lastUpdated: newsData.lastUpdated,
+    });
+  } catch (err) {
+    console.error('disease-map error:', err.message);
+    res.status(500).json({ error: 'ไม่สามารถโหลดข้อมูลแผนที่โรคได้' });
+  }
+});
+
 app.use((req, res) => {
   if (req.path.startsWith('/api/')) return res.status(404).json({ error: 'Not found' });
   res.status(404).sendFile(path.join(__dirname, '404.html'));

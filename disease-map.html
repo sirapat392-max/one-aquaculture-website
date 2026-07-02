@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NTT4VNM7EE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-NTT4VNM7EE');
+</script>
+<link rel="icon" href="/logo.jpg" type="image/jpeg">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#4D1232">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ONE Aqua">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แผนที่โรคระบาดกุ้ง รายภูมิภาค · ONE AQUACULTURE PRODUCT</title>
+<meta name="description" content="ติดตามสถานการณ์โรคระบาดกุ้งแต่ละภูมิภาค EHP WSSV White Feces Vibrio อัปเดตจากข่าวสารล่าสุดในวงการเพาะเลี้ยงสัตว์น้ำ">
+<meta name="keywords" content="โรคกุ้ง, EHP, WSSV, ขี้ขาว, ตายด่วน, Vibrio, แผนที่โรค, disease map, shrimp disease outbreak, ระบาดกุ้ง">
+<meta property="og:type" content="website">
+<meta property="og:title" content="แผนที่โรคระบาดกุ้ง รายภูมิภาค · ONE AQUACULTURE PRODUCT">
+<meta property="og:description" content="ติดตามสถานการณ์โรคระบาดกุ้งแต่ละภูมิภาค EHP WSSV White Feces Vibrio อัปเดตจากข่าวสารล่าสุด">
+<meta property="og:image" content="https://oneaquaculture.com/logo.jpg">
+<meta property="og:url" content="https://oneaquaculture.com/disease-map">
+<meta property="og:site_name" content="ONE AQUACULTURE PRODUCT">
+<meta property="og:locale" content="th_TH">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="แผนที่โรคระบาดกุ้ง · ONE AQUACULTURE PRODUCT">
+<meta name="twitter:description" content="ติดตามสถานการณ์โรคระบาดกุ้งแต่ละภูมิภาค อัปเดตจากข่าวสารล่าสุด">
+<meta name="twitter:image" content="https://oneaquaculture.com/logo.jpg">
+<link rel="canonical" href="https://oneaquaculture.com/disease-map">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Inter:wght@400;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="css/main.css">
+<style>
+body { padding-top: 68px; }
+.page-header { padding: 80px 5% 48px; }
+
+/* ─── UPDATE BAR ─────────────────────────────────────────────────────── */
+.update-bar {
+  background: var(--wine-pale);
+  border-bottom: 1px solid rgba(139,48,96,0.1);
+  padding: 10px 5%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.update-bar .dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #22C55E; animation: pulse 2s infinite; flex-shrink: 0;
+}
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
+.update-bar .status-text { font-size: 12px; color: var(--wine-dark); font-weight: 500; }
+.update-bar .refresh-btn {
+  margin-left: auto; padding: 9px 16px; border-radius: 20px;
+  border: 1.5px solid var(--wine); color: var(--wine); background: white;
+  font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit;
+  transition: all .2s; min-height: 36px; white-space: nowrap;
+}
+.update-bar .refresh-btn:hover { background: var(--wine); color: white; }
+.update-bar .refresh-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ─── LEGEND ──────────────────────────────────────────────────────────── */
+.legend-bar {
+  background: white;
+  border-bottom: 1px solid var(--gray-mid);
+  padding: 12px 5%;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.legend-bar .legend-label { font-size: 12px; color: var(--text-soft); font-weight: 600; margin-right: 4px; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-mid); font-weight: 500; }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.legend-dot.high   { background: #dc2626; }
+.legend-dot.medium { background: #f59e0b; }
+.legend-dot.low    { background: #16a34a; }
+.legend-dot.none   { background: #9ca3af; }
+
+/* ─── REGION CARDS ───────────────────────────────────────────────────── */
+.map-container { max-width: 1200px; margin: 0 auto; padding: 40px 5%; }
+
+.region-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+  margin-bottom: 56px;
+}
+
+.region-card {
+  background: white;
+  border-radius: 16px;
+  border: 2px solid var(--gray-mid);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  transition: all .3s;
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+}
+.region-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: #9ca3af;
+  transition: background .3s;
+}
+.region-card.risk-high   { border-color: rgba(220,38,38,.25); }
+.region-card.risk-high::before   { background: #dc2626; }
+.region-card.risk-medium { border-color: rgba(245,158,11,.25); }
+.region-card.risk-medium::before { background: #f59e0b; }
+.region-card.risk-low    { border-color: rgba(22,163,74,.25); }
+.region-card.risk-low::before    { background: #16a34a; }
+.region-card.risk-none   { border-color: var(--gray-mid); }
+.region-card.risk-none::before   { background: #9ca3af; }
+.region-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+
+.region-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.region-icon { font-size: 28px; line-height: 1; }
+.risk-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.risk-badge.high   { background: #FEF2F2; color: #991B1B; }
+.risk-badge.medium { background: #FFFBEB; color: #92400E; }
+.risk-badge.low    { background: #F0FDF4; color: #14532D; }
+.risk-badge.none   { background: #F9FAFB; color: #6B7280; }
+
+.region-name-th { font-size: 18px; font-weight: 700; color: var(--text-dark); margin-bottom: 2px; }
+.region-name-en { font-size: 12px; color: var(--text-soft); font-weight: 500; margin-bottom: 16px; }
+
+.region-stats {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.stat-item { text-align: center; }
+.stat-num { font-size: 22px; font-weight: 800; color: var(--wine); line-height: 1; }
+.stat-num.zero { color: #9ca3af; }
+.stat-label { font-size: 10px; color: var(--text-soft); font-weight: 500; margin-top: 2px; }
+
+.disease-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; min-height: 22px; }
+.disease-tag {
+  background: #FFE4E6; color: #9F1239;
+  padding: 3px 10px; border-radius: 12px;
+  font-size: 11px; font-weight: 700;
+}
+.disease-tag.no-tag { color: var(--text-soft); font-size: 11px; font-style: italic; align-self: center; }
+
+.province-list { font-size: 11px; color: var(--text-soft); line-height: 1.6; }
+.province-list strong { color: var(--text-mid); font-size: 11px; font-weight: 600; }
+
+.region-articles { margin-top: 14px; border-top: 1px solid var(--gray-mid); padding-top: 12px; }
+.region-articles a {
+  display: block;
+  font-size: 12px;
+  color: var(--wine);
+  text-decoration: none;
+  line-height: 1.5;
+  margin-bottom: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.region-articles a:hover { text-decoration: underline; }
+
+/* ─── LOADING SKELETON ───────────────────────────────────────────────── */
+.skeleton-card {
+  background: white;
+  border-radius: 16px;
+  border: 2px solid var(--gray-mid);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  animation: shimmer 1.5s infinite;
+}
+@keyframes shimmer {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+.skel-line {
+  background: var(--gray-mid);
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+/* ─── NEWS SECTION ───────────────────────────────────────────────────── */
+.section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--wine-pale);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.news-list { display: flex; flex-direction: column; gap: 14px; }
+
+.news-item {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid var(--gray-mid);
+  padding: 16px 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  transition: all .2s;
+  text-decoration: none;
+}
+.news-item:hover { border-color: var(--wine); box-shadow: var(--shadow); transform: translateX(3px); }
+.news-item-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+.news-item-body { flex: 1; min-width: 0; }
+.news-item-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+  line-height: 1.5;
+  margin-bottom: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.news-item-summary {
+  font-size: 12px;
+  color: var(--text-soft);
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.news-item-meta { display: flex; align-items: center; gap: 10px; }
+.news-item-cat {
+  background: #FFE4E6; color: #9F1239;
+  padding: 2px 8px; border-radius: 10px;
+  font-size: 10px; font-weight: 700;
+}
+.news-item-date { font-size: 11px; color: var(--text-soft); }
+.news-item-src  { font-size: 11px; color: var(--text-soft); font-weight: 600; }
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-soft);
+}
+.empty-state .icon { font-size: 48px; margin-bottom: 16px; }
+.empty-state h3 { font-size: 18px; color: var(--text-mid); margin-bottom: 8px; }
+.empty-state p  { font-size: 13px; line-height: 1.7; }
+
+.last-updated-bar {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-soft);
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--gray-mid);
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .region-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+  .map-container { padding: 28px 5%; }
+  .page-header { padding: 48px 5% 32px; }
+  .legend-bar { gap: 12px; padding: 10px 5%; }
+  .update-bar { flex-wrap: wrap; gap: 6px; }
+  .update-bar .refresh-btn { margin-left: 0; }
+}
+@media (max-width: 480px) {
+  .region-grid { grid-template-columns: 1fr; }
+  .region-card { padding: 18px; }
+  .region-stats { gap: 10px; }
+}
+</style>
+</head>
+<body>
+
+<div class="update-bar" id="updateBar">
+  <div class="dot"></div>
+  <span class="status-text" id="statusText"></span>
+  <button class="refresh-btn" id="refreshBtn" onclick="loadMap(true)" data-i18n="dmap.refresh">🔄 รีเฟรชข้อมูล</button>
+</div>
+
+<div class="page-header">
+  <div class="page-tag" data-i18n="dmap.page.tag">แผนที่โรคระบาด · Disease Map</div>
+  <h1 data-i18n-html="dmap.header.title">แผนที่โรคระบาดกุ้ง<br>รายภูมิภาค</h1>
+  <p data-i18n="dmap.header.desc">ติดตามสถานการณ์โรคระบาดกุ้งแต่ละภูมิภาค EHP · WSSV · WFS · Vibrio อัปเดตจากข่าวสารล่าสุด</p>
+</div>
+
+<div class="legend-bar">
+  <span class="legend-label">ระดับความเสี่ยง:</span>
+  <div class="legend-item"><div class="legend-dot high"></div><span data-i18n="dmap.risk.high">🔴 ความเสี่ยงสูง</span></div>
+  <div class="legend-item"><div class="legend-dot medium"></div><span data-i18n="dmap.risk.medium">🟡 ปานกลาง</span></div>
+  <div class="legend-item"><div class="legend-dot low"></div><span data-i18n="dmap.risk.low">🟢 ต่ำ</span></div>
+  <div class="legend-item"><div class="legend-dot none"></div><span data-i18n="dmap.risk.none">⚫ ไม่มีข้อมูล</span></div>
+</div>
+
+<div class="map-container">
+  <!-- Region cards -->
+  <div class="region-grid" id="regionGrid">
+    <!-- skeleton cards while loading -->
+    <div class="skeleton-card"><div class="skel-line" style="height:20px;width:60%"></div><div class="skel-line" style="height:14px;width:80%;margin-top:20px"></div><div class="skel-line" style="height:14px;width:50%"></div></div>
+    <div class="skeleton-card"><div class="skel-line" style="height:20px;width:60%"></div><div class="skel-line" style="height:14px;width:80%;margin-top:20px"></div><div class="skel-line" style="height:14px;width:50%"></div></div>
+    <div class="skeleton-card"><div class="skel-line" style="height:20px;width:60%"></div><div class="skel-line" style="height:14px;width:80%;margin-top:20px"></div><div class="skel-line" style="height:14px;width:50%"></div></div>
+    <div class="skeleton-card"><div class="skel-line" style="height:20px;width:60%"></div><div class="skel-line" style="height:14px;width:80%;margin-top:20px"></div><div class="skel-line" style="height:14px;width:50%"></div></div>
+  </div>
+
+  <!-- Disease news list -->
+  <div class="section-title">
+    <span>🦠</span>
+    <span data-i18n="dmap.news.title">ข่าวโรคสัตว์น้ำล่าสุด</span>
+  </div>
+  <div id="newsList" class="news-list">
+    <!-- populated by JS -->
+  </div>
+
+  <div class="last-updated-bar" id="lastUpdatedBar"></div>
+</div>
+
+<script src="js/i18n.js"></script>
+<script src="js/main.js"></script>
+<script>
+const RISK_LABELS = {
+  high:   () => t('dmap.risk.high'),
+  medium: () => t('dmap.risk.medium'),
+  low:    () => t('dmap.risk.low'),
+  none:   () => t('dmap.risk.none'),
+};
+
+function fmtDate(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  const locale = getLang() === 'th' ? 'th-TH' : getLang() === 'vi' ? 'vi-VN' : getLang() === 'zh' ? 'zh-CN' : 'en-US';
+  return d.toLocaleDateString(locale, { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function renderRegionCard(region) {
+  const riskCls = region.riskLevel;
+  const riskLabel = RISK_LABELS[riskCls]?.() || RISK_LABELS.none();
+  const countColor = region.diseaseCount > 0 ? '' : ' zero';
+  const provinceStr = region.provinces.join(' · ');
+
+  const diseaseTags = region.diseases.length > 0
+    ? region.diseases.map(d => `<span class="disease-tag">${d}</span>`).join('')
+    : `<span class="disease-tag no-tag">—</span>`;
+
+  const articleLinks = region.articles.length > 0
+    ? `<div class="region-articles">
+        ${region.articles.map(a => `<a href="${a.url}" target="_blank" rel="noopener" title="${a.title}">↗ ${a.title}</a>`).join('')}
+       </div>`
+    : '';
+
+  return `
+    <div class="region-card risk-${riskCls}">
+      <div class="region-card-header">
+        <span class="region-icon">${region.icon || '🌊'}</span>
+        <span class="risk-badge ${riskCls}">${riskLabel}</span>
+      </div>
+      <div class="region-name-th">${region.name}</div>
+      <div class="region-name-en">${region.nameEn}</div>
+      <div class="region-stats">
+        <div class="stat-item">
+          <div class="stat-num${countColor}">${region.diseaseCount}</div>
+          <div class="stat-label">${t('dmap.reports')}</div>
+        </div>
+        ${region.latestDate ? `<div class="stat-item">
+          <div class="stat-num" style="font-size:13px;font-weight:700">${fmtDate(region.latestDate)}</div>
+          <div class="stat-label">ล่าสุด</div>
+        </div>` : ''}
+      </div>
+      <div class="disease-tags">${diseaseTags}</div>
+      <div class="province-list">
+        <strong>${t('dmap.provinces')}:</strong> ${provinceStr}
+      </div>
+      ${articleLinks}
+    </div>`;
+}
+
+function renderNewsItem(article) {
+  const title = article.titleTH || article.title;
+  const d = fmtDate(article.date);
+  return `
+    <a class="news-item" href="${article.url}" target="_blank" rel="noopener">
+      <div class="news-item-icon">🦠</div>
+      <div class="news-item-body">
+        <div class="news-item-title">${title}</div>
+        ${article.summary ? `<div class="news-item-summary">${article.summary}</div>` : ''}
+        <div class="news-item-meta">
+          <span class="news-item-cat">🦠 โรคสัตว์น้ำ</span>
+          ${d ? `<span class="news-item-date">${d}</span>` : ''}
+          <span class="news-item-src">${article.source || ''}</span>
+        </div>
+      </div>
+    </a>`;
+}
+
+async function loadMap(forceRefresh = false) {
+  const refreshBtn = document.getElementById('refreshBtn');
+  const statusText = document.getElementById('statusText');
+  refreshBtn.disabled = true;
+  statusText.textContent = t('dmap.loading');
+
+  try {
+    const url = forceRefresh ? '/api/disease-map?_=' + Date.now() : '/api/disease-map';
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+
+    // Render region cards
+    const grid = document.getElementById('regionGrid');
+    if (data.regions && data.regions.length) {
+      grid.innerHTML = data.regions.map(renderRegionCard).join('');
+    } else {
+      grid.innerHTML = '';
+    }
+
+    // Render news list
+    const newsList = document.getElementById('newsList');
+    if (data.articles && data.articles.length > 0) {
+      newsList.innerHTML = data.articles.map(renderNewsItem).join('');
+    } else {
+      newsList.innerHTML = `
+        <div class="empty-state">
+          <div class="icon">🗺️</div>
+          <h3 data-i18n="dmap.news.empty">ยังไม่มีข่าวโรคระบาดในระบบ</h3>
+          <p>กดรีเฟรชข้อมูลหรืออัปเดตข่าวใหม่ที่หน้า <a href="/news" style="color:var(--wine)">ข่าวสาร</a></p>
+        </div>`;
+    }
+
+    // Last updated
+    if (data.lastUpdated) {
+      const d = new Date(data.lastUpdated);
+      const locale = getLang() === 'th' ? 'th-TH' : 'en-US';
+      document.getElementById('lastUpdatedBar').textContent =
+        `${t('dmap.lastupdated')} ${d.toLocaleDateString(locale, { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}`;
+    }
+
+    statusText.textContent = '';
+    applyI18n();
+  } catch (err) {
+    console.error('Disease map load error:', err);
+    statusText.textContent = '❌ โหลดไม่สำเร็จ';
+    document.getElementById('regionGrid').innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-soft);">
+        ไม่สามารถโหลดข้อมูลได้ กรุณาลองใหม่
+      </div>`;
+  } finally {
+    refreshBtn.disabled = false;
+  }
+}
+
+// Boot
+loadMap();
+</script>
+</body>
+</html>
