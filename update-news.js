@@ -13,7 +13,7 @@ const client = new OpenAI({
 });
 
 const RSS_SOURCES = [
-  // ── English · International Organizations ────────────────────────────────
+  // ── English · International / Global ────────────────────────────────────
   { url: 'https://hatcheryinternational.com/feed/',                    name: 'Hatchery International',       lang: 'en' },
   { url: 'https://www.aquaculturealliance.org/advocate/feed/',         name: 'GAA Advocate',                 lang: 'en' },
   { url: 'https://www.undercurrentnews.com/feed/',                     name: 'Undercurrent News',            lang: 'en' },
@@ -24,9 +24,16 @@ const RSS_SOURCES = [
   { url: 'https://aquaculturehub.org/feed/',                           name: 'Aquaculture Hub',              lang: 'en' },
   { url: 'https://enaca.org/?feed=rss2',                               name: 'NACA (Asia-Pacific)',          lang: 'en' },
   { url: 'https://www.aquahoy.com/rss.xml',                            name: 'AquaHoy (Global)',             lang: 'en' },
-  { url: 'https://globefish.org/rss.xml',                              name: 'FAO Globefish',               lang: 'en' },
+  { url: 'https://globefish.org/rss.xml',                              name: 'FAO Globefish',                lang: 'en' },
   { url: 'https://www.intrafish.com/rss',                              name: 'IntraFish',                    lang: 'en' },
   { url: 'https://www.seafish.org/feed/',                              name: 'Seafish UK',                   lang: 'en' },
+  { url: 'https://www.worldfishing.net/feed/',                         name: 'World Fishing & Aquaculture',  lang: 'en' },
+  { url: 'https://www.globalseafood.org/feed/',                        name: 'Global Seafood Alliance',      lang: 'en' },
+  { url: 'https://advocate.gaalliance.org/feed/',                      name: 'GAA Advocate (alt)',           lang: 'en' },
+  { url: 'https://www.fishingwire.com/feed/',                          name: 'FishingWire (Global)',          lang: 'en' },
+  { url: 'https://www.nationalfisherman.com/feed/',                    name: 'National Fisherman (US)',       lang: 'en' },
+  { url: 'https://www.aquaculturemagazine.com/feed/',                  name: 'Aquaculture Magazine',          lang: 'en' },
+  { url: 'https://shrimpnews.com/FreeReportsFolder/NewsFolder/RSSFeed.xml', name: 'ShrimpNews.com',          lang: 'en' },
 
   // ── Thai · ภาษาไทย ───────────────────────────────────────────────────────
   { url: 'https://www.bangkokpost.com/rss/data/agriculture.xml',       name: 'Bangkok Post Agriculture',    lang: 'en' },
@@ -37,6 +44,7 @@ const RSS_SOURCES = [
   { url: 'https://kasetthai.com/feed/',                                name: 'เกษตรไทย',                    lang: 'th' },
   { url: 'https://mgronline.com/qol/rss',                              name: 'MGR Online เกษตร',            lang: 'th' },
   { url: 'https://www.siamrath.co.th/feed/',                           name: 'สยามรัฐ',                     lang: 'th' },
+  { url: 'https://www.posttoday.com/economy/agriculture/feed',         name: 'Post Today เกษตร',            lang: 'th' },
 
   // ── Vietnamese · Tiếng Việt ───────────────────────────────────────────────
   { url: 'https://thuysanvietnam.com.vn/feed/',                        name: 'Thủy Sản Việt Nam',           lang: 'vi' },
@@ -45,15 +53,11 @@ const RSS_SOURCES = [
   { url: 'https://vietfish.org/feed/',                                  name: 'VietFish',                    lang: 'vi' },
   { url: 'https://contom.vn/feed/',                                    name: 'Con Tôm (เฉพาะกุ้ง VN)',     lang: 'vi' },
   { url: 'https://aquaculture.vn/feed/',                               name: 'Aquaculture VN',              lang: 'vi' },
-  // ราชการเวียดนาม
   { url: 'https://tongcucthuysan.gov.vn/rss',                          name: 'กรมประมง VN (Gov)',           lang: 'vi' },
   { url: 'https://mard.gov.vn/Pages/rss.aspx',                        name: 'กระทรวงเกษตร VN (Gov)',       lang: 'vi' },
-  // สื่อท้องถิ่นเวียดนาม
-  { url: 'https://nongnghiep.vn/rss/thuysan.rss',                     name: 'Nông Nghiệp VN (เกษตร VN)',  lang: 'vi' },
-  { url: 'https://nongnghiep.vn/rss/chan-nuoi-thuy-san.rss',          name: 'Nông Nghiệp · ประมง VN',     lang: 'vi' },
+  { url: 'https://nongnghiep.vn/rss/thuysan.rss',                     name: 'Nông Nghiệp VN',             lang: 'vi' },
   { url: 'https://danviet.vn/rss/nong-nghiep.rss',                    name: 'Dân Việt เกษตร',             lang: 'vi' },
   { url: 'https://baomoi.com/c/nuoi-trong-thuy-san.epi',              name: 'Báo Mới ประมง',              lang: 'vi' },
-  { url: 'https://www.bienphong.com.vn/rss/kinh-te.rss',              name: 'Biên Phòng เศรษฐกิจ',        lang: 'vi' },
 
   // ── Spanish · Ecuador / Latin America ────────────────────────────────────
   { url: 'https://www.acuicultura.ws/feed/',                           name: 'Acuicultura.ws (ES)',          lang: 'es' },
@@ -61,6 +65,8 @@ const RSS_SOURCES = [
   { url: 'https://www.camaroneros.net/feed/',                          name: 'Camaroneros (EC)',             lang: 'es' },
   { url: 'https://infopesca.org/feed/',                                name: 'Infopesca (LA)',               lang: 'es' },
   { url: 'https://www.panorama-acuicola.com/feed/',                    name: 'Panorama Acuícola (MX)',       lang: 'es' },
+  { url: 'https://www.aquahoy.com/category/camarón/feed/',             name: 'AquaHoy Camarón (EC)',        lang: 'es' },
+  { url: 'https://www.expreso.ec/economia/feed/',                      name: 'Expreso Ecuador',              lang: 'es' },
 
   // ── Indonesian · Bahasa Indonesia ────────────────────────────────────────
   { url: 'https://kkp.go.id/djpb/artikel/rss',                        name: 'KKP DJPB Indonesia (Gov)',    lang: 'id' },
@@ -68,46 +74,113 @@ const RSS_SOURCES = [
   { url: 'https://www.trobos.com/rss/aquaculture',                     name: 'TROBOS Aqua (ID)',            lang: 'id' },
   { url: 'https://mediaakuakultur.com/feed/',                          name: 'Media Akuakultur (ID)',        lang: 'id' },
   { url: 'https://www.hobinatang.com/feed/',                           name: 'Hobi Natang (ID)',             lang: 'id' },
+  { url: 'https://www.dkp.go.id/rss/',                                name: 'DKP Indonesia (Gov)',          lang: 'id' },
+  { url: 'https://infomedia.co.id/feed/',                              name: 'Infomedia Perikanan (ID)',     lang: 'id' },
+  { url: 'https://www.perikanan.co.id/feed/',                          name: 'Perikanan Indonesia',          lang: 'id' },
 
-  // ── Indian · English (India local) ───────────────────────────────────────
+  // ── Indian · English + Hindi ─────────────────────────────────────────────
   { url: 'https://www.mpeda.gov.in/rss.xml',                          name: 'MPEDA India (Gov)',            lang: 'en' },
   { url: 'https://www.seafoodexporters.in/feed/',                      name: 'Seafood Exporters India',     lang: 'en' },
   { url: 'https://aquacultureindia.com/feed/',                         name: 'Aquaculture India',           lang: 'en' },
+  { url: 'https://www.aquaculturedir.com/feed/',                       name: 'Aquaculture Directory India', lang: 'en' },
+  { url: 'https://www.thehindubusinessline.com/rss/agriculture/',      name: 'Hindu BusinessLine Agri',     lang: 'en' },
+  { url: 'https://krishijagran.com/feed/',                             name: 'Krishi Jagran (Hindi/EN)',    lang: 'hi' },
+  { url: 'https://www.apfish.com/feed/',                               name: 'AP Fisheries India',          lang: 'en' },
 
   // ── Chinese · 中文 ────────────────────────────────────────────────────────
   { url: 'https://www.shuichan.cc/rss.xml',                           name: '水产前沿 (CN)',                lang: 'zh' },
   { url: 'https://www.fishfirst.cn/rss.xml',                          name: '鱼虾蟹 (CN)',                  lang: 'zh' },
   { url: 'https://www.chinaaquaculture.com/rss/',                     name: 'China Aquaculture',            lang: 'zh' },
+  { url: 'https://www.aquainfo.cn/rss.xml',                           name: 'AquaInfo China',               lang: 'zh' },
+  { url: 'https://www.moa.gov.cn/rss/index.rss',                     name: 'กระทรวงเกษตร China (Gov)',    lang: 'zh' },
 
-  // ── Bangladesh · English ──────────────────────────────────────────────────
-  { url: 'https://www.aquabangla.com/feed/',                          name: 'Aqua Bangladesh',             lang: 'en' },
-  { url: 'https://fisheries.gov.bd/rss',                              name: 'DoF Bangladesh (Gov)',         lang: 'en' },
+  // ── Bangladesh · English + Bengali ───────────────────────────────────────
+  { url: 'https://www.aquabangla.com/feed/',                          name: 'Aqua Bangladesh',              lang: 'en' },
+  { url: 'https://fisheries.gov.bd/rss',                              name: 'DoF Bangladesh (Gov)',          lang: 'en' },
+  { url: 'https://www.dailysangram.com/rss/category/fisheries',       name: 'Daily Sangram Fisheries (BD)', lang: 'bn' },
+  { url: 'https://www.prothomalo.com/economy/agriculture/feed',       name: 'Prothom Alo เกษตร (BD)',      lang: 'bn' },
 
-  // ── Philippines · English ─────────────────────────────────────────────────
-  { url: 'https://bfar.da.gov.ph/rss',                                name: 'BFAR Philippines (Gov)',      lang: 'en' },
-  { url: 'https://www.philaquaculture.org/feed/',                     name: 'PhilAquaculture',             lang: 'en' },
+  // ── Philippines · English + Filipino ─────────────────────────────────────
+  { url: 'https://bfar.da.gov.ph/rss',                                name: 'BFAR Philippines (Gov)',       lang: 'en' },
+  { url: 'https://www.philaquaculture.org/feed/',                     name: 'PhilAquaculture',              lang: 'en' },
+  { url: 'https://www.da.gov.ph/feed/',                               name: 'DA Philippines (Gov)',          lang: 'en' },
+  { url: 'https://www.philstar.com/rss/business/agribusiness',        name: 'PhilStar Agribusiness',        lang: 'en' },
+  { url: 'https://pcarrd.dost.gov.ph/feed/',                          name: 'PCARRD Philippines',           lang: 'en' },
+  { url: 'https://www.manilatimes.net/category/business/agribusiness/feed/', name: 'Manila Times Agri',    lang: 'en' },
 
-  // ── Malaysia · English ────────────────────────────────────────────────────
-  { url: 'https://www.dof.gov.my/rss',                                name: 'DOF Malaysia (Gov)',           lang: 'en' },
-  { url: 'https://aquaculturemalaysia.com/feed/',                     name: 'Aquaculture Malaysia',        lang: 'en' },
+  // ── Malaysia · English + Malay ────────────────────────────────────────────
+  { url: 'https://www.dof.gov.my/rss',                                name: 'DOF Malaysia (Gov)',            lang: 'ms' },
+  { url: 'https://aquaculturemalaysia.com/feed/',                     name: 'Aquaculture Malaysia',          lang: 'en' },
+  { url: 'https://www.agrobank.com.my/feed/',                         name: 'Agrobank Malaysia',             lang: 'ms' },
+  { url: 'https://www.fao.org/fileadmin/user_upload/newsroom/rss/all.xml', name: 'FAO Global (multi)',       lang: 'en' },
+  { url: 'https://aquakultur.my/feed/',                               name: 'Aquakultur Malaysia',           lang: 'ms' },
+
+  // ── Myanmar · English ────────────────────────────────────────────────────
+  { url: 'https://www.mmtimes.com/feed/',                             name: 'Myanmar Times',                 lang: 'en' },
+  { url: 'https://myanmar.gov.mm/en/feed/',                           name: 'Myanmar Gov News',              lang: 'en' },
+  { url: 'https://www.myanmarfish.com/feed/',                         name: 'Myanmar Fish (EN)',             lang: 'en' },
+
+  // ── Japan · 日本語 ────────────────────────────────────────────────────────
+  { url: 'https://www.jfa.maff.go.jp/j/press/rss.xml',               name: '水産庁 Japan (Gov)',            lang: 'ja' },
+  { url: 'https://www.suisan-times.co.jp/feed/',                      name: '水産タイムズ',                  lang: 'ja' },
+  { url: 'https://www.nishinippon.co.jp/rss/category/fishing.xml',   name: '西日本新聞 水産',               lang: 'ja' },
+  { url: 'https://www.aquaculture.or.jp/feed/',                       name: 'Japan Aquaculture Society',     lang: 'ja' },
+  { url: 'https://www.minato-yamaguchi.co.jp/rss/',                   name: '水産経済新聞',                  lang: 'ja' },
+  { url: 'https://www.fisheries.hokkaido.jp/feed/',                   name: '北海道水産 (Gov)',               lang: 'ja' },
+
+  // ── Korea · 한국어 ────────────────────────────────────────────────────────
+  { url: 'https://www.nifs.go.kr/rss/rss.do',                        name: '국립수산과학원 NIFS (Gov)',     lang: 'ko' },
+  { url: 'https://www.mof.go.kr/rss/rss.do',                         name: '해양수산부 MOF (Gov)',          lang: 'ko' },
+  { url: 'https://www.suhyup.co.kr/rss/rss.do',                      name: '수협중앙회',                    lang: 'ko' },
+  { url: 'https://susaninews.com/feed/',                              name: '수산인신문',                    lang: 'ko' },
+  { url: 'https://www.fisheries.go.kr/rss/rss.do',                   name: 'KIS Korea Fisheries',           lang: 'ko' },
+  { url: 'https://www.aqua.re.kr/rss/',                              name: '수산과학원 Aqua KR',             lang: 'ko' },
+
+  // ── Australia · English ───────────────────────────────────────────────────
+  { url: 'https://www.frdc.com.au/news/rss',                         name: 'FRDC Australia',                lang: 'en' },
+  { url: 'https://www.australianseafood.com.au/news/feed/',           name: 'Australian Seafood Ind.',       lang: 'en' },
+  { url: 'https://www.apfa.com.au/news/feed/',                        name: 'APFA (Aust Prawn Farmers)',     lang: 'en' },
+  { url: 'https://www.sria.com.au/feed/',                             name: 'SRIA (Shrimp R&D AU)',          lang: 'en' },
+  { url: 'https://www.agrifutures.com.au/feed/',                      name: 'AgriFutures Australia',         lang: 'en' },
+  { url: 'https://www.fishingworld.com.au/feed/',                     name: 'Fishing World AU',              lang: 'en' },
 ];
 
 const AQUA_KEYWORDS = [
-  // English — shrimp-specific only
-  'shrimp','prawn','vannamei','penaeus','litopenaeus','monodon',
-  'ems','wssv','white spot','ehp','ahpnd','vibrio','wfs','ihhnv','yhd',
+  // English — shrimp-specific
+  'shrimp','prawn','vannamei','penaeus','litopenaeus','monodon','kuruma prawn',
+  'ems','wssv','white spot syndrome','ehp','ahpnd','vibrio','wfs','ihhnv','yhd',
+  'necrotizing hepatopancreatitis','running mortality syndrome','acute hepatopancreatic',
   'shrimp farm','shrimp pond','shrimp hatchery','shrimp feed','shrimp export',
-  'shrimp price','shrimp production','shrimp disease','shrimp harvest',
+  'shrimp price','shrimp production','shrimp disease','shrimp harvest','shrimp mortality',
+  'postlarva','nauplii','broodstock','shrimp breeding','shrimp pathogen',
   // Thai
   'กุ้ง','โรคกุ้ง','ฟาร์มกุ้ง','บ่อกุ้ง','กุ้งขาว','กุ้งกุลาดำ',
+  'ตัวอ่อนกุ้ง','กุ้งแวนนาไม','ลูกกุ้ง','พันธุ์กุ้ง',
   // Vietnamese
-  'tôm','dịch bệnh tôm','nuôi tôm','tôm thẻ','tôm sú',
+  'tôm','dịch bệnh tôm','nuôi tôm','tôm thẻ','tôm sú','tôm giống',
+  'bệnh tôm','ao tôm','xuất khẩu tôm','giá tôm',
   // Spanish
-  'camarón','langostino','cultivo de camarón','enfermedad del camarón',
+  'camarón','langostino','camarón vannamei','cultivo de camarón',
+  'enfermedad del camarón','producción de camarón','granja camaronera',
   // Indonesian
   'udang','tambak udang','udang vaname','penyakit udang','budidaya udang',
-  // Chinese — shrimp-specific
-  '虾','对虾','白虾','虾病','养虾','虾产量',
+  'udang windu','benih udang','ekspor udang','harga udang',
+  // Chinese
+  '虾','对虾','白虾','虾病','养虾','虾产量','虾苗','虾养殖','出口虾',
+  // Japanese
+  'エビ','海老','養殖エビ','クルマエビ','バナメイエビ','ウシエビ',
+  'エビ養殖','エビ病','エビ疾病','水産養殖','エビ生産',
+  // Korean
+  '새우','새우 양식','흰반점','새우 질병','바나메이','새우 생산',
+  '양식 새우','수출 새우','새우 가격','새우 농장',
+  // Filipino/Tagalog
+  'hipon','palakaya','aquaculture hipon','sakit ng hipon','pagsasaka hipon',
+  // Malay
+  'udang','akuakultur udang','penyakit udang','ladang udang','eksport udang',
+  // Bengali (Bangladesh)
+  'চিংড়ি','চিংড়ি চাষ','চিংড়ি রোগ','মৎস্য','রফতানি চিংড়ি',
+  // Myanmar/Burmese (Latin approximation — RSS usually in English)
+  'myin ma',
 ];
 
 function parseRSS(xml, sourceName) {
@@ -162,8 +235,12 @@ async function updateNews() {
 
   let items = [];
   feedResults.forEach((r, i) => {
-    if (r.status === 'fulfilled') items.push(...r.value.map(it => ({ ...it, lang: RSS_SOURCES[i].lang || 'en' })));
-    else console.warn(`  ✗ ${RSS_SOURCES[i].name}:`, r.reason.message);
+    if (r.status === 'fulfilled') {
+      // Limit 3 articles per source so no single feed dominates
+      items.push(...r.value.slice(0, 3).map(it => ({ ...it, lang: RSS_SOURCES[i].lang || 'en' })));
+    } else {
+      console.warn(`  ✗ ${RSS_SOURCES[i].name}:`, r.reason.message);
+    }
   });
 
   // Load existing articles to merge (dedup by URL)
@@ -179,12 +256,23 @@ async function updateNews() {
 
   const relevant = items.filter(it =>
     it.url &&
-    !existingUrls.has(it.url) &&  // dedup — skip already-stored articles
-    AQUA_KEYWORDS.some(kw => `${it.title} ${it.summary}`.toLowerCase().includes(kw))
+    !existingUrls.has(it.url) &&
+    AQUA_KEYWORDS.some(kw => `${it.title} ${it.summary}`.toLowerCase().includes(kw.toLowerCase()))
   );
   relevant.sort((a, b) => new Date(b.pubDate || 0) - new Date(a.pubDate || 0));
-  const top = relevant.slice(0, 20); // process up to 20 new articles per run
-  console.log(`\n📰 บทความใหม่: ${relevant.length} → ประมวลผล ${top.length} บทความ`);
+
+  // Balance languages — no single language > 40% of batch
+  const MAX_BATCH = 20;
+  const MAX_PER_LANG = Math.ceil(MAX_BATCH * 0.4);
+  const langCount = {};
+  const top = [];
+  for (const it of relevant) {
+    const l = it.lang || 'en';
+    langCount[l] = (langCount[l] || 0) + 1;
+    if (langCount[l] <= MAX_PER_LANG) top.push(it);
+    if (top.length >= MAX_BATCH) break;
+  }
+  console.log(`\n📰 บทความใหม่: ${relevant.length} → ประมวลผล ${top.length} (balance: ${JSON.stringify(langCount)})`);
 
   if (!top.length) {
     console.error('❌ ไม่พบบทความที่เกี่ยวข้อง');
@@ -208,14 +296,14 @@ async function updateNews() {
   const msg = await client.chat.completions.create({
     model: 'google/gemini-2.5-flash-lite',
     max_tokens: 5000,
-    messages: [{ role: 'user', content: `You are a shrimp aquaculture news analyst focused ONLY on shrimp farming. Below are ${top.length} news articles in MIXED LANGUAGES (Thai, English, Vietnamese, Spanish, Indonesian, Chinese). Return ONLY a valid JSON array, no markdown.
+    messages: [{ role: 'user', content: `You are a shrimp aquaculture news analyst. Below are ${top.length} articles in MIXED LANGUAGES (Thai, English, Vietnamese, Spanish, Indonesian, Chinese, Japanese, Korean, Malay, Bengali, Filipino). Return ONLY a valid JSON array, no markdown.
 
 Schema: { "idx": N, "titleTH": "ชื่อภาษาไทย", "category": "industry|regulation|research|disease", "summary": "สรุป 2 ประโยคภาษาไทย", "country": "ชื่อประเทศที่เกิดเหตุการณ์ เช่น ไทย, เวียดนาม, อินโดนีเซีย, เอกวาดอร์ (ถ้าไม่ชัดเจนใส่ null)" }
 
 Rules:
 - Translate title and summary to Thai regardless of source language
 - category: disease = โรค/pathogen/virus/outbreak/ระบาด/dịch bệnh/penyakit/enfermedad/病; regulation = law/ban/กฎ/luật; research = study/งานวิจัย/nghiên cứu; else industry
-- country: detect from content — Thai provinces/ไทย = "ไทย", Vietnam/เวียดนาม/Việt Nam = "เวียดนาม", Indonesia/อินโดนีเซีย = "อินโดนีเซีย", Ecuador/เอกวาดอร์ = "เอกวาดอร์", India/อินเดีย = "อินเดีย", China/จีน/中国 = "จีน", Bangladesh/บังกลาเทศ = "บังกลาเทศ"
+- country: detect from content — ไทย, เวียดนาม, อินโดนีเซีย, เอกวาดอร์, อินเดีย, จีน, บังกลาเทศ, ฟิลิปปินส์, มาเลเซีย, เมียนมา, ญี่ปุ่น, เกาหลี, ออสเตรเลีย, บราซิล, เม็กซิโก (ใส่ null ถ้าไม่ชัดเจน)
 
 Articles:\n${listed}` }]
   });
