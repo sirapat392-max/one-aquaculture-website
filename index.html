@@ -573,11 +573,7 @@
   .reveal { opacity: 0; transform: translateY(30px); transition: opacity .6s ease, transform .6s ease; }
   .reveal.visible { opacity: 1; transform: translateY(0); }
 
-  /* ─── LANG SWITCHER ─── */
-  .lang-switcher { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: rgba(255,255,255,0.12); border-radius: 12px; padding: 3px; flex-shrink: 0; width: 64px; }
-  .lang-btn { padding: 3px 0; border-radius: 8px; border: none; background: transparent; color: rgba(255,255,255,0.7); font-size: 10px; font-weight: 700; cursor: pointer; font-family: inherit; letter-spacing: .3px; text-align: center; transition: all .15s; line-height: 1.2; }
-  .lang-btn.active { background: var(--wine); color: white; }
-  .lang-btn:hover:not(.active) { color: white; }
+  /* ─── LANG SWITCHER (inherit from main.css) ─── */
 
   /* ─── VET SECRET BTN ─── */
   .vet-secret-btn { font-size: 12px; opacity: 0.06; text-decoration: none; transition: opacity .4s; user-select: none; }
@@ -631,7 +627,7 @@
  </div>
     <div class="hero-stats">
       <div class="stat"><div class="stat-num">100<span style="font-size:0.6em">+</span></div><div class="stat-label">ฟาร์มที่ไว้วางใจ<br>Trusted Farms</div></div>
-      <div class="stat"><div class="stat-num" style="font-size:22px;line-height:1.6;">100%</div><div class="stat-label" data-i18n="idx.hero.stat2">ควบคุมคุณภาพ<br>ทุกขั้นตอน</div></div>
+      <div class="stat"><div class="stat-num" style="font-size:22px;line-height:1.6;">100%</div><div class="stat-label" data-i18n-html="idx.hero.stat2">ควบคุมคุณภาพ<br>ทุกขั้นตอน</div></div>
       <div class="stat"><div class="stat-num">3</div><div class="stat-label">ภูมิภาคที่ให้บริการ<br>Regions Served</div></div>
  </div>
  </div>

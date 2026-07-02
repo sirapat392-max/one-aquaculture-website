@@ -131,12 +131,17 @@ footer { background: var(--text-dark); color: rgba(255,255,255,0.7); padding: 48
     background: white; padding: 20px 5% 28px;
     gap: 0; box-shadow: 0 8px 32px rgba(0,0,0,.12); z-index: 99;
     border-top: 1px solid var(--gray-mid);
+    max-height: calc(100vh - 68px); overflow-y: auto;
   }
   .nav-links.mobile-open li { border-bottom: 1px solid var(--gray-mid); }
   .nav-links.mobile-open a { display: block; padding: 13px 0; font-size: 15px; }
   .nav-cta { display: none; }
   .nav-hamburger { display: block; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 480px) {
+  nav { padding: 0 4%; }
+  .nav-logo-text span { display: none; }
 }
 @media (max-width: 600px) {
   .footer-grid { grid-template-columns: 1fr; }

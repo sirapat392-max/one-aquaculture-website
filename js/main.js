@@ -112,15 +112,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const ham = document.getElementById('navHamburger');
   const navLinksList = document.getElementById('navLinks');
   if (ham && navLinksList) {
-    ham.addEventListener('click', () => {
+    const closeNav = () => {
+      navLinksList.classList.remove('mobile-open');
+      ham.classList.remove('open');
+    };
+    ham.addEventListener('click', (e) => {
+      e.stopPropagation();
       const isOpen = navLinksList.classList.toggle('mobile-open');
       ham.classList.toggle('open', isOpen);
     });
-    navLinksList.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => {
-        navLinksList.classList.remove('mobile-open');
-        ham.classList.remove('open');
-      });
+    navLinksList.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
+    document.addEventListener('click', (e) => {
+      if (navLinksList.classList.contains('mobile-open') && !navLinksList.contains(e.target) && e.target !== ham) {
+        closeNav();
+      }
     });
   }
 
