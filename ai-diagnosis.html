@@ -280,12 +280,16 @@ select {
 
 @media (max-width:600px) {
   .water-grid { grid-template-columns:1fr 1fr; }
+  .water-color-grid { grid-template-columns:repeat(3,1fr); }
   .ai-action-grid { grid-template-columns:1fr; }
 }
 @media (max-width:480px) {
   .page-hero { padding: 80px 4% 40px; }
   form { padding: 8px 12px 0; }
   .group { padding: 14px 12px 12px; border-radius: 12px; }
+  .water-grid { grid-template-columns:1fr 1fr; }
+  .water-color-grid { grid-template-columns:repeat(3,1fr); }
+  .tag-chip { min-height: 36px; padding: 6px 12px; }
 }
 
 /* ===== RATE BAR ===== */
