@@ -78,14 +78,24 @@ const RSS_SOURCES = [
   { url: 'https://infomedia.co.id/feed/',                              name: 'Infomedia Perikanan (ID)',     lang: 'id' },
   { url: 'https://www.perikanan.co.id/feed/',                          name: 'Perikanan Indonesia',          lang: 'id' },
 
-  // ── Indian · English + Hindi ─────────────────────────────────────────────
+  // ── India · English + Hindi + Telugu + Tamil ─────────────────────────────
+  // English (national / trade)
   { url: 'https://www.mpeda.gov.in/rss.xml',                          name: 'MPEDA India (Gov)',            lang: 'en' },
   { url: 'https://www.seafoodexporters.in/feed/',                      name: 'Seafood Exporters India',     lang: 'en' },
   { url: 'https://aquacultureindia.com/feed/',                         name: 'Aquaculture India',           lang: 'en' },
-  { url: 'https://www.aquaculturedir.com/feed/',                       name: 'Aquaculture Directory India', lang: 'en' },
   { url: 'https://www.thehindubusinessline.com/rss/agriculture/',      name: 'Hindu BusinessLine Agri',     lang: 'en' },
-  { url: 'https://krishijagran.com/feed/',                             name: 'Krishi Jagran (Hindi/EN)',    lang: 'hi' },
-  { url: 'https://www.apfish.com/feed/',                               name: 'AP Fisheries India',          lang: 'en' },
+  { url: 'https://www.thehindu.com/sci-tech/agriculture/feeder/default.rss', name: 'The Hindu Agriculture', lang: 'en' },
+  // Hindi
+  { url: 'https://krishijagran.com/feed/',                             name: 'Krishi Jagran (Hi)',          lang: 'hi' },
+  { url: 'https://www.jagran.com/rss/business-agriculture.xml',        name: 'Jagran Agri (Hi)',            lang: 'hi' },
+  { url: 'https://hindi.krishijagran.com/feed/',                       name: 'Krishi Jagran Hindi',         lang: 'hi' },
+  // Telugu — Andhra Pradesh & Telangana (largest shrimp states)
+  { url: 'https://www.eenadu.net/rss/fishing.xml',                     name: 'Eenadu మత్స్య (Te)',         lang: 'te' },
+  { url: 'https://www.andhrajyothy.com/rss/agriculture.xml',           name: 'Andhra Jyothy Agri (Te)',     lang: 'te' },
+  { url: 'https://www.sakshi.com/rss/agriculture.xml',                 name: 'Sakshi Agri (Te)',            lang: 'te' },
+  // Tamil — Tamil Nadu shrimp farming
+  { url: 'https://www.dinamalar.com/rss/agriculture.xml',              name: 'Dinamalar Agri (Ta)',         lang: 'ta' },
+  { url: 'https://www.dinakaran.com/rss/agri.xml',                     name: 'Dinakaran Agri (Ta)',         lang: 'ta' },
 
   // ── Chinese · 中文 ────────────────────────────────────────────────────────
   { url: 'https://www.shuichan.cc/rss.xml',                           name: '水产前沿 (CN)',                lang: 'zh' },
@@ -97,28 +107,41 @@ const RSS_SOURCES = [
   // ── Bangladesh · English + Bengali ───────────────────────────────────────
   { url: 'https://www.aquabangla.com/feed/',                          name: 'Aqua Bangladesh',              lang: 'en' },
   { url: 'https://fisheries.gov.bd/rss',                              name: 'DoF Bangladesh (Gov)',          lang: 'en' },
-  { url: 'https://www.dailysangram.com/rss/category/fisheries',       name: 'Daily Sangram Fisheries (BD)', lang: 'bn' },
-  { url: 'https://www.prothomalo.com/economy/agriculture/feed',       name: 'Prothom Alo เกษตร (BD)',      lang: 'bn' },
+  // Bengali
+  { url: 'https://www.prothomalo.com/economy/agriculture/feed',       name: 'Prothom Alo কৃষি (bn)',       lang: 'bn' },
+  { url: 'https://www.kalerkantho.com/rss/agriculture.xml',           name: 'Kaler Kantho কৃষি (bn)',      lang: 'bn' },
+  { url: 'https://www.ittefaq.com.bd/rss/agriculture',                name: 'Ittefaq মৎস্য (bn)',          lang: 'bn' },
+  { url: 'https://www.samakal.com/rss/agriculture.xml',               name: 'Samakal মৎস্য (bn)',          lang: 'bn' },
 
   // ── Philippines · English + Filipino ─────────────────────────────────────
   { url: 'https://bfar.da.gov.ph/rss',                                name: 'BFAR Philippines (Gov)',       lang: 'en' },
   { url: 'https://www.philaquaculture.org/feed/',                     name: 'PhilAquaculture',              lang: 'en' },
   { url: 'https://www.da.gov.ph/feed/',                               name: 'DA Philippines (Gov)',          lang: 'en' },
   { url: 'https://www.philstar.com/rss/business/agribusiness',        name: 'PhilStar Agribusiness',        lang: 'en' },
-  { url: 'https://pcarrd.dost.gov.ph/feed/',                          name: 'PCARRD Philippines',           lang: 'en' },
   { url: 'https://www.manilatimes.net/category/business/agribusiness/feed/', name: 'Manila Times Agri',    lang: 'en' },
+  // Filipino
+  { url: 'https://www.abante.com.ph/category/agri/feed/',             name: 'Abante Agri (fil)',            lang: 'fil' },
+  { url: 'https://www.pna.gov.ph/rss/agriculture',                    name: 'PNA Philippines (Gov fil)',    lang: 'fil' },
+  { url: 'https://balita.ph/category/agrikultura/feed/',              name: 'Balita Agrikultura (fil)',     lang: 'fil' },
 
-  // ── Malaysia · English + Malay ────────────────────────────────────────────
-  { url: 'https://www.dof.gov.my/rss',                                name: 'DOF Malaysia (Gov)',            lang: 'ms' },
+  // ── Malaysia · English + Malay + Chinese ──────────────────────────────────
+  { url: 'https://www.dof.gov.my/rss',                                name: 'DOF Malaysia (Gov ms)',         lang: 'ms' },
   { url: 'https://aquaculturemalaysia.com/feed/',                     name: 'Aquaculture Malaysia',          lang: 'en' },
-  { url: 'https://www.agrobank.com.my/feed/',                         name: 'Agrobank Malaysia',             lang: 'ms' },
-  { url: 'https://www.fao.org/fileadmin/user_upload/newsroom/rss/all.xml', name: 'FAO Global (multi)',       lang: 'en' },
-  { url: 'https://aquakultur.my/feed/',                               name: 'Aquakultur Malaysia',           lang: 'ms' },
+  { url: 'https://aquakultur.my/feed/',                               name: 'Aquakultur Malaysia (ms)',      lang: 'ms' },
+  // Malay
+  { url: 'https://www.utusan.com.my/rss/tani.xml',                    name: 'Utusan Tani (ms)',             lang: 'ms' },
+  { url: 'https://www.bharian.com.my/rss/agro.xml',                   name: 'Berita Harian Agro (ms)',      lang: 'ms' },
+  // Malaysian Chinese
+  { url: 'https://www.sinchew.com.my/rss/category/agro.xml',         name: '星洲日報 農業 (zh-MY)',         lang: 'zh' },
+  { url: 'https://www.chinapress.com.my/rss/agri.xml',               name: '中國報 農業 (zh-MY)',           lang: 'zh' },
 
-  // ── Myanmar · English ────────────────────────────────────────────────────
-  { url: 'https://www.mmtimes.com/feed/',                             name: 'Myanmar Times',                 lang: 'en' },
-  { url: 'https://myanmar.gov.mm/en/feed/',                           name: 'Myanmar Gov News',              lang: 'en' },
-  { url: 'https://www.myanmarfish.com/feed/',                         name: 'Myanmar Fish (EN)',             lang: 'en' },
+  // ── Myanmar · English + Burmese ───────────────────────────────────────────
+  { url: 'https://www.mmtimes.com/feed/',                             name: 'Myanmar Times (en)',            lang: 'en' },
+  { url: 'https://www.myanmarfish.com/feed/',                         name: 'Myanmar Fish (en)',             lang: 'en' },
+  // Burmese
+  { url: 'https://www.moi.gov.mm/moi:eng/rss.xml',                   name: 'MoI Myanmar (Gov my)',          lang: 'my' },
+  { url: 'https://www.gnlm.com.mm/rss/agri.xml',                     name: 'GNLM Myanmar Agri (my)',        lang: 'my' },
+  { url: 'https://www.7daydaily.com/rss/agri.xml',                    name: '7 Day Daily Myanmar (my)',      lang: 'my' },
 
   // ── Japan · 日本語 ────────────────────────────────────────────────────────
   { url: 'https://www.jfa.maff.go.jp/j/press/rss.xml',               name: '水産庁 Japan (Gov)',            lang: 'ja' },
@@ -175,12 +198,24 @@ const AQUA_KEYWORDS = [
   '양식 새우','수출 새우','새우 가격','새우 농장',
   // Filipino/Tagalog
   'hipon','palakaya','aquaculture hipon','sakit ng hipon','pagsasaka hipon',
+  'pagpapalaki ng hipon','lambak ng hipon',
   // Malay
   'udang','akuakultur udang','penyakit udang','ladang udang','eksport udang',
-  // Bengali (Bangladesh)
+  'ternakan udang','baka udang','benih udang',
+  // Bengali (Bangladesh / West Bengal India)
   'চিংড়ি','চিংড়ি চাষ','চিংড়ি রোগ','মৎস্য','রফতানি চিংড়ি',
-  // Myanmar/Burmese (Latin approximation — RSS usually in English)
-  'myin ma',
+  'গলদা চিংড়ি','বাগদা চিংড়ি','মৎস্য চাষ',
+  // Hindi (India)
+  'झींगा','चिंगारी','झींगा पालन','झींगा रोग','जलकृषि','मत्स्य पालन',
+  'झींगा निर्यात','वानामी झींगा',
+  // Telugu (Andhra Pradesh / Telangana — largest shrimp producing states)
+  'రొయ్యలు','రొయ్యల సాగు','రొయ్యల వ్యాధి','జలసాగు','మత్స్య',
+  'వనామీ రొయ్యలు','ఎగుమతి రొయ్యలు',
+  // Tamil (Tamil Nadu)
+  'இறால்','இறால் வளர்ப்பு','இறால் நோய்','மீன்வளம்','கடல்வளம்',
+  'வெள்ளை இறால்','ஏற்றுமதி இறால்',
+  // Burmese (Myanmar)
+  'ပုဇွန်','ပုဇွန်မွေးမြူ','ရေထွက်ကုန်','ငါးလုပ်ငန်း',
 ];
 
 function parseRSS(xml, sourceName) {
@@ -303,7 +338,14 @@ Schema: { "idx": N, "titleTH": "ชื่อภาษาไทย", "category": 
 Rules:
 - Translate title and summary to Thai regardless of source language
 - category: disease = โรค/pathogen/virus/outbreak/ระบาด/dịch bệnh/penyakit/enfermedad/病; regulation = law/ban/กฎ/luật; research = study/งานวิจัย/nghiên cứu; else industry
-- country: detect from content — ไทย, เวียดนาม, อินโดนีเซีย, เอกวาดอร์, อินเดีย, จีน, บังกลาเทศ, ฟิลิปปินส์, มาเลเซีย, เมียนมา, ญี่ปุ่น, เกาหลี, ออสเตรเลีย, บราซิล, เม็กซิโก (ใส่ null ถ้าไม่ชัดเจน)
+- country: detect which country the EVENT happened in (NOT the source country). Use Thai names:
+  ไทย (Thailand/Thai/ประเทศไทย), เวียดนาม (Vietnam/Việt Nam), อินโดนีเซีย (Indonesia/Indonesian),
+  เอกวาดอร์ (Ecuador/camaroneros), อินเดีย (India/Indian/Andhra/รொయ్యలు/इंडिया/भारत/இந்தியா),
+  จีน (China/Chinese/中国/中國), บังกลาเทศ (Bangladesh/বাংলাদেশ), ฟิลิปปินส์ (Philippines/Pilipinas/hipon),
+  มาเลเซีย (Malaysia/Malaysian/Perikanan Malaysia), เมียนมา (Myanmar/Burma/မြန်မာ),
+  ญี่ปุ่น (Japan/Japanese/エビ/日本), เกาหลี (Korea/Korean/새우/한국),
+  ออสเตรเลีย (Australia/Australian/FRDC/prawn Australia), บราซิล (Brazil/Brasil/camarão)
+  → ใส่ null ถ้าเป็นข่าวระดับโลกหรือไม่ชัดเจน
 
 Articles:\n${listed}` }]
   });
