@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ไม่มีสัญญาณอินเทอร์เน็ต · ONE AQUACULTURE</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#4D1232">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Noto Sans Thai', sans-serif;
+  background: #fdf8fb;
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; padding: 24px;
+}
+.card {
+  background: white;
+  border-radius: 24px;
+  padding: 48px 32px;
+  max-width: 360px;
+  box-shadow: 0 8px 40px rgba(77,18,50,.12);
+}
+.icon { font-size: 64px; margin-bottom: 20px; }
+h1 { font-size: 22px; color: #4D1232; margin-bottom: 10px; font-weight: 700; }
+p { font-size: 14px; color: #6b7280; line-height: 1.7; margin-bottom: 28px; }
+.btn {
+  display: inline-block;
+  background: #4D1232; color: white;
+  padding: 12px 28px; border-radius: 24px;
+  font-size: 15px; font-weight: 600;
+  text-decoration: none; border: none; cursor: pointer;
+  font-family: inherit;
+}
+.links { margin-top: 24px; display: flex; flex-direction: column; gap: 8px; }
+.links a {
+  color: #8B3060; font-size: 14px; font-weight: 600;
+  text-decoration: none; padding: 8px;
+}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="icon">📡</div>
+  <h1>ไม่มีสัญญาณอินเทอร์เน็ต</h1>
+  <p>ข้อมูลล่าสุดที่โหลดไว้จะยังแสดงอยู่<br>เชื่อมต่ออินเทอร์เน็ตแล้วรีเฟรชเพื่ออัปเดต</p>
+  <button class="btn" onclick="location.reload()">ลองใหม่</button>
+  <div class="links">
+    <a href="/">🏠 หน้าหลัก</a>
+    <a href="/shrimp-price">📈 ราคากุ้ง</a>
+    <a href="/farm-calculator">🧮 คำนวณฟาร์ม</a>
+  </div>
+</div>
+</body>
+</html>

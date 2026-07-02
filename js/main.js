@@ -142,6 +142,13 @@ document.addEventListener('DOMContentLoaded', () => {
   reveals.forEach(el => obs.observe(el));
 });
 
+// Register service worker for PWA offline support
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  });
+}
+
 // API base URL — empty string = relative to current host (works local + production)
 const API = '';
 
