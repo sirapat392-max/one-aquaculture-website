@@ -13,6 +13,28 @@ const client = new OpenAI({
 });
 
 const RSS_SOURCES = [
+  // ── Google News RSS (reliable, never blocked, aggregates thousands of sources) ──
+  { url: "https://news.google.com/rss/search?q=shrimp+aquaculture&hl=en-US&gl=US&ceid=US:en",            name: 'Google News: shrimp aquaculture', lang: 'en' },
+  { url: "https://news.google.com/rss/search?q=shrimp+disease+outbreak&hl=en-US&gl=US&ceid=US:en",       name: 'Google News: shrimp disease',    lang: 'en' },
+  { url: "https://news.google.com/rss/search?q=shrimp+export+import+trade&hl=en-US&gl=US&ceid=US:en",    name: 'Google News: shrimp trade',      lang: 'en' },
+  { url: "https://news.google.com/rss/search?q=prawn+vannamei+penaeus&hl=en-US&gl=US&ceid=US:en",        name: 'Google News: prawn vannamei',    lang: 'en' },
+  { url: "https://news.google.com/rss/search?q=WSSV+EHP+AHPND+shrimp&hl=en-US&gl=US&ceid=US:en",        name: 'Google News: shrimp pathogen',   lang: 'en' },
+  { url: "https://news.google.com/rss/search?q=shrimp+price+market+2026&hl=en-US&gl=US&ceid=US:en",      name: 'Google News: shrimp price',      lang: 'en' },
+  { url: "https://news.google.com/rss/search?q=%E0%B8%81%E0%B8%B8%E0%B9%89%E0%B8%87&hl=th&gl=TH&ceid=TH:th", name: 'Google News: กุ้ง (TH)',    lang: 'th' },
+  { url: "https://news.google.com/rss/search?q=%E0%B8%81%E0%B8%B8%E0%B9%89%E0%B8%87+%E0%B9%82%E0%B8%A3%E0%B8%84&hl=th&gl=TH&ceid=TH:th", name: 'Google News: กุ้งโรค (TH)', lang: 'th' },
+  { url: "https://news.google.com/rss/search?q=t%C3%B4m+nu%C3%B4i+xu%E1%BA%A5t+kh%E1%BA%A9u&hl=vi&gl=VN&ceid=VN:vi", name: 'Google News: tôm VN', lang: 'vi' },
+  { url: "https://news.google.com/rss/search?q=camar%C3%B3n+camaronero+Ecuador&hl=es&gl=EC&ceid=EC:es",  name: 'Google News: camarón EC',        lang: 'es' },
+  { url: "https://news.google.com/rss/search?q=udang+vaname+penyakit&hl=id&gl=ID&ceid=ID:id",            name: 'Google News: udang ID',          lang: 'id' },
+  { url: "https://news.google.com/rss/search?q=shrimp+India+export+aquaculture&hl=en-IN&gl=IN&ceid=IN:en", name: 'Google News: shrimp India',    lang: 'en' },
+  { url: "https://news.google.com/rss/search?q=%E0%A6%9A%E0%A6%BF%E0%A6%82%E0%A6%A1%E0%A6%BC%E0%A6%BF+%E0%A6%9A%E0%A6%BE%E0%A6%B7&hl=bn&gl=BD&ceid=BD:bn", name: 'Google News: চিংড়ি BD', lang: 'bn' },
+  { url: "https://news.google.com/rss/search?q=%E3%82%A8%E3%83%93+%E9%A4%8A%E6%AE%96+%E8%BC%B8%E5%87%BA&hl=ja&gl=JP&ceid=JP:ja", name: 'Google News: エビ JP',  lang: 'ja' },
+  { url: "https://news.google.com/rss/search?q=%EC%83%88%EC%9A%B0+%EC%96%91%EC%8B%9D+%EC%88%98%EC%B6%9C&hl=ko&gl=KR&ceid=KR:ko", name: 'Google News: 새우 KR',  lang: 'ko' },
+  { url: "https://news.google.com/rss/search?q=shrimp+Australia+prawn+export&hl=en-AU&gl=AU&ceid=AU:en", name: 'Google News: prawn AU',           lang: 'en' },
+  { url: "https://news.google.com/rss/search?q=camar%C3%A3o+aquicultura+exporta%C3%A7%C3%A3o&hl=pt&gl=BR&ceid=BR:pt", name: 'Google News: camarão BR', lang: 'pt' },
+  { url: "https://news.google.com/rss/search?q=%E8%99%BE+%E5%85%BB%E6%AE%96+%E5%87%BA%E5%8F%A3&hl=zh-CN&gl=CN&ceid=CN:zh-Hans", name: 'Google News: 虾 CN',   lang: 'zh' },
+  { url: "https://news.google.com/rss/search?q=shrimp+Philippines+hipon+aquaculture&hl=en-PH&gl=PH&ceid=PH:en", name: 'Google News: shrimp PH',   lang: 'en' },
+  { url: "https://news.google.com/rss/search?q=shrimp+Myanmar+prawn&hl=en&gl=MM&ceid=MM:en",              name: 'Google News: shrimp MM',         lang: 'en' },
+
   // ── Global · Shrimp & Aquaculture ───────────────────────────────────────
   { url: 'https://hatcheryinternational.com/feed/',                    name: 'Hatchery International',       lang: 'en' },
   { url: 'https://www.aquaculturealliance.org/advocate/feed/',         name: 'GAA Advocate',                 lang: 'en' },
