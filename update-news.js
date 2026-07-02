@@ -325,6 +325,13 @@ const AQUA_KEYWORDS = [
   'ပုဇွန်','ပုဇွန်မွေးမြူ','ရေထွက်ကုန်','ငါးလုပ်ငန်း',
 ];
 
+function decodeHtml(str) {
+  return str
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(+n))
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&nbsp;/g, ' ');
+}
+
 function parseRSS(xml, sourceName) {
   // Reject HTML pages masquerading as RSS
   const trimmed = xml.trimStart();
@@ -332,16 +339,14 @@ function parseRSS(xml, sourceName) {
   if (!trimmed.includes('<item>') && !trimmed.includes('<entry>')) return [];
 
   const items = [];
-  // Support both RSS <item> and Atom <entry>
   const rx = /(<item>[\s\S]*?<\/item>|<entry>[\s\S]*?<\/entry>)/gi;
   let m;
   while ((m = rx.exec(xml)) !== null) {
     const block = m[1];
     const get = (tag) => {
       const r = block.match(new RegExp(`<${tag}[\\s][^>]*>(?:<!\\[CDATA\\[)?([\\s\\S]*?)(?:\\]\\]>)?<\\/${tag}>|<${tag}>(?:<!\\[CDATA\\[)?([\\s\\S]*?)(?:\\]\\]>)?<\\/${tag}>`, 'i'));
-      return r ? (r[1] || r[2] || '').replace(/<[^>]+>/g, '').trim() : '';
+      return r ? decodeHtml((r[1] || r[2] || '').replace(/<[^>]+>/g, '').trim()) : '';
     };
-    // RSS uses <link>, Atom uses <link href="..."/>
     const linkM = block.match(/<link[^>]+href=["']([^"']+)["']/i)
       || block.match(/<link>([^<]+)<\/link>/i);
     const title = get('title');
@@ -459,7 +464,7 @@ async function updateNews() {
       firstSeen: today,
       category: cat, categoryLabel: catLabel(cat),
       summary: ai.summary || it.summary || '',
-      country: ai.country || null,
+      country: (ai.country && ai.country !== 'null') ? ai.country : null,
     };
   };
 
