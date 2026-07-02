@@ -284,7 +284,12 @@ async function updateNews() {
   if (fs.existsSync(dataPath)) {
     try {
       const existing = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
-      existingArticles = (existing.articles || []).filter(a => !a.isSample);
+      // Keep only shrimp articles when loading existing data (purge old fish articles)
+      existingArticles = (existing.articles || []).filter(a => {
+        if (a.isSample) return false;
+        const text = `${a.title || ''} ${a.titleTH || ''} ${a.summary || ''}`;
+        return AQUA_KEYWORDS.some(kw => text.toLowerCase().includes(kw.toLowerCase()));
+      });
     } catch {}
   }
   const existingUrls = new Set(existingArticles.map(a => a.url).filter(Boolean));

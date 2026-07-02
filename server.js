@@ -441,13 +441,24 @@ app.get('/api/shrimp-price', (req, res) => {
 });
 
 // ─── GET CURRENT NEWS ─────────────────────────────────────────────────────
+// Shrimp-only keywords for API-level filtering
+const SHRIMP_KW = [
+  'shrimp','prawn','vannamei','penaeus','monodon','กุ้ง','tôm','udang','camarón',
+  'エビ','새우','চিংড়ি','รొయ్యలు','இறால்','झींगा','hipon','ปุ้งกี๋','กุ้งขาว','กุ้งกุลา',
+  'ems','wssv','ehp','ahpnd','wfs','ihhnv','yhd','white spot','vibrio',
+];
+
+function isShrimpArticle(a) {
+  const text = `${a.title || ''} ${a.titleTH || ''} ${a.summary || ''}`.toLowerCase();
+  return SHRIMP_KW.some(kw => text.includes(kw.toLowerCase()));
+}
+
 app.get('/api/news', (req, res) => {
   const newsFile = path.join(__dirname, 'news-data.json');
-  if (fs.existsSync(newsFile)) {
-    res.json(JSON.parse(fs.readFileSync(newsFile, 'utf-8')));
-  } else {
-    res.json({ articles: [], lastUpdated: null });
-  }
+  if (!fs.existsSync(newsFile)) return res.json({ articles: [], lastUpdated: null });
+  const data = JSON.parse(fs.readFileSync(newsFile, 'utf-8'));
+  data.articles = (data.articles || []).filter(a => !a.isSample && isShrimpArticle(a));
+  res.json(data);
 });
 
 // ─── RSS FETCH + AI TRANSLATE NEWS ───────────────────────────────────────
