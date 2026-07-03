@@ -395,7 +395,36 @@ function computePriceRange(records) {
   return { byDate, dates };
 }
 
-const THAI_BACKUP_FILE = path.join(__dirname, 'thai-price-backup.json');
+const THAI_BACKUP_FILE   = path.join(__dirname, 'thai-price-backup.json');
+const THAI_HISTORY_FILE  = path.join(__dirname, 'thai-price-history.json');
+
+function loadThaiHistory() {
+  if (!fs.existsSync(THAI_HISTORY_FILE)) return {};
+  try { return JSON.parse(fs.readFileSync(THAI_HISTORY_FILE, 'utf-8')).byDate || {}; } catch { return {}; }
+}
+
+function mergeThaiHistory(newByDate) {
+  const existing = loadThaiHistory();
+  let addedDates = 0;
+  for (const [date, sizes] of Object.entries(newByDate)) {
+    if (!existing[date]) { existing[date] = sizes; addedDates++; }
+    else {
+      // Update existing date with latest aggregations (more reports may have come in)
+      existing[date] = sizes;
+    }
+  }
+  const sorted = Object.fromEntries(Object.keys(existing).sort().map(k => [k, existing[k]]));
+  const content = JSON.stringify({ updatedAt: new Date().toISOString(), byDate: sorted }, null, 2);
+  fs.writeFileSync(THAI_HISTORY_FILE, content);
+  if (addedDates > 0) {
+    const latestDate = Object.keys(sorted).at(-1);
+    console.log(`✅ Thai price history: +${addedDates} new dates (latest ${latestDate}, total ${Object.keys(sorted).length})`);
+    commitFileToGitHub(THAI_HISTORY_FILE, content,
+      `data: thai price history +${addedDates} dates (latest ${latestDate})`
+    ).catch(e => console.error('GitHub commit (thai history) error:', e.message));
+  }
+  return sorted;
+}
 
 async function refreshPriceCache() {
   const r = await fetch(N8N_PRICE_URL, { signal: AbortSignal.timeout(15000) });
@@ -404,7 +433,9 @@ async function refreshPriceCache() {
   const records = json.data || [];
   priceRangeCache = computePriceRange(records);
   priceRangeCacheAt = Date.now();
-  // Backup to disk: merge new records into existing backup
+  // Save synthesized history to disk + auto-commit new dates to GitHub
+  try { mergeThaiHistory(priceRangeCache.byDate); } catch (e) { console.error('Thai history error:', e.message); }
+  // Raw backup to disk (for N8N fallback — not committed to GitHub due to size)
   try {
     let existing = [];
     if (fs.existsSync(THAI_BACKUP_FILE)) {
