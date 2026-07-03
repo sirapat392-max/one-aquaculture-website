@@ -395,16 +395,47 @@ function computePriceRange(records) {
   return { byDate, dates };
 }
 
+const THAI_BACKUP_FILE = path.join(__dirname, 'thai-price-backup.json');
+
 async function refreshPriceCache() {
   const r = await fetch(N8N_PRICE_URL, { signal: AbortSignal.timeout(15000) });
   if (!r.ok) throw new Error(`upstream ${r.status}`);
   const json = await r.json();
-  priceRangeCache = computePriceRange(json.data || []);
+  const records = json.data || [];
+  priceRangeCache = computePriceRange(records);
   priceRangeCacheAt = Date.now();
+  // Backup to disk: merge new records into existing backup
+  try {
+    let existing = [];
+    if (fs.existsSync(THAI_BACKUP_FILE)) {
+      existing = JSON.parse(fs.readFileSync(THAI_BACKUP_FILE, 'utf-8')).data || [];
+    }
+    const seenKeys = new Set(existing.map(r => `${r.date?.slice(0,10)}_${r.size}_${r.price}`));
+    let added = 0;
+    for (const rec of records) {
+      const k = `${rec.date?.slice(0,10)}_${rec.size}_${rec.price}`;
+      if (!seenKeys.has(k)) { existing.push(rec); seenKeys.add(k); added++; }
+    }
+    if (added > 0) {
+      existing.sort((a,b) => (a.date||'').localeCompare(b.date||''));
+      fs.writeFileSync(THAI_BACKUP_FILE, JSON.stringify({ updatedAt: new Date().toISOString(), data: existing }));
+      console.log(`✅ Thai price backup: +${added} records (total ${existing.length})`);
+    }
+  } catch (e) { console.error('Thai backup error:', e.message); }
 }
 
-// Pre-warm on startup so first visitor never waits
-refreshPriceCache().catch(err => console.error('Price cache pre-warm failed:', err.message));
+// Pre-warm on startup; fall back to Thai backup if N8N is down
+refreshPriceCache().catch(err => {
+  console.error('Price cache pre-warm failed:', err.message);
+  if (fs.existsSync(THAI_BACKUP_FILE)) {
+    try {
+      const backup = JSON.parse(fs.readFileSync(THAI_BACKUP_FILE, 'utf-8'));
+      priceRangeCache = computePriceRange(backup.data || []);
+      priceRangeCacheAt = Date.now() - PRICE_RANGE_TTL; // mark stale
+      console.log('⚠️  Using Thai price backup (N8N unavailable)');
+    } catch {}
+  }
+});
 
 app.get('/api/shrimp-price-range', async (req, res) => {
   const stale = priceRangeCache && Date.now() - priceRangeCacheAt >= PRICE_RANGE_TTL;
@@ -445,30 +476,90 @@ app.get('/api/shrimp-price', (req, res) => {
 });
 
 // ─── WORLD SHRIMP PRICE (Shrimp Insights) ────────────────────────────────
-const WORLD_PRICE_FILE = path.join(__dirname, 'world-price-cache.json');
-const WORLD_PRICE_TTL  = 24 * 3600_000; // 24 hours (Shrimp Insights updates weekly, we re-check daily)
+const WORLD_PRICE_FILE   = path.join(__dirname, 'world-price-cache.json');
+const WORLD_HISTORY_FILE = path.join(__dirname, 'world-price-history.json');
+const WORLD_PRICE_TTL    = 24 * 3600_000; // re-check daily (SI publishes weekly)
 let worldPriceCache = null;
 let worldPriceCacheAt = 0;
 
-// Load from disk on startup
-if (fs.existsSync(WORLD_PRICE_FILE)) {
-  try {
-    const d = JSON.parse(fs.readFileSync(WORLD_PRICE_FILE, 'utf-8'));
-    if (Date.now() - d.fetchedAt < WORLD_PRICE_TTL) {
-      worldPriceCache = d;
-      worldPriceCacheAt = d.fetchedAt;
-    }
-  } catch {}
+const WORLD_COUNTRIES = { ec:'Ecuador', in:'India', id:'Indonesia', th:'Thailand', vn:'Vietnam' };
+const WORLD_CURR      = { ec:'USD', in:'INR', id:'IDR', th:'THB', vn:'VND' };
+const WORLD_FLAGS     = { ec:'🇪🇨', in:'🇮🇳', id:'🇮🇩', th:'🇹🇭', vn:'🇻🇳' };
+
+// Load history records from disk (persists across restarts; base from git)
+function loadHistoryRecords() {
+  if (!fs.existsSync(WORLD_HISTORY_FILE)) return [];
+  try { return JSON.parse(fs.readFileSync(WORLD_HISTORY_FILE, 'utf-8')).records || []; } catch { return []; }
 }
+
+function mergeAndSaveHistory(incoming) {
+  const existing = loadHistoryRecords();
+  const seen = new Set(existing.map(r => `${r.c}_${r.sz}_${r.wk}_${r.yr}`));
+  let added = 0;
+  for (const r of incoming) {
+    const k = `${r.c}_${r.sz}_${r.wk}_${r.yr}`;
+    if (!seen.has(k)) { existing.push(r); seen.add(k); added++; }
+  }
+  if (added > 0) {
+    existing.sort((a, b) => a.yr !== b.yr ? a.yr - b.yr : a.wk !== b.wk ? a.wk - b.wk : a.c.localeCompare(b.c));
+    fs.writeFileSync(WORLD_HISTORY_FILE, JSON.stringify({ updatedAt: new Date().toISOString(), records: existing }, null, 2));
+    console.log(`✅ World price history: +${added} new records (total ${existing.length})`);
+  }
+  return existing;
+}
+
+function buildWorldResponse(allRecords, fetchedAt) {
+  // Latest per (country, size)
+  const latestMap = {};
+  for (const r of allRecords) {
+    const k = `${r.c}_${r.sz}`;
+    const cur = latestMap[k];
+    if (!cur || r.yr > cur.yr || (r.yr === cur.yr && r.wk > cur.wk)) latestMap[k] = r;
+  }
+  const countries = {};
+  for (const r of Object.values(latestMap)) {
+    if (!countries[r.c]) countries[r.c] = { name: WORLD_COUNTRIES[r.c]||r.c, flag: WORLD_FLAGS[r.c]||'', currency: WORLD_CURR[r.c]||'USD', sizes: {} };
+    countries[r.c].sizes[r.sz] = { usd: r.usd, local: r.local, week: r.wk, year: r.yr };
+  }
+  // History series per country/size for charts
+  const history = {};
+  for (const r of allRecords) {
+    if (!r.usd) continue;
+    const sz = String(r.sz);
+    if (!history[r.c]) history[r.c] = {};
+    if (!history[r.c][sz]) history[r.c][sz] = [];
+    history[r.c][sz].push({ week: r.wk, year: r.yr, usd: r.usd });
+  }
+  for (const c of Object.keys(history))
+    for (const sz of Object.keys(history[c]))
+      history[c][sz].sort((a, b) => a.year !== b.year ? a.year - b.year : a.week - b.week);
+
+  return { countries, history, fetchedAt };
+}
+
+// Load cache on startup (build from history file if available)
+(() => {
+  const cached = fs.existsSync(WORLD_PRICE_FILE)
+    ? (() => { try { return JSON.parse(fs.readFileSync(WORLD_PRICE_FILE,'utf-8')); } catch { return null; } })()
+    : null;
+  if (cached && Date.now() - cached.fetchedAt < WORLD_PRICE_TTL) {
+    worldPriceCache = cached; worldPriceCacheAt = cached.fetchedAt; return;
+  }
+  // Build from history file (always available after first deploy)
+  const records = loadHistoryRecords();
+  if (records.length) {
+    worldPriceCache = buildWorldResponse(records, Date.now());
+    worldPriceCacheAt = Date.now() - WORLD_PRICE_TTL; // mark as stale so it refreshes soon
+  }
+})();
 
 async function fetchWorldPrice() {
   const https = require('https');
-  const SIZES = [30, 60, 100];
   const params = [
     'f%5B0%5D=species%3Avannamei',
-    'f%5B1%5D=country%3Aid', 'f%5B2%5D=country%3Ain',
-    'f%5B3%5D=country%3Avn', 'f%5B4%5D=country%3Aec', 'f%5B5%5D=country%3Ath',
-    'f%5B6%5D=size%3A30', 'f%5B7%5D=size%3A60', 'f%5B8%5D=size%3A100',
+    'f%5B1%5D=country%3Aid','f%5B2%5D=country%3Ain',
+    'f%5B3%5D=country%3Avn','f%5B4%5D=country%3Aec','f%5B5%5D=country%3Ath',
+    'f%5B6%5D=size%3A30','f%5B7%5D=size%3A60','f%5B8%5D=size%3A100',
   ].join('&');
   const url = `https://www.shrimpinsights.com/price-portal?${params}`;
 
@@ -479,11 +570,7 @@ async function fetchWorldPrice() {
         'Accept': 'text/html,application/xhtml+xml',
         'Accept-Language': 'en-US,en;q=0.9',
       }
-    }, res => {
-      let body = '';
-      res.on('data', c => body += c);
-      res.on('end', () => resolve(body));
-    });
+    }, res => { let b=''; res.on('data', c=>b+=c); res.on('end', ()=>resolve(b)); });
     req.on('error', reject);
     req.setTimeout(20000, () => { req.destroy(); reject(new Error('timeout')); });
   });
@@ -491,66 +578,21 @@ async function fetchWorldPrice() {
   const m = html.match(/data-prices="([^"]+)"/);
   if (!m) throw new Error('data-prices not found in Shrimp Insights page');
   const raw = m[1].replace(/&quot;/g, '"').replace(/&amp;/g, '&');
-  const records = JSON.parse(raw);
+  const incoming = JSON.parse(raw)
+    .filter(r => r.farm_gate_price_price_usd)
+    .map(r => ({
+      c: r.field_country, sp: r.field_species, sz: r.farm_gate_price_size,
+      usd: r.farm_gate_price_price_usd, local: r.farm_gate_price_price_local,
+      wk: r.farm_gate_price_weeknumber, yr: r.farm_gate_price_year,
+    }));
 
-  // Pick latest week per (country, size)
-  const latest = {};
-  for (const r of records) {
-    const key = `${r.field_country}_${r.farm_gate_price_size}`;
-    const cur = latest[key];
-    if (!cur ||
-      r.farm_gate_price_year > cur.farm_gate_price_year ||
-      (r.farm_gate_price_year === cur.farm_gate_price_year && r.farm_gate_price_weeknumber > cur.farm_gate_price_weeknumber)) {
-      latest[key] = r;
-    }
-  }
+  // Merge into persistent history file
+  const allRecords = mergeAndSaveHistory(incoming);
 
-  const COUNTRIES = { ec:'Ecuador', in:'India', id:'Indonesia', th:'Thailand', vn:'Vietnam' };
-  const LOCAL_CURR = { ec:'USD', in:'INR', id:'IDR', th:'THB', vn:'VND' };
-  const FLAGS      = { ec:'🇪🇨', in:'🇮🇳', id:'🇮🇩', th:'🇹🇭', vn:'🇻🇳' };
-
-  const result = {};
-  for (const [key, r] of Object.entries(latest)) {
-    const c = r.field_country;
-    const sz = r.farm_gate_price_size;
-    if (!result[c]) result[c] = { name: COUNTRIES[c] || c, flag: FLAGS[c] || '', currency: LOCAL_CURR[c] || 'USD', sizes: {} };
-    result[c].sizes[sz] = {
-      usd: r.farm_gate_price_price_usd,
-      local: r.farm_gate_price_price_local,
-      week: r.farm_gate_price_weeknumber,
-      year: r.farm_gate_price_year,
-    };
-  }
-
-  // Build historical series: history[country][size] = [{week, year, usd, label}...]
-  const history = {};
-  for (const r of records) {
-    const c = r.field_country;
-    const sz = String(r.farm_gate_price_size);
-    if (!r.farm_gate_price_price_usd) continue;
-    if (!history[c]) history[c] = {};
-    if (!history[c][sz]) history[c][sz] = [];
-    history[c][sz].push({
-      week: r.farm_gate_price_weeknumber,
-      year: r.farm_gate_price_year,
-      usd: r.farm_gate_price_price_usd,
-    });
-  }
-  // Sort each series chronologically and dedupe (keep first occurrence per week/year)
-  for (const c of Object.keys(history)) {
-    for (const sz of Object.keys(history[c])) {
-      const seen = new Set();
-      history[c][sz] = history[c][sz]
-        .filter(p => { const k = `${p.year}_${p.week}`; if (seen.has(k)) return false; seen.add(k); return true; })
-        .sort((a, b) => a.year !== b.year ? a.year - b.year : a.week - b.week);
-    }
-  }
-
-  const data = { countries: result, history, fetchedAt: Date.now() };
+  const data = buildWorldResponse(allRecords, Date.now());
   fs.writeFileSync(WORLD_PRICE_FILE, JSON.stringify(data));
   worldPriceCache = data;
   worldPriceCacheAt = data.fetchedAt;
-  console.log('✅ World price cache updated');
   return data;
 }
 
