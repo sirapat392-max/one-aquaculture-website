@@ -657,23 +657,6 @@ app.get('/api/world-shrimp-price', async (req, res) => {
   }
 });
 
-// ─── TEST GITHUB AUTO-COMMIT (TEMPORARY) ──────────────────────────────────
-app.get('/api/test-github-commit', async (req, res) => {
-  const token = process.env.GITHUB_TOKEN;
-  if (!token) return res.status(500).json({ ok: false, error: 'GITHUB_TOKEN not set' });
-  try {
-    const testContent = JSON.stringify({ test: true, ts: new Date().toISOString() });
-    const result = await commitFileToGitHub(
-      path.join(__dirname, '_github_test.json'),
-      testContent,
-      'test: verify GitHub auto-commit from Railway'
-    );
-    res.json(result || { ok: false, error: 'no result returned' });
-  } catch (err) {
-    res.status(500).json({ ok: false, error: err.message });
-  }
-});
-
 // ─── GET CURRENT NEWS ─────────────────────────────────────────────────────
 // Shrimp-only keywords for API-level filtering
 const SHRIMP_KW = [
