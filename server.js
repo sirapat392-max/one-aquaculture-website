@@ -688,32 +688,6 @@ app.get('/api/world-shrimp-price', async (req, res) => {
   }
 });
 
-// ─── TEST THAI HISTORY AUTO-COMMIT (TEMPORARY) ────────────────────────────
-app.get('/api/test-thai-history-commit', async (req, res) => {
-  try {
-    const hist = loadThaiHistory();
-    const dates = Object.keys(hist).sort();
-    if (dates.length === 0) return res.status(500).json({ ok: false, error: 'no history on disk' });
-    // Remove last date so mergeThaiHistory sees it as "new"
-    const testDate = dates.at(-1);
-    const saved = hist[testDate];
-    delete hist[testDate];
-    fs.writeFileSync(THAI_HISTORY_FILE, JSON.stringify({ updatedAt: new Date().toISOString(), byDate: hist }, null, 2));
-    // Re-merge with the full current byDate — testDate will appear as new
-    const fullHistory = { ...hist, [testDate]: saved };
-    const result = await new Promise((resolve) => {
-      const orig = console.log.bind(console);
-      const msgs = [];
-      console.log = (...a) => { msgs.push(a.join(' ')); orig(...a); };
-      mergeThaiHistory(fullHistory);
-      setTimeout(() => { console.log = orig; resolve(msgs); }, 3000); // wait for GitHub API
-    });
-    res.json({ ok: true, testDate, logs: result });
-  } catch (err) {
-    res.status(500).json({ ok: false, error: err.message });
-  }
-});
-
 // ─── GET CURRENT NEWS ─────────────────────────────────────────────────────
 // Shrimp-only keywords for API-level filtering
 const SHRIMP_KW = [
