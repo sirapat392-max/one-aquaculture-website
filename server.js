@@ -28,7 +28,7 @@ app.use(cors({
     else cb(null, false);
   }
 }));
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 
 // ─── SERVER-SIDE RATE LIMIT: 10 diagnoses / IP / day ─────────────────────
 const DIAG_LIMIT = 10;
