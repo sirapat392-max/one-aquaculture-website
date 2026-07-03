@@ -368,12 +368,21 @@
           <div class="chart-title">แนวโน้มราคาปากบ่อ 5 ประเทศ</div>
           <div class="chart-sub">เปรียบเทียบรายสัปดาห์ · USD/กก.</div>
         </div>
-        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
-          <span style="font-size:11px;font-weight:600;color:#8A7A85;">ขนาดกุ้ง:</span>
-          <div class="range-tabs" id="worldSizeTabs">
-            <button class="range-btn" data-sz="30" onclick="onWorldSizeChange(30)">Size 30<br><small>~30ตัว/กก.</small></button>
-            <button class="range-btn active" data-sz="60" onclick="onWorldSizeChange(60)">Size 60<br><small>~60ตัว/กก.</small></button>
-            <button class="range-btn" data-sz="100" onclick="onWorldSizeChange(100)">Size 100<br><small>~100ตัว/กก.</small></button>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <span style="font-size:11px;font-weight:600;color:#8A7A85;">ขนาดกุ้ง:</span>
+            <div class="range-tabs" id="worldSizeTabs">
+              <button class="range-btn" data-sz="30" onclick="onWorldSizeChange(30)">Size 30<br><small>~30ตัว/กก.</small></button>
+              <button class="range-btn active" data-sz="60" onclick="onWorldSizeChange(60)">Size 60<br><small>~60ตัว/กก.</small></button>
+              <button class="range-btn" data-sz="100" onclick="onWorldSizeChange(100)">Size 100<br><small>~100ตัว/กก.</small></button>
+            </div>
+          </div>
+          <div class="range-tabs" id="worldRangeTabs">
+            <button class="range-btn" data-wks="4"  onclick="onWorldRangeChange(4)">1 เดือน</button>
+            <button class="range-btn" data-wks="13" onclick="onWorldRangeChange(13)">3 เดือน</button>
+            <button class="range-btn" data-wks="26" onclick="onWorldRangeChange(26)">6 เดือน</button>
+            <button class="range-btn active" data-wks="52" onclick="onWorldRangeChange(52)">1 ปี</button>
+            <button class="range-btn" data-wks="0"  onclick="onWorldRangeChange(0)">Max</button>
           </div>
         </div>
       </div>
@@ -883,21 +892,33 @@ const WORLD_COLORS  = { th:'#8B3060', vn:'#e53935', in:'#f57c00', id:'#388e3c', 
 let worldLineInst = null, worldBarInst = null;
 let worldData = null;
 let worldSelectedSz = 60;
+let worldSelectedWeeks = 52; // default 1 year
 
 function weekLabel(week, year) {
   // Convert ISO week to approximate date string
   return `W${week}/${String(year).slice(2)}`;
 }
 
+function filterByWeeks(series, nWeeks) {
+  if (!nWeeks || !series.length) return series;
+  // Find max week/year in the series
+  const last = series[series.length - 1];
+  // Convert to a comparable ordinal: year*53 + week
+  const lastOrd = last.year * 53 + last.week;
+  const cutOrd  = lastOrd - nWeeks;
+  return series.filter(p => (p.year * 53 + p.week) >= cutOrd);
+}
+
 function renderWorldLine(sz) {
   if (!worldData?.history) return;
   const history = worldData.history;
-  // Collect all week/year combos across all countries for this size
   const szStr = String(sz);
+  // Collect all week/year combos across all countries, filtered by range
   const allPoints = new Set();
   for (const code of COUNTRY_ORDER) {
-    const series = history[code]?.[szStr] || [];
-    series.forEach(p => allPoints.add(`${p.year}_${p.week}`));
+    const raw = history[code]?.[szStr] || [];
+    const filtered = filterByWeeks(raw, worldSelectedWeeks);
+    filtered.forEach(p => allPoints.add(`${p.year}_${p.week}`));
   }
   const sorted = [...allPoints].sort((a,b) => {
     const [ay,aw] = a.split('_').map(Number);
@@ -908,7 +929,8 @@ function renderWorldLine(sz) {
 
   const datasets = COUNTRY_ORDER.map(code => {
     const c = worldData.countries[code];
-    const series = history[code]?.[szStr] || [];
+    const raw = history[code]?.[szStr] || [];
+    const series = filterByWeeks(raw, worldSelectedWeeks);
     const lookup = {};
     series.forEach(p => { lookup[`${p.year}_${p.week}`] = p.usd; });
     return {
@@ -1015,6 +1037,12 @@ function onWorldSizeChange(sz) {
   document.querySelectorAll('#worldSizeTabs .range-btn').forEach(b => b.classList.toggle('active', +b.dataset.sz === sz));
   renderWorldLine(sz);
   renderWorldBar(sz);
+}
+
+function onWorldRangeChange(wks) {
+  worldSelectedWeeks = wks;
+  document.querySelectorAll('#worldRangeTabs .range-btn').forEach(b => b.classList.toggle('active', +b.dataset.wks === wks));
+  renderWorldLine(worldSelectedSz);
 }
 
 async function loadWorldPrice() {
