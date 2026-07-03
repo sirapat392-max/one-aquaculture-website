@@ -179,7 +179,7 @@ ${diseaseRef}
     res.setHeader('Connection', 'keep-alive');
 
     const stream = await client.chat.completions.create({
-      model: 'google/gemini-2.5-flash',
+      model: 'google/gemini-2.5-pro',
       max_tokens: 2048,
       stream: true,
       messages: [
@@ -197,6 +197,48 @@ ${diseaseRef}
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'ไม่สามารถวิเคราะห์ได้ในขณะนี้ กรุณาลองใหม่' });
+  }
+});
+
+// ─── WATER QUALITY ANALYSIS ────────────────────────────────────────────────
+app.post('/api/analyze-water', async (req, res) => {
+  const { imageBase64, imageMimeType, waterParams } = req.body;
+  if (!imageBase64) return res.status(400).json({ error: 'กรุณาแนบรูปน้ำก่อน' });
+
+  const systemPrompt = `ผู้เชี่ยวชาญคุณภาพน้ำบ่อกุ้ง ตอบ JSON เท่านั้น ห้ามมี text นอก JSON
+
+Format:
+{"color":"เขียวอ่อน/เขียวเข้ม/น้ำตาล/แดง/ดำ-เทา/ใส/ขุ่นขาว","algaeType":"Chlorella/Spirulina/Diatom/Dinoflagellate/แบคทีเรีย/ไม่ชัดเจน","bloom":false,"transparencyEst":35,"density":"บาง/ปกติ/หนา/หนามาก","issues":["ปัญหาที่พบ"],"risk":"ต่ำ/ปานกลาง/สูง","recommendations":["คำแนะนำกระชับ ขึ้นต้นด้วยกริยา"],"warning":"ข้อเตือนสั้นๆ ถ้ามี"}
+
+เกณฑ์วินิจฉัย:
+- เขียวอ่อน (Chlorella) → ดี โปร่งใส ~30cm
+- เขียวเข้มมาก → หนาเกิน เสี่ยง bloom ออกซิเจนผันผวน
+- น้ำตาล (Diatom) → ปกติน้ำกร่อย แต่ตรวจ DO กลางคืน
+- แดง (Dinoflagellate) → เสี่ยงสูง ออกซิเจนต่ำกลางคืน เพิ่มตี
+- ดำ-เทา → เน่า H₂S สูง ต้องถ่ายน้ำด่วน
+- ใส → แพลงก์ตอนน้อยเกิน อาหารธรรมชาติขาด
+- ขุ่นขาว → แบคทีเรียหรือแพลงก์ตอนล่ม
+- bloom = true เมื่อ density หนามาก หรือสีผิดปกติรุนแรง`;
+
+  try {
+    const completion = await client.chat.completions.create({
+      model: 'google/gemini-2.5-flash',
+      max_tokens: 800,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: [
+          { type: 'image_url', image_url: { url: `data:${imageMimeType || 'image/jpeg'};base64,${imageBase64}` } },
+          { type: 'text', text: `วิเคราะห์สีและสภาพน้ำในภาพ${waterParams ? `\nข้อมูลเพิ่ม: ${waterParams}` : ''}\nตอบ JSON ตาม format` },
+        ]},
+      ],
+    });
+    const raw = completion.choices[0]?.message?.content || '';
+    const start = raw.indexOf('{'); const end = raw.lastIndexOf('}');
+    if (start === -1) return res.status(500).json({ error: 'วิเคราะห์ไม่สำเร็จ' });
+    res.json(JSON.parse(raw.slice(start, end + 1)));
+  } catch (err) {
+    console.error('analyze-water:', err.message);
+    res.status(500).json({ error: 'ไม่สามารถวิเคราะห์ได้ กรุณาลองใหม่' });
   }
 });
 

@@ -301,6 +301,24 @@ select {
   .tag-chip { min-height: 36px; padding: 6px 12px; }
 }
 
+/* ===== WATER ANALYSIS ===== */
+.water-analyze-btn {
+  width:100%; border:none; border-radius:11px; padding:12px; cursor:pointer;
+  background:linear-gradient(135deg,#1565c0,#0d47a1); color:#fff;
+  font-family:inherit; font-size:14px; font-weight:700; display:flex;
+  align-items:center; justify-content:center; gap:8px; transition:opacity .15s;
+}
+.water-analyze-btn:disabled { opacity:.6; cursor:wait; }
+.waq-card {
+  background:linear-gradient(135deg,#1565c0 0%,#0d47a1 100%);
+  border-radius:14px; padding:16px; color:#fff; margin-top:10px;
+}
+.waq-color-dot { width:14px; height:14px; border-radius:50%; display:inline-block; flex-shrink:0; border:2px solid rgba(255,255,255,.4); }
+.waq-risk-pill { border-radius:100px; padding:3px 10px; font-size:10.5px; font-weight:700; font-family:'JetBrains Mono',monospace; }
+.waq-risk-low  { background:rgba(67,160,71,.3); border:1px solid rgba(67,160,71,.6); }
+.waq-risk-mid  { background:rgba(255,152,0,.3); border:1px solid rgba(255,152,0,.6); }
+.waq-risk-high { background:rgba(211,47,47,.3); border:1px solid rgba(211,47,47,.6); }
+
 /* ===== RATE BAR ===== */
 .rate-bar {
   margin:8px 16px 0; padding:9px 13px;
@@ -389,7 +407,7 @@ window.addEventListener('offline', () => document.getElementById('offlineBanner'
     <div class="page-tag">🔬 AI · ShrimpDx</div>
     <h1 data-i18n="dx.hero.h1">วิเคราะห์โรคกุ้ง AI</h1>
     <p data-i18n="dx.hero.p">กรอกอาการ ข้อมูลบ่อ และค่าน้ำ — AI วินิจฉัยและให้คำแนะนำทันที</p>
-    <div class="version-pill" data-i18n="dx.hero.pill">ONE AI · Gemini 2.5 Flash · Vision · เพื่อเกษตรกรกุ้งไทย</div>
+    <div class="version-pill" data-i18n="dx.hero.pill">ONE AI · Gemini 2.5 Pro · Vision · ตรวจโรคกุ้ง + วิเคราะห์น้ำ</div>
   </div>
 </div>
 
@@ -441,12 +459,22 @@ window.addEventListener('offline', () => document.getElementById('offlineBanner'
           <span class="chip" data-i18n="dx.chip.emptystom">กระเพาะว่าง</span>
           <span class="chip" data-i18n="dx.chip.twist">ตัวบิดงอ</span>
           <span class="chip" data-i18n="dx.chip.nomolt">ไม่ลอกคราบ</span>
+          <span class="chip">ตายก้นบ่อ</span>
+          <span class="chip">กุ้งเฉื่อย/นิ่ง</span>
+          <span class="chip">ตัวขุ่น/ซีด</span>
+          <span class="chip">ตับหดฝ่อ</span>
+          <span class="chip">เรืองแสงในน้ำ</span>
+          <span class="chip">หนวดขาด/ผิดรูป</span>
+          <span class="chip">ครีบหาง/หางกุด</span>
+          <span class="chip">ตาขุ่น/ตาเสีย</span>
+          <span class="chip">ตายเร็ว (&lt;3วัน)</span>
+          <span class="chip">FCR สูงผิดปกติ</span>
         </div>
       </div>
 
       <div class="field">
         <label data-i18n="dx.time.label">⏱ เริ่มเห็นอาการเมื่อไหร่</label>
-        <div class="chips time" id="cs-time">
+        <div class="chips time" id="cs-time" data-solo="1">
           <span class="chip" data-i18n="dx.chip.t.today">วันนี้</span>
           <span class="chip" data-i18n="dx.chip.t.yesterday">เมื่อวาน</span>
           <span class="chip" data-i18n="dx.chip.t.2days">2–3 วัน</span>
@@ -458,7 +486,7 @@ window.addEventListener('offline', () => document.getElementById('offlineBanner'
 
       <div class="field">
         <label data-i18n="dx.scale.label">⚡ ระดับความรุนแรงเบื้องต้น</label>
-        <div class="chips scale" id="cs-scale">
+        <div class="chips scale" id="cs-scale" data-solo="1">
           <span class="chip" data-i18n="dx.chip.s.lt5">&lt; 5%</span>
           <span class="chip" data-i18n="dx.chip.s.5to20">5–20%</span>
           <span class="chip" data-i18n="dx.chip.s.20to50">20–50%</span>
@@ -542,7 +570,7 @@ window.addEventListener('offline', () => document.getElementById('offlineBanner'
 
       <div class="field" style="margin-top:12px;">
         <label data-i18n="dx.species.label">ชนิดกุ้ง</label>
-        <div class="chips" id="cs-species">
+        <div class="chips" id="cs-species" data-solo="1">
           <span class="chip" data-i18n="dx.chip.sp.van">กุ้งขาวแวนนาไม</span>
           <span class="chip" data-i18n="dx.chip.sp.mon">กุ้งกุลาดำ</span>
           <span class="chip" data-i18n="dx.chip.sp.fresh">กุ้งก้ามกราม</span>
@@ -552,7 +580,7 @@ window.addEventListener('offline', () => document.getElementById('offlineBanner'
 
       <div class="field" style="margin-top:9px;">
         <label><span data-i18n="dx.strain.label">🧬 สายกุ้ง / สายพันธุ์</span> <span class="hint" data-i18n="dx.strain.hint">(ช่วย AI แยกความเสี่ยง)</span></label>
-        <div class="chips" id="cs-strain">
+        <div class="chips" id="cs-strain" data-solo="1">
           <span class="chip" data-i18n="dx.chip.st.fast">สายโตไว / Fast-grow</span>
           <span class="chip" data-i18n="dx.chip.st.std">สายมาตรฐาน</span>
           <span class="chip" data-i18n="dx.chip.st.spf">SPF / SPR</span>
@@ -562,7 +590,7 @@ window.addEventListener('offline', () => document.getElementById('offlineBanner'
 
       <div class="field" style="margin-top:9px;">
         <label data-i18n="dx.nbr.label">🗺️ บ่อข้างๆ เป็นไหม</label>
-        <div class="chips" id="cs-nbr">
+        <div class="chips" id="cs-nbr" data-solo="1">
           <span class="chip" data-i18n="dx.chip.nb.no">ไม่เป็น</span>
           <span class="chip" data-i18n="dx.chip.nb.near">บ่อใกล้ๆ เป็น</span>
           <span class="chip" data-i18n="dx.chip.nb.all">ทั้งฟาร์มเป็น</span>
@@ -621,6 +649,37 @@ window.addEventListener('offline', () => document.getElementById('offlineBanner'
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- SECTION 3.5: ตรวจสุขภาพน้ำ -->
+    <div class="group">
+      <div class="group-head">
+        <div class="num" style="background:#1565c0;">🌊</div>
+        <h2>ตรวจสุขภาพน้ำ</h2>
+        <span class="who-tag opt">ถ่ายรูปน้ำในบ่อ</span>
+      </div>
+
+      <div class="field">
+        <label style="font-size:12px;color:var(--mud);">ถ่ายรูปน้ำในบ่อแล้วให้ AI วิเคราะห์สีน้ำ แพลงก์ตอน และความเสี่ยง</label>
+        <div class="img-upload-area" id="waqImgArea" style="margin-top:6px;">
+          <input type="file" id="waqImgInput" accept="image/*" onchange="handleWaqImg(event)">
+          <div id="waqImgPlaceholder">
+            <div class="img-upload-ico">🌊</div>
+            <div class="img-upload-txt">แตะเพื่อถ่าย/เลือกรูปน้ำในบ่อ</div>
+            <div class="img-upload-hint">ถ่ายน้ำในบ่อให้เห็นสีชัดเจน · JPG/PNG ไม่เกิน 5MB</div>
+          </div>
+        </div>
+        <div id="waqImgPreviewWrap" class="img-preview-wrap" style="display:none">
+          <img id="waqImgPreview" class="img-preview" alt="water preview">
+          <button type="button" class="img-remove-btn" onclick="removeWaqImg()">×</button>
+        </div>
+      </div>
+
+      <button type="button" class="water-analyze-btn" id="waqBtn" onclick="analyzeWater()" disabled>
+        🔬 วิเคราะห์น้ำด้วย AI
+      </button>
+
+      <div id="waqResult"></div>
     </div>
 
     <!-- SECTION 4: รายละเอียดเพิ่ม collapsible -->
@@ -815,7 +874,17 @@ function removeImg() {
 
 // ── CHIP TOGGLE ──────────────────────────────────────────────────────────────
 document.querySelectorAll('.chip').forEach(c => {
-  c.addEventListener('click', () => c.classList.toggle('on'));
+  c.addEventListener('click', () => {
+    const grp = c.closest('[data-solo]');
+    if (grp) {
+      // Radio behavior — allow deselect by clicking selected chip again
+      const wasOn = c.classList.contains('on');
+      grp.querySelectorAll('.chip').forEach(s => s.classList.remove('on'));
+      if (!wasOn) c.classList.add('on');
+    } else {
+      c.classList.toggle('on');
+    }
+  });
 });
 document.querySelectorAll('.tag-chip').forEach(c => {
   c.addEventListener('click', () => c.classList.toggle('on'));
@@ -1355,6 +1424,94 @@ function clearForm() {
   document.getElementById('aiResult').innerHTML=`<div class="ai-card"><div class="ai-empty"><span class="ico">🔬</span><p>กรอกอาการที่พบ<br>แล้วกด "วิเคราะห์ด้วย AI"</p></div></div>`;
   document.getElementById('aiMeta').textContent='';
   lastCase = null;
+}
+
+// ── WATER ANALYSIS ───────────────────────────────────────────────────────────
+let waqImageBase64 = null, waqImageMime = null;
+
+function handleWaqImg(e) {
+  const file = e.target.files[0]; if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { alert('ไฟล์ใหญ่เกิน 5MB'); return; }
+  waqImageMime = file.type || 'image/jpeg';
+  const reader = new FileReader();
+  reader.onload = ev => {
+    waqImageBase64 = ev.target.result.split(',')[1];
+    document.getElementById('waqImgPreview').src = ev.target.result;
+    document.getElementById('waqImgPreviewWrap').style.display = '';
+    document.getElementById('waqImgArea').style.display = 'none';
+    document.getElementById('waqBtn').disabled = false;
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeWaqImg() {
+  waqImageBase64 = null; waqImageMime = null;
+  document.getElementById('waqImgInput').value = '';
+  document.getElementById('waqImgPreviewWrap').style.display = 'none';
+  document.getElementById('waqImgArea').style.display = '';
+  document.getElementById('waqBtn').disabled = true;
+  document.getElementById('waqResult').innerHTML = '';
+}
+
+async function analyzeWater() {
+  if (!waqImageBase64) return;
+  const btn = document.getElementById('waqBtn');
+  const result = document.getElementById('waqResult');
+  btn.disabled = true; btn.innerHTML = '⏳ กำลังวิเคราะห์...';
+  result.innerHTML = '';
+
+  try {
+    const waterParams = [
+      getVal('wph') && `pH ${getVal('wph')}`,
+      getVal('wdo') && `DO ${getVal('wdo')}`,
+      getVal('wtrans') && `ความใส ${getVal('wtrans')}cm`,
+      getVal('wsal') && `เค็ม ${getVal('wsal')}ppt`,
+    ].filter(Boolean).join(', ');
+
+    const r = await fetch('/api/analyze-water', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ imageBase64: waqImageBase64, imageMimeType: waqImageMime, waterParams: waterParams || undefined }),
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || 'error');
+
+    const COLOR_DOT = {
+      'เขียวอ่อน':'#7cb87a','เขียวเข้ม':'#2e6b35','น้ำตาล':'#8a5a35',
+      'แดง':'#c25e2a','ดำ-เทา':'#4a4540','ใส':'#c4dde8','ขุ่นขาว':'#e8dcb8',
+    };
+    const dotColor = COLOR_DOT[d.color] || '#888';
+    const riskCls = d.risk === 'สูง' ? 'waq-risk-high' : d.risk === 'ปานกลาง' ? 'waq-risk-mid' : 'waq-risk-low';
+    const issuesHTML = (d.issues||[]).map(i=>`<span style="display:block;font-size:12px;opacity:.9;padding:2px 0">• ${i}</span>`).join('');
+    const recsHTML  = (d.recommendations||[]).map(r=>`<span style="display:block;font-size:12px;opacity:.9;padding:2px 0">• ${r}</span>`).join('');
+    const bloom = d.bloom ? `<span style="background:rgba(211,47,47,.35);border:1px solid rgba(211,47,47,.6);border-radius:100px;padding:2px 8px;font-size:10px;font-weight:700;margin-left:6px;">⚠️ BLOOM</span>` : '';
+
+    result.innerHTML = `
+    <div class="waq-card">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px;">
+        <span class="waq-color-dot" style="background:${dotColor}"></span>
+        <span style="font-size:16px;font-weight:700;">${d.color||'—'}</span>
+        ${bloom}
+        <span class="waq-risk-pill ${riskCls}" style="margin-left:auto;">ความเสี่ยง ${d.risk||'?'}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;font-size:12px;">
+        <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:8px 10px;">
+          <div style="opacity:.7;font-size:10px;font-weight:700;margin-bottom:3px;">ALGAE</div>
+          <div>${d.algaeType||'ไม่ชัดเจน'}</div>
+        </div>
+        <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:8px 10px;">
+          <div style="opacity:.7;font-size:10px;font-weight:700;margin-bottom:3px;">ความหนาแน่น</div>
+          <div>${d.density||'—'} ${d.transparencyEst ? `· ใส ~${d.transparencyEst}cm` : ''}</div>
+        </div>
+      </div>
+      ${issuesHTML ? `<div style="margin-bottom:8px;"><div style="opacity:.7;font-size:10px;font-weight:700;margin-bottom:4px;">⚠️ ปัญหาที่พบ</div>${issuesHTML}</div>` : ''}
+      ${recsHTML ? `<div style="border-top:1px solid rgba(255,255,255,.2);padding-top:10px;margin-top:2px;"><div style="opacity:.7;font-size:10px;font-weight:700;margin-bottom:4px;">💡 คำแนะนำ</div>${recsHTML}</div>` : ''}
+      ${d.warning ? `<div style="background:rgba(255,152,0,.2);border:1px solid rgba(255,152,0,.5);border-radius:8px;padding:8px 10px;font-size:12px;margin-top:8px;">⚡ ${d.warning}</div>` : ''}
+    </div>`;
+  } catch(e) {
+    result.innerHTML = `<div style="padding:10px;font-size:13px;color:var(--coral);">ไม่สามารถวิเคราะห์ได้ — ${e.message}</div>`;
+  }
+  btn.disabled = false; btn.innerHTML = '🔬 วิเคราะห์น้ำด้วย AI';
 }
 
 updateRateBar();
