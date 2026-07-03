@@ -418,8 +418,15 @@ async function refreshPriceCache() {
     }
     if (added > 0) {
       existing.sort((a,b) => (a.date||'').localeCompare(b.date||''));
-      fs.writeFileSync(THAI_BACKUP_FILE, JSON.stringify({ updatedAt: new Date().toISOString(), data: existing }));
+      const thaiContent = JSON.stringify({ updatedAt: new Date().toISOString(), data: existing });
+      fs.writeFileSync(THAI_BACKUP_FILE, thaiContent);
       console.log(`✅ Thai price backup: +${added} records (total ${existing.length})`);
+      // Auto-commit to GitHub weekly (only when significant new data)
+      if (added >= 5) {
+        commitFileToGitHub(THAI_BACKUP_FILE, thaiContent,
+          `data: thai price backup +${added} records`
+        ).catch(e => console.error('GitHub commit (thai) error:', e.message));
+      }
     }
   } catch (e) { console.error('Thai backup error:', e.message); }
 }
@@ -486,6 +493,44 @@ const WORLD_COUNTRIES = { ec:'Ecuador', in:'India', id:'Indonesia', th:'Thailand
 const WORLD_CURR      = { ec:'USD', in:'INR', id:'IDR', th:'THB', vn:'VND' };
 const WORLD_FLAGS     = { ec:'🇪🇨', in:'🇮🇳', id:'🇮🇩', th:'🇹🇭', vn:'🇻🇳' };
 
+// ─── AUTO-COMMIT TO GITHUB VIA API ───────────────────────────────────────────
+const GH_REPO = 'sirapat392-max/one-aquaculture-website';
+const GH_API  = 'https://api.github.com';
+
+async function commitFileToGitHub(filePath, content, message) {
+  const token = process.env.GITHUB_TOKEN;
+  if (!token) return; // silently skip if no token configured
+
+  const fileName = path.basename(filePath);
+  const apiPath  = `/repos/${GH_REPO}/contents/${fileName}`;
+  const encoded  = Buffer.from(content).toString('base64');
+
+  // Get current SHA (needed to update existing file)
+  const getRes = await fetch(`${GH_API}${apiPath}`, {
+    headers: { Authorization: `Bearer ${token}`, 'User-Agent': 'ONE-Aquaculture-Server' }
+  });
+  const current = getRes.ok ? await getRes.json() : null;
+  const sha = current?.sha;
+
+  const body = { message, content: encoded, ...(sha ? { sha } : {}) };
+  const putRes = await fetch(`${GH_API}${apiPath}`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      'User-Agent': 'ONE-Aquaculture-Server',
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (putRes.ok) {
+    console.log(`✅ GitHub auto-commit: ${fileName}`);
+  } else {
+    const err = await putRes.text();
+    console.error(`❌ GitHub commit failed (${putRes.status}): ${err.slice(0, 200)}`);
+  }
+}
+
 // Load history records from disk (persists across restarts; base from git)
 function loadHistoryRecords() {
   if (!fs.existsSync(WORLD_HISTORY_FILE)) return [];
@@ -502,8 +547,14 @@ function mergeAndSaveHistory(incoming) {
   }
   if (added > 0) {
     existing.sort((a, b) => a.yr !== b.yr ? a.yr - b.yr : a.wk !== b.wk ? a.wk - b.wk : a.c.localeCompare(b.c));
-    fs.writeFileSync(WORLD_HISTORY_FILE, JSON.stringify({ updatedAt: new Date().toISOString(), records: existing }, null, 2));
+    const content = JSON.stringify({ updatedAt: new Date().toISOString(), records: existing }, null, 2);
+    fs.writeFileSync(WORLD_HISTORY_FILE, content);
     console.log(`✅ World price history: +${added} new records (total ${existing.length})`);
+    // Auto-commit to GitHub so data survives Railway redeploys
+    const latestWk = existing[existing.length-1];
+    commitFileToGitHub(WORLD_HISTORY_FILE, content,
+      `data: world price history +${added} records (W${latestWk?.wk}/${latestWk?.yr})`
+    ).catch(e => console.error('GitHub commit error:', e.message));
   }
   return existing;
 }
