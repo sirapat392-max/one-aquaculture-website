@@ -103,6 +103,10 @@ app.use((req, res, next) => {
 app.get('/guides', (req, res) => res.sendFile(path.join(__dirname, 'guides.html')));
 app.get('/guides/', (req, res) => res.redirect(301, '/guides'));
 
+// disease-map is work-in-progress — hidden from public (file kept in repo)
+app.get('/disease-map', (req, res) => res.redirect(301, '/'));
+app.get('/disease-map.html', (req, res) => res.redirect(301, '/'));
+
 // serve static files; fall back to .html extension for clean URLs
 app.use(express.static(path.join(__dirname), { extensions: ['html'] }));
 
