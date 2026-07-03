@@ -418,15 +418,8 @@ async function refreshPriceCache() {
     }
     if (added > 0) {
       existing.sort((a,b) => (a.date||'').localeCompare(b.date||''));
-      const thaiContent = JSON.stringify({ updatedAt: new Date().toISOString(), data: existing });
-      fs.writeFileSync(THAI_BACKUP_FILE, thaiContent);
+      fs.writeFileSync(THAI_BACKUP_FILE, JSON.stringify({ updatedAt: new Date().toISOString(), data: existing }));
       console.log(`✅ Thai price backup: +${added} records (total ${existing.length})`);
-      // Auto-commit to GitHub weekly (only when significant new data)
-      if (added >= 5) {
-        commitFileToGitHub(THAI_BACKUP_FILE, thaiContent,
-          `data: thai price backup +${added} records`
-        ).catch(e => console.error('GitHub commit (thai) error:', e.message));
-      }
     }
   } catch (e) { console.error('Thai backup error:', e.message); }
 }
