@@ -446,7 +446,7 @@ app.get('/api/shrimp-price', (req, res) => {
 
 // ─── WORLD SHRIMP PRICE (Shrimp Insights) ────────────────────────────────
 const WORLD_PRICE_FILE = path.join(__dirname, 'world-price-cache.json');
-const WORLD_PRICE_TTL  = 7 * 24 * 3600_000; // 7 days
+const WORLD_PRICE_TTL  = 24 * 3600_000; // 24 hours (Shrimp Insights updates weekly, we re-check daily)
 let worldPriceCache = null;
 let worldPriceCacheAt = 0;
 
@@ -522,7 +522,31 @@ async function fetchWorldPrice() {
     };
   }
 
-  const data = { countries: result, fetchedAt: Date.now() };
+  // Build historical series: history[country][size] = [{week, year, usd, label}...]
+  const history = {};
+  for (const r of records) {
+    const c = r.field_country;
+    const sz = String(r.farm_gate_price_size);
+    if (!r.farm_gate_price_price_usd) continue;
+    if (!history[c]) history[c] = {};
+    if (!history[c][sz]) history[c][sz] = [];
+    history[c][sz].push({
+      week: r.farm_gate_price_weeknumber,
+      year: r.farm_gate_price_year,
+      usd: r.farm_gate_price_price_usd,
+    });
+  }
+  // Sort each series chronologically and dedupe (keep first occurrence per week/year)
+  for (const c of Object.keys(history)) {
+    for (const sz of Object.keys(history[c])) {
+      const seen = new Set();
+      history[c][sz] = history[c][sz]
+        .filter(p => { const k = `${p.year}_${p.week}`; if (seen.has(k)) return false; seen.add(k); return true; })
+        .sort((a, b) => a.year !== b.year ? a.year - b.year : a.week - b.week);
+    }
+  }
+
+  const data = { countries: result, history, fetchedAt: Date.now() };
   fs.writeFileSync(WORLD_PRICE_FILE, JSON.stringify(data));
   worldPriceCache = data;
   worldPriceCacheAt = data.fetchedAt;
