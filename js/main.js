@@ -15,15 +15,15 @@ function langSwitcherHTML() {
 
 function navHTML() {
   const links = [
-    { href: '/',                id: 'index',           key: 'nav.home' },
-    { href: '/products',        id: 'products',        key: 'nav.products' },
-    { href: '/shrimp-price',    id: 'shrimp-price',    key: 'nav.price' },
-    { href: '/ai-diagnosis',    id: 'ai-diagnosis',    key: 'nav.diagnosis' },
-    { href: '/farm-calculator', id: 'farm-calculator', key: 'nav.farm' },
-    { href: '/guides',          id: 'guides',          key: 'nav.guides' },
-    { href: '/news',            id: 'news',            key: 'nav.news' },
-    { href: '/about',           id: 'about',           key: 'nav.about' },
-    { href: '/contact',         id: 'contact',         key: 'nav.contact' },
+    { href: '/',                id: 'index',           key: 'nav.home',      icon: '🏠' },
+    { href: '/products',        id: 'products',        key: 'nav.products',  icon: '🦐' },
+    { href: '/shrimp-price',    id: 'shrimp-price',    key: 'nav.price',     icon: '📈' },
+    { href: '/ai-diagnosis',    id: 'ai-diagnosis',    key: 'nav.diagnosis', icon: '🔬' },
+    { href: '/farm-calculator', id: 'farm-calculator', key: 'nav.farm',      icon: '🧮' },
+    { href: '/guides',          id: 'guides',          key: 'nav.guides',    icon: '📚' },
+    { href: '/news',            id: 'news',            key: 'nav.news',      icon: '📰' },
+    { href: '/about',           id: 'about',           key: 'nav.about',     icon: 'ℹ️' },
+    { href: '/contact',         id: 'contact',         key: 'nav.contact',   icon: '💬' },
   ];
   const isActive = (id) => currentPage === id || currentSection === id;
   return `
@@ -36,7 +36,7 @@ function navHTML() {
     </div>
   </a>
   <ul class="nav-links" id="navLinks">
-    ${links.map(l => `<li><a href="${l.href}" class="${isActive(l.id)?'active':''}" data-i18n="${l.key}">${t(l.key)}</a></li>`).join('')}
+    ${links.map(l => `<li><a href="${l.href}" class="${isActive(l.id)?'active':''}" data-i18n="${l.key}">${l.icon} ${t(l.key)}</a></li>`).join('')}
   </ul>
   ${langSwitcherHTML()}
   <a href="/ai-diagnosis" class="nav-cta" id="navCta" data-i18n="nav.cta">${t('nav.cta')}</a>
