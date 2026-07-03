@@ -516,11 +516,14 @@ async function commitFileToGitHub(filePath, content, message) {
     body: JSON.stringify(body),
   });
 
+  const resText = await putRes.text();
   if (putRes.ok) {
     console.log(`✅ GitHub auto-commit: ${fileName}`);
+    return { ok: true, status: putRes.status };
   } else {
-    const err = await putRes.text();
-    console.error(`❌ GitHub commit failed (${putRes.status}): ${err.slice(0, 200)}`);
+    const msg = `GitHub commit failed (${putRes.status}): ${resText.slice(0, 300)}`;
+    console.error(`❌ ${msg}`);
+    return { ok: false, status: putRes.status, error: resText.slice(0, 300) };
   }
 }
 
@@ -656,17 +659,16 @@ app.get('/api/world-shrimp-price', async (req, res) => {
 
 // ─── TEST GITHUB AUTO-COMMIT (TEMPORARY) ──────────────────────────────────
 app.get('/api/test-github-commit', async (req, res) => {
-  if (!process.env.GITHUB_TOKEN) {
-    return res.status(500).json({ ok: false, error: 'GITHUB_TOKEN not set' });
-  }
+  const token = process.env.GITHUB_TOKEN;
+  if (!token) return res.status(500).json({ ok: false, error: 'GITHUB_TOKEN not set' });
   try {
     const testContent = JSON.stringify({ test: true, ts: new Date().toISOString() });
-    await commitFileToGitHub(
+    const result = await commitFileToGitHub(
       path.join(__dirname, '_github_test.json'),
       testContent,
       'test: verify GitHub auto-commit from Railway'
     );
-    res.json({ ok: true, message: 'Committed _github_test.json — check GitHub repo' });
+    res.json(result || { ok: false, error: 'no result returned' });
   } catch (err) {
     res.status(500).json({ ok: false, error: err.message });
   }
