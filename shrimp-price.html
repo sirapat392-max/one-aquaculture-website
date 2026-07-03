@@ -210,6 +210,21 @@
 .sz-range-low  { font-size: 17px; font-weight: 800; color: var(--dn);  font-family: 'JetBrains Mono', monospace; line-height: 1; }
 .sz-range-sep  { font-size: 13px; color: #bbb; font-weight: 400; padding: 0 1px; }
 .sz-range-high { font-size: 17px; font-weight: 800; color: var(--up);  font-family: 'JetBrains Mono', monospace; line-height: 1; }
+
+/* ── WORLD PRICE SECTION ── */
+.world-section { margin-top: 40px; padding-top: 32px; border-top: 1.5px solid #F4F0F5; }
+.world-header { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
+.world-sub { font-size: 12px; color: #8A7A85; margin-top: 2px; }
+.world-ts { font-size: 11px; color: #B0A0AA; font-family: 'JetBrains Mono', monospace; }
+.world-table td { text-align: center; }
+.world-table td:first-child { text-align: left; }
+.world-usd { font-size: 16px; font-weight: 800; color: #1C1020; font-family: 'JetBrains Mono', monospace; }
+.world-local { font-size: 10px; color: #8A7A85; margin-top: 1px; }
+.world-flag { font-size: 18px; margin-right: 6px; }
+.world-country { font-weight: 700; font-size: 14px; }
+.world-table tr.th-row td { background: rgba(139,48,96,.04); }
+.world-table tr.th-row .world-country { color: var(--wine); }
+.world-week { font-size: 11px; color: #8A7A85; font-family: 'JetBrains Mono', monospace; }
 </style>
 </head>
 <body>
@@ -316,6 +331,39 @@
   <p style="text-align:center;font-size:11px;color:#B0A0AA;margin-top:20px;" data-i18n="price.disclaimer">
     ราคาเพื่อใช้ในการอ้างอิงเบื้องต้น อาจมีความแตกต่างตามพื้นที่และเวลา · ข้อมูลจากเกษตรกรในเครือข่ายภาคใต้ อ่าวไทย
   </p>
+
+  <!-- ── WORLD PRICE COMPARISON ─────────────────────────────────── -->
+  <div class="world-section">
+    <div class="world-header">
+      <div>
+        <div class="summary-label">ราคาปากบ่อโลก · World Farm-Gate Price</div>
+        <p class="world-sub">กุ้งขาวแวนนาไม (Vannamei) · USD/กก. · อัปเดตรายสัปดาห์</p>
+      </div>
+      <div id="worldUpdated" class="world-ts"></div>
+    </div>
+
+    <div class="table-card" style="margin-top:12px;">
+      <div class="table-scroll">
+        <table class="price-table world-table" id="worldTable">
+          <thead>
+            <tr>
+              <th>ประเทศ</th>
+              <th style="text-align:center">Size 30<br><span style="font-weight:400;text-transform:none;letter-spacing:0">~30 ตัว/กก.</span></th>
+              <th style="text-align:center">Size 60<br><span style="font-weight:400;text-transform:none;letter-spacing:0">~60 ตัว/กก.</span></th>
+              <th style="text-align:center">Size 100<br><span style="font-weight:400;text-transform:none;letter-spacing:0">~100 ตัว/กก.</span></th>
+              <th style="text-align:center">ข้อมูลสัปดาห์</th>
+            </tr>
+          </thead>
+          <tbody id="worldTableBody">
+            <tr><td colspan="5" class="load-state" style="padding:30px"><span style="font-size:24px;display:block;margin-bottom:8px">🌏</span>กำลังโหลดราคาโลก...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <p style="text-align:center;font-size:11px;color:#B0A0AA;margin-top:10px;">
+      ข้อมูลจาก <a href="https://www.shrimpinsights.com/price-portal" target="_blank" rel="noopener" style="color:#B0A0AA">Shrimp Insights Farm Gate Price Portal</a> · ราคาใช้เพื่ออ้างอิงแนวโน้มเท่านั้น
+    </p>
+  </div>
 </div>
 
 <script src="js/i18n.js"></script>
@@ -774,6 +822,67 @@ async function loadPrices() {
   btn.classList.remove('loading');
   btn.querySelector('.ico').textContent = '⟳';
 }
+
+// ── WORLD PRICE ──────────────────────────────────────────────────────────────
+const COUNTRY_ORDER = ['th','vn','in','id','ec'];
+const SIZE_LABEL = { 30:'Size 30', 60:'Size 60', 100:'Size 100' };
+
+function renderWorldTable(data) {
+  const { countries, fetchedAt } = data;
+  const ts = document.getElementById('worldUpdated');
+  if (ts && fetchedAt) {
+    const d = new Date(fetchedAt);
+    ts.textContent = `อัปเดต: ${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
+  }
+
+  const tbody = document.getElementById('worldTableBody');
+  if (!tbody) return;
+
+  const rows = COUNTRY_ORDER.map(code => {
+    const c = countries[code];
+    if (!c) return '';
+    const isTH = code === 'th';
+
+    // Get the latest week number across sizes for this country
+    const weeks = Object.values(c.sizes).map(s => `W${s.week}/${s.year}`);
+    const weekLabel = weeks.length ? weeks[0] : '—';
+
+    const sizeCell = sz => {
+      const s = c.sizes[sz];
+      if (!s || !s.usd) return '<td>—</td>';
+      const localStr = sz === 60 && s.local ? `${Number(s.local).toLocaleString()} ${c.currency}` : '';
+      return `<td>
+        <div class="world-usd">$${s.usd.toFixed(2)}</div>
+        ${localStr ? `<div class="world-local">${localStr}/kg</div>` : ''}
+      </td>`;
+    };
+
+    return `<tr${isTH ? ' class="th-row"' : ''}>
+      <td>
+        <span class="world-flag">${c.flag}</span>
+        <span class="world-country">${c.name}</span>
+      </td>
+      ${sizeCell(30)}${sizeCell(60)}${sizeCell(100)}
+      <td><span class="world-week">${weekLabel}</span></td>
+    </tr>`;
+  }).join('');
+
+  tbody.innerHTML = rows || '<tr><td colspan="5">ไม่มีข้อมูล</td></tr>';
+}
+
+async function loadWorldPrice() {
+  try {
+    const res = await fetch('/api/world-shrimp-price');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    renderWorldTable(data);
+  } catch (err) {
+    const tbody = document.getElementById('worldTableBody');
+    if (tbody) tbody.innerHTML = `<tr><td colspan="5" class="load-state" style="padding:20px">ไม่สามารถโหลดข้อมูลราคาโลกได้</td></tr>`;
+  }
+}
+
+loadWorldPrice();
 
 // ── RANGE TABS ───────────────────────────────────────────────────────────────
 document.getElementById('rangeTabs').addEventListener('click', e => {

@@ -444,6 +444,106 @@ app.get('/api/shrimp-price', (req, res) => {
   } catch { res.json({ latest: {} }); }
 });
 
+// ─── WORLD SHRIMP PRICE (Shrimp Insights) ────────────────────────────────
+const WORLD_PRICE_FILE = path.join(__dirname, 'world-price-cache.json');
+const WORLD_PRICE_TTL  = 7 * 24 * 3600_000; // 7 days
+let worldPriceCache = null;
+let worldPriceCacheAt = 0;
+
+// Load from disk on startup
+if (fs.existsSync(WORLD_PRICE_FILE)) {
+  try {
+    const d = JSON.parse(fs.readFileSync(WORLD_PRICE_FILE, 'utf-8'));
+    if (Date.now() - d.fetchedAt < WORLD_PRICE_TTL) {
+      worldPriceCache = d;
+      worldPriceCacheAt = d.fetchedAt;
+    }
+  } catch {}
+}
+
+async function fetchWorldPrice() {
+  const https = require('https');
+  const SIZES = [30, 60, 100];
+  const params = [
+    'f%5B0%5D=species%3Avannamei',
+    'f%5B1%5D=country%3Aid', 'f%5B2%5D=country%3Ain',
+    'f%5B3%5D=country%3Avn', 'f%5B4%5D=country%3Aec', 'f%5B5%5D=country%3Ath',
+    'f%5B6%5D=size%3A30', 'f%5B7%5D=size%3A60', 'f%5B8%5D=size%3A100',
+  ].join('&');
+  const url = `https://www.shrimpinsights.com/price-portal?${params}`;
+
+  const html = await new Promise((resolve, reject) => {
+    const req = https.get(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml',
+        'Accept-Language': 'en-US,en;q=0.9',
+      }
+    }, res => {
+      let body = '';
+      res.on('data', c => body += c);
+      res.on('end', () => resolve(body));
+    });
+    req.on('error', reject);
+    req.setTimeout(20000, () => { req.destroy(); reject(new Error('timeout')); });
+  });
+
+  const m = html.match(/data-prices="([^"]+)"/);
+  if (!m) throw new Error('data-prices not found in Shrimp Insights page');
+  const raw = m[1].replace(/&quot;/g, '"').replace(/&amp;/g, '&');
+  const records = JSON.parse(raw);
+
+  // Pick latest week per (country, size)
+  const latest = {};
+  for (const r of records) {
+    const key = `${r.field_country}_${r.farm_gate_price_size}`;
+    const cur = latest[key];
+    if (!cur ||
+      r.farm_gate_price_year > cur.farm_gate_price_year ||
+      (r.farm_gate_price_year === cur.farm_gate_price_year && r.farm_gate_price_weeknumber > cur.farm_gate_price_weeknumber)) {
+      latest[key] = r;
+    }
+  }
+
+  const COUNTRIES = { ec:'Ecuador', in:'India', id:'Indonesia', th:'Thailand', vn:'Vietnam' };
+  const LOCAL_CURR = { ec:'USD', in:'INR', id:'IDR', th:'THB', vn:'VND' };
+  const FLAGS      = { ec:'🇪🇨', in:'🇮🇳', id:'🇮🇩', th:'🇹🇭', vn:'🇻🇳' };
+
+  const result = {};
+  for (const [key, r] of Object.entries(latest)) {
+    const c = r.field_country;
+    const sz = r.farm_gate_price_size;
+    if (!result[c]) result[c] = { name: COUNTRIES[c] || c, flag: FLAGS[c] || '', currency: LOCAL_CURR[c] || 'USD', sizes: {} };
+    result[c].sizes[sz] = {
+      usd: r.farm_gate_price_price_usd,
+      local: r.farm_gate_price_price_local,
+      week: r.farm_gate_price_weeknumber,
+      year: r.farm_gate_price_year,
+    };
+  }
+
+  const data = { countries: result, fetchedAt: Date.now() };
+  fs.writeFileSync(WORLD_PRICE_FILE, JSON.stringify(data));
+  worldPriceCache = data;
+  worldPriceCacheAt = data.fetchedAt;
+  console.log('✅ World price cache updated');
+  return data;
+}
+
+app.get('/api/world-shrimp-price', async (req, res) => {
+  if (worldPriceCache && Date.now() - worldPriceCacheAt < WORLD_PRICE_TTL) {
+    return res.json(worldPriceCache);
+  }
+  try {
+    const data = await fetchWorldPrice();
+    res.json(data);
+  } catch (err) {
+    console.error('world-shrimp-price error:', err.message);
+    if (worldPriceCache) return res.json(worldPriceCache); // serve stale on error
+    res.status(503).json({ error: 'ไม่สามารถโหลดข้อมูลราคาโลกได้' });
+  }
+});
+
 // ─── GET CURRENT NEWS ─────────────────────────────────────────────────────
 // Shrimp-only keywords for API-level filtering
 const SHRIMP_KW = [
