@@ -36,7 +36,7 @@ function navHTML() {
     </div>
   </a>
   <ul class="nav-links" id="navLinks">
-    ${links.map(l => `<li><a href="${l.href}" class="${isActive(l.id)?'active':''}"><span class="nav-emoji" aria-hidden="true">${l.icon}</span><span data-i18n="${l.key}">${t(l.key)}</span></a></li>`).join('')}
+    ${links.map(l => `<li><a href="${l.href}" class="${isActive(l.id)?'active':''}" data-i18n="${l.key}">${t(l.key)}</a></li>`).join('')}
   </ul>
   ${langSwitcherHTML()}
   <a href="/ai-diagnosis" class="nav-cta" id="navCta" data-i18n="nav.cta">${t('nav.cta')}</a>
