@@ -17,7 +17,7 @@
   --shadow-lg:   0 12px 48px rgba(139,48,96,0.16);
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 body { font-family: 'Noto Sans Thai', 'Inter', sans-serif; color: var(--text-dark); background: var(--white); overflow-x: hidden; }
 
 /* NAV */
