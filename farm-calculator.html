@@ -57,9 +57,13 @@
 /* HERO */
 .calc-hero {
   background: linear-gradient(135deg, #4D1232 0%, #8B3060 60%, #B04880 100%);
-  padding: 100px 5% 48px; color: white;
+  padding: 100px 5% 48px; color: white; position: relative; overflow: hidden;
 }
-.calc-hero-inner { max-width: 900px; margin: 0 auto; }
+.calc-hero-photo { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+.calc-hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center; animation: kenBurns 24s ease-in-out infinite alternate; will-change: transform; }
+.calc-hero-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(77,18,50,.80) 0%, rgba(139,48,96,.66) 55%, rgba(176,72,128,.56) 100%); }
+@keyframes kenBurns { 0% { transform: scale(1) translate(0,0); } 100% { transform: scale(1.1) translate(-2%,-1.5%); } }
+.calc-hero-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 2; }
 .calc-hero .hero-tag { display: inline-block; background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25); border-radius: 100px; padding: 4px 14px; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px; }
 .calc-hero h1 { font-size: clamp(26px,4vw,38px); font-weight: 800; margin-bottom: 8px; }
 .calc-hero p { font-size: 15px; opacity: .85; }
@@ -212,6 +216,7 @@
 <body>
 
 <div class="calc-hero">
+  <div class="calc-hero-photo"><img src="/images/hero-calc.jpg" alt="" loading="eager"></div>
   <div class="calc-hero-inner">
     <div class="hero-tag">🧮 Farm Calculator</div>
     <h1 data-i18n="calc.hero.h1">เครื่องคิดเลขฟาร์มกุ้ง</h1>

@@ -77,7 +77,11 @@ body {
   padding: 80px 5% 60px; color: white; position: relative; overflow: hidden;
 }
 .page-hero::after { content:''; position:absolute; right:-60px; bottom:-60px; width:240px; height:240px; border-radius:50%; background:rgba(255,255,255,.07); }
-.page-hero::before { content:''; position:absolute; left:-60px; top:-60px; width:180px; height:180px; border-radius:50%; background:rgba(201,149,108,.12); }
+.page-hero::before { content:''; position:absolute; left:-60px; top:-60px; width:180px; height:180px; border-radius:50%; background:rgba(201,149,108,.12); z-index:1; }
+.page-hero-photo { position:absolute; inset:0; z-index:0; overflow:hidden; }
+.page-hero-photo img { width:100%; height:100%; object-fit:cover; object-position:center; animation:kenBurns 24s ease-in-out infinite alternate; will-change:transform; }
+.page-hero-photo::after { content:''; position:absolute; inset:0; background: linear-gradient(135deg, rgba(77,18,50,.80) 0%, rgba(139,48,96,.66) 55%, rgba(176,72,128,.56) 100%); }
+@keyframes kenBurns { 0% { transform:scale(1) translate(0,0); } 100% { transform:scale(1.1) translate(-2%,-1.5%); } }
 .hero-inner { max-width: 1200px; margin: 0 auto; position: relative; z-index: 2; }
 .page-tag { display:inline-block; background:rgba(255,255,255,.15); color:rgba(255,255,255,.9); font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:4px 14px; border-radius:24px; margin-bottom:16px; }
 .page-hero h1 { font-size: clamp(28px,5vw,46px); font-weight:800; line-height:1.2; margin-bottom:10px; }
@@ -403,6 +407,7 @@ window.addEventListener('offline', () => document.getElementById('offlineBanner'
 
 <!-- HERO -->
 <div class="page-hero">
+  <div class="page-hero-photo"><img src="/images/hero-diagnosis.jpg" alt="" loading="eager"></div>
   <div class="hero-inner">
     <div class="page-tag">🔬 AI · ShrimpDx</div>
     <h1 data-i18n="dx.hero.h1">วิเคราะห์โรคกุ้ง AI</h1>
