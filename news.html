@@ -41,7 +41,12 @@
 <link rel="stylesheet" href="css/main.css">
 <style>
 body { padding-top: 68px; }
-.page-header { padding: 80px 5% 48px; }
+.page-header { padding: 80px 5% 48px; position: relative; overflow: hidden; }
+.ph-photo { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+.ph-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center; animation: kenBurns 24s ease-in-out infinite alternate; will-change: transform; }
+.ph-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(77,18,50,.80) 0%, rgba(139,48,96,.66) 55%, rgba(176,72,128,.56) 100%); }
+@keyframes kenBurns { 0% { transform: scale(1) translate(0,0); } 100% { transform: scale(1.1) translate(-2%,-1.5%); } }
+.page-header > .page-tag, .page-header > h1, .page-header > p { position: relative; z-index: 2; }
 
 .ai-update-bar { background: var(--wine-pale); border-bottom: 1px solid rgba(139,48,96,0.1); padding: 10px 5%; display: flex; align-items: center; gap: 12px; }
 .ai-update-bar .dot { width: 7px; height: 7px; border-radius: 50%; background: #22C55E; animation: pulse 2s infinite; }
@@ -103,6 +108,7 @@ body { padding-top: 68px; }
 </div>
 
 <div class="page-header">
+  <div class="ph-photo"><img src="/images/hero-news.jpg" alt="" loading="eager"></div>
   <div class="page-tag" data-i18n="news.page.tag">ข่าวสาร · News</div>
   <h1 data-i18n-html="news.header.title">ข่าวสารและความรู้<br>อุตสาหกรรมประมง</h1>
   <p data-i18n="news.header.desc">ติดตามข่าวสาร งานวิจัย และกฎระเบียบล่าสุดด้านการเพาะเลี้ยงสัตว์น้ำ</p>
