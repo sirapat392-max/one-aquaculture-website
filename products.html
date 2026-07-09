@@ -63,7 +63,13 @@ body { padding-top: 68px; }
 
 .product-card { background: white; border-radius: 16px; border: 1px solid var(--gray-mid); box-shadow: var(--shadow); overflow: hidden; transition: all .3s; }
 .product-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
-.product-card-top { background: linear-gradient(135deg, var(--wine-deeper), var(--wine)); padding: 28px 24px 20px; }
+.product-card-top { background: linear-gradient(135deg, var(--wine-deeper), var(--wine)); padding: 28px 24px 20px; background-size: cover; background-position: center; }
+/* faint real photo behind each category header — themed per category */
+#cat-vitamin     .product-card-top { background-image: linear-gradient(135deg, rgba(77,18,50,.84), rgba(139,48,96,.78)), url(/images/cat-vitamin.jpg); }
+#cat-mineral     .product-card-top { background-image: linear-gradient(135deg, rgba(77,18,50,.84), rgba(139,48,96,.78)), url(/images/cat-mineral.jpg); }
+#cat-water       .product-card-top { background-image: linear-gradient(135deg, rgba(77,18,50,.84), rgba(139,48,96,.78)), url(/images/cat-water.jpg); }
+#cat-disinfect   .product-card-top { background-image: linear-gradient(135deg, rgba(77,18,50,.84), rgba(139,48,96,.78)), url(/images/cat-disinfect.jpg); }
+#cat-conditioner .product-card-top { background-image: linear-gradient(135deg, rgba(77,18,50,.84), rgba(139,48,96,.78)), url(/images/cat-conditioner.jpg); }
 .product-card-name { color: white; font-size: 18px; font-weight: 700; margin-bottom: 4px; }
 .product-card-name-en { color: rgba(255,255,255,0.65); font-size: 13px; }
 .product-card-body { padding: 24px; }
