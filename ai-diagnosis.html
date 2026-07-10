@@ -466,10 +466,10 @@ window.addEventListener('offline', () => document.getElementById('offlineBanner'
 
   <!-- TOOL TABS: เลือกเครื่องมือ AI -->
   <div class="tool-tabs" id="toolTabs" role="tablist">
-    <button type="button" class="tool-tab active" data-tooltab="disease" onclick="switchTool('disease')">🔬 วินิจฉัยโรค</button>
-    <button type="button" class="tool-tab" data-tooltab="water" onclick="switchTool('water')">🌊 ตรวจน้ำ</button>
-    <button type="button" class="tool-tab" data-tooltab="shrimp" onclick="switchTool('shrimp')">🦐 ตรวจสุขภาพกุ้ง</button>
-    <button type="button" class="tool-tab" data-tooltab="lab" onclick="switchTool('lab')">🧪 แปลผลแล็บ</button>
+    <button type="button" class="tool-tab active" data-tooltab="disease" onclick="switchTool('disease')" data-i18n="dx.tab.disease">🔬 วินิจฉัยโรค</button>
+    <button type="button" class="tool-tab" data-tooltab="water" onclick="switchTool('water')" data-i18n="dx.tab.water">🌊 ตรวจน้ำ</button>
+    <button type="button" class="tool-tab" data-tooltab="shrimp" onclick="switchTool('shrimp')" data-i18n="dx.tab.shrimp">🦐 ตรวจสุขภาพกุ้ง</button>
+    <button type="button" class="tool-tab" data-tooltab="lab" onclick="switchTool('lab')" data-i18n="dx.tab.lab">🧪 แปลผลแล็บ</button>
   </div>
   <div class="tool-hint" id="toolHint"></div>
 
@@ -733,18 +733,18 @@ window.addEventListener('offline', () => document.getElementById('offlineBanner'
     <div class="group" data-tool="water">
       <div class="group-head">
         <div class="num" style="background:#1565c0;">🌊</div>
-        <h2>ตรวจสุขภาพน้ำ</h2>
-        <span class="who-tag opt">ถ่ายรูปน้ำในบ่อ</span>
+        <h2 data-i18n="dx.waq.h2">ตรวจสุขภาพน้ำ</h2>
+        <span class="who-tag opt" data-i18n="dx.waq.tag">ถ่ายรูปน้ำในบ่อ</span>
       </div>
 
       <div class="field">
-        <label style="font-size:12px;color:var(--mud);">ถ่ายรูปน้ำในบ่อแล้วให้ AI วิเคราะห์สีน้ำ แพลงก์ตอน และความเสี่ยง</label>
+        <label style="font-size:12px;color:var(--mud);" data-i18n="dx.waq.label">ถ่ายรูปน้ำในบ่อแล้วให้ AI วิเคราะห์สีน้ำ แพลงก์ตอน และความเสี่ยง</label>
         <div class="img-upload-area" id="waqImgArea" style="margin-top:6px;">
           <input type="file" id="waqImgInput" accept="image/*" onchange="handleWaqImg(event)">
           <div id="waqImgPlaceholder">
             <div class="img-upload-ico">🌊</div>
-            <div class="img-upload-txt">แตะเพื่อถ่าย/เลือกรูปน้ำในบ่อ</div>
-            <div class="img-upload-hint">ถ่ายน้ำในบ่อให้เห็นสีชัดเจน · JPG/PNG ไม่เกิน 5MB</div>
+            <div class="img-upload-txt" data-i18n="dx.waq.txt">แตะเพื่อถ่าย/เลือกรูปน้ำในบ่อ</div>
+            <div class="img-upload-hint" data-i18n="dx.waq.hint">ถ่ายน้ำในบ่อให้เห็นสีชัดเจน · JPG/PNG ไม่เกิน 5MB</div>
           </div>
         </div>
         <div id="waqImgPreviewWrap" class="img-preview-wrap" style="display:none">
@@ -753,7 +753,7 @@ window.addEventListener('offline', () => document.getElementById('offlineBanner'
         </div>
       </div>
 
-      <button type="button" class="water-analyze-btn" id="waqBtn" onclick="analyzeWater()" disabled>
+      <button type="button" class="water-analyze-btn" id="waqBtn" onclick="analyzeWater()" data-i18n="dx.waq.btn" disabled>
         🔬 วิเคราะห์น้ำด้วย AI
       </button>
 
@@ -764,18 +764,18 @@ window.addEventListener('offline', () => document.getElementById('offlineBanner'
     <div class="group" data-tool="shrimp">
       <div class="group-head">
         <div class="num" style="background:#2e7d32;">🦐</div>
-        <h2>ตรวจสุขภาพกุ้งจากรูป</h2>
-        <span class="who-tag opt">ถ่ายรูปกุ้ง</span>
+        <h2 data-i18n="dx.shr.h2">ตรวจสุขภาพกุ้งจากรูป</h2>
+        <span class="who-tag opt" data-i18n="dx.shr.tag">ถ่ายรูปกุ้ง</span>
       </div>
 
       <div class="field">
-        <label style="font-size:12px;color:var(--mud);">ถ่ายรูปกุ้งใกล้ ๆ ให้ AI ดูเปลือก สี ตับ เส้นขี้ เหงือก ว่าแข็งแรงไหม เปลือกนิ่ม (soft shell) หรือเปล่า</label>
+        <label style="font-size:12px;color:var(--mud);" data-i18n="dx.shr.label">ถ่ายรูปกุ้งใกล้ ๆ ให้ AI ดูเปลือก สี ตับ เส้นขี้ เหงือก ว่าแข็งแรงไหม เปลือกนิ่ม (soft shell) หรือเปล่า</label>
         <div class="img-upload-area" id="shrImgArea" style="margin-top:6px;">
           <input type="file" id="shrImgInput" accept="image/*" onchange="handleShrImg(event)">
           <div id="shrImgPlaceholder">
             <div class="img-upload-ico">🦐</div>
-            <div class="img-upload-txt">แตะเพื่อถ่าย/เลือกรูปกุ้ง</div>
-            <div class="img-upload-hint">ถ่ายกุ้ง 1-2 ตัวใกล้ ๆ เห็นทั้งตัวชัดเจน · JPG/PNG ไม่เกิน 5MB</div>
+            <div class="img-upload-txt" data-i18n="dx.shr.txt">แตะเพื่อถ่าย/เลือกรูปกุ้ง</div>
+            <div class="img-upload-hint" data-i18n="dx.shr.hint">ถ่ายกุ้ง 1-2 ตัวใกล้ ๆ เห็นทั้งตัวชัดเจน · JPG/PNG ไม่เกิน 5MB</div>
           </div>
         </div>
         <div id="shrImgPreviewWrap" class="img-preview-wrap" style="display:none">
@@ -784,7 +784,7 @@ window.addEventListener('offline', () => document.getElementById('offlineBanner'
         </div>
       </div>
 
-      <button type="button" class="shr-analyze-btn" id="shrBtn" onclick="analyzeShrimp()" disabled>
+      <button type="button" class="shr-analyze-btn" id="shrBtn" onclick="analyzeShrimp()" data-i18n="dx.shr.btn" disabled>
         🔬 ตรวจสุขภาพกุ้งด้วย AI
       </button>
 
@@ -795,18 +795,18 @@ window.addEventListener('offline', () => document.getElementById('offlineBanner'
     <div class="group" data-tool="lab">
       <div class="group-head">
         <div class="num" style="background:var(--wine);">🧪</div>
-        <h2>AI แปลผลแล็บ / PCR</h2>
-        <span class="who-tag opt">ถ่ายรูปใบผลตรวจ</span>
+        <h2 data-i18n="dx.lab.h2">AI แปลผลแล็บ / PCR</h2>
+        <span class="who-tag opt" data-i18n="dx.lab.tag">ถ่ายรูปใบผลตรวจ</span>
       </div>
 
       <div class="field">
-        <label style="font-size:12px;color:var(--mud);">อัปโหลดรูปใบผลตรวจ PCR / ผลแล็บ / ผลตรวจน้ำ — AI อ่านค่าให้ แล้วอธิบายเป็นภาษาชาวบ้านว่าหมายความว่าอะไร ความเสี่ยงแค่ไหน ควรทำอะไรต่อ</label>
+        <label style="font-size:12px;color:var(--mud);" data-i18n="dx.lab.label">อัปโหลดรูปใบผลตรวจ PCR / ผลแล็บ / ผลตรวจน้ำ — AI อ่านค่าให้ แล้วอธิบายเป็นภาษาชาวบ้านว่าหมายความว่าอะไร ความเสี่ยงแค่ไหน ควรทำอะไรต่อ</label>
         <div class="img-upload-area" id="labImgArea" style="margin-top:6px;">
           <input type="file" id="labImgInput" accept="image/*" onchange="handleLabImg(event)">
           <div id="labImgPlaceholder">
             <div class="img-upload-ico">🧪</div>
-            <div class="img-upload-txt">แตะเพื่อถ่าย/เลือกรูปใบผลตรวจ</div>
-            <div class="img-upload-hint">ถ่ายให้เห็นตัวเลข/ผลชัดเจน ไม่เอียง · JPG/PNG ไม่เกิน 5MB</div>
+            <div class="img-upload-txt" data-i18n="dx.lab.txt">แตะเพื่อถ่าย/เลือกรูปใบผลตรวจ</div>
+            <div class="img-upload-hint" data-i18n="dx.lab.hint">ถ่ายให้เห็นตัวเลข/ผลชัดเจน ไม่เอียง · JPG/PNG ไม่เกิน 5MB</div>
           </div>
         </div>
         <div id="labImgPreviewWrap" class="img-preview-wrap" style="display:none">
@@ -816,10 +816,10 @@ window.addEventListener('offline', () => document.getElementById('offlineBanner'
       </div>
 
       <div class="field">
-        <input type="text" id="labNote" placeholder="ข้อมูลเพิ่ม (ไม่บังคับ) เช่น อายุกุ้ง / อาการที่เจอ" style="width:100%;">
+        <input type="text" id="labNote" data-i18n-placeholder="dx.lab.note.ph" placeholder="ข้อมูลเพิ่ม (ไม่บังคับ) เช่น อายุกุ้ง / อาการที่เจอ" style="width:100%;">
       </div>
 
-      <button type="button" class="lab-analyze-btn" id="labBtn" onclick="analyzeLab()" disabled>
+      <button type="button" class="lab-analyze-btn" id="labBtn" onclick="analyzeLab()" data-i18n="dx.lab.btn" disabled>
         🔬 แปลผลแล็บด้วย AI
       </button>
 
@@ -1601,7 +1601,7 @@ async function analyzeWater() {
   if (!waqImageBase64) return;
   const btn = document.getElementById('waqBtn');
   const result = document.getElementById('waqResult');
-  btn.disabled = true; btn.innerHTML = '⏳ กำลังวิเคราะห์...';
+  btn.disabled = true; btn.innerHTML = t('dx.waq.btn.loading');
   result.innerHTML = '';
 
   try {
@@ -1653,9 +1653,9 @@ async function analyzeWater() {
       ${d.warning ? `<div style="background:rgba(255,152,0,.2);border:1px solid rgba(255,152,0,.5);border-radius:8px;padding:8px 10px;font-size:12px;margin-top:8px;">⚡ ${d.warning}</div>` : ''}
     </div>`;
   } catch(e) {
-    result.innerHTML = `<div style="padding:10px;font-size:13px;color:var(--coral);">ไม่สามารถวิเคราะห์ได้ — ${e.message}</div>`;
+    result.innerHTML = `<div style="padding:10px;font-size:13px;color:var(--coral);">${t('dx.err.analyze')} — ${e.message}</div>`;
   }
-  btn.disabled = false; btn.innerHTML = '🔬 วิเคราะห์น้ำด้วย AI';
+  btn.disabled = false; btn.innerHTML = t('dx.waq.btn');
 }
 
 // ─── SHRIMP PHOTO HEALTH ANALYSIS ─────────────────────────────────────────
@@ -1686,7 +1686,7 @@ async function analyzeShrimp() {
   if (!shrImageBase64) return;
   const btn = document.getElementById('shrBtn');
   const result = document.getElementById('shrResult');
-  btn.disabled = true; btn.innerHTML = '⏳ กำลังตรวจ...';
+  btn.disabled = true; btn.innerHTML = t('dx.shr.btn.loading');
   result.innerHTML = '';
   try {
     const shrimpParams = [
@@ -1701,8 +1701,8 @@ async function analyzeShrimp() {
     const d = await r.json();
     if (!r.ok) throw new Error(d.error || 'error');
     if (d.notShrimp) {
-      result.innerHTML = `<div style="padding:12px;font-size:13px;color:var(--coral);">ไม่พบกุ้งในรูปนี้ 🦐 ลองถ่ายกุ้งใกล้ ๆ ให้เห็นทั้งตัวชัดเจนอีกครั้ง</div>`;
-      btn.disabled = false; btn.innerHTML = '🔬 ตรวจสุขภาพกุ้งด้วย AI'; return;
+      result.innerHTML = `<div style="padding:12px;font-size:13px;color:var(--coral);">${t('dx.shr.notShrimp')}</div>`;
+      btn.disabled = false; btn.innerHTML = t('dx.shr.btn'); return;
     }
     const riskCls = d.risk === 'สูง' ? 'waq-risk-high' : d.risk === 'ปานกลาง' ? 'waq-risk-mid' : 'waq-risk-low';
     const cell = (k, v) => `<div class="ana-cell"><div class="k">${k}</div><div>${v || 'ไม่เห็นชัด'}</div></div>`;
@@ -1730,9 +1730,9 @@ async function analyzeShrimp() {
       ${d.disclaimer ? `<div style="font-size:10.5px;opacity:.7;margin-top:10px;">${d.disclaimer}</div>` : ''}
     </div>`;
   } catch (e) {
-    result.innerHTML = `<div style="padding:10px;font-size:13px;color:var(--coral);">ไม่สามารถวิเคราะห์ได้ — ${e.message}</div>`;
+    result.innerHTML = `<div style="padding:10px;font-size:13px;color:var(--coral);">${t('dx.err.analyze')} — ${e.message}</div>`;
   }
-  btn.disabled = false; btn.innerHTML = '🔬 ตรวจสุขภาพกุ้งด้วย AI';
+  btn.disabled = false; btn.innerHTML = t('dx.shr.btn');
 }
 
 // ─── AI LAB RESULT INTERPRETATION ─────────────────────────────────────────
@@ -1763,7 +1763,7 @@ async function analyzeLab() {
   if (!labImageBase64) return;
   const btn = document.getElementById('labBtn');
   const result = document.getElementById('labResult');
-  btn.disabled = true; btn.innerHTML = '⏳ กำลังอ่านผล...';
+  btn.disabled = true; btn.innerHTML = t('dx.lab.btn.loading');
   result.innerHTML = '';
   try {
     const labNote = getVal('labNote');
@@ -1775,8 +1775,8 @@ async function analyzeLab() {
     const d = await r.json();
     if (!r.ok) throw new Error(d.error || 'error');
     if (d.unreadable) {
-      result.innerHTML = `<div style="padding:12px;font-size:13px;color:var(--coral);">อ่านผลในรูปไม่ออก 🧪 ลองถ่ายใหม่ให้เห็นตัวเลข/ผลชัดเจน ไม่เอียง แสงพอ</div>`;
-      btn.disabled = false; btn.innerHTML = '🔬 แปลผลแล็บด้วย AI'; return;
+      result.innerHTML = `<div style="padding:12px;font-size:13px;color:var(--coral);">${t('dx.lab.unreadable')}</div>`;
+      btn.disabled = false; btn.innerHTML = t('dx.lab.btn'); return;
     }
     const riskCls = d.overallRisk === 'สูง' ? 'waq-risk-high' : d.overallRisk === 'ปานกลาง' ? 'waq-risk-mid' : 'waq-risk-low';
     const LVL = { 'บวก':'#ff5252','สูง':'#ff9800','ต่ำ':'#ffb74d','ลบ':'#69f0ae','ปกติ':'#69f0ae' };
@@ -1810,26 +1810,30 @@ async function analyzeLab() {
       ${d.disclaimer ? `<div style="font-size:10.5px;opacity:.7;margin-top:6px;">${d.disclaimer}</div>` : ''}
     </div>`;
   } catch (e) {
-    result.innerHTML = `<div style="padding:10px;font-size:13px;color:var(--coral);">ไม่สามารถแปลผลได้ — ${e.message}</div>`;
+    result.innerHTML = `<div style="padding:10px;font-size:13px;color:var(--coral);">${t('dx.err.interpret')} — ${e.message}</div>`;
   }
-  btn.disabled = false; btn.innerHTML = '🔬 แปลผลแล็บด้วย AI';
+  btn.disabled = false; btn.innerHTML = t('dx.lab.btn');
 }
 
 // ─── TOOL TABS: สลับเครื่องมือ AI (โชว์เฉพาะที่เลือก) ─────────────────────
-const TOOL_HINTS = {
-  disease: '',
-  water:  'ถ่ายรูปน้ำในบ่อให้เห็นสีชัดเจน → AI ประเมินสีน้ำ แพลงก์ตอน และความเสี่ยง',
-  shrimp: 'ถ่ายรูปกุ้งใกล้ ๆ ให้เห็นทั้งตัว → AI ดูเปลือก สี ตับ เส้นขี้ เหงือก แล้วให้คะแนนสุขภาพ',
-  lab:    'อัปโหลดรูปใบผลตรวจ PCR / แล็บ / ตรวจน้ำ → AI อ่านค่าแล้วอธิบายเป็นภาษาชาวบ้าน',
-};
+const TOOL_HINT_KEYS = { water: 'dx.hint.water', shrimp: 'dx.hint.shrimp', lab: 'dx.hint.lab' };
+let currentTool = 'disease';
 function switchTool(tool) {
+  currentTool = tool;
   document.querySelectorAll('.tool-tab').forEach(b =>
     b.classList.toggle('active', b.dataset.tooltab === tool));
   document.querySelectorAll('[data-tool]').forEach(el => {
     el.style.display = el.dataset.tool.split(' ').includes(tool) ? '' : 'none';
   });
   const hint = document.getElementById('toolHint');
-  if (hint) { hint.textContent = TOOL_HINTS[tool] || ''; hint.style.display = TOOL_HINTS[tool] ? '' : 'none'; }
+  const key = TOOL_HINT_KEYS[tool];
+  const txt = key && window.t ? t(key) : '';
+  if (hint) { hint.textContent = txt; hint.style.display = txt ? '' : 'none'; }
+}
+// เมื่อสลับภาษา ให้รีเฟรชมุมมองเครื่องมือ (รวม hint ที่ render ด้วย JS)
+if (window.setLang) {
+  const _origSetLang = window.setLang;
+  window.setLang = function (l) { _origSetLang(l); switchTool(currentTool); };
 }
 
 switchTool('disease');
