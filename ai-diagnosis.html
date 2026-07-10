@@ -318,6 +318,20 @@ select {
   border-radius:14px; padding:16px; color:#fff; margin-top:10px;
 }
 .waq-color-dot { width:14px; height:14px; border-radius:50%; display:inline-block; flex-shrink:0; border:2px solid rgba(255,255,255,.4); }
+/* shrimp photo + lab analysis (reuse waq-risk-* pills) */
+.shr-analyze-btn, .lab-analyze-btn {
+  width:100%; border:none; border-radius:11px; padding:12px; cursor:pointer;
+  color:#fff; font-family:inherit; font-size:14px; font-weight:700; display:flex;
+  align-items:center; justify-content:center; gap:8px; transition:opacity .15s;
+}
+.shr-analyze-btn { background:linear-gradient(135deg,#2e7d32,#1b5e20); }
+.lab-analyze-btn { background:linear-gradient(135deg,var(--wine),var(--wine-dark,#4a1730)); }
+.shr-analyze-btn:disabled, .lab-analyze-btn:disabled { opacity:.6; cursor:wait; }
+.shr-card { background:linear-gradient(135deg,#2e7d32 0%,#1b5e20 100%); border-radius:14px; padding:16px; color:#fff; margin-top:10px; }
+.lab-card { background:linear-gradient(135deg,var(--wine) 0%,var(--wine-dark,#4a1730) 100%); border-radius:14px; padding:16px; color:#fff; margin-top:10px; }
+.ana-cell { background:rgba(255,255,255,.1); border-radius:8px; padding:8px 10px; }
+.ana-cell .k { opacity:.7; font-size:10px; font-weight:700; margin-bottom:3px; }
+.ana-score { margin-left:auto; font-family:'JetBrains Mono',monospace; font-weight:700; font-size:13px; background:rgba(255,255,255,.15); border-radius:100px; padding:3px 11px; }
 .waq-risk-pill { border-radius:100px; padding:3px 10px; font-size:10.5px; font-weight:700; font-family:'JetBrains Mono',monospace; }
 .waq-risk-low  { background:rgba(67,160,71,.3); border:1px solid rgba(67,160,71,.6); }
 .waq-risk-mid  { background:rgba(255,152,0,.3); border:1px solid rgba(255,152,0,.6); }
@@ -412,7 +426,7 @@ window.addEventListener('offline', () => document.getElementById('offlineBanner'
     <div class="page-tag">🔬 AI · ShrimpDx</div>
     <h1 data-i18n="dx.hero.h1">วิเคราะห์โรคกุ้ง AI</h1>
     <p data-i18n="dx.hero.p">กรอกอาการ ข้อมูลบ่อ และค่าน้ำ — AI วินิจฉัยและให้คำแนะนำทันที</p>
-    <div class="version-pill" data-i18n="dx.hero.pill">ONE AI · Gemini 2.5 Pro · Vision · ตรวจโรคกุ้ง + วิเคราะห์น้ำ</div>
+    <div class="version-pill" data-i18n="dx.hero.pill">ONE AI · Gemini 2.5 Pro · Vision · ตรวจโรค + วิเคราะห์น้ำ + สุขภาพกุ้ง + แปลผลแล็บ</div>
   </div>
 </div>
 
@@ -717,6 +731,72 @@ window.addEventListener('offline', () => document.getElementById('offlineBanner'
       </button>
 
       <div id="waqResult"></div>
+    </div>
+
+    <!-- SECTION 3.6: ตรวจสุขภาพกุ้งจากรูป -->
+    <div class="group">
+      <div class="group-head">
+        <div class="num" style="background:#2e7d32;">🦐</div>
+        <h2>ตรวจสุขภาพกุ้งจากรูป</h2>
+        <span class="who-tag opt">ถ่ายรูปกุ้ง</span>
+      </div>
+
+      <div class="field">
+        <label style="font-size:12px;color:var(--mud);">ถ่ายรูปกุ้งใกล้ ๆ ให้ AI ดูเปลือก สี ตับ เส้นขี้ เหงือก ว่าแข็งแรงไหม เปลือกนิ่ม (soft shell) หรือเปล่า</label>
+        <div class="img-upload-area" id="shrImgArea" style="margin-top:6px;">
+          <input type="file" id="shrImgInput" accept="image/*" onchange="handleShrImg(event)">
+          <div id="shrImgPlaceholder">
+            <div class="img-upload-ico">🦐</div>
+            <div class="img-upload-txt">แตะเพื่อถ่าย/เลือกรูปกุ้ง</div>
+            <div class="img-upload-hint">ถ่ายกุ้ง 1-2 ตัวใกล้ ๆ เห็นทั้งตัวชัดเจน · JPG/PNG ไม่เกิน 5MB</div>
+          </div>
+        </div>
+        <div id="shrImgPreviewWrap" class="img-preview-wrap" style="display:none">
+          <img id="shrImgPreview" class="img-preview" alt="shrimp preview">
+          <button type="button" class="img-remove-btn" onclick="removeShrImg()">×</button>
+        </div>
+      </div>
+
+      <button type="button" class="shr-analyze-btn" id="shrBtn" onclick="analyzeShrimp()" disabled>
+        🔬 ตรวจสุขภาพกุ้งด้วย AI
+      </button>
+
+      <div id="shrResult"></div>
+    </div>
+
+    <!-- SECTION 3.7: AI แปลผลแล็บ / PCR -->
+    <div class="group">
+      <div class="group-head">
+        <div class="num" style="background:var(--wine);">🧪</div>
+        <h2>AI แปลผลแล็บ / PCR</h2>
+        <span class="who-tag opt">ถ่ายรูปใบผลตรวจ</span>
+      </div>
+
+      <div class="field">
+        <label style="font-size:12px;color:var(--mud);">อัปโหลดรูปใบผลตรวจ PCR / ผลแล็บ / ผลตรวจน้ำ — AI อ่านค่าให้ แล้วอธิบายเป็นภาษาชาวบ้านว่าหมายความว่าอะไร ความเสี่ยงแค่ไหน ควรทำอะไรต่อ</label>
+        <div class="img-upload-area" id="labImgArea" style="margin-top:6px;">
+          <input type="file" id="labImgInput" accept="image/*" onchange="handleLabImg(event)">
+          <div id="labImgPlaceholder">
+            <div class="img-upload-ico">🧪</div>
+            <div class="img-upload-txt">แตะเพื่อถ่าย/เลือกรูปใบผลตรวจ</div>
+            <div class="img-upload-hint">ถ่ายให้เห็นตัวเลข/ผลชัดเจน ไม่เอียง · JPG/PNG ไม่เกิน 5MB</div>
+          </div>
+        </div>
+        <div id="labImgPreviewWrap" class="img-preview-wrap" style="display:none">
+          <img id="labImgPreview" class="img-preview" alt="lab result preview">
+          <button type="button" class="img-remove-btn" onclick="removeLabImg()">×</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <input type="text" id="labNote" placeholder="ข้อมูลเพิ่ม (ไม่บังคับ) เช่น อายุกุ้ง / อาการที่เจอ" style="width:100%;">
+      </div>
+
+      <button type="button" class="lab-analyze-btn" id="labBtn" onclick="analyzeLab()" disabled>
+        🔬 แปลผลแล็บด้วย AI
+      </button>
+
+      <div id="labResult"></div>
     </div>
 
     <!-- SECTION 4: รายละเอียดเพิ่ม collapsible -->
@@ -1549,6 +1629,163 @@ async function analyzeWater() {
     result.innerHTML = `<div style="padding:10px;font-size:13px;color:var(--coral);">ไม่สามารถวิเคราะห์ได้ — ${e.message}</div>`;
   }
   btn.disabled = false; btn.innerHTML = '🔬 วิเคราะห์น้ำด้วย AI';
+}
+
+// ─── SHRIMP PHOTO HEALTH ANALYSIS ─────────────────────────────────────────
+let shrImageBase64 = null, shrImageMime = null;
+function handleShrImg(e) {
+  const file = e.target.files[0]; if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { alert('ไฟล์ใหญ่เกิน 5MB'); return; }
+  shrImageMime = file.type || 'image/jpeg';
+  const reader = new FileReader();
+  reader.onload = ev => {
+    shrImageBase64 = ev.target.result.split(',')[1];
+    document.getElementById('shrImgPreview').src = ev.target.result;
+    document.getElementById('shrImgPreviewWrap').style.display = '';
+    document.getElementById('shrImgArea').style.display = 'none';
+    document.getElementById('shrBtn').disabled = false;
+  };
+  reader.readAsDataURL(file);
+}
+function removeShrImg() {
+  shrImageBase64 = null; shrImageMime = null;
+  document.getElementById('shrImgInput').value = '';
+  document.getElementById('shrImgPreviewWrap').style.display = 'none';
+  document.getElementById('shrImgArea').style.display = '';
+  document.getElementById('shrBtn').disabled = true;
+  document.getElementById('shrResult').innerHTML = '';
+}
+async function analyzeShrimp() {
+  if (!shrImageBase64) return;
+  const btn = document.getElementById('shrBtn');
+  const result = document.getElementById('shrResult');
+  btn.disabled = true; btn.innerHTML = '⏳ กำลังตรวจ...';
+  result.innerHTML = '';
+  try {
+    const shrimpParams = [
+      getVal('doc') && `อายุ ${getVal('doc')} วัน`,
+      getVal('sz') && `ไซส์ ${getVal('sz')} ตัว/กก`,
+    ].filter(Boolean).join(', ');
+    const r = await fetch('/api/analyze-shrimp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ imageBase64: shrImageBase64, imageMimeType: shrImageMime, shrimpParams: shrimpParams || undefined }),
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || 'error');
+    if (d.notShrimp) {
+      result.innerHTML = `<div style="padding:12px;font-size:13px;color:var(--coral);">ไม่พบกุ้งในรูปนี้ 🦐 ลองถ่ายกุ้งใกล้ ๆ ให้เห็นทั้งตัวชัดเจนอีกครั้ง</div>`;
+      btn.disabled = false; btn.innerHTML = '🔬 ตรวจสุขภาพกุ้งด้วย AI'; return;
+    }
+    const riskCls = d.risk === 'สูง' ? 'waq-risk-high' : d.risk === 'ปานกลาง' ? 'waq-risk-mid' : 'waq-risk-low';
+    const cell = (k, v) => `<div class="ana-cell"><div class="k">${k}</div><div>${v || 'ไม่เห็นชัด'}</div></div>`;
+    const list = arr => (arr || []).map(i => `<span style="display:block;font-size:12px;opacity:.92;padding:2px 0">• ${i}</span>`).join('');
+    const findingsHTML = list(d.findings);
+    const issuesHTML = list(d.possibleIssues);
+    const recsHTML = list(d.recommendations);
+    result.innerHTML = `
+    <div class="shr-card">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px;">
+        <span style="font-size:16px;font-weight:700;">🦐 ${d.overall || '—'}</span>
+        ${d.healthScore != null ? `<span class="ana-score">${d.healthScore}/100</span>` : ''}
+        <span class="waq-risk-pill ${riskCls}" style="margin-left:auto;">ความเสี่ยง ${d.risk || '?'}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;font-size:12px;">
+        ${cell('เปลือก', d.shell)}${cell('สีตัว', d.color)}
+        ${cell('ตับกุ้ง', d.hepato)}${cell('เส้นขี้', d.gut)}
+        ${cell('เนื้อ', d.muscle)}${cell('เหงือก', d.gills)}
+      </div>
+      ${d.appendages ? `<div style="font-size:12px;opacity:.9;margin-bottom:8px;">รยางค์/หนวด/หาง: ${d.appendages}</div>` : ''}
+      ${findingsHTML ? `<div style="margin-bottom:8px;"><div style="opacity:.7;font-size:10px;font-weight:700;margin-bottom:4px;">👁️ สิ่งที่เห็น</div>${findingsHTML}</div>` : ''}
+      ${issuesHTML ? `<div style="margin-bottom:8px;"><div style="opacity:.7;font-size:10px;font-weight:700;margin-bottom:4px;">⚠️ อาจเกี่ยวข้องกับ</div>${issuesHTML}</div>` : ''}
+      ${recsHTML ? `<div style="border-top:1px solid rgba(255,255,255,.2);padding-top:10px;margin-top:2px;"><div style="opacity:.7;font-size:10px;font-weight:700;margin-bottom:4px;">💡 คำแนะนำ</div>${recsHTML}</div>` : ''}
+      ${d.warning ? `<div style="background:rgba(255,152,0,.2);border:1px solid rgba(255,152,0,.5);border-radius:8px;padding:8px 10px;font-size:12px;margin-top:8px;">⚡ ${d.warning}</div>` : ''}
+      ${d.disclaimer ? `<div style="font-size:10.5px;opacity:.7;margin-top:10px;">${d.disclaimer}</div>` : ''}
+    </div>`;
+  } catch (e) {
+    result.innerHTML = `<div style="padding:10px;font-size:13px;color:var(--coral);">ไม่สามารถวิเคราะห์ได้ — ${e.message}</div>`;
+  }
+  btn.disabled = false; btn.innerHTML = '🔬 ตรวจสุขภาพกุ้งด้วย AI';
+}
+
+// ─── AI LAB RESULT INTERPRETATION ─────────────────────────────────────────
+let labImageBase64 = null, labImageMime = null;
+function handleLabImg(e) {
+  const file = e.target.files[0]; if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { alert('ไฟล์ใหญ่เกิน 5MB'); return; }
+  labImageMime = file.type || 'image/jpeg';
+  const reader = new FileReader();
+  reader.onload = ev => {
+    labImageBase64 = ev.target.result.split(',')[1];
+    document.getElementById('labImgPreview').src = ev.target.result;
+    document.getElementById('labImgPreviewWrap').style.display = '';
+    document.getElementById('labImgArea').style.display = 'none';
+    document.getElementById('labBtn').disabled = false;
+  };
+  reader.readAsDataURL(file);
+}
+function removeLabImg() {
+  labImageBase64 = null; labImageMime = null;
+  document.getElementById('labImgInput').value = '';
+  document.getElementById('labImgPreviewWrap').style.display = 'none';
+  document.getElementById('labImgArea').style.display = '';
+  document.getElementById('labBtn').disabled = true;
+  document.getElementById('labResult').innerHTML = '';
+}
+async function analyzeLab() {
+  if (!labImageBase64) return;
+  const btn = document.getElementById('labBtn');
+  const result = document.getElementById('labResult');
+  btn.disabled = true; btn.innerHTML = '⏳ กำลังอ่านผล...';
+  result.innerHTML = '';
+  try {
+    const labNote = getVal('labNote');
+    const r = await fetch('/api/analyze-lab', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ imageBase64: labImageBase64, imageMimeType: labImageMime, labNote: labNote || undefined }),
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || 'error');
+    if (d.unreadable) {
+      result.innerHTML = `<div style="padding:12px;font-size:13px;color:var(--coral);">อ่านผลในรูปไม่ออก 🧪 ลองถ่ายใหม่ให้เห็นตัวเลข/ผลชัดเจน ไม่เอียง แสงพอ</div>`;
+      btn.disabled = false; btn.innerHTML = '🔬 แปลผลแล็บด้วย AI'; return;
+    }
+    const riskCls = d.overallRisk === 'สูง' ? 'waq-risk-high' : d.overallRisk === 'ปานกลาง' ? 'waq-risk-mid' : 'waq-risk-low';
+    const LVL = { 'บวก':'#ff5252','สูง':'#ff9800','ต่ำ':'#ffb74d','ลบ':'#69f0ae','ปกติ':'#69f0ae' };
+    const rowsHTML = (d.results || []).map(x => {
+      const dot = LVL[x.level] || '#ffffffaa';
+      return `<div style="background:rgba(255,255,255,.1);border-radius:8px;padding:8px 10px;margin-bottom:6px;">
+        <div style="display:flex;align-items:center;gap:7px;">
+          <span style="width:9px;height:9px;border-radius:50%;background:${dot};flex-shrink:0;"></span>
+          <span style="font-weight:700;font-size:13px;">${x.name || '—'}</span>
+          <span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:12px;opacity:.95;">${x.value || ''}</span>
+        </div>
+        ${x.interpret ? `<div style="font-size:11.5px;opacity:.85;margin-top:3px;padding-left:16px;">${x.interpret}</div>` : ''}
+      </div>`;
+    }).join('');
+    const actionsHTML = (d.actions || []).map(a => `<span style="display:block;font-size:12px;opacity:.92;padding:2px 0">• ${a}</span>`).join('');
+    const detectedHTML = (d.detected || []).length
+      ? `<div style="margin-bottom:10px;">${(d.detected).map(x => `<span style="display:inline-block;background:rgba(255,82,82,.25);border:1px solid rgba(255,82,82,.5);border-radius:100px;padding:2px 10px;font-size:11px;font-weight:700;margin:2px 4px 2px 0;">${x}</span>`).join('')}</div>` : '';
+    result.innerHTML = `
+    <div class="lab-card">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:10px;">
+        <span style="font-size:14px;font-weight:700;">🧪 ${d.docType || 'ผลแล็บ'}</span>
+        <span class="waq-risk-pill ${riskCls}" style="margin-left:auto;">ความเสี่ยง ${d.overallRisk || '?'}</span>
+      </div>
+      ${d.summary ? `<div style="font-size:13px;line-height:1.5;margin-bottom:12px;background:rgba(255,255,255,.08);border-radius:8px;padding:9px 11px;">${d.summary}</div>` : ''}
+      ${detectedHTML}
+      ${rowsHTML ? `<div style="margin-bottom:10px;"><div style="opacity:.7;font-size:10px;font-weight:700;margin-bottom:5px;">📋 ผลที่อ่านได้</div>${rowsHTML}</div>` : ''}
+      ${d.meaning ? `<div style="font-size:12.5px;line-height:1.5;margin-bottom:8px;"><span style="opacity:.7;font-size:10px;font-weight:700;display:block;margin-bottom:3px;">🔎 หมายความว่า</span>${d.meaning}</div>` : ''}
+      ${actionsHTML ? `<div style="border-top:1px solid rgba(255,255,255,.2);padding-top:10px;margin-top:2px;"><div style="opacity:.7;font-size:10px;font-weight:700;margin-bottom:4px;">✅ ควรทำต่อ</div>${actionsHTML}</div>` : ''}
+      ${d.warning ? `<div style="background:rgba(255,152,0,.2);border:1px solid rgba(255,152,0,.5);border-radius:8px;padding:8px 10px;font-size:12px;margin-top:8px;">⚡ ${d.warning}</div>` : ''}
+      ${d.lab ? `<div style="font-size:10.5px;opacity:.6;margin-top:8px;">ออกผลโดย: ${d.lab}</div>` : ''}
+      ${d.disclaimer ? `<div style="font-size:10.5px;opacity:.7;margin-top:6px;">${d.disclaimer}</div>` : ''}
+    </div>`;
+  } catch (e) {
+    result.innerHTML = `<div style="padding:10px;font-size:13px;color:var(--coral);">ไม่สามารถแปลผลได้ — ${e.message}</div>`;
+  }
+  btn.disabled = false; btn.innerHTML = '🔬 แปลผลแล็บด้วย AI';
 }
 
 updateRateBar();

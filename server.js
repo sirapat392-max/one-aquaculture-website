@@ -242,6 +242,92 @@ Format:
   }
 });
 
+// ─── SHRIMP PHOTO HEALTH ANALYSIS ──────────────────────────────────────────
+app.post('/api/analyze-shrimp', async (req, res) => {
+  const { imageBase64, imageMimeType, shrimpParams } = req.body;
+  if (!imageBase64) return res.status(400).json({ error: 'กรุณาแนบรูปกุ้งก่อน' });
+
+  const systemPrompt = `ผู้เชี่ยวชาญสุขภาพกุ้งขาว/กุ้งกุลาดำ ดูรูปถ่ายกุ้งแล้วประเมินสุขภาพภายนอก ตอบ JSON เท่านั้น ห้ามมี text นอก JSON
+
+## สไตล์
+- ภาษาชาวบ้าน เข้าใจง่าย ห้ามศัพท์แล็บ/ชื่อยีน — อธิบายให้คนเลี้ยงเห็นภาพ
+- ถ้าในรูปไม่เห็นกุ้งชัด หรือเป็นรูปอื่น → ตั้ง notShrimp:true และบอกให้ถ่ายใหม่
+- แต่ละ finding/recommendation สั้น ≤ 12 คำ ขึ้นต้นด้วยกริยาหรือสิ่งที่เห็น
+- ประเมินเท่าที่ "เห็นในรูป" เท่านั้น อย่าเดาสิ่งที่มองไม่เห็น (ใส่ "ไม่เห็นชัด")
+
+## จุดที่ต้องดู
+- เปลือก (shell): แข็งปกติ / นิ่ม(soft shell) / เพิ่งลอกคราบ / กร่อน-เป็นแผล-จุดดำ
+- สี/ความใสของตัว: ใส-เทาปกติ / ซีด / แดง(เครียด) / คล้ำ
+- ตับกุ้ง (ดูสีบริเวณหัว): สีเข้มปกติ / ซีด-เหลือง / ฝ่อเล็ก / ไม่เห็นชัด
+- เส้นขี้ (ลำไส้กลางหลัง): เต็มดี / ขาดเป็นช่วง / ขี้ขาว / ไม่เห็นชัด
+- เนื้อ/กล้ามเนื้อ: ใสแน่น / ขุ่น / ขาวเป็นปล้อง(ตะคริว)
+- เหงือก: สะอาด / ดำ-น้ำตาล / บวม / ไม่เห็นชัด
+- รยางค์ หนวด หาง: ครบปกติ / กุด-กร่อน-แดง
+
+## JSON format
+{"notShrimp":false,"overall":"แข็งแรง/พอใช้/อ่อนแอ/น่ากังวล","healthScore":75,"shell":"เปลือกแข็งปกติ","color":"ใส-เทาปกติ","hepato":"ตับสีเข้มปกติ","gut":"เส้นขี้เต็มดี","muscle":"เนื้อใสแน่น","gills":"เหงือกสะอาด","appendages":"รยางค์ครบปกติ","findings":["สิ่งที่สังเกตเห็นในรูป"],"possibleIssues":["ภาวะที่อาจเกี่ยวข้อง ถ้ามี"],"risk":"ต่ำ/ปานกลาง/สูง","recommendations":["คำแนะนำขึ้นต้นด้วยกริยา"],"warning":"ข้อควรระวังสั้นๆ ถ้ามี","disclaimer":"ประเมินจากภาพภายนอกเบื้องต้น ไม่แทนการตรวจแล็บ/สัตวแพทย์"}`;
+
+  try {
+    const completion = await client.chat.completions.create({
+      model: 'google/gemini-2.5-flash',
+      max_tokens: 1000,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: [
+          { type: 'image_url', image_url: { url: `data:${imageMimeType || 'image/jpeg'};base64,${imageBase64}` } },
+          { type: 'text', text: `ประเมินสุขภาพกุ้งในภาพ${shrimpParams ? `\nข้อมูลเพิ่ม: ${shrimpParams}` : ''}\nตอบ JSON ตาม format` },
+        ]},
+      ],
+    });
+    const raw = completion.choices[0]?.message?.content || '';
+    const start = raw.indexOf('{'); const end = raw.lastIndexOf('}');
+    if (start === -1) return res.status(500).json({ error: 'วิเคราะห์ไม่สำเร็จ' });
+    res.json(JSON.parse(raw.slice(start, end + 1)));
+  } catch (err) {
+    console.error('analyze-shrimp:', err.message);
+    res.status(500).json({ error: 'ไม่สามารถวิเคราะห์ได้ กรุณาลองใหม่' });
+  }
+});
+
+// ─── AI LAB RESULT INTERPRETATION (PCR / lab report photo) ──────────────────
+app.post('/api/analyze-lab', async (req, res) => {
+  const { imageBase64, imageMimeType, labNote } = req.body;
+  if (!imageBase64) return res.status(400).json({ error: 'กรุณาแนบรูปผลแล็บก่อน' });
+
+  const systemPrompt = `ผู้เชี่ยวชาญแปลผลตรวจแล็บสำหรับฟาร์มกุ้ง (ผล PCR โรคกุ้ง, ผลตรวจน้ำ, ผลตรวจแบคทีเรีย/Vibrio) อ่านรูปใบผลตรวจแล้วอธิบายเป็นภาษาชาวบ้าน ตอบ JSON เท่านั้น ห้ามมี text นอก JSON
+
+## กฎสำคัญ
+- อ่านเฉพาะค่าที่ "เห็นจริงในรูป" ห้ามแต่งค่า/ตัวเลขที่ไม่ปรากฏ
+- ถ้าอ่านรูปไม่ออก/ไม่ใช่ใบผลแล็บ → unreadable:true + บอกให้ถ่ายใหม่ให้ชัด
+- แปลศัพท์แล็บ/ตัวย่อเป็นภาษาชาวบ้าน (เช่น EHP=โรคขี้ขาว/โตช้า, WSSV=ตัวแดงดวงขาว, AHPND/EMS=ตับวายตายด่วน, Vibrio=เชื้อวิบริโอ, IHHNV=หนวดกุด)
+- Positive/Detected/พบเชื้อ = ผลบวก ; Negative/Not detected = ผลลบ ; Ct ต่ำ = เชื้อเยอะ
+- อย่าวินิจฉัยเกินผล — บอกว่าผลนี้หมายความว่าอะไร และควรทำอะไรต่อ
+
+## JSON format
+{"unreadable":false,"docType":"ผล PCR/ผลตรวจน้ำ/ผลตรวจแบคทีเรีย/ใบผลแล็บ/ไม่ชัดเจน","lab":"ชื่อแล็บถ้าเห็น หรือ ''","summary":"สรุปผลภาษาชาวบ้าน 1-2 ประโยค","results":[{"name":"ชื่อรายการ เช่น EHP","value":"ค่า/ผลที่อ่านได้","level":"บวก/ลบ/สูง/ปกติ/ต่ำ","interpret":"หมายความว่าอะไรแบบสั้นๆ"}],"detected":["เชื้อ/ค่าที่ผิดปกติที่พบ"],"overallRisk":"ต่ำ/ปานกลาง/สูง","meaning":"ผลรวมนี้มีความหมายกับบ่ออย่างไร 1-2 ประโยค","actions":["ควรทำอะไรต่อ ขึ้นต้นด้วยกริยา"],"warning":"ข้อควรระวังถ้ามี","disclaimer":"แปลผลเบื้องต้น ควรยืนยันกับสัตวแพทย์/ห้องแล็บที่ออกผล"}`;
+
+  try {
+    const completion = await client.chat.completions.create({
+      model: 'google/gemini-2.5-flash',
+      max_tokens: 2000,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: [
+          { type: 'image_url', image_url: { url: `data:${imageMimeType || 'image/jpeg'};base64,${imageBase64}` } },
+          { type: 'text', text: `อ่านและแปลผลใบตรวจแล็บในภาพ${labNote ? `\nข้อมูลเพิ่มจากผู้ใช้: ${labNote}` : ''}\nตอบ JSON ตาม format` },
+        ]},
+      ],
+    });
+    const raw = completion.choices[0]?.message?.content || '';
+    const start = raw.indexOf('{'); const end = raw.lastIndexOf('}');
+    if (start === -1) return res.status(500).json({ error: 'แปลผลไม่สำเร็จ' });
+    res.json(JSON.parse(raw.slice(start, end + 1)));
+  } catch (err) {
+    console.error('analyze-lab:', err.message);
+    res.status(500).json({ error: 'ไม่สามารถแปลผลได้ กรุณาลองใหม่' });
+  }
+});
+
 // ─── AI GENERAL CHAT ───────────────────────────────────────────────────────
 app.post('/api/chat', chatRateLimiter, async (req, res) => {
   const { message, history } = req.body;
