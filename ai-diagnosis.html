@@ -332,6 +332,24 @@ select {
 .ana-cell { background:rgba(255,255,255,.1); border-radius:8px; padding:8px 10px; }
 .ana-cell .k { opacity:.7; font-size:10px; font-weight:700; margin-bottom:3px; }
 .ana-score { margin-left:auto; font-family:'JetBrains Mono',monospace; font-weight:700; font-size:13px; background:rgba(255,255,255,.15); border-radius:100px; padding:3px 11px; }
+/* tool selector tabs */
+.tool-tabs { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:10px; }
+.tool-tab {
+  border:1.5px solid var(--line); background:var(--paper); color:var(--mud);
+  border-radius:12px; padding:12px 8px; font-family:inherit; font-size:13.5px; font-weight:700;
+  cursor:pointer; transition:all .15s; display:flex; align-items:center; justify-content:center;
+  gap:6px; text-align:center; line-height:1.25;
+}
+.tool-tab:hover { border-color:var(--wine); color:var(--wine); }
+.tool-tab.active { background:var(--wine); border-color:var(--wine); color:#fff; box-shadow:var(--shadow); }
+.tool-tab.active[data-tooltab="water"]  { background:#1565c0; border-color:#1565c0; }
+.tool-tab.active[data-tooltab="shrimp"] { background:#2e7d32; border-color:#2e7d32; }
+.tool-tab.active[data-tooltab="lab"]    { background:var(--wine); border-color:var(--wine); }
+.tool-hint { font-size:12.5px; color:var(--mud); background:var(--wine-pale); border-radius:9px; padding:9px 13px; margin-bottom:12px; line-height:1.5; }
+@media (max-width:640px){
+  .tool-tabs { grid-template-columns:repeat(2,1fr); gap:7px; }
+  .tool-tab { font-size:12.5px; padding:11px 5px; }
+}
 .waq-risk-pill { border-radius:100px; padding:3px 10px; font-size:10.5px; font-weight:700; font-family:'JetBrains Mono',monospace; }
 .waq-risk-low  { background:rgba(67,160,71,.3); border:1px solid rgba(67,160,71,.6); }
 .waq-risk-mid  { background:rgba(255,152,0,.3); border:1px solid rgba(255,152,0,.6); }
@@ -446,12 +464,21 @@ window.addEventListener('offline', () => document.getElementById('offlineBanner'
     <div class="hist-list" id="histList" style="display:none"></div>
   </div>
 
+  <!-- TOOL TABS: เลือกเครื่องมือ AI -->
+  <div class="tool-tabs" id="toolTabs" role="tablist">
+    <button type="button" class="tool-tab active" data-tooltab="disease" onclick="switchTool('disease')">🔬 วินิจฉัยโรค</button>
+    <button type="button" class="tool-tab" data-tooltab="water" onclick="switchTool('water')">🌊 ตรวจน้ำ</button>
+    <button type="button" class="tool-tab" data-tooltab="shrimp" onclick="switchTool('shrimp')">🦐 ตรวจสุขภาพกุ้ง</button>
+    <button type="button" class="tool-tab" data-tooltab="lab" onclick="switchTool('lab')">🧪 แปลผลแล็บ</button>
+  </div>
+  <div class="tool-hint" id="toolHint"></div>
+
   <div class="dx-layout">
     <div class="dx-form-col">
   <form id="dxForm">
 
     <!-- SECTION 1 -->
-    <div class="group">
+    <div class="group" data-tool="disease">
       <div class="group-head">
         <div class="num">1</div>
         <h2 data-i18n="dx.s1.h2">เกิดอะไรขึ้นที่บ่อ</h2>
@@ -584,7 +611,7 @@ window.addEventListener('offline', () => document.getElementById('offlineBanner'
     </div>
 
     <!-- SECTION 2: ข้อมูลบ่อ -->
-    <div class="group">
+    <div class="group" data-tool="disease">
       <div class="group-head">
         <div class="num">2</div>
         <h2 data-i18n="dx.s2.h2">ข้อมูลบ่อ</h2>
@@ -651,7 +678,7 @@ window.addEventListener('offline', () => document.getElementById('offlineBanner'
     </div>
 
     <!-- SECTION 3: ค่าน้ำ -->
-    <div class="group">
+    <div class="group" data-tool="disease">
       <div class="group-head">
         <div class="num">3</div>
         <h2 data-i18n="dx.s3.h2">ค่าน้ำ</h2>
@@ -703,7 +730,7 @@ window.addEventListener('offline', () => document.getElementById('offlineBanner'
     </div>
 
     <!-- SECTION 3.5: ตรวจสุขภาพน้ำ -->
-    <div class="group">
+    <div class="group" data-tool="water">
       <div class="group-head">
         <div class="num" style="background:#1565c0;">🌊</div>
         <h2>ตรวจสุขภาพน้ำ</h2>
@@ -734,7 +761,7 @@ window.addEventListener('offline', () => document.getElementById('offlineBanner'
     </div>
 
     <!-- SECTION 3.6: ตรวจสุขภาพกุ้งจากรูป -->
-    <div class="group">
+    <div class="group" data-tool="shrimp">
       <div class="group-head">
         <div class="num" style="background:#2e7d32;">🦐</div>
         <h2>ตรวจสุขภาพกุ้งจากรูป</h2>
@@ -765,7 +792,7 @@ window.addEventListener('offline', () => document.getElementById('offlineBanner'
     </div>
 
     <!-- SECTION 3.7: AI แปลผลแล็บ / PCR -->
-    <div class="group">
+    <div class="group" data-tool="lab">
       <div class="group-head">
         <div class="num" style="background:var(--wine);">🧪</div>
         <h2>AI แปลผลแล็บ / PCR</h2>
@@ -800,7 +827,7 @@ window.addEventListener('offline', () => document.getElementById('offlineBanner'
     </div>
 
     <!-- SECTION 4: รายละเอียดเพิ่ม collapsible -->
-    <div class="group collapsible closed">
+    <div class="group collapsible closed" data-tool="disease">
       <div class="group-head" onclick="toggleCollapse(this)">
         <div class="num" style="background:var(--wine-light);font-size:13px;">+</div>
         <h2 data-i18n="dx.s4.h2">รายละเอียดเพิ่มเติม</h2>
@@ -841,7 +868,7 @@ window.addEventListener('offline', () => document.getElementById('offlineBanner'
     </div>
 
     <!-- SECTION 5: ตำแหน่ง & สภาพอากาศ -->
-    <div class="group collapsible closed" id="groupWeather">
+    <div class="group collapsible closed" id="groupWeather" data-tool="disease">
       <div class="group-head" onclick="toggleCollapse(this)">
         <div class="num" style="background:#1565C0;font-size:13px;">☁️</div>
         <h2 data-i18n="dx.weather.h2">ตำแหน่ง &amp; สภาพอากาศ</h2>
@@ -903,7 +930,7 @@ window.addEventListener('offline', () => document.getElementById('offlineBanner'
     </div>
 
   </form>
-  <div class="action-row" style="padding:0 16px 12px;">
+  <div class="action-row" data-tool="disease" style="padding:0 16px 12px;">
     <button class="btn-clear" type="button" onclick="clearForm()" data-i18n="dx.btn.clear">↺ ล้าง</button>
     <button class="btn-submit" type="button" id="submitBtn" onclick="runDiagnosis()" data-i18n="dx.btn.submit">
       🔬 วิเคราะห์ด้วย AI
@@ -911,12 +938,12 @@ window.addEventListener('offline', () => document.getElementById('offlineBanner'
   </div>
     </div><!-- /dx-form-col -->
     <div class="dx-result-col">
-      <div id="rateBar" class="rate-bar">
+      <div id="rateBar" class="rate-bar" data-tool="disease">
         <span id="rateLabel">📊 วันนี้วิเคราะห์แล้ว <b id="rateCount">0</b>/10 ครั้ง</span>
         <div class="rate-track"><div class="rate-fill" id="rateFill" style="width:0%"></div></div>
       </div>
     <!-- SECTION: AI CARD -->
-    <div class="group" id="groupAI">
+    <div class="group" id="groupAI" data-tool="disease">
       <div class="group-head">
         <div class="num ai">✦</div>
         <h2 data-i18n="dx.ai.h2">AI วินิจฉัย</h2>
@@ -1788,6 +1815,24 @@ async function analyzeLab() {
   btn.disabled = false; btn.innerHTML = '🔬 แปลผลแล็บด้วย AI';
 }
 
+// ─── TOOL TABS: สลับเครื่องมือ AI (โชว์เฉพาะที่เลือก) ─────────────────────
+const TOOL_HINTS = {
+  disease: '',
+  water:  'ถ่ายรูปน้ำในบ่อให้เห็นสีชัดเจน → AI ประเมินสีน้ำ แพลงก์ตอน และความเสี่ยง',
+  shrimp: 'ถ่ายรูปกุ้งใกล้ ๆ ให้เห็นทั้งตัว → AI ดูเปลือก สี ตับ เส้นขี้ เหงือก แล้วให้คะแนนสุขภาพ',
+  lab:    'อัปโหลดรูปใบผลตรวจ PCR / แล็บ / ตรวจน้ำ → AI อ่านค่าแล้วอธิบายเป็นภาษาชาวบ้าน',
+};
+function switchTool(tool) {
+  document.querySelectorAll('.tool-tab').forEach(b =>
+    b.classList.toggle('active', b.dataset.tooltab === tool));
+  document.querySelectorAll('[data-tool]').forEach(el => {
+    el.style.display = el.dataset.tool.split(' ').includes(tool) ? '' : 'none';
+  });
+  const hint = document.getElementById('toolHint');
+  if (hint) { hint.textContent = TOOL_HINTS[tool] || ''; hint.style.display = TOOL_HINTS[tool] ? '' : 'none'; }
+}
+
+switchTool('disease');
 updateRateBar();
 renderHistPanel();
 </script>
