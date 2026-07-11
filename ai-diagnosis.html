@@ -1172,28 +1172,28 @@ function renderAICard(raw) {
       ? `<div class="ai-products">${d.relevantProducts.map(p=>`<span class="ai-product-pill"> ${p}</span>`).join('')}</div>` : '';
 
     const vetMsg = (d.severity === 'รุนแรงมาก' || d.severity === 'รุนแรง')
-      ? 'เคสนี้รุนแรง — ควรให้สัตวแพทย์ตรวจยืนยันก่อนรักษา'
-      : 'ผลเบื้องต้นจาก AI — ควรให้ผู้เชี่ยวชาญตรวจยืนยัน';
+      ? t('dx.res.dis.vetSevere')
+      : t('dx.res.dis.vetNormal');
     const vetHTML = d.needVet
-      ? `<div class="vet-alert-box"><b>แนะนำปรึกษาผู้เชี่ยวชาญ</b> — ${vetMsg}</div>` : '';
+      ? `<div class="vet-alert-box"><b>${t('dx.res.dis.vetTitle')}</b> — ${vetMsg}</div>` : '';
 
     area.innerHTML = `
     <div class="ai-card">
       <div class="ai-head">
-        <div class="ai-label"><span class="ai-pulse"></span>AI วินิจฉัย</div>
+        <div class="ai-label"><span class="ai-pulse"></span>${t('dx.ai.h2')}</div>
         <div class="ai-conf-pill">conf ${top.confidence || 0}%</div>
       </div>
       <div class="ai-dx">${top.nameTH || '—'}</div>
-      <div class="ai-dx-sub">${top.nameEN || ''}${d.severity ? ` &nbsp;·&nbsp; <span style="color:${sevColor};font-weight:700;">${d.severity}</span>` : ''}</div>
+      <div class="ai-dx-sub">${top.nameEN || ''}${d.severity ? ` &nbsp;·&nbsp; <span style="color:${sevColor};font-weight:700;">${sevText(d.severity)}</span>` : ''}</div>
 
       ${diffs.length > 1 ? `<div class="diff-list"><div class="diff-list-lbl">Differential Diagnosis</div>${diffHTML}</div>` : ''}
 
       ${top.reasoning ? `<div class="ai-reasoning">${top.reasoning}</div>` : ''}
 
       <div class="ai-action-grid">
-        ${d.immediateAction ? `<div class="ai-action-box"><div class="ai-action-lbl">⚡ ทำทันที</div><div class="ai-action-txt">${fmtBullets(d.immediateAction)}</div></div>` : ''}
-        ${d.treatment ? `<div class="ai-action-box"><div class="ai-action-lbl">💊 การรักษา</div><div class="ai-action-txt">${fmtBullets(d.treatment)}</div></div>` : ''}
-        ${d.prevention ? `<div class="ai-action-box" style="grid-column:1/-1"><div class="ai-action-lbl">🛡️ การป้องกัน</div><div class="ai-action-txt">${fmtBullets(d.prevention)}</div></div>` : ''}
+        ${d.immediateAction ? `<div class="ai-action-box"><div class="ai-action-lbl">⚡ ${t('dx.res.dis.now')}</div><div class="ai-action-txt">${fmtBullets(d.immediateAction)}</div></div>` : ''}
+        ${d.treatment ? `<div class="ai-action-box"><div class="ai-action-lbl">💊 ${t('dx.res.dis.treat')}</div><div class="ai-action-txt">${fmtBullets(d.treatment)}</div></div>` : ''}
+        ${d.prevention ? `<div class="ai-action-box" style="grid-column:1/-1"><div class="ai-action-lbl">🛡️ ${t('dx.res.dis.prevent')}</div><div class="ai-action-txt">${fmtBullets(d.prevention)}</div></div>` : ''}
       </div>
       ${productsHTML}
       ${vetHTML}
@@ -1333,7 +1333,7 @@ async function runDiagnosis() {
   const t0 = Date.now();
   let full = '';
   try {
-    const diagBody = { symptoms, farmDetails };
+    const diagBody = { symptoms, farmDetails, lang: getLang() };
     if (diagImageBase64) { diagBody.imageBase64 = diagImageBase64; diagBody.imageMimeType = diagImageMime; }
     await streamAI('/api/diagnose', diagBody,
       txt => { full += txt; },
@@ -1344,7 +1344,7 @@ async function runDiagnosis() {
     localStorage.setItem('dx_usage', JSON.stringify(usage));
     updateRateBar();
     const secs = ((Date.now()-t0)/1000).toFixed(1);
-    document.getElementById('aiMeta').textContent = ` ONE AI · ${secs}s · ผลเบื้องต้นเท่านั้น`;
+    document.getElementById('aiMeta').textContent = ` ONE AI · ${secs}s · ${t('dx.meta.preliminary')}`;
 
     // auto-save every case to vet review
     lastCase = { symptoms, farmDetails, aiRaw: full };
@@ -1366,7 +1366,7 @@ async function runDiagnosis() {
   } catch(e) {
     document.getElementById('aiResult').innerHTML = `
     <div class="ai-card">
-      <div class="ai-empty"><span class="ico">🔬</span><p>ไม่สามารถเชื่อมต่อ AI ได้<br>กรุณาตรวจสอบว่า server กำลังทำงาน</p></div>
+      <div class="ai-empty"><span class="ico">🔬</span><p>${t('dx.err.connect')}</p></div>
     </div>`;
   }
   btn.disabled = false;
@@ -1402,7 +1402,7 @@ async function sendChat() {
   let reply = '';
   try {
     await streamAI('/api/chat',
-      { message: msg, history: chatHistory.slice(-8) },
+      { message: msg, history: chatHistory.slice(-8), lang: getLang() },
       txt => { reply += txt; aiBubble.textContent = reply; document.getElementById('chatMsgs').scrollTop = 99999; },
       () => { chatHistory.push({ role:'assistant', content: reply }); }
     );
@@ -1615,7 +1615,7 @@ async function analyzeWater() {
     const r = await fetch('/api/analyze-water', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ imageBase64: waqImageBase64, imageMimeType: waqImageMime, waterParams: waterParams || undefined }),
+      body: JSON.stringify({ imageBase64: waqImageBase64, imageMimeType: waqImageMime, waterParams: waterParams || undefined, lang: getLang() }),
     });
     const d = await r.json();
     if (!r.ok) throw new Error(d.error || 'error');
@@ -1636,20 +1636,20 @@ async function analyzeWater() {
         <span class="waq-color-dot" style="background:${dotColor}"></span>
         <span style="font-size:16px;font-weight:700;">${d.color||'—'}</span>
         ${bloom}
-        <span class="waq-risk-pill ${riskCls}" style="margin-left:auto;">ความเสี่ยง ${d.risk||'?'}</span>
+        <span class="waq-risk-pill ${riskCls}" style="margin-left:auto;">${t('dx.res.risk')} ${riskText(d.risk)}</span>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;font-size:12px;">
         <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:8px 10px;">
-          <div style="opacity:.7;font-size:10px;font-weight:700;margin-bottom:3px;">ALGAE</div>
-          <div>${d.algaeType||'ไม่ชัดเจน'}</div>
+          <div style="opacity:.7;font-size:10px;font-weight:700;margin-bottom:3px;">${t('dx.res.waq.algae')}</div>
+          <div>${d.algaeType||t('dx.res.unclear')}</div>
         </div>
         <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:8px 10px;">
-          <div style="opacity:.7;font-size:10px;font-weight:700;margin-bottom:3px;">ความหนาแน่น</div>
-          <div>${d.density||'—'} ${d.transparencyEst ? `· ใส ~${d.transparencyEst}cm` : ''}</div>
+          <div style="opacity:.7;font-size:10px;font-weight:700;margin-bottom:3px;">${t('dx.res.waq.density')}</div>
+          <div>${d.density||'—'} ${d.transparencyEst ? `· ${t('dx.res.waq.clarity')} ~${d.transparencyEst}cm` : ''}</div>
         </div>
       </div>
-      ${issuesHTML ? `<div style="margin-bottom:8px;"><div style="opacity:.7;font-size:10px;font-weight:700;margin-bottom:4px;">⚠️ ปัญหาที่พบ</div>${issuesHTML}</div>` : ''}
-      ${recsHTML ? `<div style="border-top:1px solid rgba(255,255,255,.2);padding-top:10px;margin-top:2px;"><div style="opacity:.7;font-size:10px;font-weight:700;margin-bottom:4px;">💡 คำแนะนำ</div>${recsHTML}</div>` : ''}
+      ${issuesHTML ? `<div style="margin-bottom:8px;"><div style="opacity:.7;font-size:10px;font-weight:700;margin-bottom:4px;">⚠️ ${t('dx.res.waq.issues')}</div>${issuesHTML}</div>` : ''}
+      ${recsHTML ? `<div style="border-top:1px solid rgba(255,255,255,.2);padding-top:10px;margin-top:2px;"><div style="opacity:.7;font-size:10px;font-weight:700;margin-bottom:4px;">💡 ${t('dx.res.rec')}</div>${recsHTML}</div>` : ''}
       ${d.warning ? `<div style="background:rgba(255,152,0,.2);border:1px solid rgba(255,152,0,.5);border-radius:8px;padding:8px 10px;font-size:12px;margin-top:8px;">⚡ ${d.warning}</div>` : ''}
     </div>`;
   } catch(e) {
@@ -1657,6 +1657,12 @@ async function analyzeWater() {
   }
   btn.disabled = false; btn.innerHTML = t('dx.waq.btn');
 }
+
+// ── ป้าย enum → ภาษา UI (AI คงค่า enum เป็นไทย, ตรงนี้แปลงเป็นภาษาที่เลือก) ──
+const _RISK_KEY = { 'สูง':'dx.res.risk.high', 'ปานกลาง':'dx.res.risk.mid', 'ต่ำ':'dx.res.risk.low' };
+function riskText(v){ return _RISK_KEY[v] ? t(_RISK_KEY[v]) : (v || '?'); }
+const _SEV_KEY = { 'รุนแรงมาก':'dx.res.sev.critical', 'รุนแรง':'dx.res.sev.severe', 'ปานกลาง':'dx.res.sev.moderate', 'เบา':'dx.res.sev.mild' };
+function sevText(v){ return _SEV_KEY[v] ? t(_SEV_KEY[v]) : (v || ''); }
 
 // ─── SHRIMP PHOTO HEALTH ANALYSIS ─────────────────────────────────────────
 let shrImageBase64 = null, shrImageMime = null;
@@ -1696,7 +1702,7 @@ async function analyzeShrimp() {
     const r = await fetch('/api/analyze-shrimp', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ imageBase64: shrImageBase64, imageMimeType: shrImageMime, shrimpParams: shrimpParams || undefined }),
+      body: JSON.stringify({ imageBase64: shrImageBase64, imageMimeType: shrImageMime, shrimpParams: shrimpParams || undefined, lang: getLang() }),
     });
     const d = await r.json();
     if (!r.ok) throw new Error(d.error || 'error');
@@ -1705,7 +1711,7 @@ async function analyzeShrimp() {
       btn.disabled = false; btn.innerHTML = t('dx.shr.btn'); return;
     }
     const riskCls = d.risk === 'สูง' ? 'waq-risk-high' : d.risk === 'ปานกลาง' ? 'waq-risk-mid' : 'waq-risk-low';
-    const cell = (k, v) => `<div class="ana-cell"><div class="k">${k}</div><div>${v || 'ไม่เห็นชัด'}</div></div>`;
+    const cell = (k, v) => `<div class="ana-cell"><div class="k">${k}</div><div>${v || t('dx.res.unclear')}</div></div>`;
     const list = arr => (arr || []).map(i => `<span style="display:block;font-size:12px;opacity:.92;padding:2px 0">• ${i}</span>`).join('');
     const findingsHTML = list(d.findings);
     const issuesHTML = list(d.possibleIssues);
@@ -1715,17 +1721,17 @@ async function analyzeShrimp() {
       <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px;">
         <span style="font-size:16px;font-weight:700;">🦐 ${d.overall || '—'}</span>
         ${d.healthScore != null ? `<span class="ana-score">${d.healthScore}/100</span>` : ''}
-        <span class="waq-risk-pill ${riskCls}" style="margin-left:auto;">ความเสี่ยง ${d.risk || '?'}</span>
+        <span class="waq-risk-pill ${riskCls}" style="margin-left:auto;">${t('dx.res.risk')} ${riskText(d.risk)}</span>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;font-size:12px;">
-        ${cell('เปลือก', d.shell)}${cell('สีตัว', d.color)}
-        ${cell('ตับกุ้ง', d.hepato)}${cell('เส้นขี้', d.gut)}
-        ${cell('เนื้อ', d.muscle)}${cell('เหงือก', d.gills)}
+        ${cell(t('dx.res.shr.shell'), d.shell)}${cell(t('dx.res.shr.color'), d.color)}
+        ${cell(t('dx.res.shr.hepato'), d.hepato)}${cell(t('dx.res.shr.gut'), d.gut)}
+        ${cell(t('dx.res.shr.muscle'), d.muscle)}${cell(t('dx.res.shr.gills'), d.gills)}
       </div>
-      ${d.appendages ? `<div style="font-size:12px;opacity:.9;margin-bottom:8px;">รยางค์/หนวด/หาง: ${d.appendages}</div>` : ''}
-      ${findingsHTML ? `<div style="margin-bottom:8px;"><div style="opacity:.7;font-size:10px;font-weight:700;margin-bottom:4px;">👁️ สิ่งที่เห็น</div>${findingsHTML}</div>` : ''}
-      ${issuesHTML ? `<div style="margin-bottom:8px;"><div style="opacity:.7;font-size:10px;font-weight:700;margin-bottom:4px;">⚠️ อาจเกี่ยวข้องกับ</div>${issuesHTML}</div>` : ''}
-      ${recsHTML ? `<div style="border-top:1px solid rgba(255,255,255,.2);padding-top:10px;margin-top:2px;"><div style="opacity:.7;font-size:10px;font-weight:700;margin-bottom:4px;">💡 คำแนะนำ</div>${recsHTML}</div>` : ''}
+      ${d.appendages ? `<div style="font-size:12px;opacity:.9;margin-bottom:8px;">${t('dx.res.shr.append')}: ${d.appendages}</div>` : ''}
+      ${findingsHTML ? `<div style="margin-bottom:8px;"><div style="opacity:.7;font-size:10px;font-weight:700;margin-bottom:4px;">👁️ ${t('dx.res.seen')}</div>${findingsHTML}</div>` : ''}
+      ${issuesHTML ? `<div style="margin-bottom:8px;"><div style="opacity:.7;font-size:10px;font-weight:700;margin-bottom:4px;">⚠️ ${t('dx.res.related')}</div>${issuesHTML}</div>` : ''}
+      ${recsHTML ? `<div style="border-top:1px solid rgba(255,255,255,.2);padding-top:10px;margin-top:2px;"><div style="opacity:.7;font-size:10px;font-weight:700;margin-bottom:4px;">💡 ${t('dx.res.rec')}</div>${recsHTML}</div>` : ''}
       ${d.warning ? `<div style="background:rgba(255,152,0,.2);border:1px solid rgba(255,152,0,.5);border-radius:8px;padding:8px 10px;font-size:12px;margin-top:8px;">⚡ ${d.warning}</div>` : ''}
       ${d.disclaimer ? `<div style="font-size:10.5px;opacity:.7;margin-top:10px;">${d.disclaimer}</div>` : ''}
     </div>`;
@@ -1770,7 +1776,7 @@ async function analyzeLab() {
     const r = await fetch('/api/analyze-lab', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ imageBase64: labImageBase64, imageMimeType: labImageMime, labNote: labNote || undefined }),
+      body: JSON.stringify({ imageBase64: labImageBase64, imageMimeType: labImageMime, labNote: labNote || undefined, lang: getLang() }),
     });
     const d = await r.json();
     if (!r.ok) throw new Error(d.error || 'error');
@@ -1797,16 +1803,16 @@ async function analyzeLab() {
     result.innerHTML = `
     <div class="lab-card">
       <div style="display:flex;align-items:center;gap:9px;margin-bottom:10px;">
-        <span style="font-size:14px;font-weight:700;">🧪 ${d.docType || 'ผลแล็บ'}</span>
-        <span class="waq-risk-pill ${riskCls}" style="margin-left:auto;">ความเสี่ยง ${d.overallRisk || '?'}</span>
+        <span style="font-size:14px;font-weight:700;">🧪 ${d.docType || t('dx.res.lab.fallback')}</span>
+        <span class="waq-risk-pill ${riskCls}" style="margin-left:auto;">${t('dx.res.risk')} ${riskText(d.overallRisk)}</span>
       </div>
       ${d.summary ? `<div style="font-size:13px;line-height:1.5;margin-bottom:12px;background:rgba(255,255,255,.08);border-radius:8px;padding:9px 11px;">${d.summary}</div>` : ''}
       ${detectedHTML}
-      ${rowsHTML ? `<div style="margin-bottom:10px;"><div style="opacity:.7;font-size:10px;font-weight:700;margin-bottom:5px;">📋 ผลที่อ่านได้</div>${rowsHTML}</div>` : ''}
-      ${d.meaning ? `<div style="font-size:12.5px;line-height:1.5;margin-bottom:8px;"><span style="opacity:.7;font-size:10px;font-weight:700;display:block;margin-bottom:3px;">🔎 หมายความว่า</span>${d.meaning}</div>` : ''}
-      ${actionsHTML ? `<div style="border-top:1px solid rgba(255,255,255,.2);padding-top:10px;margin-top:2px;"><div style="opacity:.7;font-size:10px;font-weight:700;margin-bottom:4px;">✅ ควรทำต่อ</div>${actionsHTML}</div>` : ''}
+      ${rowsHTML ? `<div style="margin-bottom:10px;"><div style="opacity:.7;font-size:10px;font-weight:700;margin-bottom:5px;">📋 ${t('dx.res.lab.results')}</div>${rowsHTML}</div>` : ''}
+      ${d.meaning ? `<div style="font-size:12.5px;line-height:1.5;margin-bottom:8px;"><span style="opacity:.7;font-size:10px;font-weight:700;display:block;margin-bottom:3px;">🔎 ${t('dx.res.lab.meaning')}</span>${d.meaning}</div>` : ''}
+      ${actionsHTML ? `<div style="border-top:1px solid rgba(255,255,255,.2);padding-top:10px;margin-top:2px;"><div style="opacity:.7;font-size:10px;font-weight:700;margin-bottom:4px;">✅ ${t('dx.res.lab.actions')}</div>${actionsHTML}</div>` : ''}
       ${d.warning ? `<div style="background:rgba(255,152,0,.2);border:1px solid rgba(255,152,0,.5);border-radius:8px;padding:8px 10px;font-size:12px;margin-top:8px;">⚡ ${d.warning}</div>` : ''}
-      ${d.lab ? `<div style="font-size:10.5px;opacity:.6;margin-top:8px;">ออกผลโดย: ${d.lab}</div>` : ''}
+      ${d.lab ? `<div style="font-size:10.5px;opacity:.6;margin-top:8px;">${t('dx.res.lab.by')} ${d.lab}</div>` : ''}
       ${d.disclaimer ? `<div style="font-size:10.5px;opacity:.7;margin-top:6px;">${d.disclaimer}</div>` : ''}
     </div>`;
   } catch (e) {

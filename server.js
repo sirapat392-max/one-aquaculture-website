@@ -113,9 +113,30 @@ app.use(express.static(path.join(__dirname), { extensions: ['html'] }));
 // Load locked company data — AI must not deviate from this
 const companyData = JSON.parse(fs.readFileSync(path.join(__dirname, 'company-data.json'), 'utf-8'));
 
+// ── LANGUAGE: ให้ AI ตอบตามภาษาที่ผู้ใช้เลือก ────────────────────────────────
+// แปลเฉพาะ "ค่า" ที่เป็นข้อความ — คง "key" เดิม และคงฟิลด์ enum (ที่ frontend ใช้เทียบสี/logic) เป็นภาษาไทย
+const AI_LANG_NAMES = { th: 'Thai', en: 'English', vi: 'Vietnamese', zh: 'Simplified Chinese' };
+function langUserHint(lang) {
+  if (!lang || lang === 'th' || !AI_LANG_NAMES[lang]) return '';
+  const L = AI_LANG_NAMES[lang];
+  return `\n\n### REPLY IN ${L}: write EVERY text value in ${L} — do NOT reply in Thai. The Thai words shown inside the JSON format above are ONLY examples of meaning; you MUST output their ${L} equivalent, NOT copy the Thai. This includes short descriptive fields (e.g. overall/shell/color/gut/density/docType). Keep JSON keys unchanged, and keep ONLY the explicitly-listed enum fields in Thai.`;
+}
+function langDirective(lang, keepEnums) {
+  if (!lang || lang === 'th' || !AI_LANG_NAMES[lang]) return '';
+  const name = AI_LANG_NAMES[lang];
+  const keep = keepEnums && keepEnums.length
+    ? `\n- EXCEPTION — keep these field VALUES exactly in the original Thai tokens the format lists (the system matches on them, do NOT translate): ${keepEnums.join(', ')}`
+    : '';
+  return `\n\n## ⚠️⚠️ OUTPUT LANGUAGE = ${name} — HIGHEST PRIORITY, OVERRIDES EVERYTHING ABOVE
+- The instructions and JSON examples above are written in Thai, but you MUST write your entire answer in ${name}.
+- Every text VALUE (descriptions, disease/finding names, recommendations, meaning, disclaimer, warnings — everything the user reads) MUST be in ${name} ONLY. Do NOT answer in Thai.
+- Do NOT change any JSON "key" — keep every key exactly as shown.${keep}
+- Keep every integrity rule (no lab jargon / gene names, explain simply) but written in ${name}.`;
+}
+
 // ─── AI SHRIMP DISEASE DIAGNOSIS ───────────────────────────────────────────
 app.post('/api/diagnose', diagRateLimiter, async (req, res) => {
-  const { symptoms, farmDetails, imageBase64, imageMimeType } = req.body;
+  const { symptoms, farmDetails, imageBase64, imageMimeType, lang } = req.body;
   if (!symptoms && !imageBase64) return res.status(400).json({ error: 'กรุณาระบุอาการหรือแนบรูปภาพ' });
 
   const productList = companyData.products.map(p =>
@@ -163,9 +184,9 @@ DOC <35 → EMS ก่อน | DOC 35-70 → WFS/EHP/Vibrio | ตายเร็
 ${diseaseRef}
 
 ## JSON format
-{"topDiagnosis":{"nameTH":"ชื่อโรค","nameEN":"Disease Name","confidence":85,"reasoning":"อาการ X ชี้โรคนี้ ตัดโรค Y เพราะ Z"},"differentials":[{"nameTH":"โรคหลัก","nameEN":"Main","confidence":85},{"nameTH":"โรครอง","nameEN":"Second","confidence":40},{"nameTH":"โรคที่3","nameEN":"Third","confidence":15}],"severity":"รุนแรงมาก/รุนแรง/ปานกลาง/เบา","immediateAction":"• action1\\n• action2\\n• action3","treatment":"• action1\\n• action2","prevention":"• action1\\n• action2","relevantProducts":["ชื่อผลิตภัณฑ์"],"needVet":false,"disclaimer":"ผลเบื้องต้น ควรปรึกษาผู้เชี่ยวชาญ"}`;
+{"topDiagnosis":{"nameTH":"ชื่อโรค","nameEN":"Disease Name","confidence":85,"reasoning":"อาการ X ชี้โรคนี้ ตัดโรค Y เพราะ Z"},"differentials":[{"nameTH":"โรคหลัก","nameEN":"Main","confidence":85},{"nameTH":"โรครอง","nameEN":"Second","confidence":40},{"nameTH":"โรคที่3","nameEN":"Third","confidence":15}],"severity":"รุนแรงมาก/รุนแรง/ปานกลาง/เบา","immediateAction":"• action1\\n• action2\\n• action3","treatment":"• action1\\n• action2","prevention":"• action1\\n• action2","relevantProducts":["ชื่อผลิตภัณฑ์"],"needVet":false,"disclaimer":"ผลเบื้องต้น ควรปรึกษาผู้เชี่ยวชาญ"}` + langDirective(lang, ['severity']);
 
-  const userText = `${symptoms ? `อาการที่พบ: ${symptoms}` : ''}${farmDetails ? `\nข้อมูลบ่อ:\n${farmDetails}` : ''}\n\nวิเคราะห์โรคที่เป็นไปได้และตอบในรูปแบบ JSON ที่กำหนด`;
+  const userText = `${symptoms ? `อาการที่พบ: ${symptoms}` : ''}${farmDetails ? `\nข้อมูลบ่อ:\n${farmDetails}` : ''}\n\nวิเคราะห์โรคที่เป็นไปได้และตอบในรูปแบบ JSON ที่กำหนด` + langUserHint(lang);
   const userContent = imageBase64
     ? [
         { type: 'image_url', image_url: { url: `data:${imageMimeType || 'image/jpeg'};base64,${imageBase64}` } },
@@ -202,7 +223,7 @@ ${diseaseRef}
 
 // ─── WATER QUALITY ANALYSIS ────────────────────────────────────────────────
 app.post('/api/analyze-water', async (req, res) => {
-  const { imageBase64, imageMimeType, waterParams } = req.body;
+  const { imageBase64, imageMimeType, waterParams, lang } = req.body;
   if (!imageBase64) return res.status(400).json({ error: 'กรุณาแนบรูปน้ำก่อน' });
 
   const systemPrompt = `ผู้เชี่ยวชาญคุณภาพน้ำบ่อกุ้ง ตอบ JSON เท่านั้น ห้ามมี text นอก JSON
@@ -218,7 +239,7 @@ Format:
 - ดำ-เทา → เน่า H₂S สูง ต้องถ่ายน้ำด่วน
 - ใส → แพลงก์ตอนน้อยเกิน อาหารธรรมชาติขาด
 - ขุ่นขาว → แบคทีเรียหรือแพลงก์ตอนล่ม
-- bloom = true เมื่อ density หนามาก หรือสีผิดปกติรุนแรง`;
+- bloom = true เมื่อ density หนามาก หรือสีผิดปกติรุนแรง` + langDirective(lang, ['risk', 'color']);
 
   try {
     const completion = await client.chat.completions.create({
@@ -228,7 +249,7 @@ Format:
         { role: 'system', content: systemPrompt },
         { role: 'user', content: [
           { type: 'image_url', image_url: { url: `data:${imageMimeType || 'image/jpeg'};base64,${imageBase64}` } },
-          { type: 'text', text: `วิเคราะห์สีและสภาพน้ำในภาพ${waterParams ? `\nข้อมูลเพิ่ม: ${waterParams}` : ''}\nตอบ JSON ตาม format` },
+          { type: 'text', text: `วิเคราะห์สีและสภาพน้ำในภาพ${waterParams ? `\nข้อมูลเพิ่ม: ${waterParams}` : ''}\nตอบ JSON ตาม format` + langUserHint(lang) },
         ]},
       ],
     });
@@ -244,7 +265,7 @@ Format:
 
 // ─── SHRIMP PHOTO HEALTH ANALYSIS ──────────────────────────────────────────
 app.post('/api/analyze-shrimp', async (req, res) => {
-  const { imageBase64, imageMimeType, shrimpParams } = req.body;
+  const { imageBase64, imageMimeType, shrimpParams, lang } = req.body;
   if (!imageBase64) return res.status(400).json({ error: 'กรุณาแนบรูปกุ้งก่อน' });
 
   const systemPrompt = `ผู้เชี่ยวชาญสุขภาพกุ้งขาว/กุ้งกุลาดำ ดูรูปถ่ายกุ้งแล้วประเมินสุขภาพภายนอก ตอบ JSON เท่านั้น ห้ามมี text นอก JSON
@@ -265,7 +286,7 @@ app.post('/api/analyze-shrimp', async (req, res) => {
 - รยางค์ หนวด หาง: ครบปกติ / กุด-กร่อน-แดง
 
 ## JSON format
-{"notShrimp":false,"overall":"แข็งแรง/พอใช้/อ่อนแอ/น่ากังวล","healthScore":75,"shell":"เปลือกแข็งปกติ","color":"ใส-เทาปกติ","hepato":"ตับสีเข้มปกติ","gut":"เส้นขี้เต็มดี","muscle":"เนื้อใสแน่น","gills":"เหงือกสะอาด","appendages":"รยางค์ครบปกติ","findings":["สิ่งที่สังเกตเห็นในรูป"],"possibleIssues":["ภาวะที่อาจเกี่ยวข้อง ถ้ามี"],"risk":"ต่ำ/ปานกลาง/สูง","recommendations":["คำแนะนำขึ้นต้นด้วยกริยา"],"warning":"ข้อควรระวังสั้นๆ ถ้ามี","disclaimer":"ประเมินจากภาพภายนอกเบื้องต้น ไม่แทนการตรวจแล็บ/สัตวแพทย์"}`;
+{"notShrimp":false,"overall":"แข็งแรง/พอใช้/อ่อนแอ/น่ากังวล","healthScore":75,"shell":"เปลือกแข็งปกติ","color":"ใส-เทาปกติ","hepato":"ตับสีเข้มปกติ","gut":"เส้นขี้เต็มดี","muscle":"เนื้อใสแน่น","gills":"เหงือกสะอาด","appendages":"รยางค์ครบปกติ","findings":["สิ่งที่สังเกตเห็นในรูป"],"possibleIssues":["ภาวะที่อาจเกี่ยวข้อง ถ้ามี"],"risk":"ต่ำ/ปานกลาง/สูง","recommendations":["คำแนะนำขึ้นต้นด้วยกริยา"],"warning":"ข้อควรระวังสั้นๆ ถ้ามี","disclaimer":"ประเมินจากภาพภายนอกเบื้องต้น ไม่แทนการตรวจแล็บ/สัตวแพทย์"}` + langDirective(lang, ['risk']);
 
   try {
     const completion = await client.chat.completions.create({
@@ -275,7 +296,7 @@ app.post('/api/analyze-shrimp', async (req, res) => {
         { role: 'system', content: systemPrompt },
         { role: 'user', content: [
           { type: 'image_url', image_url: { url: `data:${imageMimeType || 'image/jpeg'};base64,${imageBase64}` } },
-          { type: 'text', text: `ประเมินสุขภาพกุ้งในภาพ${shrimpParams ? `\nข้อมูลเพิ่ม: ${shrimpParams}` : ''}\nตอบ JSON ตาม format` },
+          { type: 'text', text: `ประเมินสุขภาพกุ้งในภาพ${shrimpParams ? `\nข้อมูลเพิ่ม: ${shrimpParams}` : ''}\nตอบ JSON ตาม format` + langUserHint(lang) },
         ]},
       ],
     });
@@ -291,7 +312,7 @@ app.post('/api/analyze-shrimp', async (req, res) => {
 
 // ─── AI LAB RESULT INTERPRETATION (PCR / lab report photo) ──────────────────
 app.post('/api/analyze-lab', async (req, res) => {
-  const { imageBase64, imageMimeType, labNote } = req.body;
+  const { imageBase64, imageMimeType, labNote, lang } = req.body;
   if (!imageBase64) return res.status(400).json({ error: 'กรุณาแนบรูปผลแล็บก่อน' });
 
   const systemPrompt = `ผู้เชี่ยวชาญแปลผลตรวจแล็บสำหรับฟาร์มกุ้ง (ผล PCR โรคกุ้ง, ผลตรวจน้ำ, ผลตรวจแบคทีเรีย/Vibrio) อ่านรูปใบผลตรวจแล้วอธิบายเป็นภาษาชาวบ้าน ตอบ JSON เท่านั้น ห้ามมี text นอก JSON
@@ -304,7 +325,7 @@ app.post('/api/analyze-lab', async (req, res) => {
 - อย่าวินิจฉัยเกินผล — บอกว่าผลนี้หมายความว่าอะไร และควรทำอะไรต่อ
 
 ## JSON format
-{"unreadable":false,"docType":"ผล PCR/ผลตรวจน้ำ/ผลตรวจแบคทีเรีย/ใบผลแล็บ/ไม่ชัดเจน","lab":"ชื่อแล็บถ้าเห็น หรือ ''","summary":"สรุปผลภาษาชาวบ้าน 1-2 ประโยค","results":[{"name":"ชื่อรายการ เช่น EHP","value":"ค่า/ผลที่อ่านได้","level":"บวก/ลบ/สูง/ปกติ/ต่ำ","interpret":"หมายความว่าอะไรแบบสั้นๆ"}],"detected":["เชื้อ/ค่าที่ผิดปกติที่พบ"],"overallRisk":"ต่ำ/ปานกลาง/สูง","meaning":"ผลรวมนี้มีความหมายกับบ่ออย่างไร 1-2 ประโยค","actions":["ควรทำอะไรต่อ ขึ้นต้นด้วยกริยา"],"warning":"ข้อควรระวังถ้ามี","disclaimer":"แปลผลเบื้องต้น ควรยืนยันกับสัตวแพทย์/ห้องแล็บที่ออกผล"}`;
+{"unreadable":false,"docType":"ผล PCR/ผลตรวจน้ำ/ผลตรวจแบคทีเรีย/ใบผลแล็บ/ไม่ชัดเจน","lab":"ชื่อแล็บถ้าเห็น หรือ ''","summary":"สรุปผลภาษาชาวบ้าน 1-2 ประโยค","results":[{"name":"ชื่อรายการ เช่น EHP","value":"ค่า/ผลที่อ่านได้","level":"บวก/ลบ/สูง/ปกติ/ต่ำ","interpret":"หมายความว่าอะไรแบบสั้นๆ"}],"detected":["เชื้อ/ค่าที่ผิดปกติที่พบ"],"overallRisk":"ต่ำ/ปานกลาง/สูง","meaning":"ผลรวมนี้มีความหมายกับบ่ออย่างไร 1-2 ประโยค","actions":["ควรทำอะไรต่อ ขึ้นต้นด้วยกริยา"],"warning":"ข้อควรระวังถ้ามี","disclaimer":"แปลผลเบื้องต้น ควรยืนยันกับสัตวแพทย์/ห้องแล็บที่ออกผล"}` + langDirective(lang, ['overallRisk', 'level']);
 
   try {
     const completion = await client.chat.completions.create({
@@ -314,7 +335,7 @@ app.post('/api/analyze-lab', async (req, res) => {
         { role: 'system', content: systemPrompt },
         { role: 'user', content: [
           { type: 'image_url', image_url: { url: `data:${imageMimeType || 'image/jpeg'};base64,${imageBase64}` } },
-          { type: 'text', text: `อ่านและแปลผลใบตรวจแล็บในภาพ${labNote ? `\nข้อมูลเพิ่มจากผู้ใช้: ${labNote}` : ''}\nตอบ JSON ตาม format` },
+          { type: 'text', text: `อ่านและแปลผลใบตรวจแล็บในภาพ${labNote ? `\nข้อมูลเพิ่มจากผู้ใช้: ${labNote}` : ''}\nตอบ JSON ตาม format` + langUserHint(lang) },
         ]},
       ],
     });
@@ -330,7 +351,7 @@ app.post('/api/analyze-lab', async (req, res) => {
 
 // ─── AI GENERAL CHAT ───────────────────────────────────────────────────────
 app.post('/api/chat', chatRateLimiter, async (req, res) => {
-  const { message, history } = req.body;
+  const { message, history, lang } = req.body;
   if (!message) return res.status(400).json({ error: 'กรุณาระบุข้อความ' });
 
   const systemPrompt = `คุณคือผู้ช่วย AI ของบริษัท ${companyData.company.nameTH}
@@ -343,7 +364,7 @@ app.post('/api/chat', chatRateLimiter, async (req, res) => {
 
 ผลิตภัณฑ์ที่มี: ${companyData.products.map(p => p.nameTH).join(', ')}
 
-กฎ: ห้ามให้ข้อมูลบริษัทที่ไม่ได้ระบุไว้ข้างต้น ตอบเป็นภาษาไทย`;
+กฎ: ห้ามให้ข้อมูลบริษัทที่ไม่ได้ระบุไว้ข้างต้น ตอบเป็นภาษาไทย` + langDirective(lang);
 
   try {
     res.setHeader('Content-Type', 'text/event-stream');
@@ -353,7 +374,7 @@ app.post('/api/chat', chatRateLimiter, async (req, res) => {
     const messages = [
       { role: 'system', content: systemPrompt },
       ...(history || []).map(h => ({ role: h.role, content: h.content })),
-      { role: 'user', content: message },
+      { role: 'user', content: message + langUserHint(lang) },
     ];
 
     const stream = await client.chat.completions.create({
@@ -389,7 +410,7 @@ function farmChatRateLimiter(req, res, next) {
 }
 
 app.post('/api/farm-chat', farmChatRateLimiter, async (req, res) => {
-  const { message, history } = req.body;
+  const { message, history, lang } = req.body;
   if (!message) return res.status(400).json({ error: 'กรุณาระบุข้อความ' });
 
   const FARM_SYSTEM = `คุณคือผู้ช่วยคำนวณฟาร์มกุ้งอัจฉริยะของบริษัท ONE AQUACULTURE PRODUCT
@@ -413,7 +434,7 @@ app.post('/api/farm-chat', farmChatRateLimiter, async (req, res) => {
 - FCR ดี < 1.2 | ปกติ 1.2–1.6 | สูง > 1.6
 - อัตรารอด ดี > 70% | ปกติ 50–70% | ต่ำ < 50%
 - %BW กุ้งเล็ก < 1ก. = ~20% | 5–10ก. = ~7% | 15–20ก. = ~3.5% | > 20ก. = ~2.5–3%
-- DO ควร > 5 mg/L | pH 7.5–8.5 | แอมโมเนีย < 0.1 mg/L`;
+- DO ควร > 5 mg/L | pH 7.5–8.5 | แอมโมเนีย < 0.1 mg/L` + langDirective(lang);
 
   try {
     res.setHeader('Content-Type', 'text/event-stream');
@@ -423,7 +444,7 @@ app.post('/api/farm-chat', farmChatRateLimiter, async (req, res) => {
     const messages = [
       { role: 'system', content: FARM_SYSTEM },
       ...(history || []).slice(-10).map(h => ({ role: h.role, content: h.content })),
-      { role: 'user', content: message },
+      { role: 'user', content: message + langUserHint(lang) },
     ];
 
     const stream = await client.chat.completions.create({
