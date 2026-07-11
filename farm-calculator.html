@@ -986,7 +986,7 @@ async function fcSend() {
     const resp = await fetch('/api/farm-chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: msg, history: fcHistory.slice(-10) }),
+      body: JSON.stringify({ message: msg, history: fcHistory.slice(-10), lang: (window.getLang ? getLang() : 'th') }),
     });
 
     if (!resp.ok) {

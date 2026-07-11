@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v6';
+const CACHE_VERSION = 'v7';
 const STATIC_CACHE = `one-aqua-static-${CACHE_VERSION}`;
 const API_CACHE    = `one-aqua-api-${CACHE_VERSION}`;
 
