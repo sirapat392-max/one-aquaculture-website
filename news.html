@@ -224,6 +224,10 @@ async function fetchFreshNews(showLoading) {
   }
 }
 
+function esc(s) {
+  return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
 function renderNews(articles) {
   const grid = document.getElementById('newsGrid');
   const filtered = currentFilter === 'all' ? articles : articles.filter(a => a.category === currentFilter);
@@ -237,14 +241,14 @@ function renderNews(articles) {
     const cat = catMap[a.category] || { label: a.categoryLabel || a.category, cls: 'cat-industry' };
     const title = (lang === 'en' && a.titleEN) ? a.titleEN : (a.titleTH || a.title);
     return `
-    <a class="news-card" href="${a.url || '#'}" target="_blank" rel="noopener">
+    <a class="news-card" href="${esc(a.url || '#')}" target="_blank" rel="noopener">
       <div class="news-card-body">
         <span class="news-cat-label ${cat.cls}">${cat.label}</span>
-        <div class="news-title">${title}</div>
-        ${a.summary ? `<div class="news-summary">${a.summary}</div>` : ''}
+        <div class="news-title">${esc(title)}</div>
+        ${a.summary ? `<div class="news-summary">${esc(a.summary)}</div>` : ''}
         <div class="news-meta">
-          <span class="news-source">${a.source || ''}</span>
-          <span class="news-date">${a.date || ''}</span>
+          <span class="news-source">${esc(a.source || '')}</span>
+          <span class="news-date">${esc(a.date || '')}</span>
  </div>
  </div>
  </a>`;
