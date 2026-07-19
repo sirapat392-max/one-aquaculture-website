@@ -332,6 +332,15 @@ function decodeHtml(str) {
     .replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&nbsp;/g, ' ');
 }
 
+// Strip complete tags + any truncated trailing tag fragment (e.g. summary cut mid-attribute)
+function stripHtml(s) {
+  return (s || '')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/<[^>]*$/, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 function parseRSS(xml, sourceName) {
   // Reject HTML pages masquerading as RSS
   const trimmed = xml.trimStart();
@@ -345,7 +354,8 @@ function parseRSS(xml, sourceName) {
     const block = m[1];
     const get = (tag) => {
       const r = block.match(new RegExp(`<${tag}[\\s][^>]*>(?:<!\\[CDATA\\[)?([\\s\\S]*?)(?:\\]\\]>)?<\\/${tag}>|<${tag}>(?:<!\\[CDATA\\[)?([\\s\\S]*?)(?:\\]\\]>)?<\\/${tag}>`, 'i'));
-      return r ? decodeHtml((r[1] || r[2] || '').replace(/<[^>]+>/g, '').trim()) : '';
+      // Google News encodes HTML as entities — strip tags again AFTER decoding
+      return r ? stripHtml(decodeHtml(stripHtml(r[1] || r[2] || ''))) : '';
     };
     const linkM = block.match(/<link[^>]+href=["']([^"']+)["']/i)
       || block.match(/<link>([^<]+)<\/link>/i);
@@ -409,6 +419,11 @@ async function updateNews() {
         const text = `${a.title || ''} ${a.titleTH || ''} ${a.summary || ''}`;
         return AQUA_KEYWORDS.some(kw => text.toLowerCase().includes(kw.toLowerCase()));
       });
+      // Clean any raw HTML that older versions let through into stored fields
+      existingArticles.forEach(a => {
+        if (a.summary) a.summary = stripHtml(a.summary);
+        if (a.titleTH) a.titleTH = stripHtml(a.titleTH);
+      });
     } catch {}
   }
   const existingUrls = new Set(existingArticles.map(a => a.url).filter(Boolean));
@@ -447,7 +462,12 @@ async function updateNews() {
     return merged.length;
   };
 
-  if (!top.length) {
+  // Repair pass: stored articles whose translation failed in a past run (still not Thai)
+  const hasThai = (s) => /[฀-๿]/.test(s || '');
+  const needsFix = existingArticles.filter(a => !hasThai(a.titleTH) || (a.summary && !hasThai(a.summary)));
+  if (needsFix.length) console.log(`🔧 บทความเดิมที่ยังไม่เป็นไทย: ${needsFix.length} — แปลซ่อมในรอบนี้`);
+
+  if (!top.length && !needsFix.length) {
     // No new articles — update timestamp so startup doesn't re-run immediately
     console.log('⚠️  ไม่มีบทความใหม่ — อัปเดต timestamp เท่านั้น');
     saveMerged([]);
@@ -474,30 +494,54 @@ async function updateNews() {
 
   // 5. AI translate + country extract (best-effort — fallback already saved)
   try {
-    const listed = top.map((it, i) =>
-      `[${i}] title: ${it.title}\nsource: ${it.source}\ndate: ${it.pubDate||''}\nexcerpt: ${(it.summary||'').slice(0,200)}`
-    ).join('\n---\n');
+    const fixItems = needsFix.map(a => ({ title: a.title, source: a.source, pubDate: a.date || '', summary: a.summary || '' }));
+    const batch = [...top, ...fixItems];
 
-    const msg = await client.chat.completions.create({
-      model: 'google/gemini-2.5-flash-lite',
-      max_tokens: 6000,
-      messages: [{ role: 'user', content:
-`Shrimp aquaculture news analyst. ${top.length} articles in MIXED LANGUAGES.
-Return ONLY valid JSON array, no markdown.
+    // Chunked calls — one giant request times out; a failed chunk only loses its own articles
+    const CHUNK = 15;
+    const byIdx = {};
+    for (let start = 0; start < batch.length; start += CHUNK) {
+      const chunk = batch.slice(start, start + CHUNK);
+      const listed = chunk.map((it, i) =>
+        `[${start + i}] title: ${it.title}\nsource: ${it.source}\ndate: ${it.pubDate||''}\nexcerpt: ${(it.summary||'').slice(0,200)}`
+      ).join('\n---\n');
+      try {
+        const msg = await client.chat.completions.create({
+          model: 'google/gemini-2.5-flash-lite',
+          max_tokens: 6000,
+          messages: [{ role: 'user', content:
+`Shrimp aquaculture news analyst. ${chunk.length} articles in MIXED LANGUAGES.
+Return ONLY valid JSON array, no markdown. The array MUST contain one object for EVERY article, using the exact idx shown in [brackets].
 
 Schema: {"idx":N,"titleTH":"Thai title","category":"industry|regulation|research|disease|trade","summary":"2-sentence Thai summary","country":"Thai name or null"}
+
+CRITICAL: "titleTH" and "summary" MUST be written in THAI LANGUAGE (ภาษาไทย) for every article, regardless of the article's original language (English, Vietnamese, Chinese, Spanish, ...). Never write them in the article's own language.
 
 category: disease=โรค/pathogen/virus/outbreak; regulation=law/ban/standard/certification; trade=import/export/tariff/quota/price/price index; research=study/vaccine/technology; else industry
 country (event location, NOT source): ไทย เวียดนาม อินโดนีเซีย เอกวาดอร์ อินเดีย จีน บังกลาเทศ ฟิลิปปินส์ มาเลเซีย เมียนมา ญี่ปุ่น เกาหลี ออสเตรเลีย บราซิล เม็กซิโก สหรัฐอเมริกา สหภาพยุโรป — null if global
 
 Articles:
 ${listed}` }]
-    });
+        }, { timeout: 90_000, maxRetries: 2 });
 
-    const raw = msg.choices[0].message.content.trim();
-    const parsed = JSON.parse(raw.slice(raw.indexOf('['), raw.lastIndexOf(']') + 1));
-    const byIdx = Object.fromEntries(parsed.map(p => [p.idx, p]));
+        const raw = msg.choices[0].message.content.trim();
+        const parsed = JSON.parse(raw.slice(raw.indexOf('['), raw.lastIndexOf(']') + 1));
+        parsed.forEach(p => { byIdx[p.idx] = p; });
+        console.log(`  🈯 แปล chunk ${start}-${start + chunk.length - 1} สำเร็จ (${parsed.length})`);
+      } catch (chunkErr) {
+        console.warn(`  ⚠️ chunk ${start}-${start + chunk.length - 1} ล้มเหลว: ${chunkErr.message.slice(0, 60)}`);
+      }
+    }
     const newArticles = top.map((it, i) => buildArticle(it, byIdx[i] || {}));
+    // Apply repairs to stored articles (mutates entries inside existingArticles)
+    let fixed = 0;
+    needsFix.forEach((a, j) => {
+      const ai = byIdx[top.length + j];
+      if (!ai) return;
+      if (hasThai(ai.titleTH)) { a.titleTH = stripHtml(ai.titleTH); fixed++; }
+      if (hasThai(ai.summary)) a.summary = stripHtml(ai.summary);
+    });
+    if (needsFix.length) console.log(`🔧 แปลซ่อมสำเร็จ ${fixed}/${needsFix.length}`);
     const total = saveMerged(newArticles);
     console.log(`\n✅ เสร็จ — ${newArticles.length} ใหม่  รวม ${total} บทความ`);
     newArticles.slice(0, 5).forEach((a, i) =>

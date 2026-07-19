@@ -853,11 +853,18 @@ function isShrimpArticle(a) {
   return SHRIMP_KW.some(kw => text.includes(kw.toLowerCase()));
 }
 
+// Strip complete tags + truncated trailing fragments — old news-data may hold raw RSS HTML
+function stripNewsHtml(s) {
+  return (s || '').replace(/<[^>]+>/g, ' ').replace(/<[^>]*$/, '').replace(/\s+/g, ' ').trim();
+}
+
 app.get('/api/news', (req, res) => {
   const newsFile = path.join(__dirname, 'news-data.json');
   if (!fs.existsSync(newsFile)) return res.json({ articles: [], lastUpdated: null });
   const data = JSON.parse(fs.readFileSync(newsFile, 'utf-8'));
-  data.articles = (data.articles || []).filter(a => !a.isSample && isShrimpArticle(a));
+  data.articles = (data.articles || [])
+    .filter(a => !a.isSample && isShrimpArticle(a))
+    .map(a => ({ ...a, titleTH: stripNewsHtml(a.titleTH), summary: stripNewsHtml(a.summary) }));
   res.json(data);
 });
 
