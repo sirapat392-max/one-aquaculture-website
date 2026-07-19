@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-16T12:16:49.759Z",
+  "updatedAt": "2026-07-19T13:39:20.598Z",
   "records": [
     {
       "c": "in",
@@ -8939,6 +8939,33 @@
       "yr": 2026
     },
     {
+      "c": "ec",
+      "sp": "vannamei",
+      "sz": 30,
+      "usd": 3.7,
+      "local": 3.7,
+      "wk": 27,
+      "yr": 2026
+    },
+    {
+      "c": "ec",
+      "sp": "vannamei",
+      "sz": 60,
+      "usd": 2.4,
+      "local": 2.4,
+      "wk": 27,
+      "yr": 2026
+    },
+    {
+      "c": "ec",
+      "sp": "vannamei",
+      "sz": 100,
+      "usd": 1.9,
+      "local": 1.9,
+      "wk": 27,
+      "yr": 2026
+    },
+    {
       "c": "id",
       "sp": "vannamei",
       "sz": 30,
@@ -9038,6 +9065,33 @@
       "yr": 2026
     },
     {
+      "c": "ec",
+      "sp": "vannamei",
+      "sz": 30,
+      "usd": 3.6,
+      "local": 3.6,
+      "wk": 28,
+      "yr": 2026
+    },
+    {
+      "c": "ec",
+      "sp": "vannamei",
+      "sz": 60,
+      "usd": 2.2,
+      "local": 2.2,
+      "wk": 28,
+      "yr": 2026
+    },
+    {
+      "c": "ec",
+      "sp": "vannamei",
+      "sz": 100,
+      "usd": 1.9,
+      "local": 1.9,
+      "wk": 28,
+      "yr": 2026
+    },
+    {
       "c": "id",
       "sp": "vannamei",
       "sz": 30,
@@ -9107,6 +9161,33 @@
       "usd": 2.93,
       "local": 77000,
       "wk": 28,
+      "yr": 2026
+    },
+    {
+      "c": "ec",
+      "sp": "vannamei",
+      "sz": 30,
+      "usd": 3.5,
+      "local": 3.5,
+      "wk": 29,
+      "yr": 2026
+    },
+    {
+      "c": "ec",
+      "sp": "vannamei",
+      "sz": 60,
+      "usd": 2.2,
+      "local": 2.2,
+      "wk": 29,
+      "yr": 2026
+    },
+    {
+      "c": "ec",
+      "sp": "vannamei",
+      "sz": 100,
+      "usd": 1.9,
+      "local": 1.9,
+      "wk": 29,
       "yr": 2026
     },
     {
