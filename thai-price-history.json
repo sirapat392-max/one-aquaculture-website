@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-16T12:16:48.339Z",
+  "updatedAt": "2026-07-19T13:39:52.813Z",
   "byDate": {
     "2025-05-02": {
       "40": {
@@ -47163,6 +47163,274 @@
         "max": 123,
         "trend": "up",
         "change": 1
+      }
+    },
+    "2026-07-17": {
+      "45": {
+        "min": 177,
+        "max": 182,
+        "trend": "stable",
+        "change": 0
+      },
+      "50": {
+        "min": 163,
+        "max": 179,
+        "trend": "stable",
+        "change": 0
+      },
+      "55": {
+        "min": 144,
+        "max": 162,
+        "trend": "stable",
+        "change": 0
+      },
+      "60": {
+        "min": 139,
+        "max": 150,
+        "trend": "stable",
+        "change": 0
+      },
+      "65": {
+        "min": 130,
+        "max": 143,
+        "trend": "up",
+        "change": 2
+      },
+      "70": {
+        "min": 130,
+        "max": 145,
+        "trend": "stable",
+        "change": 0
+      },
+      "75": {
+        "min": 121,
+        "max": 138,
+        "trend": "stable",
+        "change": 0
+      },
+      "80": {
+        "min": 123,
+        "max": 133,
+        "trend": "stable",
+        "change": 0
+      },
+      "85": {
+        "min": 117,
+        "max": 129,
+        "trend": "stable",
+        "change": 0
+      },
+      "90": {
+        "min": 120,
+        "max": 125,
+        "trend": "stable",
+        "change": 0
+      },
+      "95": {
+        "min": 116,
+        "max": 132,
+        "trend": "stable",
+        "change": 0
+      },
+      "100": {
+        "min": 110,
+        "max": 128,
+        "trend": "stable",
+        "change": 0
+      },
+      "105": {
+        "min": 115,
+        "max": 126,
+        "trend": "up",
+        "change": 1
+      },
+      "110": {
+        "min": 111,
+        "max": 124,
+        "trend": "up",
+        "change": 1
+      },
+      "115": {
+        "min": 116,
+        "max": 131,
+        "trend": "up",
+        "change": 1
+      },
+      "120": {
+        "min": 112,
+        "max": 129,
+        "trend": "up",
+        "change": 1
+      },
+      "125": {
+        "min": 117,
+        "max": 127,
+        "trend": "up",
+        "change": 1
+      },
+      "130": {
+        "min": 113,
+        "max": 125,
+        "trend": "up",
+        "change": 1
+      },
+      "135": {
+        "min": 115,
+        "max": 120,
+        "trend": "down",
+        "change": -1
+      },
+      "140": {
+        "min": 109,
+        "max": 125,
+        "trend": "stable",
+        "change": 0
+      },
+      "145": {
+        "min": 105,
+        "max": 123,
+        "trend": "stable",
+        "change": 0
+      },
+      "150": {
+        "min": 108,
+        "max": 119,
+        "trend": "down",
+        "change": -2
+      }
+    },
+    "2026-07-18": {
+      "45": {
+        "min": 172,
+        "max": 189,
+        "trend": "stable",
+        "change": 0
+      },
+      "50": {
+        "min": 167,
+        "max": 177,
+        "trend": "stable",
+        "change": 0
+      },
+      "55": {
+        "min": 148,
+        "max": 160,
+        "trend": "stable",
+        "change": 0
+      },
+      "60": {
+        "min": 134,
+        "max": 148,
+        "trend": "stable",
+        "change": 0
+      },
+      "65": {
+        "min": 134,
+        "max": 150,
+        "trend": "stable",
+        "change": 0
+      },
+      "70": {
+        "min": 125,
+        "max": 143,
+        "trend": "stable",
+        "change": 0
+      },
+      "75": {
+        "min": 125,
+        "max": 136,
+        "trend": "stable",
+        "change": 0
+      },
+      "80": {
+        "min": 118,
+        "max": 131,
+        "trend": "stable",
+        "change": 0
+      },
+      "85": {
+        "min": 121,
+        "max": 127,
+        "trend": "stable",
+        "change": 0
+      },
+      "90": {
+        "min": 115,
+        "max": 132,
+        "trend": "stable",
+        "change": 0
+      },
+      "95": {
+        "min": 118,
+        "max": 128,
+        "trend": "down",
+        "change": -2
+      },
+      "100": {
+        "min": 114,
+        "max": 126,
+        "trend": "stable",
+        "change": 0
+      },
+      "105": {
+        "min": 110,
+        "max": 124,
+        "trend": "stable",
+        "change": 0
+      },
+      "110": {
+        "min": 115,
+        "max": 131,
+        "trend": "stable",
+        "change": 0
+      },
+      "115": {
+        "min": 110,
+        "max": 128,
+        "trend": "down",
+        "change": -1
+      },
+      "120": {
+        "min": 115,
+        "max": 126,
+        "trend": "down",
+        "change": -1
+      },
+      "125": {
+        "min": 111,
+        "max": 124,
+        "trend": "down",
+        "change": -1
+      },
+      "130": {
+        "min": 115,
+        "max": 121,
+        "trend": "down",
+        "change": -2
+      },
+      "135": {
+        "min": 111,
+        "max": 128,
+        "trend": "up",
+        "change": 1
+      },
+      "140": {
+        "min": 115,
+        "max": 125,
+        "trend": "up",
+        "change": 2
+      },
+      "145": {
+        "min": 111,
+        "max": 123,
+        "trend": "up",
+        "change": 2
+      },
+      "150": {
+        "min": 105,
+        "max": 119,
+        "trend": "up",
+        "change": 2
       }
     }
   }
