@@ -147,3 +147,9 @@ footer { background: var(--text-dark); color: rgba(255,255,255,0.7); padding: 48
   .footer-grid { grid-template-columns: 1fr; }
   .footer-bottom { flex-direction: column; gap: 6px; text-align: center; }
 }
+@media (max-width: 760px) {
+  /* Trust band: stack cleanly, drop the stray vertical dividers */
+  .trust-band { flex-direction: column; gap: 12px !important; padding: 18px 6% !important; text-align: center; }
+  .trust-band > div:not(.trust-div) { justify-content: center; }
+  .trust-band .trust-div { display: none; }
+}
