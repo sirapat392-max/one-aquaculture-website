@@ -676,19 +676,19 @@
 </section>
 
 <!-- TRUST BAND -->
-<div style="background:var(--wine-deeper);padding:16px 5%;display:flex;align-items:center;justify-content:center;gap:40px;flex-wrap:wrap;">
+<div class="trust-band" style="background:var(--wine-deeper);padding:16px 5%;display:flex;align-items:center;justify-content:center;gap:40px;flex-wrap:wrap;">
   <div style="display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.85);font-size:13px;font-weight:600;">
     <span style="font-size:18px;"></span> <span data-i18n="idx.trust.1">เวชภัณฑ์คุณภาพสูง ควบคุมคุณภาพ 100%</span>
  </div>
-  <div style="width:1px;height:20px;background:rgba(255,255,255,0.2);flex-shrink:0;"></div>
+  <div class="trust-div" style="width:1px;height:20px;background:rgba(255,255,255,0.2);flex-shrink:0;"></div>
   <div style="display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.85);font-size:13px;font-weight:600;">
     <span style="font-size:18px;"></span> <span data-i18n="idx.trust.2">ภาคใต้อ่าวไทย · อันดามัน · ภาคกลาง</span>
  </div>
-  <div style="width:1px;height:20px;background:rgba(255,255,255,0.2);flex-shrink:0;"></div>
+  <div class="trust-div" style="width:1px;height:20px;background:rgba(255,255,255,0.2);flex-shrink:0;"></div>
   <div style="display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.85);font-size:13px;font-weight:600;">
     <span style="font-size:18px;"></span> <span data-i18n="idx.trust.3">ไว้วางใจโดยกว่า 100 ฟาร์มเชิงพาณิชย์</span>
  </div>
-  <div style="width:1px;height:20px;background:rgba(255,255,255,0.2);flex-shrink:0;"></div>
+  <div class="trust-div" style="width:1px;height:20px;background:rgba(255,255,255,0.2);flex-shrink:0;"></div>
   <a href="https://www.facebook.com/profile.php?id=100075538372879" target="_blank" style="display:flex;align-items:center;gap:8px;color:#90CAF9;font-size:13px;font-weight:700;text-decoration:none;">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
     <span data-i18n="idx.trust.fb">ติดตามบน Facebook</span>
@@ -876,6 +876,44 @@
 @keyframes ai-pulse { 0%,100%{box-shadow:0 0 0 2px rgba(245,124,90,.2)}50%{box-shadow:0 0 0 5px rgba(245,124,90,.08)} }
 .ai-diag-grid { }
 @media(max-width:900px){.ai-diag-grid{grid-template-columns:1fr!important;gap:36px!important;}}
+</style>
+
+<!-- BIGFARM SIT · FARM MANAGEMENT VIA LINE -->
+<section id="bigfarm" style="background:linear-gradient(135deg,#141f38 0%,#1c2b4a 55%,#2a1730 100%);padding:80px 5%;position:relative;overflow:hidden;">
+  <div style="position:absolute;top:-90px;left:-70px;width:300px;height:300px;border-radius:50%;background:rgba(124,31,62,.18);pointer-events:none;"></div>
+  <div style="position:absolute;bottom:-70px;right:-60px;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,.05);pointer-events:none;"></div>
+  <div style="max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:center;position:relative;z-index:1;" class="bf-grid">
+    <div class="reveal">
+      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:24px;padding:5px 16px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.9);margin-bottom:20px;" data-i18n="idx.bf.tag">
+        🚜 BIGFARM SIT · Farm Intelligence System
+      </div>
+      <h2 style="font-size:clamp(28px,4vw,42px);font-weight:800;color:white;line-height:1.2;margin-bottom:12px;" data-i18n-html="idx.bf.title">จัดการฟาร์มกุ้งทั้งฟาร์ม<br>ครบทุกบ่อ ผ่าน LINE</h2>
+      <p style="font-size:16px;color:rgba(255,255,255,.78);line-height:1.8;max-width:460px;margin-bottom:24px;" data-i18n="idx.bf.desc">บันทึกค่าน้ำ อาหาร ขนาดกุ้ง และรอบเลี้ยงของทุกบ่อ ระบบสรุปเป็นการ์ด + กราฟส่งเข้า LINE ให้อัตโนมัติ ดูย้อนหลังได้ ทำงานร่วมกันได้ทั้งทีมฟาร์ม — ใช้งานผ่าน LINE ไม่ต้องติดตั้งแอป</p>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:30px;">
+        <span style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:6px 14px;font-size:13px;color:rgba(255,255,255,.85);font-weight:500;" data-i18n="idx.bf.b1">💧 บันทึกค่าน้ำรายบ่อ</span>
+        <span style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:6px 14px;font-size:13px;color:rgba(255,255,255,.85);font-weight:500;" data-i18n="idx.bf.b2">📊 กราฟ + การ์ดสรุปเข้า LINE</span>
+        <span style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:6px 14px;font-size:13px;color:rgba(255,255,255,.85);font-weight:500;" data-i18n="idx.bf.b3">👥 ทั้งทีมฟาร์มใช้ร่วมกัน</span>
+        <span style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:6px 14px;font-size:13px;color:rgba(255,255,255,.85);font-weight:500;" data-i18n="idx.bf.b4">📗 ส่งออก Excel</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;">
+        <a href="https://lin.ee/Zvr3OFu" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;background:#06C755;color:white;padding:15px 30px;border-radius:32px;font-size:16px;font-weight:700;text-decoration:none;transition:all .25s;box-shadow:0 6px 24px rgba(6,199,85,.35);" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 10px 32px rgba(6,199,85,.45)'" onmouseout="this.style.transform='';this.style.boxShadow='0 6px 24px rgba(6,199,85,.35)'" data-i18n="idx.bf.btn">
+          ➕ เพิ่มเพื่อนใน LINE เริ่มใช้เลย →
+        </a>
+        <a href="https://web-production-7e8e4.up.railway.app" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.28);color:white;padding:14px 26px;border-radius:32px;font-size:15px;font-weight:600;text-decoration:none;transition:all .25s;" onmouseover="this.style.background='rgba(255,255,255,.18)'" onmouseout="this.style.background='rgba(255,255,255,.1)'" data-i18n="idx.bf.btn2">เปิดระบบ ↗</a>
+      </div>
+      <div style="margin-top:16px;font-size:12px;color:rgba(255,255,255,.55);" data-i18n="idx.bf.free">ใช้ฟรี 100% · ล็อกอินด้วย LINE · เริ่มใช้ได้ทันที · โดย ONE Aquaculture</div>
+    </div>
+    <div class="reveal" style="justify-self:center;background:rgba(255,255,255,.97);border-radius:20px;padding:28px 28px 22px;text-align:center;box-shadow:0 18px 50px rgba(0,0,0,.32);max-width:280px;">
+      <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#7c1f3e;font-weight:800;margin-bottom:4px;">BIGFARM SIT</div>
+      <div style="font-size:11px;color:#5a6478;font-weight:600;margin-bottom:16px;letter-spacing:.04em;">Farm Intelligence System</div>
+      <img src="images/bigfarm-line-qr.png" alt="LINE QR — BIGFARM SIT" width="180" height="180" loading="lazy" style="width:180px;height:180px;display:block;margin:0 auto 14px;border-radius:10px;">
+      <div style="font-size:13px;color:#1c2b4a;font-weight:700;margin-bottom:2px;" data-i18n="idx.bf.qr">สแกน QR เพื่อเริ่มใช้งาน</div>
+      <div style="font-size:12px;color:#7a8399;" data-i18n="idx.bf.qr2">หรือกดปุ่มเพิ่มเพื่อนบนมือถือ</div>
+    </div>
+  </div>
+</section>
+<style>
+@media(max-width:900px){#bigfarm .bf-grid{grid-template-columns:1fr!important;gap:34px!important;}}
 </style>
 
 <!-- WHY ONE -->
@@ -1172,6 +1210,7 @@
       <h5 data-i18n="idx.foot.c3">บริการ · Services</h5>
       <ul>
         <li><a href="/ai-diagnosis" data-i18n="idx.foot.p3.1">วิเคราะห์โรคกุ้ง AI</a></li>
+        <li><a href="https://lin.ee/Zvr3OFu" target="_blank" rel="noopener" data-i18n="idx.foot.p3.bf">🚜 BIGFARM SIT — จัดการฟาร์ม (ฟรี)</a></li>
         <li><a href="/contact" data-i18n="idx.foot.p3.2">ขอใบเสนอราคา</a></li>
         <li><a href="/contact" data-i18n="idx.foot.p3.3">ปรึกษาผู้เชี่ยวชาญ</a></li>
         <li><a href="/contact" data-i18n="idx.foot.p3.4">ติดต่อเรา</a></li>
