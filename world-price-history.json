@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-25T02:41:30.511Z",
+  "updatedAt": "2026-09-30T05:23:20.358Z",
   "records": [
     {
       "c": "in",
@@ -10109,6 +10109,33 @@
       "yr": 2026
     },
     {
+      "c": "ec",
+      "sp": "vannamei",
+      "sz": 30,
+      "usd": 3.4,
+      "local": 3.4,
+      "wk": 38,
+      "yr": 2026
+    },
+    {
+      "c": "ec",
+      "sp": "vannamei",
+      "sz": 60,
+      "usd": 2.4,
+      "local": 2.4,
+      "wk": 38,
+      "yr": 2026
+    },
+    {
+      "c": "ec",
+      "sp": "vannamei",
+      "sz": 100,
+      "usd": 1.8,
+      "local": 1.8,
+      "wk": 38,
+      "yr": 2026
+    },
+    {
       "c": "id",
       "sp": "vannamei",
       "sz": 30,
@@ -10154,6 +10181,33 @@
       "yr": 2026
     },
     {
+      "c": "ec",
+      "sp": "vannamei",
+      "sz": 30,
+      "usd": 3.4,
+      "local": 3.4,
+      "wk": 39,
+      "yr": 2026
+    },
+    {
+      "c": "ec",
+      "sp": "vannamei",
+      "sz": 60,
+      "usd": 2.4,
+      "local": 2.4,
+      "wk": 39,
+      "yr": 2026
+    },
+    {
+      "c": "ec",
+      "sp": "vannamei",
+      "sz": 100,
+      "usd": 1.8,
+      "local": 1.8,
+      "wk": 39,
+      "yr": 2026
+    },
+    {
       "c": "id",
       "sp": "vannamei",
       "sz": 30,
@@ -10187,6 +10241,150 @@
       "usd": 4.8,
       "local": 159.22,
       "wk": 39,
+      "yr": 2026
+    },
+    {
+      "c": "th",
+      "sp": "vannamei",
+      "sz": 100,
+      "usd": 3.4,
+      "local": 114.29,
+      "wk": 39,
+      "yr": 2026
+    },
+    {
+      "c": "vn",
+      "sp": "vannamei",
+      "sz": 30,
+      "usd": 4.73,
+      "local": 123000,
+      "wk": 39,
+      "yr": 2026
+    },
+    {
+      "c": "vn",
+      "sp": "vannamei",
+      "sz": 60,
+      "usd": 3.7,
+      "local": 96000,
+      "wk": 39,
+      "yr": 2026
+    },
+    {
+      "c": "vn",
+      "sp": "vannamei",
+      "sz": 100,
+      "usd": 3.08,
+      "local": 80000,
+      "wk": 39,
+      "yr": 2026
+    },
+    {
+      "c": "ec",
+      "sp": "vannamei",
+      "sz": 30,
+      "usd": 3.4,
+      "local": 3.4,
+      "wk": 40,
+      "yr": 2026
+    },
+    {
+      "c": "ec",
+      "sp": "vannamei",
+      "sz": 60,
+      "usd": 2.5,
+      "local": 2.5,
+      "wk": 40,
+      "yr": 2026
+    },
+    {
+      "c": "ec",
+      "sp": "vannamei",
+      "sz": 100,
+      "usd": 1.8,
+      "local": 1.8,
+      "wk": 40,
+      "yr": 2026
+    },
+    {
+      "c": "id",
+      "sp": "vannamei",
+      "sz": 30,
+      "usd": 4.28,
+      "local": 77000,
+      "wk": 40,
+      "yr": 2026
+    },
+    {
+      "c": "id",
+      "sp": "vannamei",
+      "sz": 60,
+      "usd": 3.56,
+      "local": 64000,
+      "wk": 40,
+      "yr": 2026
+    },
+    {
+      "c": "id",
+      "sp": "vannamei",
+      "sz": 100,
+      "usd": 3.11,
+      "local": 56000,
+      "wk": 40,
+      "yr": 2026
+    },
+    {
+      "c": "in",
+      "sp": "vannamei",
+      "sz": 30,
+      "usd": 5.05,
+      "local": 485,
+      "wk": 40,
+      "yr": 2026
+    },
+    {
+      "c": "in",
+      "sp": "vannamei",
+      "sz": 60,
+      "usd": 3.75,
+      "local": 360,
+      "wk": 40,
+      "yr": 2026
+    },
+    {
+      "c": "in",
+      "sp": "vannamei",
+      "sz": 100,
+      "usd": 2.87,
+      "local": 275,
+      "wk": 40,
+      "yr": 2026
+    },
+    {
+      "c": "vn",
+      "sp": "vannamei",
+      "sz": 30,
+      "usd": 4.97,
+      "local": 129000,
+      "wk": 40,
+      "yr": 2026
+    },
+    {
+      "c": "vn",
+      "sp": "vannamei",
+      "sz": 60,
+      "usd": 3.85,
+      "local": 100000,
+      "wk": 40,
+      "yr": 2026
+    },
+    {
+      "c": "vn",
+      "sp": "vannamei",
+      "sz": 100,
+      "usd": 3.23,
+      "local": 84000,
+      "wk": 40,
       "yr": 2026
     }
   ]
