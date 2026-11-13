@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-12T06:07:52.399Z",
+  "updatedAt": "2026-11-13T08:09:34.480Z",
   "byDate": {
     "2025-05-02": {
       "40": {
@@ -52829,6 +52829,140 @@
         "max": 114,
         "trend": "up",
         "change": 1
+      }
+    },
+    "2026-11-13": {
+      "45": {
+        "min": 197,
+        "max": 202,
+        "trend": "stable",
+        "change": 0
+      },
+      "50": {
+        "min": 168,
+        "max": 184,
+        "trend": "stable",
+        "change": 0
+      },
+      "55": {
+        "min": 144,
+        "max": 162,
+        "trend": "stable",
+        "change": 0
+      },
+      "60": {
+        "min": 139,
+        "max": 150,
+        "trend": "stable",
+        "change": 0
+      },
+      "65": {
+        "min": 130,
+        "max": 143,
+        "trend": "stable",
+        "change": 0
+      },
+      "70": {
+        "min": 135,
+        "max": 150,
+        "trend": "stable",
+        "change": 0
+      },
+      "75": {
+        "min": 129,
+        "max": 146,
+        "trend": "stable",
+        "change": 0
+      },
+      "80": {
+        "min": 131,
+        "max": 141,
+        "trend": "stable",
+        "change": 0
+      },
+      "85": {
+        "min": 122,
+        "max": 134,
+        "trend": "stable",
+        "change": 0
+      },
+      "90": {
+        "min": 122,
+        "max": 127,
+        "trend": "stable",
+        "change": 0
+      },
+      "95": {
+        "min": 113,
+        "max": 129,
+        "trend": "stable",
+        "change": 0
+      },
+      "100": {
+        "min": 107,
+        "max": 125,
+        "trend": "up",
+        "change": 1
+      },
+      "105": {
+        "min": 112,
+        "max": 123,
+        "trend": "up",
+        "change": 1
+      },
+      "110": {
+        "min": 108,
+        "max": 121,
+        "trend": "up",
+        "change": 1
+      },
+      "115": {
+        "min": 113,
+        "max": 128,
+        "trend": "up",
+        "change": 1
+      },
+      "120": {
+        "min": 109,
+        "max": 126,
+        "trend": "up",
+        "change": 1
+      },
+      "125": {
+        "min": 113,
+        "max": 123,
+        "trend": "stable",
+        "change": 0
+      },
+      "130": {
+        "min": 108,
+        "max": 120,
+        "trend": "down",
+        "change": -1
+      },
+      "135": {
+        "min": 112,
+        "max": 117,
+        "trend": "down",
+        "change": -1
+      },
+      "140": {
+        "min": 107,
+        "max": 123,
+        "trend": "down",
+        "change": -1
+      },
+      "145": {
+        "min": 103,
+        "max": 121,
+        "trend": "down",
+        "change": -1
+      },
+      "150": {
+        "min": 99,
+        "max": 110,
+        "trend": "down",
+        "change": -2
       }
     }
   }
